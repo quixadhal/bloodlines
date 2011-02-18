@@ -20,8 +20,8 @@
  */
 
 typedef struct {
-    char *name;
-    short index;
+  char *name;
+  short index;
 } simul_entry;
 
 simul_entry *simul_names = 0;
@@ -49,14 +49,14 @@ void init_simul_efun (char * file)
 {
     char buf[512];
     object_t *new_ob;
-
+    
     if (!file || !file[0]) {
         fprintf(stderr, "No simul_efun\n");
         return;
     }
     if (!strip_name(file, buf, sizeof buf))
         error("Ilegal simul_efun file name '%s'\n", file);
-
+    
     if (file[strlen(file) - 2] != '.')
         strcat(buf, ".c");
 
@@ -87,7 +87,7 @@ static void remove_simuls() {
     }    
 }
 
-    static
+static
 void get_simul_efuns (program_t * prog)
 {
     int i;
@@ -102,9 +102,9 @@ void get_simul_efuns (program_t * prog)
         } else {
             /* will be resized later */
             simul_names = RESIZE(simul_names, num_simul_efun + num_new,
-                    simul_entry, TAG_SIMULS, "get_simul_efuns");
+                                 simul_entry, TAG_SIMULS, "get_simul_efuns");
             simuls = RESIZE(simuls, num_simul_efun + num_new,
-                    function_lookup_info_t, TAG_SIMULS, "get_simul_efuns: 2");
+                            function_lookup_info_t, TAG_SIMULS, "get_simul_efuns: 2");
         }
     } else {
         if (num_new) {
@@ -114,18 +114,18 @@ void get_simul_efuns (program_t * prog)
     }
     for (i=0; i < num_new; i++) {
         if (prog->function_flags[i] & 
-                (FUNC_NO_CODE|DECL_PROTECTED|DECL_PRIVATE|DECL_HIDDEN))
+            (FUNC_NO_CODE|DECL_PROTECTED|DECL_PRIVATE|DECL_HIDDEN))
             continue;
 
         find_or_add_simul_efun(find_func_entry(prog,i), i);
     }
-
+    
     if (num_simul_efun) {
         /* shrink to fit */
         simul_names = RESIZE(simul_names, num_simul_efun, simul_entry,
-                TAG_SIMULS, "get_simul_efuns");
+                             TAG_SIMULS, "get_simul_efuns");
         simuls = RESIZE(simuls, num_simul_efun, function_lookup_info_t,
-                TAG_SIMULS, "get_simul_efuns");
+                        TAG_SIMULS, "get_simul_efuns");
     }
 }
 
@@ -138,7 +138,7 @@ find_or_add_simul_efun (function_t * funp, int runtime_index) {
     int first = 0;
     int last = num_simul_efun - 1;
     int i,j;
-
+    
     while (first <= last) {
         j = ((first + last) >> 1);
         if (funp->funcname < simul_names[j].name) last = j - 1;
@@ -171,7 +171,7 @@ find_or_add_simul_efun (function_t * funp, int runtime_index) {
 void
 set_simul_efun (object_t * ob) {
     get_simul_efuns(ob->prog);
-
+    
     simul_efun_ob = ob;
     add_ref(simul_efun_ob, "set_simul_efun");
 }

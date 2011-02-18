@@ -14,14 +14,14 @@ buffer_t null_buf =
     0                           /* size */
 };
 
-    INLINE buffer_t *
-null_buffer()
+INLINE buffer_t *
+       null_buffer()
 {
     null_buf.ref++;
     return &null_buf;
 }                               /* null_buffer() */
 
-    INLINE void
+INLINE void
 free_buffer (buffer_t * b)
 {
     b->ref--;
@@ -32,7 +32,7 @@ free_buffer (buffer_t * b)
     FREE((char *) b);
 }                               /* free_buffer() */
 
-    buffer_t *
+buffer_t *
 allocate_buffer (int size)
 {
     buffer_t *buf;
@@ -46,7 +46,7 @@ allocate_buffer (int size)
     }
     /* using calloc() so that memory will be zero'd out when allocated */
     buf = (buffer_t *) DCALLOC(sizeof(buffer_t) + size - 1, 1,
-            TAG_BUFFER, "allocate_buffer");
+                                    TAG_BUFFER, "allocate_buffer");
     buf->size = size;
     buf->ref = 1;
     return buf;
@@ -77,12 +77,12 @@ int write_buffer (buffer_t * buf, int start, const char * str, int theLength)
     return 1;
 }                               /* write_buffer() */
 
-    char *
+char *
 read_buffer (buffer_t * b, int start, int len, int * rlen)
 {
     char *str;
     unsigned int size;
-
+    
     if (len < 0)
         return 0;
 

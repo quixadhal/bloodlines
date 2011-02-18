@@ -7,15 +7,15 @@ string yes = 0;
 
 void catch_tell(string str) {
     if (str[0..2] != "yes")
-        err = str;
+	err = str;
     else
-        yes = str;
+	yes = str;
 }
 
 void do_tests() {
     object tp;
     object talker = new(__DIR__ "talker");
-
+    
 #ifndef __NO_ADD_ACTION__
     SAVETP;
     enable_commands();
@@ -23,7 +23,7 @@ void do_tests() {
 #endif
     NO("no-noenv");
     talker->move(this_object());
-
+    
     YES("yes-inside");
     talker->move(new("/single/void"));
     move_object(talker);

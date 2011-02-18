@@ -66,7 +66,7 @@ INLINE void check_legal_string (const char * s)
 {
     if (strlen(s) > LARGEST_PRINTABLE_STRING) {
         error("Printable strings limited to length of %d.\n",
-                LARGEST_PRINTABLE_STRING);
+              LARGEST_PRINTABLE_STRING);
     }
 }
 
@@ -103,16 +103,16 @@ char *strput_int (char * x, char * limit, int num) {
 }
 
 #ifdef PRIVS
-    static void
+static void
 init_privs_for_object (object_t * ob)
 {
     svalue_t *value;
 
     if (!current_object
 #ifdef PACKAGE_UIDS
-            || !current_object->uid
+        || !current_object->uid
 #endif
-       ) {
+    ) {
         ob->privs = NULL;
         return;
     }
@@ -156,7 +156,7 @@ static int give_uid_to_object (object_t * ob)
     ret = apply_master_ob(APPLY_CREATOR_FILE, 1);
     if (!ret)
         error("master object: No function %s() defined!\n",
-                applies_table[APPLY_CREATOR_FILE]);
+              applies_table[APPLY_CREATOR_FILE]);
     if (!ret || ret == (svalue_t *)-1 || ret->type != T_STRING) {
         destruct_object(ob);
         if (!ret) error("Master object has no function %s().\n", applies_table[APPLY_CREATOR_FILE]);
@@ -225,7 +225,7 @@ static int init_object (object_t * ob)
 #endif
 #ifdef NO_ADD_ACTION
     if (function_exists(APPLY_CATCH_TELL, ob, 1) ||
-            function_exists(APPLY_RECEIVE_MESSAGE, ob, 1))
+        function_exists(APPLY_RECEIVE_MESSAGE, ob, 1))
         ob->flags |= O_LISTENER;
 #endif
 #ifdef PACKAGE_UIDS
@@ -276,8 +276,8 @@ static object_t *load_virtual_object (const char * name, int clone)
             destruct_object(new_ob);
             error("Virtual object name duplicates an existing object name.\n");
         }
-        /* Make sure O_CLONE is NOT set */
-        new_ob->flags &= ~O_CLONE;
+	/* Make sure O_CLONE is NOT set */
+	new_ob->flags &= ~O_CLONE;
         new_name = alloc_cstring(name, "load_virtual_object");
         SET_TAG(new_name, TAG_OBJ_NAME);
     } else {
@@ -374,29 +374,38 @@ object_t *int_load_object (const char * lname)
     object_t *ob;
     svalue_t *mret;
     struct stat c_st;
-    char real_name[200], name[200];
+    char real_name[400], name[400], actualname[400], obname[400];
 
+    const char *pname = check_valid_path(lname, master_ob, "load_object", 0);
+    if(!pname)
+    	error("Read access denied.\n");
     if (++num_objects_this_thread > INHERIT_CHAIN_SIZE)
         error("Inherit chain too deep: > %d when trying to load '%s'.\n", INHERIT_CHAIN_SIZE, lname);
 #ifdef PACKAGE_UIDS
     if (current_object && current_object->euid == NULL)
         error("Can't load objects when no effective user.\n");
 #endif
-    if (strrchr(lname, '#'))
+    if (strrchr(pname, '#'))
         error("Cannot load a clone.\n");
     if (!strip_name(lname, name, sizeof name))
         error("Filenames with consecutive /'s in them aren't allowed (%s).\n",
-                lname);
+              lname);
+    if (!strip_name(pname, actualname, sizeof actualname))
+        error("Filenames with consecutive /'s in them aren't allowed (%s).\n",
+              pname);
 
     /*
      * First check that the c-file exists.
      */
-    (void) strcpy(real_name, name);
+    (void) strcpy(real_name, actualname);
     (void) strcat(real_name, ".c");
+
+    (void) strcpy(obname, name);
+        (void) strcat(obname, ".c");
 
     if (stat(real_name, &c_st) == -1 || S_ISDIR(c_st.st_mode)) {
         save_command_giver(command_giver);
-        ob = load_virtual_object(name, 0);
+        ob = load_virtual_object(actualname, 0);
         restore_command_giver();
         num_objects_this_thread--;
         return ob;
@@ -409,23 +418,23 @@ object_t *int_load_object (const char * lname)
         error("Illegal path name '/%s'.\n", real_name);
     }
 
-    /* maybe move this section into compile_file? */
-    if (comp_flag) {
-        debug_message(" compiling /%s ...", real_name);
-    }
-    f = open(real_name, O_RDONLY);
-    if (f == -1) {
-        debug_perror("compile_file", real_name);
-        error("Could not read the file '/%s'.\n", real_name);
-    }
-    save_command_giver(command_giver);
-    prog = compile_file(f, real_name);
-    restore_command_giver();
-    if (comp_flag)
-        debug_message(" done\n");
-    update_compile_av(total_lines);
-    total_lines = 0;
-    close(f);
+        /* maybe move this section into compile_file? */
+        if (comp_flag) {
+            debug_message(" compiling /%s ...", real_name);
+        }
+        f = open(real_name, O_RDONLY);
+        if (f == -1) {
+            debug_perror("compile_file", real_name);
+            error("Could not read the file '/%s'.\n", real_name);
+        }
+	save_command_giver(command_giver);
+	prog = compile_file(f, obname);
+	restore_command_giver();
+        if (comp_flag)
+            debug_message(" done\n");
+        update_compile_av(total_lines);
+        total_lines = 0;
+        close(f);
 
 
     /* Sorry, can't handle objects without programs yet. */
@@ -433,7 +442,7 @@ object_t *int_load_object (const char * lname)
         if (num_parse_error == 0 && prog == 0)
             error("No program in object '/%s'!\n", name);
 
-        if (prog) {
+	if (prog) {
             free_prog(&prog);
         }
         error("Error in loading object '/%s'\n", name);
@@ -462,12 +471,12 @@ object_t *int_load_object (const char * lname)
         }
 
         if ((inh_obj = lookup_object_hash(inhbuf))) {
-            IF_DEBUG(fatal("Inherited object is already loaded!"));
+	    IF_DEBUG(fatal("Inherited object is already loaded!"));
         } else {
             inh_obj = load_object(inhbuf, 0);
         }
         if (!inh_obj) error("Inherited file '/%s' does not exist!\n",
-                inhbuf);
+                            inhbuf);
 
         /*
          * Yes, the following is necessary.  It is possible that when we
@@ -496,7 +505,7 @@ object_t *int_load_object (const char * lname)
     ob->next_all = obj_list;
     ob->prev_all = 0;
     if(obj_list)
-        obj_list->prev_all = ob;
+      obj_list->prev_all = ob;
     obj_list = ob;
     enter_object_hash(ob);      /* add name to fast object lookup table */
     save_command_giver(command_giver);
@@ -510,7 +519,7 @@ object_t *int_load_object (const char * lname)
     if (init_object(ob))
         call_create(ob, 0);
     if (!(ob->flags & O_DESTRUCTED) &&
-            function_exists(APPLY_CLEAN_UP, ob, 1)) {
+        function_exists(APPLY_CLEAN_UP, ob, 1)) {
         ob->flags |= O_WILL_CLEAN_UP;
     }
     restore_command_giver();
@@ -565,16 +574,16 @@ object_t *clone_object (const char * str1, int num_arg)
     }
 
     if (ob->flags & O_CLONE)
-        error("Cannot clone from a clone\n");
+      error("Cannot clone from a clone\n");
 
     if(ob->flags & O_VIRTUAL) {
-        new_ob = load_virtual_object(ob->obname, 1 + num_arg);
-        restore_command_giver();
-        return new_ob;
-        /*
-         * we can skip all of the stuff below since we were already
-         * cloned once to have gotten to this stage.
-         */
+      new_ob = load_virtual_object(ob->obname, 1 + num_arg);
+      restore_command_giver();
+      return new_ob;
+      /*
+       * we can skip all of the stuff below since we were already
+       * cloned once to have gotten to this stage.
+       */
     }
 
     /* We do not want the heart beat to be running for unused copied objects */
@@ -650,7 +659,7 @@ object_t *object_present (svalue_t * v, object_t * ob)
                 return 0;
         }
         if (v->u.ob->super == ob ||
-                (v->u.ob->super == ob->super && ob->super != 0))
+            (v->u.ob->super == ob->super && ob->super != 0))
             return v->u.ob->super;
         return 0;
     }
@@ -665,7 +674,7 @@ object_t *object_present (svalue_t * v, object_t * ob)
         if (ob->super->flags & O_DESTRUCTED)
             return 0;
         if (!IS_ZERO(ret)) {
-            return ob->super;
+                return ob->super;
         }
         return object_present2(v->u.string, ob->super->contains);
     }
@@ -906,9 +915,9 @@ void destruct_object (object_t * ob)
         SETOBNAME(new_ob, "");
         remove_object_hash(ob);
         SETOBNAME(new_ob, tmp);
-        tmp_ob = ob;
-        free_object(&tmp_ob, "vital object reference");
-        // still need ob below!
+	tmp_ob = ob;
+	free_object(&tmp_ob, "vital object reference");
+	// still need ob below!
     } else
         remove_object_hash(ob);
 
@@ -926,14 +935,14 @@ void destruct_object (object_t * ob)
         obj_list->prev_all = 0;
     }
     /*
-       for (pp = &obj_list; *pp; pp = &(*pp)->next_all) {
-       if (*pp != ob)
-       continue;
-     *pp = (*pp)->next_all;
-     removed = 1;
-     break;
-     }
-     DEBUG_CHECK(!removed, "Failed to delete object.\n");//*/
+    for (pp = &obj_list; *pp; pp = &(*pp)->next_all) {
+        if (*pp != ob)
+            continue;
+        *pp = (*pp)->next_all;
+        removed = 1;
+        break;
+	}
+	DEBUG_CHECK(!removed, "Failed to delete object.\n");//*/
 
     remove_living_name(ob);
 #ifndef NO_ENVIRONMENT
@@ -943,7 +952,7 @@ void destruct_object (object_t * ob)
 #endif
     ob->next_all = obj_list_destruct;
     if(obj_list_destruct)
-        obj_list_destruct->prev_all = ob;
+      obj_list_destruct->prev_all = ob;
     ob->prev_all = 0;
     obj_list_destruct = ob;
     set_heart_beat(ob, 0);
@@ -1012,7 +1021,7 @@ void destruct2 (object_t * ob)
     tot_dangling_object++;
     ob->next_all = obj_list_dangling;
     if(obj_list_dangling)
-        obj_list_dangling->prev_all = ob;
+       obj_list_dangling->prev_all = ob;
     obj_list_dangling = ob;
     ob->prev_all = 0;
 #endif
@@ -1110,25 +1119,25 @@ void tell_room (object_t * room, svalue_t * v, array_t * avoid)
     char txt_buf[LARGEST_PRINTABLE_STRING + 1];
 
     switch (v->type) {
-        case T_STRING:
-            check_legal_string(v->u.string);
-            buff = v->u.string;
-            break;
-        case T_OBJECT:
-            buff = v->u.ob->obname;
-            break;
-        case T_NUMBER:
-            buff = txt_buf;
-            sprintf(txt_buf, "%ld", v->u.number);
-            break;
-        case T_REAL:
-            buff = txt_buf;
-            sprintf(txt_buf, "%f", v->u.real);
-            break;
-        default:
-            bad_argument(v, T_OBJECT | T_NUMBER | T_REAL | T_STRING,
-                    2, F_TELL_ROOM);
-            IF_DEBUG(buff = 0);
+    case T_STRING:
+        check_legal_string(v->u.string);
+        buff = v->u.string;
+        break;
+    case T_OBJECT:
+        buff = v->u.ob->obname;
+        break;
+    case T_NUMBER:
+        buff = txt_buf;
+        sprintf(txt_buf, "%ld", v->u.number);
+        break;
+    case T_REAL:
+        buff = txt_buf;
+        sprintf(txt_buf, "%f", v->u.real);
+        break;
+    default:
+        bad_argument(v, T_OBJECT | T_NUMBER | T_REAL | T_STRING,
+                     2, F_TELL_ROOM);
+        IF_DEBUG(buff = 0);
     }
 
     for (ob = room->contains; ob; ob = ob->next_inv) {
@@ -1170,9 +1179,9 @@ void shout_string (const char * str)
     for (ob = obj_list; ob; ob = ob->next_all) {
         if (!(ob->flags & O_LISTENER) || (ob == command_giver)
 #ifndef NO_ENVIRONMENT
-                || !ob->super
+            || !ob->super
 #endif
-           )
+            )
             continue;
         tell_object(ob, str, strlen(str));
     }
@@ -1200,7 +1209,7 @@ int input_to (svalue_t * fun, int flag, int num_arg, svalue_t * args)
         if (num_arg) {
             i = num_arg * sizeof(svalue_t);
             if ((x = (svalue_t *)
-                        DMALLOC(i, TAG_INPUT_TO, "input_to: 1")) == NULL)
+                 DMALLOC(i, TAG_INPUT_TO, "input_to: 1")) == NULL)
                 fatal("Out of memory!\n");
             memcpy(x, args, i);
         } else
@@ -1247,7 +1256,7 @@ int get_char (svalue_t * fun, int flag, int num_arg, svalue_t * args)
         if (num_arg) {
             i = num_arg * sizeof(svalue_t);
             if ((x = (svalue_t *)
-                        DMALLOC(i, TAG_TEMPORARY, "get_char: 1")) == NULL)
+                 DMALLOC(i, TAG_TEMPORARY, "get_char: 1")) == NULL)
                 fatal("Out of memory!\n");
             memcpy(x, args, i);
         } else
@@ -1256,8 +1265,8 @@ int get_char (svalue_t * fun, int flag, int num_arg, svalue_t * args)
         command_giver->interactive->carryover = x;
         command_giver->interactive->num_carry = num_arg;
         if (fun->type == T_STRING) {
-            s->function.s = make_shared_string(fun->u.string);
-            s->flags = 0;
+           s->function.s = make_shared_string(fun->u.string);
+           s->flags = 0;
         } else {
             s->function.f = fun->u.fp;
             fun->u.fp->hdr.ref++;
@@ -1281,44 +1290,44 @@ void print_svalue (svalue_t * arg)
         tell_object(command_giver, "<NULL>", 6);
     } else
         switch (arg->type) {
-            case T_STRING:
-                len = SVALUE_STRLEN(arg);
-                if (len > LARGEST_PRINTABLE_STRING) {
-                    error("Printable strings limited to length of %d.\n",
-                            LARGEST_PRINTABLE_STRING);
-                }
+        case T_STRING:
+            len = SVALUE_STRLEN(arg);
+            if (len > LARGEST_PRINTABLE_STRING) {
+                error("Printable strings limited to length of %d.\n",
+                      LARGEST_PRINTABLE_STRING);
+            }
 
-                tell_object(command_giver, arg->u.string, len);
-                break;
-            case T_OBJECT:
-                sprintf(tbuf, "OBJ(/%s)", arg->u.ob->obname);
-                tell_object(command_giver, tbuf, strlen(tbuf));
-                break;
-            case T_NUMBER:
-                sprintf(tbuf, "%ld", arg->u.number);
-                tell_object(command_giver, tbuf, strlen(tbuf));
-                break;
-            case T_REAL:
-                sprintf(tbuf, "%f", arg->u.real);
-                tell_object(command_giver, tbuf, strlen(tbuf));
-                break;
-            case T_ARRAY:
-                tell_object(command_giver, "<ARRAY>", strlen("<ARRAY>"));
-                break;
-            case T_MAPPING:
-                tell_object(command_giver, "<MAPPING>", strlen("<MAPPING>"));
-                break;
-            case T_FUNCTION:
-                tell_object(command_giver, "<FUNCTION>", strlen("<FUNCTION>"));
-                break;
+            tell_object(command_giver, arg->u.string, len);
+            break;
+        case T_OBJECT:
+            sprintf(tbuf, "OBJ(/%s)", arg->u.ob->obname);
+            tell_object(command_giver, tbuf, strlen(tbuf));
+            break;
+        case T_NUMBER:
+            sprintf(tbuf, "%ld", arg->u.number);
+            tell_object(command_giver, tbuf, strlen(tbuf));
+            break;
+        case T_REAL:
+            sprintf(tbuf, "%f", arg->u.real);
+            tell_object(command_giver, tbuf, strlen(tbuf));
+            break;
+        case T_ARRAY:
+            tell_object(command_giver, "<ARRAY>", strlen("<ARRAY>"));
+            break;
+        case T_MAPPING:
+            tell_object(command_giver, "<MAPPING>", strlen("<MAPPING>"));
+            break;
+        case T_FUNCTION:
+            tell_object(command_giver, "<FUNCTION>", strlen("<FUNCTION>"));
+            break;
 #ifndef NO_BUFFER_TYPE
-            case T_BUFFER:
-                tell_object(command_giver, "<BUFFER>", strlen("<BUFFER>"));
-                break;
+        case T_BUFFER:
+            tell_object(command_giver, "<BUFFER>", strlen("<BUFFER>"));
+            break;
 #endif
-            default:
-                tell_object(command_giver, "<UNKNOWN>", strlen("<UNKNOWN>"));
-                break;
+        default:
+            tell_object(command_giver, "<UNKNOWN>", strlen("<UNKNOWN>"));
+            break;
         }
     return;
 }
@@ -1433,7 +1442,7 @@ void move_object (object_t * item, object_t * dest)
 #ifdef DEBUG
         if (!okay)
             fatal("Failed to find object /%s in super list of /%s.\n",
-                    item->obname, item->super->obname);
+                  item->obname, item->super->obname);
 #endif
     }
     /*
@@ -1496,12 +1505,12 @@ void mark_free_sentences() {
 
     while (sent) {
         DO_MARK(sent, TAG_SENTENCE);
-        /* Freed sentences should have been freed.  right?
-           if (sent->function)
-           EXTRA_REF(BLOCK(sent->function))++;
-           if (sent->verb)
-           EXTRA_REF(BLOCK(sent->verb))++;
-         */
+/* Freed sentences should have been freed.  right?
+        if (sent->function)
+            EXTRA_REF(BLOCK(sent->function))++;
+        if (sent->verb)
+            EXTRA_REF(BLOCK(sent->verb))++;
+*/
         sent = sent->next;
     }
 }
@@ -1510,13 +1519,13 @@ void mark_free_sentences() {
 void free_sentence (sentence_t * p)
 {
     if (p->flags & V_FUNCTION) {
-        if (p->function.f)
-            free_funp(p->function.f);
-        else p->function.f = 0;
+      if (p->function.f)
+          free_funp(p->function.f);
+      else p->function.f = 0;
     } else {
-        if (p->function.s)
-            free_string(p->function.s);
-        else p->function.s = 0;
+      if (p->function.s)
+          free_string(p->function.s);
+      else p->function.s = 0;
     }
 #ifndef NO_ADD_ACTION
     if (p->verb)
@@ -1529,54 +1538,54 @@ void free_sentence (sentence_t * p)
 
 void fatal (const char *fmt, ...)
 {
-    static int in_fatal = 0;
-    char msg_buf[2049];
-    va_list args;
+  static int in_fatal = 0;
+  char msg_buf[2049];
+  va_list args;
 
-    switch (in_fatal) {
-        default:
-            debug_message("Fatal error while shutting down.  Aborting.\n");
-            break;
-        case 0:
-            in_fatal = 1;
-            V_START(args, fmt);
-            V_VAR(char *, fmt, args);
-            vsnprintf(msg_buf, 2048, fmt, args);
-            va_end(args);
-            debug_message("******** FATAL ERROR: %s\nFluffOS driver attempting to exit gracefully.\n", msg_buf);
-            if (current_file)
-                debug_message("(occured during compilation of %s at line %d)\n", current_file, current_line);
-            if (current_object)
-                debug_message("(current object was /%s)\n", current_object->obname);
+  switch (in_fatal) {
+  default:
+    debug_message("Fatal error while shutting down.  Aborting.\n");
+    break;
+  case 0:
+    in_fatal = 1;
+    V_START(args, fmt);
+    V_VAR(char *, fmt, args);
+    vsnprintf(msg_buf, 2048, fmt, args);
+    va_end(args);
+    debug_message("******** FATAL ERROR: %s\nFluffOS driver attempting to exit gracefully.\n", msg_buf);
+    if (current_file)
+      debug_message("(occured during compilation of %s at line %d)\n", current_file, current_line);
+    if (current_object)
+      debug_message("(current object was /%s)\n", current_object->obname);
 
-            dump_trace(1);
+    dump_trace(1);
 
 #ifdef PACKAGE_MUDLIB_STATS
-            save_stat_files();
+        save_stat_files();
 #endif
-        case 1:
-            in_fatal = 2;
-            copy_and_push_string(msg_buf);
-            push_object(command_giver);
-            push_object(current_object);
-            safe_apply_master_ob(APPLY_CRASH, 3);
-            debug_message("crash() in master called successfully.  Aborting.\n");
-    }
-    /* Make sure we don't trap our abort() */
+  case 1:
+    in_fatal = 2;
+    copy_and_push_string(msg_buf);
+    push_object(command_giver);
+    push_object(current_object);
+    safe_apply_master_ob(APPLY_CRASH, 3);
+    debug_message("crash() in master called successfully.  Aborting.\n");
+  }
+  /* Make sure we don't trap our abort() */
 #ifdef SIGABRT
-    signal(SIGABRT, SIG_DFL);
+  signal(SIGABRT, SIG_DFL);
 #endif
 #ifdef SIGILL
-    signal(SIGILL, SIG_DFL);
+  signal(SIGILL, SIG_DFL);
 #endif
 #ifdef SIGIOT
-    signal(SIGIOT, SIG_DFL);
+  signal(SIGIOT, SIG_DFL);
 #endif
 
 #if !defined(DEBUG_NON_FATAL) || !defined(DEBUG)
-    abort();
+  abort();
 #endif
-    in_fatal = 0;
+  in_fatal = 0;
 }
 
 static int num_error = 0;
@@ -1611,42 +1620,42 @@ void throw_error()
 static void debug_message_with_location (char * err) {
     if (current_object && current_prog) {
         debug_message("%sprogram: /%s, object: /%s, file: %s\n",
-                err,
-                current_prog->filename,
-                current_object->obname,
-                get_line_number(pc, current_prog));
+                      err,
+                      current_prog->filename,
+                      current_object->obname,
+                      get_line_number(pc, current_prog));
     } else if (current_object) {
         debug_message("%sprogram: (none), object: /%s, file: (none)\n",
-                err,
-                current_object->obname);
+                      err,
+                      current_object->obname);
     } else {
         debug_message("%sprogram: (none), object: (none), file: (none)\n",
-                err);
+                      err);
     }
 }
 
 static void add_message_with_location (char * err) {
     if (current_object && current_prog) {
         add_vmessage(command_giver, "%sprogram: /%s, object: /%s, file: %s\n",
-                err,
-                current_prog->filename,
-                current_object->obname,
-                get_line_number(pc, current_prog));
+                     err,
+                     current_prog->filename,
+                     current_object->obname,
+                     get_line_number(pc, current_prog));
     } else if (current_object) {
         add_vmessage(command_giver, "%sprogram: (none), object: /%s, file: (none)\n",
-                err,
-                current_object->obname);
+                     err,
+                     current_object->obname);
     } else {
         add_vmessage(command_giver, "%sprogram: (none), object: (none), file: (none)\n",
-                err);
+                     err);
     }
 }
 
 #ifdef MUDLIB_ERROR_HANDLER
 static void mudlib_error_handler (char * err, int katch) {
     mapping_t *m;
-    const char *file;
-    int line;
+    const char *file = NULL;
+    int line = 0;
     svalue_t *mret;
 
     m = allocate_mapping(6);
@@ -1706,8 +1715,8 @@ void error_handler (char * err)
             num_error--;
             num_mudlib_error = 0;
         } else {
-            if(max_eval_error)
-                outoftime = 0;
+    	    if(max_eval_error)
+	        outoftime = 0;
 
             if (!too_deep_error) {
                 num_mudlib_error++;
@@ -1718,7 +1727,7 @@ void error_handler (char * err)
 #endif
 #endif
         if(max_eval_error)
-            outoftime = 1;
+	    outoftime = 1;
         free_svalue(&catch_value, "caught error");
         catch_value.type = T_STRING;
         catch_value.subtype = STRING_MALLOC;
@@ -1730,7 +1739,7 @@ void error_handler (char * err)
     if (num_error > 0) {
         /* This can happen via errors in the object_name() apply. */
         debug_message("Error '%s' while trying to print error trace -- trace suppressed.\n", err);
-        too_deep_error = max_eval_error = 0;
+	too_deep_error = max_eval_error = 0;
         if (current_error_context)
             LONGJMP(current_error_context->context, 1);
         fatal("LONGJMP failed or no error context for error.\n");
@@ -1751,10 +1760,10 @@ void error_handler (char * err)
         } else {
             num_mudlib_error++;
             num_error--;
-            outoftime = 0;
+	    outoftime = 0;
             mudlib_error_handler(err, 0);
-            if(max_eval_error)
-                outoftime = 1;
+	    if(max_eval_error)
+	      outoftime = 1;
             num_mudlib_error--;
             num_error++;
         }
@@ -1775,10 +1784,10 @@ void error_handler (char * err)
             if (!ob) {
                 if (command_giver)
                     add_vmessage(command_giver,
-                            "error when executing program in destroyed object /%s\n",
-                            object_name);
+                                "error when executing program in destroyed object /%s\n",
+                                object_name);
                 debug_message("error when executing program in destroyed object /%s\n",
-                        object_name);
+                            object_name);
             }
         }
         if (command_giver && command_giver->interactive) {
@@ -1925,16 +1934,16 @@ void do_message (svalue_t * lclass, svalue_t * msg, array_t * scope, array_t * e
 
     for (i = 0; i < scope->size; i++) {
         switch (scope->item[i].type) {
-            case T_STRING:
-                ob = find_object(scope->item[i].u.string);
-                if (!ob || !object_visible(ob))
-                    continue;
-                break;
-            case T_OBJECT:
-                ob = scope->item[i].u.ob;
-                break;
-            default:
+        case T_STRING:
+            ob = find_object(scope->item[i].u.string);
+            if (!ob || !object_visible(ob))
                 continue;
+            break;
+        case T_OBJECT:
+            ob = scope->item[i].u.ob;
+            break;
+        default:
+            continue;
         }
         if (ob->flags & O_LISTENER || ob->interactive) {
             for (valid = 1, j = 0; j < exclude->size; j++) {

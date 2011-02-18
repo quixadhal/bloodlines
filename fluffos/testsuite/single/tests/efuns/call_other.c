@@ -2,7 +2,7 @@ int foo() { return 1; }
 
 int same(mixed *x, mixed *y) {
     for (int i = 0; i < sizeof(x); i++) {
-        return x[i] == y[i];
+	return x[i] == y[i];
     }
 }
 
@@ -19,7 +19,7 @@ void do_tests() {
     ASSERT(call_other(this_object(), "foo"));
     ASSERT(call_other(this_object(), ({ "foo", 1 })));
     ASSERT(catch(call_other("foadf", "foo")));
-
+    
     ASSERT(undefinedp(this_object()->bazz()));
     destruct(this_object());
     ASSERT(undefinedp("/single/master"->valid_bind()));

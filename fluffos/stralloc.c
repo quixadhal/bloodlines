@@ -5,7 +5,7 @@
 #include "comm.h"
 
 /* used temporarily by SVALUE_STRLEN() */
-int svalue_strlen_size;
+unsigned int svalue_strlen_size;
 
 #ifdef NOISY_DEBUG
 void bp (void) {
@@ -19,7 +19,7 @@ void bp (void) {
 
    modified to make calls to strlen() unnecessary and to remove superfluous
    calls to findblock().  -- Truilkan@TMI, 1992/08/05
- */
+*/
 
 /*
  * stralloc.c - string management.
@@ -92,7 +92,7 @@ void init_strings()
         ;
     htable_size_minus_one = htable_size - 1;
     base_table = CALLOCATE(htable_size, block_t *,
-            TAG_STR_TBL, "init_strings");
+                           TAG_STR_TBL, "init_strings");
 #ifdef STRING_STATS
     overhead_bytes += (sizeof(block_t *) * htable_size);
 #endif
@@ -109,8 +109,8 @@ void init_strings()
  * pointer on the hash chain into fs_prev.
  */
 
-    INLINE_STATIC block_t *
-sfindblock (const char * s, int h)
+INLINE_STATIC block_t *
+        sfindblock (const char * s, int h)
 {
     block_t *curr, *prev;
 
@@ -138,8 +138,8 @@ sfindblock (const char * s, int h)
     return ((block_t *) 0);     /* not found */
 }
 
-    char *
-findstring (const char * s)
+char *
+     findstring (const char * s)
 {
     block_t *b;
 
@@ -152,7 +152,7 @@ findstring (const char * s)
 
 /* alloc_new_string: Make a space for a string.  */
 
-    INLINE_STATIC block_t *
+INLINE_STATIC block_t *
 alloc_new_string (const char * string, int h)
 {
     block_t *b;
@@ -169,8 +169,8 @@ alloc_new_string (const char * string, int h)
     STRING(b)[len] = '\0';      /* strncpy doesn't put on \0 if 'from' too
                                  * long */
     if(cut)
-        h = whashstr(string) & htable_size_minus_one;
-    SIZE(b) = (len > USHRT_MAX ? USHRT_MAX : len);
+    	h = whashstr(STRING(b)) & htable_size_minus_one;
+    SIZE(b) = (len > UINT_MAX ? UINT_MAX : len);
     REFS(b) = 1;
     NEXT(b) = base_table[h];
     HASH(b) = h;
@@ -180,8 +180,8 @@ alloc_new_string (const char * string, int h)
     return (b);
 }
 
-    char *
-make_shared_string (const char * str)
+char *
+     make_shared_string (const char * str)
 {
     block_t *b;
     int h;
@@ -199,10 +199,10 @@ make_shared_string (const char * str)
 }
 
 /*
-ref_string: Fatal to call this function on a string that isn't shared.
- */
+   ref_string: Fatal to call this function on a string that isn't shared.
+*/
 
-    const char *
+const char *
 ref_string (const char * str)
 {
     block_t *b;
@@ -226,7 +226,7 @@ ref_string (const char * str)
  * checks applied.
  */
 
-    void
+void
 free_string (const char * str)
 {
     block_t **prev, *b;
@@ -249,7 +249,8 @@ free_string (const char * str)
     if (REFS(b) > 0)
         return;
 
-    h = StrHash(str);
+    //h = StrHash(str);
+    h = HASH(BLOCK(str));
     prev = base_table + h;
     while ((b = *prev)) {
         if (STRING(b) == str) {
@@ -266,13 +267,14 @@ free_string (const char * str)
     CHECK_STRING_STATS;
 }
 
-    void
+void
 deallocate_string (char * str)
 {
     int h;
     block_t *b, **prev;
 
-    h = StrHash(str);
+    //h = StrHash(str);
+    h = HASH(BLOCK(str));
     prev = base_table + h;
     while ((b = *prev)) {
         if (STRING(b) == str) {
@@ -286,7 +288,7 @@ deallocate_string (char * str)
     FREE(b);
 }
 
-    int
+int
 add_string_status (outbuffer_t * out, int verbose)
 {
 #ifdef STRING_STATS
@@ -296,14 +298,14 @@ add_string_status (outbuffer_t * out, int verbose)
     }
     if (verbose != -1)
         outbuf_addv(out, "All strings:\t\t\t%8d %8d + %d overhead\n",
-                num_distinct_strings, bytes_distinct_strings, overhead_bytes);
+              num_distinct_strings, bytes_distinct_strings, overhead_bytes);
     if (verbose == 1) {
         outbuf_addv(out, "Total asked for\t\t\t%8d %8d\n",
-                allocd_strings, allocd_bytes);
+                    allocd_strings, allocd_bytes);
         outbuf_addv(out, "Space actually required/total string bytes %d%%\n",
-                (bytes_distinct_strings + overhead_bytes) * 100 / allocd_bytes);
+            (bytes_distinct_strings + overhead_bytes) * 100 / allocd_bytes);
         outbuf_addv(out, "Searches: %d    Average search length: %6.3f\n",
-                num_str_searches, (double) search_len / num_str_searches);
+                  num_str_searches, (double) search_len / num_str_searches);
     }
     return (bytes_distinct_strings + overhead_bytes);
 #else
@@ -320,10 +322,10 @@ add_string_status (outbuffer_t * out, int verbose)
 #endif
 
 /* This stuff needs a bit more work, otherwise FREE_MSTR() will crash on this
-   malloc_block_t the_null_string_blocks[2] = { { DME 0, 1 }, { DME 0, 0 } };
+malloc_block_t the_null_string_blocks[2] = { { DME 0, 1 }, { DME 0, 0 } };
 
-   char *the_null_string = (char *)&the_null_string_blocks[1];
- */
+char *the_null_string = (char *)&the_null_string_blocks[1];
+*/
 
 #ifdef DEBUGMALLOC
 char *int_new_string (int size, char * tag)
@@ -342,12 +344,12 @@ char *int_new_string (int size)
 #endif
 
     mbt = (malloc_block_t *)DXALLOC(size + sizeof(malloc_block_t) + 1, TAG_MALLOC_STRING, tag);
-    if (size < USHRT_MAX) {
+    if (size < UINT_MAX) {
         mbt->size = size;
         ADD_NEW_STRING(size, sizeof(malloc_block_t));
     } else {
-        mbt->size = USHRT_MAX;
-        ADD_NEW_STRING(USHRT_MAX, sizeof(malloc_block_t));
+        mbt->size = UINT_MAX;
+        ADD_NEW_STRING(UINT_MAX, sizeof(malloc_block_t));
     }
     mbt->ref = 1;
     ADD_STRING(mbt->size);
@@ -362,10 +364,10 @@ char *extend_string (const char * str, int len) {
 #endif
 
     mbt = (malloc_block_t *)DREALLOC(MSTR_BLOCK(str), len + sizeof(malloc_block_t) + 1, TAG_MALLOC_STRING, "extend_string");
-    if (len < USHRT_MAX) {
+    if (len < UINT_MAX) {
         mbt->size = len;
     } else {
-        mbt->size = USHRT_MAX;
+        mbt->size = UINT_MAX;
     }
     ADD_STRING_SIZE(mbt->size - oldsize);
     CHECK_STRING_STATS;

@@ -1,7 +1,7 @@
 int same(mixed* x, mixed* y) {
     if (sizeof(x) != sizeof(y)) return 0;
     for (int i = 0; i < sizeof(x); i++) {
-        if (x[i] != y[i]) return 0;
+	if (x[i] != y[i]) return 0;
     }
     return 1;
 }
@@ -10,7 +10,7 @@ int msame(mapping x, mapping y) {
     mixed z;
     if (sizeof(keys(x)) != sizeof(keys(y))) return 0;
     foreach (z in keys(x)) {
-        if (x[z] != y[z]) return 0;
+	if (x[z] != y[z]) return 0;
     }
     return 1;
 }

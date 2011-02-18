@@ -35,15 +35,15 @@ long random_number (long n)
     static char called = 0;
 
     if (!called) {
-        time_t tim;
+	time_t tim;
 
-        time(&tim);
+	time(&tim);
 #  ifdef RAND
-        srand(tim);
+	srand(tim);
 #  else
-        srand48(tim);
+	srand48(tim);
 #  endif
-        called = 1;
+	called = 1;
     }				/* endif */
 #  ifdef RAND
 #    ifdef MINGW
@@ -52,25 +52,25 @@ long random_number (long n)
     return 1 + (long) ((float)n * rand() / (RAND_MAX+1.0);
 #endif
 #  else
-            return (long)(drand48() * n);
+    return (long)(drand48() * n);
 #  endif
 #else
 #  ifdef RANDOM
-            return random() % n;
+    return random() % n;
 #  else				/* RANDOM */
-            return current_time % n;	/* You really don't want to use this method */
+    return current_time % n;	/* You really don't want to use this method */
 #  endif			/* RANDOM */
 #endif				/* RAND */
-            }
+}
 
-            /*
-             * The function time() can't really be trusted to return an integer.
-             * But MudOS uses the 'current_time', which is an integer number
-             * of seconds. To make this more portable, the following functions
-             * should be defined in such a way as to return the number of seconds since
-             * some chosen year. The old behaviour of time(), is to return the number
-             * of seconds since 1970.
-             */
+/*
+ * The function time() can't really be trusted to return an integer.
+ * But MudOS uses the 'current_time', which is an integer number
+ * of seconds. To make this more portable, the following functions
+ * should be defined in such a way as to return the number of seconds since
+ * some chosen year. The old behaviour of time(), is to return the number
+ * of seconds since 1970.
+ */
 
 long get_current_time()
 {
@@ -81,7 +81,7 @@ const char *time_string (time_t t)
 {
     const char *res = ctime(&t);
     if(!res)
-        res = "ctime failed";
+      res = "ctime failed";
     return res;
 }
 
@@ -98,7 +98,7 @@ void init_usec_clock()
 /*
  * Get a microsecond clock sample.
  */
-    void
+void
 get_usec_clock (long * sec, long * usec)
 {
 #ifdef HAS_GETTIMEOFDAY
@@ -109,7 +109,7 @@ get_usec_clock (long * sec, long * usec)
     *usec = tv.tv_usec;
 #else
 #ifdef _SEQUENT_
-    *sec = 0;
+           *sec = 0;
     *usec = GETUSCLK();
 #else
     *sec = time(0);
@@ -119,7 +119,7 @@ get_usec_clock (long * sec, long * usec)
 }
 
 #ifdef USE_POSIX_SIGNALS
-    int
+int
 port_sigblock (sigset_t mask)
 {
     sigset_t omask;
@@ -128,7 +128,7 @@ port_sigblock (sigset_t mask)
     return (omask);
 }
 
-    int
+int
 port_sigmask (int sig)
 {
     sigset_t set;
@@ -138,8 +138,8 @@ port_sigmask (int sig)
     return (set);
 }
 
-    void
-(*port_signal(sig, func)) ()
+void
+     (*port_signal(sig, func)) ()
     int sig;
     void (*func) ();
 {
@@ -149,11 +149,11 @@ port_sigmask (int sig)
     act.sa_mask = 0;
     act.sa_flags = 0;
     if (sigaction(sig, &act, &oact) == -1)
-        return ((void (*) ()) -1);
+	return ((void (*) ()) -1);
     return (oact.sa_handler);
 }
 
-    int
+int
 port_sigsetmask (sigset_t mask)
 {
     sigset_t omask;
@@ -163,7 +163,7 @@ port_sigsetmask (sigset_t mask)
 }
 #endif
 
-    int
+int
 get_cpu_times (unsigned long * secs, unsigned long * usecs)
 {
 #ifdef RUSAGE
@@ -179,7 +179,7 @@ get_cpu_times (unsigned long * secs, unsigned long * usecs)
 
 #ifdef RUSAGE			/* start RUSAGE */
     if (getrusage(RUSAGE_SELF, &rus) < 0) {
-        return 0;
+	return 0;
     }
     *secs = rus.ru_utime.tv_sec + rus.ru_stime.tv_sec;
     *usecs = rus.ru_utime.tv_usec + rus.ru_stime.tv_usec;
@@ -188,7 +188,7 @@ get_cpu_times (unsigned long * secs, unsigned long * usecs)
 
 #ifdef GET_PROCESS_STATS	/* start GET_PROCESS_STATS */
     if (get_process_stats(NULL, PS_SELF, &ps, NULL) == -1) {
-        return 0;
+	return 0;
     }
     *secs = ps.ps_utime.tv_sec + ps.ps_stime.tv_sec;
     *usecs = ps.ps_utime.tv_usec + ps.ps_stime.tv_usec;
@@ -209,8 +209,8 @@ get_cpu_times (unsigned long * secs, unsigned long * usecs)
 }
 
 /* return the current working directory */
-    char *
-get_current_dir (char * buf, int limit)
+char *
+     get_current_dir (char * buf, int limit)
 {
 #ifdef HAS_GETCWD
     return getcwd(buf, limit);	/* POSIX */
@@ -229,9 +229,9 @@ extern int sys_nerr;
 char *port_strerror (int which)
 {
     if ((which < 0) || (which >= sys_nerr)) {
-        return "unknown error";
+	return "unknown error";
     } else {
-        return sys_errlist[which];
+	return sys_errlist[which];
     }
 }
 #endif				/* STRERROR */
@@ -243,13 +243,13 @@ INLINE char *memmove (register char * b, register char * a, register int s)
     char *r = b;
 
     if (b < a) {
-        while (s--)
-            *(b++) = *(a++);
+	while (s--)
+	    *(b++) = *(a++);
     } else if (b > a) {
-        b += s;
-        a += s;
-        while (s--)
-            *(--b) = *(--a);
+	b += s;
+	a += s;
+	while (s--)
+	    *(--b) = *(--a);
     }
     return r;
 }
@@ -266,39 +266,39 @@ char *WinStrError(int err) {
 
 #ifdef MMAP_SBRK
 void * sbrkx(long size){
-    static void *end = 0;
-    static unsigned long tsize = 0;
-    void *tmp, *result;
-    long long newsize;
-    if(!end){
-        tmp = mmap((void *)0x41000000, 4096, PROT_READ|PROT_WRITE, MAP_FIXED|MAP_PRIVATE|MAP_ANONYMOUS,0,0);
-        tsize=4096;
-        end=(void *)0x41000000;
-        if(tmp != end)
-            return NULL;
-    }
+  static void *end = 0;
+  static unsigned long tsize = 0;
+  void *tmp, *result;
+  long long newsize;
+  if(!end){
+    tmp = mmap((void *)0x41000000, 4096, PROT_READ|PROT_WRITE, MAP_FIXED|MAP_PRIVATE|MAP_ANONYMOUS,0,0);
+    tsize=4096;
+    end=(void *)0x41000000;
+    if(tmp != end)
+      return NULL;
+  }
 
-    newsize = (long)end + size;
-    result = end;
-    end = newsize;
-    newsize &= 0xFFFFF000;
-    newsize += 0x1000;
-    newsize -= 0x41000000;
+  newsize = (long)end + size;
+  result = end;
+  end = newsize;
+  newsize &= 0xFFFFF000;
+  newsize += 0x1000;
+  newsize -= 0x41000000;
 
-    tmp = mremap((void *)0x41000000, tsize, newsize, 0);
+  tmp = mremap((void *)0x41000000, tsize, newsize, 0);
 
-    if(tmp != (void *) 0x41000000)
-        return NULL;
+  if(tmp != (void *) 0x41000000)
+    return NULL;
 
-    tsize = newsize;
-    return result;
+  tsize = newsize;
+  return result;
 }
 
 #else
 
 void *sbrkx(long size){
 #ifndef MINGW
-    return sbrk(size);
+  return sbrk(size);
 #endif
 }
 #endif

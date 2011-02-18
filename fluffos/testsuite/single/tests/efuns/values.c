@@ -4,7 +4,7 @@ void do_tests() {
     mixed x, y;
 
     foreach (x, y in m) {
-        k -= ({ y });
+	k -= ({ y });
     }
     ASSERT(k == ({}));
 }

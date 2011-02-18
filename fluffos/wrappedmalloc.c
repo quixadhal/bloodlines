@@ -1,7 +1,7 @@
 /*
    wrapper functions for system malloc -- keep malloc stats.
    Truilkan@TMI - 92/04/17
- */
+*/
 
 #define IN_MALLOC_WRAPPER
 #define NO_OPCODES
@@ -53,6 +53,6 @@ void dump_malloc_data (outbuffer_t * ob)
     outbuf_addv(ob, "#alloc calls:     %10lu\n", stats.alloc_calls);
     outbuf_addv(ob, "#free calls:      %10lu\n", stats.free_calls);
     outbuf_addv(ob, "#alloc - #free:   %10lu\n",
-            stats.alloc_calls - stats.free_calls);
+		stats.alloc_calls - stats.free_calls);
     outbuf_addv(ob, "#realloc calls:   %10lu\n", stats.realloc_calls);
 }

@@ -7,7 +7,7 @@ void reference_prog (program_t * progp, const char * from)
 {
     progp->ref++;
     debug(d_flag, ("reference_prog: /%s ref %d (%s)\n",
-                progp->filename, progp->ref, from));
+               progp->filename, progp->ref, from));
 }
 
 void deallocate_program (program_t * progp)
@@ -15,7 +15,7 @@ void deallocate_program (program_t * progp)
     int i;
 
     debug(d_flag, ("free_prog: /%s\n", progp->filename));
-
+    
     total_prog_block_size -= progp->total_size;
     total_num_prog_blocks -= 1;
 
@@ -31,8 +31,8 @@ void deallocate_program (program_t * progp)
         free_string(progp->variable_table[i]);
     /* Free all inherited objects */
     for (i = 0; i < progp->num_inherited; i++){
-        program_t *tmp = progp->inherit[i].prog;
-        free_prog(&tmp); //don't want to mess up the prog pointer in the inherited ob
+    	program_t *tmp = progp->inherit[i].prog;
+    	free_prog(&tmp); //don't want to mess up the prog pointer in the inherited ob
     }
     free_string(progp->filename);
 
@@ -42,7 +42,7 @@ void deallocate_program (program_t * progp)
      */
     if (progp->file_info)
         FREE(progp->file_info);
-
+    
     FREE((char *) progp);
 }
 
@@ -57,11 +57,11 @@ void free_prog (program_t **progp)
 {
     (*progp)->ref--;
     if ((*progp)->ref > 0) {
-        *progp = (program_t *)2;//NULL;
+      *progp = (program_t *)2;//NULL;
         return;
     }
     if ((*progp)->func_ref > 0) {
-        *progp = (program_t *)3;//NULL;
+      *progp = (program_t *)3;//NULL;
         return;
     }
 
@@ -86,17 +86,17 @@ char *variable_name (program_t * prog, int idx) {
 
 function_t *find_func_entry (program_t * prog, int index) {
     register int low, mid, high;
-
+    
 
     /* Walk up the inheritance tree to the real definition */   
     if (prog->function_flags[index] & FUNC_ALIAS) {
         index = prog->function_flags[index] & ~FUNC_ALIAS;
     }
-
+    
     while (prog->function_flags[index] & FUNC_INHERITED) {
         low = 0;
         high = prog->num_inherited -1;
-
+        
         while (high > low) {
             mid = (low + high + 1) >> 1;
             if (prog->inherit[mid].function_index_offset > index)
@@ -106,7 +106,7 @@ function_t *find_func_entry (program_t * prog, int index) {
         index -= prog->inherit[low].function_index_offset;
         prog = prog->inherit[low].prog;
     }
-
+    
     index -= prog->last_inherited;
 
     return prog->function_table + index;

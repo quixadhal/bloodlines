@@ -61,18 +61,18 @@ static void CDECL sig_int SIGPROT;
 
 #ifndef DEBUG
 static void CDECL sig_hup SIGPROT,
-            CDECL sig_abrt SIGPROT,
-            CDECL sig_segv SIGPROT,
-            CDECL sig_ill SIGPROT,
-            CDECL sig_bus SIGPROT,
-            CDECL sig_iot SIGPROT;
+    CDECL sig_abrt SIGPROT,
+    CDECL sig_segv SIGPROT,
+    CDECL sig_ill SIGPROT,
+    CDECL sig_bus SIGPROT,
+    CDECL sig_iot SIGPROT;
 #endif
 #endif
 
 #ifdef DEBUG_MACRO
 /* used by debug.h: please leave this in here -- Tru (you can change its
    value if you like).
- */
+*/
 int debug_level = 0;
 #endif
 
@@ -132,8 +132,8 @@ int main (int argc, char ** argv)
     p = (char *) &i;
     *p = -10;
     if (EXTRACT_UCHAR(p) != 0x100 - 10) {
-        fprintf(stderr, "Bad definition of EXTRACT_UCHAR() in interpret.h.\n");
-        exit(-1);
+  fprintf(stderr, "Bad definition of EXTRACT_UCHAR() in interpret.h.\n");
+  exit(-1);
     }
 
     /*
@@ -143,18 +143,18 @@ int main (int argc, char ** argv)
     p = (char *) &i;
     (void) EXTRACT_UCHAR(p++);
     if ((p - (char *) &i) != 1) {
-        fprintf(stderr, "EXTRACT_UCHAR() in interpret.h evaluates its argument more than once.\n");
-        exit(-1);
+  fprintf(stderr, "EXTRACT_UCHAR() in interpret.h evaluates its argument more than once.\n");
+  exit(-1);
     }
 
     /*
      * Check the living hash table size
      */
     if (CFG_LIVING_HASH_SIZE != 4 && CFG_LIVING_HASH_SIZE != 16 &&
-            CFG_LIVING_HASH_SIZE != 64 && CFG_LIVING_HASH_SIZE != 256 &&
-            CFG_LIVING_HASH_SIZE != 1024 && CFG_LIVING_HASH_SIZE != 4096) {
-        fprintf(stderr, "CFG_LIVING_HASH_SIZE in options.h must be one of 4, 16, 64, 256, 1024, 4096, ...\n");
-        exit(-1);
+  CFG_LIVING_HASH_SIZE != 64 && CFG_LIVING_HASH_SIZE != 256 &&
+  CFG_LIVING_HASH_SIZE != 1024 && CFG_LIVING_HASH_SIZE != 4096) {
+  fprintf(stderr, "CFG_LIVING_HASH_SIZE in options.h must be one of 4, 16, 64, 256, 1024, 4096, ...\n");
+  exit(-1);
     }
 
 #ifdef RAND
@@ -180,16 +180,16 @@ int main (int argc, char ** argv)
 
     got_defaults = 0;
     for (i = 1; (i < argc) && !got_defaults; i++) {
-        if (argv[i][0] != '-') {
-            set_defaults(argv[i]);
-            got_defaults = 1;
-        }
+  if (argv[i][0] != '-') {
+      set_defaults(argv[i]);
+      got_defaults = 1;
+  }
     }
     get_version(version_buf);
     if (!got_defaults) {
-        fprintf(stderr, "%s for %s.\n", version_buf, ARCH);
-        fprintf(stderr, "You must specify the configuration filename as an argument.\n");
-        exit(-1);
+  fprintf(stderr, "%s for %s.\n", version_buf, ARCH);
+  fprintf(stderr, "You must specify the configuration filename as an argument.\n");
+  exit(-1);
     }
 
     printf("Initializing internal tables....\n");
@@ -209,9 +209,9 @@ int main (int argc, char ** argv)
      */
 #if 0
     if (dtablesize > FD_SETSIZE) {
-        fprintf(stderr, "Warning: File descriptor requirements exceed system capacity!\n");
-        fprintf(stderr, "         Configuration exceeds system capacity by %d descriptor(s).\n",
-                dtablesize - FD_SETSIZE);
+  fprintf(stderr, "Warning: File descriptor requirements exceed system capacity!\n");
+  fprintf(stderr, "         Configuration exceeds system capacity by %d descriptor(s).\n",
+    dtablesize - FD_SETSIZE);
     }
 #ifdef HAS_SETDTABLESIZE
     /*
@@ -223,34 +223,34 @@ int main (int argc, char ** argv)
      * Check to make sure we get enough.
      */
     if (getdtablesize() < dtablesize)
-        if (setdtablesize(dtablesize) < dtablesize) {
-            fprintf(stderr, "Warning: Could not allocate enough file descriptors!\n");
-            fprintf(stderr, "         setdtablesize() could not allocate %d descriptor(s).\n",
-                    getdtablesize() - dtablesize);
-        }
+  if (setdtablesize(dtablesize) < dtablesize) {
+      fprintf(stderr, "Warning: Could not allocate enough file descriptors!\n");
+      fprintf(stderr, "         setdtablesize() could not allocate %d descriptor(s).\n",
+        getdtablesize() - dtablesize);
+  }
     /*
      * Just be polite and tell the administrator how many he has.
      */
     fprintf(stderr, "%d file descriptors were allocated, (%d were requested).\n",
-            getdtablesize(), dtablesize);
+      getdtablesize(), dtablesize);
 #endif
 #endif
     time_to_clean_up = TIME_TO_CLEAN_UP;
     max_cost = MAX_COST;
     reserved_size = RESERVED_SIZE;
     max_array_size = MAX_ARRAY_SIZE;
-    if(max_array_size > 65535){
-        fprintf(stderr, "Maximum array size can not exceed 65535");
-        max_array_size = 65535;
+    if(max_array_size > 2147483647){
+      fprintf(stderr, "Maximum array size can not exceed 65535");
+      max_array_size = 2147483647;
     }
     max_buffer_size = MAX_BUFFER_SIZE;
     max_string_length = MAX_STRING_LENGTH;
     mud_lib = (char *) MUD_LIB;
     set_inc_list(INCLUDE_DIRS);
     if (reserved_size > 0)
-        reserved_area = (char *) DMALLOC(reserved_size, TAG_RESERVED, "main.c: reserved_area");
+  reserved_area = (char *) DMALLOC(reserved_size, TAG_RESERVED, "main.c: reserved_area");
     for (i = 0; i < sizeof consts / sizeof consts[0]; i++)
-        consts[i] = exp(-i / 900.0);
+  consts[i] = exp(-i / 900.0);
     reset_machine(1);
     /*
      * The flags are parsed twice ! The first time, we only search for the -m
@@ -258,46 +258,46 @@ int main (int argc, char ** argv)
      * will be available when compiling master.c.
      */
     for (i = 1; i < argc; i++) {
-        if (argv[i][0] != '-')
-            continue;
-        switch (argv[i][1]) {
-            case 'D':
-                if (argv[i][2]) {
-                    lpc_predef_t *tmp = ALLOCATE(lpc_predef_t, TAG_PREDEFINES,
-                            "predef");
-                    tmp->flag = argv[i] + 2;
-                    tmp->next = lpc_predefs;
-                    lpc_predefs = tmp;
-                    continue;
-                }
-                fprintf(stderr, "Illegal flag syntax: %s\n", argv[i]);
-                exit(-1);
-            case 'N':
-                no_ip_demon++;
-                continue;
+  if (argv[i][0] != '-')
+      continue;
+  switch (argv[i][1]) {
+  case 'D':
+      if (argv[i][2]) {
+    lpc_predef_t *tmp = ALLOCATE(lpc_predef_t, TAG_PREDEFINES,
+               "predef");
+    tmp->flag = argv[i] + 2;
+    tmp->next = lpc_predefs;
+    lpc_predefs = tmp;
+    continue;
+      }
+      fprintf(stderr, "Illegal flag syntax: %s\n", argv[i]);
+      exit(-1);
+  case 'N':
+      no_ip_demon++;
+      continue;
 #ifdef HAS_CONSOLE
-            case 'C':
-                has_console = 1;
-                continue;
+  case 'C':
+      has_console = 1;
+      continue;
 #endif
 #ifdef YYDEBUG
-            case 'y':
-                yydebug = 1;
-                continue;
+  case 'y':
+      yydebug = 1;
+      continue;
 #endif        /* YYDEBUG */
-            case 'm':
-                mud_lib = alloc_cstring(argv[i] + 2, "mudlib dir");
-                if (chdir(mud_lib) == -1) {
-                    fprintf(stderr, "Bad mudlib directory: %s\n", mud_lib);
-                    exit(-1);
-                }
-                new_mudlib = 1;
-                break;
-        }
+  case 'm':
+      mud_lib = alloc_cstring(argv[i] + 2, "mudlib dir");
+      if (chdir(mud_lib) == -1) {
+    fprintf(stderr, "Bad mudlib directory: %s\n", mud_lib);
+    exit(-1);
+      }
+      new_mudlib = 1;
+      break;
+  }
     }
     if (!new_mudlib && chdir(mud_lib) == -1) {
-        fprintf(stderr, "Bad mudlib directory: %s\n", mud_lib);
-        exit(-1);
+  fprintf(stderr, "Bad mudlib directory: %s\n", mud_lib);
+  exit(-1);
     }
     time(&tm);
     debug_message("----------------------------------------------------------------------------\n%s (%s) starting up on %s - %s\n\n", MUD_NAME, version_buf, ARCH, ctime(&tm));
@@ -309,87 +309,87 @@ int main (int argc, char ** argv)
 
 #ifndef NO_IP_DEMON
     if (!no_ip_demon && ADDR_SERVER_IP)
-        init_addr_server(ADDR_SERVER_IP, ADDR_SERVER_PORT);
+  init_addr_server(ADDR_SERVER_IP, ADDR_SERVER_PORT);
 #endif        /* NO_IP_DEMON */
 
     save_context(&econ);
     if (SETJMP(econ.context)) {
-        debug_message("The simul_efun (%s) and master (%s) objects must be loadable.\n",
-                SIMUL_EFUN, MASTER_FILE);
-        exit(-1);
+  debug_message("The simul_efun (%s) and master (%s) objects must be loadable.\n",
+          SIMUL_EFUN, MASTER_FILE);
+  exit(-1);
     } else {
-        init_simul_efun(SIMUL_EFUN);
-        init_master();
+  init_simul_efun(SIMUL_EFUN);
+  init_master();
     }
     set_eval(max_cost);
     pop_context(&econ);
 
     for (i = 1; i < argc; i++) {
-        if (argv[i][0] != '-') {
-            continue;
-        } else {
-            /*
-             * Look at flags. -m and -o has already been tested.
-             */
-            switch (argv[i][1]) {
-                case 'D':
-                case 'N':
-                case 'm':
-                case 'y':
-                case 'C':
-                    continue;
-                case 'f':
-                    save_context(&econ);
-                    if (SETJMP(econ.context)) {
-                        debug_message("Error while calling master::flag(\"%s\"), aborting ...\n", argv[i] + 2);
-                        exit(-1);
-                    }
-                    push_constant_string(argv[i] + 2);
-                    apply_master_ob(APPLY_FLAG, 1);
-                    if (MudOS_is_being_shut_down) {
-                        debug_message("Shutdown by master object.\n");
-                        exit(0);
-                    }
-                    pop_context(&econ);
-                    continue;
-                case 'e':
-                    e_flag++;
-                    continue;
-                case 'p':
-                    external_port[0].port = atoi(argv[i] + 2);
-                    continue;
-                case 'd':
+  if (argv[i][0] != '-') {
+      continue;
+  } else {
+      /*
+       * Look at flags. -m and -o has already been tested.
+       */
+      switch (argv[i][1]) {
+      case 'D':
+      case 'N':
+      case 'm':
+      case 'y':
+      case 'C':
+    continue;
+      case 'f':
+    save_context(&econ);
+    if (SETJMP(econ.context)) {
+        debug_message("Error while calling master::flag(\"%s\"), aborting ...\n", argv[i] + 2);
+        exit(-1);
+    }
+    push_constant_string(argv[i] + 2);
+    apply_master_ob(APPLY_FLAG, 1);
+    if (MudOS_is_being_shut_down) {
+        debug_message("Shutdown by master object.\n");
+        exit(0);
+    }
+    pop_context(&econ);
+    continue;
+      case 'e':
+    e_flag++;
+    continue;
+      case 'p':
+    external_port[0].port = atoi(argv[i] + 2);
+    continue;
+            case 'd':
 #ifdef DEBUG_MACRO
-                    if (argv[i][2])
-                        debug_level_set(&argv[i][2]);
-                    else
-                        debug_level |= DBG_d_flag;
+    if (argv[i][2])
+        debug_level_set(&argv[i][2]);
+    else
+        debug_level |= DBG_d_flag;
 #else
-                    debug_message("Driver must be compiled with DEBUG_MACRO on to use -d.\n");
+                debug_message("Driver must be compiled with DEBUG_MACRO on to use -d.\n");
 #endif
-                    break;
-                case 'c':
-                    comp_flag++;
-                    continue;
-                case 't':
-                    t_flag++;
-                    continue;
-                default:
-                    debug_message("Unknown flag: %s\n", argv[i]);
-                    exit(-1);
-            }
-        }
+    break;
+      case 'c':
+    comp_flag++;
+    continue;
+      case 't':
+    t_flag++;
+    continue;
+      default:
+    debug_message("Unknown flag: %s\n", argv[i]);
+    exit(-1);
+      }
+  }
     }
     if (MudOS_is_being_shut_down)
-        exit(1);
+  exit(1);
     if (*(DEFAULT_FAIL_MESSAGE)) {
-        char buf[8192];
+  char buf[8192];
 
-        strcpy(buf, DEFAULT_FAIL_MESSAGE);
-        strcat(buf, "\n");
-        default_fail_message = make_shared_string(buf);
+  strcpy(buf, DEFAULT_FAIL_MESSAGE);
+  strcat(buf, "\n");
+  default_fail_message = make_shared_string(buf);
     } else
-        default_fail_message = "What?\n";
+  default_fail_message = "What?\n";
 #ifdef PACKAGE_MUDLIB_STATS
     restore_stat_files();
 #endif
@@ -433,11 +433,11 @@ int main (int argc, char ** argv)
 
 #ifdef HAS_CONSOLE
     if(has_console >= 0)
-        signal(SIGTTIN, sig_ttin);
+      signal(SIGTTIN, sig_ttin);
     signal(SIGTTOU, SIG_IGN);
 #endif
 
-    backend();
+backend();
     return 0;
 }
 
@@ -453,13 +453,13 @@ char *int_string_copy (const char * const str)
     DEBUG_CHECK(!str, "Null string passed to string_copy.\n");
     len = strlen(str);
     if (len > max_string_length) {
-        len = max_string_length;
-        p = new_string(len, desc);
-        (void) strncpy(p, str, len);
-        p[len] = '\0';
+  len = max_string_length;
+  p = new_string(len, desc);
+  (void) strncpy(p, str, len);
+  p[len] = '\0';
     } else {
-        p = new_string(len, desc);
-        (void) strncpy(p, str, len + 1);
+  p = new_string(len, desc);
+  (void) strncpy(p, str, len + 1);
     }
     return p;
 }
@@ -476,17 +476,17 @@ char *int_string_unlink (const char * str)
     mbt->ref--;
 
     if (mbt->size == USHRT_MAX) {
-        int l = strlen(str + USHRT_MAX) + USHRT_MAX; /* ouch */
+  int l = strlen(str + USHRT_MAX) + USHRT_MAX; /* ouch */
 
-        newmbt = (malloc_block_t *)DXALLOC(l + sizeof(malloc_block_t) + 1, TAG_MALLOC_STRING, desc);
-        memcpy((char *)(newmbt + 1), (char *)(mbt + 1), l+1);
-        newmbt->size = USHRT_MAX;
-        ADD_NEW_STRING(USHRT_MAX, sizeof(malloc_block_t));
+  newmbt = (malloc_block_t *)DXALLOC(l + sizeof(malloc_block_t) + 1, TAG_MALLOC_STRING, desc);
+  memcpy((char *)(newmbt + 1), (char *)(mbt + 1), l+1);
+  newmbt->size = USHRT_MAX;
+  ADD_NEW_STRING(USHRT_MAX, sizeof(malloc_block_t));
     } else {
-        newmbt = (malloc_block_t *)DXALLOC(mbt->size + sizeof(malloc_block_t) + 1, TAG_MALLOC_STRING, desc);
-        memcpy((char *)(newmbt + 1), (char *)(mbt + 1), mbt->size+1);
-        newmbt->size = mbt->size;
-        ADD_NEW_STRING(mbt->size, sizeof(malloc_block_t));
+  newmbt = (malloc_block_t *)DXALLOC(mbt->size + sizeof(malloc_block_t) + 1, TAG_MALLOC_STRING, desc);
+  memcpy((char *)(newmbt + 1), (char *)(mbt + 1), mbt->size+1);
+  newmbt->size = mbt->size;
+  ADD_NEW_STRING(mbt->size, sizeof(malloc_block_t));
     }
     newmbt->ref = 1;
     CHECK_STRING_STATS;
@@ -503,22 +503,22 @@ void debug_message (const char *fmt, ...)
     va_list args;
 
     if (!debug_message_fp) {
-        /*
-         * check whether config file specified this option
-         */
-        if (strlen(DEBUG_LOG_FILE))
-            snprintf(deb, 1023, "%s/%s", LOG_DIR, DEBUG_LOG_FILE);
-        else
-            snprintf(deb, 1023, "%s/debug.log", LOG_DIR);
-        deb[1023] = 0;
-        while (*deb == '/')
-            deb++;
-        debug_message_fp = fopen(deb, "a"); //Append is better. -Raudhrskal
-        if (!debug_message_fp) {
-            /* darn.  We're in trouble */
-            perror(deb);
-            abort();
-        }
+  /*
+   * check whether config file specified this option
+   */
+  if (strlen(DEBUG_LOG_FILE))
+	  snprintf(deb, 1023, "%s/%s", LOG_DIR, DEBUG_LOG_FILE);
+  else
+	  snprintf(deb, 1023, "%s/debug.log", LOG_DIR);
+  deb[1023] = 0;
+  while (*deb == '/')
+      deb++;
+  debug_message_fp = fopen(deb, "w");
+  if (!debug_message_fp) {
+      /* darn.  We're in trouble */
+      perror(deb);
+      abort();
+  }
     }
 
     V_START(args, fmt);
@@ -537,30 +537,30 @@ int slow_shut_down_to_do = 0;
 
 char *xalloc (int size)
 {
-    char *p;
-    const char *t;
-    static int going_to_exit;
+	char *p;
+	const char *t;
+	static int going_to_exit;
 
-    if (going_to_exit)
-        exit(3);
+	if (going_to_exit)
+		exit(3);
 #ifdef DEBUG
-    if (size == 0)
-        fatal("Tried to allocate 0 bytes.\n");
+	if (size == 0)
+		fatal("Tried to allocate 0 bytes.\n");
 #endif
-    p = (char *) DMALLOC(size, TAG_MISC, "main.c: xalloc");
-    if (p == 0) {
-        if (reserved_area) {
-            FREE(reserved_area);
-            t = "Temporarily out of MEMORY. Freeing reserve.\n";
-            write(1, t, strlen(t));
-            reserved_area = 0;
-            slow_shut_down_to_do = 6;
-            return xalloc(size);/* Try again */
-        }
-        going_to_exit = 1;
-        fatal("Totally out of MEMORY.\n");
-    }
-    return p;
+	p = (char *) DMALLOC(size, TAG_MISC, "main.c: xalloc");
+	if (p == 0) {
+		if (reserved_area) {
+			FREE(reserved_area);
+			t = "Temporarily out of MEMORY. Freeing reserve.\n";
+			write(1, t, strlen(t));
+			reserved_area = 0;
+			slow_shut_down_to_do = 6;
+			return xalloc(size);/* Try again */
+		}
+		going_to_exit = 1;
+		fatal("Totally out of MEMORY.\n");
+	}
+	return p;
 }
 
 static void CDECL PSIG(sig_cld)
@@ -569,7 +569,7 @@ static void CDECL PSIG(sig_cld)
     int status;
 #ifdef USE_BSD_SIGNALS
     while (wait3(&status, WNOHANG, NULL) > 0)
-        ;
+  ;
 #else
     wait(&status);
     signal(SIGCLD, sig_cld);
@@ -583,10 +583,10 @@ static void CDECL PSIG(sig_fpe)
 }
 
 #ifdef HAS_CONSOLE
-    void restore_sigttin(void) {
-        if(has_console >= 0)
-            signal(SIGTTIN, sig_ttin);
-    }
+void restore_sigttin(void) {
+  if(has_console >= 0)
+    signal(SIGTTIN, sig_ttin);
+}
 
 /* The console goes to sleep when backgrounded and can
  * be woken back up with kill -SIGTTIN <pid>
@@ -600,16 +600,16 @@ static void CDECL PSIG(sig_ttin)
     signal(SIGTTIN, SIG_IGN);
 
     if(has_console) {
-        /* now eat all the gibberish they typed in the console when it was dead */
-        fl = fcntl(STDIN_FILENO, F_GETFL);
-        fcntl(STDIN_FILENO, F_SETFL, fl | O_NONBLOCK);
+      /* now eat all the gibberish they typed in the console when it was dead */
+      fl = fcntl(STDIN_FILENO, F_GETFL);
+      fcntl(STDIN_FILENO, F_SETFL, fl | O_NONBLOCK);
 
-        while(read(STDIN_FILENO, junk, 1023) > 0);  /* ; */
+      while(read(STDIN_FILENO, junk, 1023) > 0);  /* ; */
 
-        /* leaving the output nonblocking is a bad idea.  large outputs tend
-           to get truncated.
-         */
-        fcntl(STDIN_FILENO, F_SETFL, fl);
+      /* leaving the output nonblocking is a bad idea.  large outputs tend
+         to get truncated.
+      */
+      fcntl(STDIN_FILENO, F_SETFL, fl);
     }
 }
 #endif

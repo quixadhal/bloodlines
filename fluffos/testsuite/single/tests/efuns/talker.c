@@ -10,9 +10,9 @@ void catch_tell(string str) {
 void send(string str, mixed x) {
 #ifndef __NO_ENVIRONMENT__
     if (x)
-        say(str, x);
+	say(str, x);
     else
-        say(str);
+	say(str);
 #else
     shout(str);
 #endif

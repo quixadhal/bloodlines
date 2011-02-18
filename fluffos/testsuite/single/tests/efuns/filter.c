@@ -2,8 +2,8 @@ int tmp = 0;
 
 int third() {
     if (++tmp == 3) {
-        tmp = 0;
-        return 0;
+	tmp = 0;
+	return 0;
     }
     return 1;
 }
@@ -25,7 +25,7 @@ int true() { return 1; }
 int same(mixed* x, mixed* y) {
     if (sizeof(x) != sizeof(y)) return 0;
     for (int i = 0; i < sizeof(x); i++) {
-        if (x[i] != y[i]) return 0;
+	if (x[i] != y[i]) return 0;
     }
     return 1;
 }
@@ -34,7 +34,7 @@ int msame(mapping x, mapping y) {
     mixed z;
     if (sizeof(keys(x)) != sizeof(keys(y))) return 0;
     foreach (z in keys(x)) {
-        if (x[z] != y[z]) return 0;
+	if (x[z] != y[z]) return 0;
     }
     return 1;
 }
@@ -46,7 +46,7 @@ void do_tests() {
     ASSERT(sizeof(filter( ({ 1 }), "true")));
 
     ASSERT(same(filter( ({ 1,2,3,4,5,6,7,8,9 }), "third", this_object())
-                , filter( ({ 1,2,3,4,5,6,7,8,9 }), (: third :))));
+	   , filter( ({ 1,2,3,4,5,6,7,8,9 }), (: third :))));
 
     ASSERT(sizeof(filter( ({ 0 }), (: whatever1, 1 :))));
     ASSERT(sizeof(filter( ({ 0 }), "whatever2", this_object(), 1)));
@@ -59,7 +59,7 @@ void do_tests() {
     ASSERT(sizeof(filter( ([ 1 : 2 ]), "true")));
 
     ASSERT(msame(filter( ([ 1:2,3:4,5:6 ]), "third", this_object()),
-                filter( ([ 1:2,3:4,5:6 ]), (: third :))));
+		 filter( ([ 1:2,3:4,5:6 ]), (: third :))));
 
     ASSERT(!sizeof(filter( ([]), (: $1 :))));
     ASSERT(sizeof(filter( ([ 0 : 0 ]), (: whatever1, 1 :))));

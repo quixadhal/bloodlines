@@ -13,22 +13,22 @@ void do_tests() {
 
     code = __TREE__ { int i; for (; i < 5; i++) ; };
     ASSERT(same(code, ({
-                    "two values", 0, ({
-                        "loop", 1, 0, ({
-                            "opcode_2", "loop_cond_number", 1, 5 
-                            }), ({ 
-                                "opcode_1", "loop_incr", 1 
-                                }) }) }) ));
+	"two values", 0, ({
+	    "loop", 1, 0, ({
+		"opcode_2", "loop_cond_number", 1, 5 
+	    }), ({ 
+		"opcode_1", "loop_incr", 1 
+	    }) }) }) ));
 
     code = __TREE__( !code ? 1 : 2 );
     ASSERT(same(code, ({
-                    "if", ({
-                        "number", 2 
-                        }), ({
-                            "number", 1
-                            }), ({
-                                "opcode_1", "local", 0
-                                }) }) ));
+	"if", ({
+	    "number", 2 
+	}), ({
+	    "number", 1
+	}), ({
+	    "opcode_1", "local", 0
+	}) }) ));
 
     ASSERT(5/3 == 1);
     ASSERT(1/8.0 == 0.125);

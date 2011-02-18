@@ -1,11 +1,11 @@
 /*
-   efunctions.c: this file contains the efunctions called from
-   inside eval_instruction() in interpret.c.  Note: if you are adding
-   local efunctions that are specific to your driver, you would be better
-   off adding them to a separate source file.  Doing so will make it much
-   easier for you to upgrade (won't have to patch this file).  Be sure
-   to #include "lpc_incl.h" in that separate source file.
- */
+        efunctions.c: this file contains the efunctions called from
+        inside eval_instruction() in interpret.c.  Note: if you are adding
+    local efunctions that are specific to your driver, you would be better
+    off adding them to a separate source file.  Doing so will make it much
+    easier for you to upgrade (won't have to patch this file).  Be sure
+    to #include "lpc_incl.h" in that separate source file.
+*/
 
 #include "std.h"
 #include "lpc_incl.h"
@@ -28,13 +28,13 @@
 #define CRYPT(x, y) custom_crypt(x, y, 0)
 #endif
 
-    void
+void
 f_crypt (void)
 {
     const char *res, *p;
     char salt[SALT_LEN + 1];
     const char *choice =
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./";
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./";
 
     if (sp->type == T_STRING && SVALUE_STRLEN(sp) >= 2) {
         p = sp->u.string;
@@ -63,7 +63,7 @@ f_oldcrypt (void) {
 
     char *res, salt[3];
     const char *choice =
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./";
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./";
 
     if (sp->type == T_STRING && SVALUE_STRLEN(sp) >= 2) {
         salt[0] = sp->u.string[0];
@@ -86,7 +86,7 @@ f_oldcrypt (void) {
 #ifdef F_LOCALTIME
 /* FIXME: most of the #ifdefs here should be based on configure checks
    instead.  Same for rusage() */
-    void
+void
 f_localtime (void)
 {
     struct tm *tm;
@@ -122,7 +122,7 @@ f_localtime (void)
     vec->item[LT_ZONE].subtype = STRING_MALLOC;
     vec->item[LT_ISDST].type = T_NUMBER;
 #if defined(BSD42) || defined(apollo) || defined(_AUX_SOURCE) \
-    || defined(OLD_ULTRIX)
+        || defined(OLD_ULTRIX)
     /* 4.2 BSD doesn't seem to provide any way to get these last three values */
     vec->item[LT_GMTOFF].u.number = 0;
     vec->item[LT_ZONE].type = T_NUMBER;
@@ -146,8 +146,8 @@ f_localtime (void)
         vec->item[LT_ZONE].u.string = string_copy(tzname[0], "f_localtime");
     } else {
 #if (defined(_AIX) || defined(hpux) || defined(linux) || defined(cray) \
-        || defined(__CYGWIN__)\
-    )
+	|| defined(__CYGWIN__)\
+	)
         vec->item[LT_GMTOFF].u.number = timezone;
 #else
         vec->item[LT_GMTOFF].u.number = altzone;
@@ -178,7 +178,7 @@ void f_rusage (void)
 #else
 
 #ifdef RUSAGE
-    void
+void
 f_rusage (void)
 {
     struct rusage rus;
@@ -190,7 +190,7 @@ f_rusage (void)
         m = allocate_mapping(0);
     } else {
         char buf[256];
-        int fd;
+	int fd;
         usertime = rus.ru_utime.tv_sec * 1000 + rus.ru_utime.tv_usec / 1000;
         stime = rus.ru_stime.tv_sec * 1000 + rus.ru_stime.tv_usec / 1000;
         maxrss = rus.ru_maxrss;
@@ -228,7 +228,7 @@ f_rusage (void)
 #else
 
 #ifdef GET_PROCESS_STATS
-    void
+void
 f_rusage (void)
 {
     struct process_stats ps;
@@ -270,11 +270,11 @@ f_rusage (void)
 #ifdef TIMES                    /* has times() but not getrusage() */
 
 /*
-   warning times are reported in processor dependent units of time.
-   see man pages for 'times' to figure out how long a tick is on your system.
- */
+  warning times are reported in processor dependent units of time.
+  see man pages for 'times' to figure out how long a tick is on your system.
+*/
 
-    void
+void
 f_rusage (void)
 {
     mapping_t *m;
@@ -303,8 +303,8 @@ f_rusage (void)
 /* this efun only useful on the NeXT (func_spec.c has #ifdef NeXT).  A
    non-zero return value indicates that some memory corruption has occurred
    at some time prior to this calling of this efun.
- */
-    void
+*/
+void
 f_malloc_check (void)
 {
     push_number(NXMallocCheck());
@@ -314,8 +314,8 @@ f_malloc_check (void)
 #ifdef F_MALLOC_DEBUG
 /* NeXT specific efun for setting the debugging level of NeXT's built-in
    malloc.
- */
-    void
+*/
+void
 f_malloc_debug (void)
 {
     int level;

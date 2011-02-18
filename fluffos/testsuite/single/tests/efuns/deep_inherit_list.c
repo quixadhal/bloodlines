@@ -1,6 +1,6 @@
 void do_tests() {
     mixed *x;
-
+    
     ASSERT(deep_inherit_list(this_object()) == ({ }));
     x = deep_inherit_list(load_object("/single/tests/efuns/inh2.c"));
     ASSERT(sizeof(x) == 2);

@@ -28,7 +28,7 @@
 static object_t *ob;
 
 #ifdef F_EXPORT_UID
-    void
+void
 f_export_uid (void)
 {
     if (current_object->euid == NULL)
@@ -47,7 +47,7 @@ f_export_uid (void)
 #endif
 
 #ifdef F_GETEUID
-    void
+void
 f_geteuid (void)
 {
     if (sp->type & T_OBJECT) {
@@ -75,7 +75,7 @@ f_geteuid (void)
 #endif
 
 #ifdef F_GETUID
-    void
+void
 f_getuid (void)
 {
     ob = sp->u.ob;
@@ -87,7 +87,7 @@ f_getuid (void)
 #endif
 
 #ifdef F_SETEUID
-    void
+void
 f_seteuid (void)
 {
     svalue_t *arg;
@@ -124,7 +124,7 @@ userid_t *root_uid = NULL;
 static void mark_uid_tree (tree * tr) {
     DO_MARK(tr, TAG_UID);
     DO_MARK(tr->tree_p, TAG_UID);
-
+    
     EXTRA_REF(BLOCK(((userid_t *)tr->tree_p)->name))++;
     if (tr->tree_l)
         mark_uid_tree(tr->tree_l);
@@ -132,10 +132,10 @@ static void mark_uid_tree (tree * tr) {
         mark_uid_tree(tr->tree_r);
 }
 
-    void mark_all_uid_nodes() {
-        if (uids)
-            mark_uid_tree(uids);
-    }
+void mark_all_uid_nodes() {
+    if (uids)
+        mark_uid_tree(uids);
+}
 #endif
 
 static int uidcmp (void *, void *);

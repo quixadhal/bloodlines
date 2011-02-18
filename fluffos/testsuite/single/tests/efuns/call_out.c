@@ -41,11 +41,11 @@ void do_tests() {
     call_out( (: two_arg, 1 :), 5, 2);
     call_out( "two_arg", 6, 1, 2);
     call_out( "finish", 10);
-
+    
     calls = call_out_info();
     foreach(call in calls) {
-        ASSERT(objectp(call[0]));
-        ASSERT(stringp(call[1]));
-        ASSERT(intp(call[2]));
+	ASSERT(objectp(call[0]));
+	ASSERT(stringp(call[1]));
+	ASSERT(intp(call[2]));
     }		   
 }

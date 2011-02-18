@@ -1,9 +1,9 @@
 #include <globals.h>
 
-    int
+int
 main(string file)
 {
-    // need to call resolve_path() and query_cwd()
-    rm(file);
-    return 1;
+	// need to call resolve_path() and query_cwd()
+	rm(file);
+	return 1;
 }

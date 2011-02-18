@@ -21,12 +21,7 @@ int total_array_size;
 INLINE_STATIC int builtin_sort_array_cmp_fwd (void *, void *);
 INLINE_STATIC int builtin_sort_array_cmp_rev (void *, void *);
 INLINE_STATIC int sort_array_cmp (void *, void *);
-#ifndef NO_ENVIRONMENT
-static int deep_inventory_count (object_t *);
-static void deep_inventory_collect (object_t *, array_t *, int *);
-#endif
 INLINE_STATIC long alist_cmp (svalue_t *, svalue_t *);
-
 /*
  * Make an empty array for everyone to use, never to be deallocated.
  * It is cheaper to reuse it, than to use MALLOC() and allocate.
@@ -74,7 +69,7 @@ static void ms_setup_stats (array_t * p) {
  * Note that we rely a bit on gcc automatically inlining small routines.
  * Speed maniacs may wish to add INLINE liberally.
  */
-static array_t *int_allocate_empty_array (unsigned short n) {
+static array_t *int_allocate_empty_array (unsigned int n) {
     array_t *p;
 
 #ifdef ARRAY_STATS
@@ -180,37 +175,42 @@ void free_empty_array (array_t * p)
 
 /* Finish setting up an array allocated with ALLOC_ARRAY, resizing it to
    size n */
-static array_t *fix_array (array_t * p, unsigned short n) {
-    if(n){
+static array_t *fix_array (array_t * p, unsigned int n) {
+	if(n){
 #ifdef ARRAY_STATS
-        num_arrays++;
-        total_array_size += sizeof(array_t) + sizeof(svalue_t) * (n-1);
+		num_arrays++;
+		total_array_size += sizeof(array_t) + sizeof(svalue_t) * (n-1);
 #endif
-        p->size = n;
-        p->ref = 1;
-        ms_setup_stats(p);
-        return RESIZE_ARRAY(p, n);
-    }
-    if(p!=&the_null_array)
-        FREE(p);
-    return &the_null_array;
+		p->size = n;
+		p->ref = 1;
+		ms_setup_stats(p);
+//		if(n>65535)
+//			fatal("big array2");
+		return RESIZE_ARRAY(p, n);
+	}
+	if(p!=&the_null_array)
+		FREE(p);
+	return &the_null_array;
 }
 
-array_t *resize_array (array_t * p, unsigned short n) {
+array_t *resize_array (array_t * p, unsigned int n) {
 #ifdef ARRAY_STATS
     total_array_size += (n - p->size) * sizeof(svalue_t);
 #endif
     if(n){
-        ms_remove_stats(p);
-        p = RESIZE_ARRAY(p, n);
-        if (!p)
-            fatal("Out of memory.\n");
-        p->size = n;
-        ms_setup_stats(p);
+    ms_remove_stats(p);
+    p = RESIZE_ARRAY(p, n);
+//    if(n>65535)
+//    			fatal("big array3");
+
+    if (!p)
+        fatal("Out of memory.\n");
+    p->size = n;
+    ms_setup_stats(p);
     } else {
-        if(p != &the_null_array)
-            FREE(p);
-        return &the_null_array;
+    	if(p != &the_null_array)
+    		FREE(p);
+    	return &the_null_array;
     }
     return p;
 }
@@ -376,7 +376,7 @@ array_t *explode_string (const char * str, int slen, const char * del, int len)
             ret->item[num].type = T_STRING;
             ret->item[num].subtype = STRING_MALLOC;
             ret->item[num].u.string = buff = new_string(p - beg,
-                    "explode_string: buff");
+                                                     "explode_string: buff");
 
             strncpy(buff, beg, p - beg);
             buff[p - beg] = '\0';
@@ -436,7 +436,7 @@ char *implode_string (array_t * arr, const char * del, int del_len)
 }
 
 void implode_array (funptr_t * fptr, array_t * arr,
-        svalue_t * dest, int first_on_stack) {
+                      svalue_t * dest, int first_on_stack) {
     int i = 0, n;
     svalue_t *v;
 
@@ -543,20 +543,20 @@ array_t *slice_array (array_t * p, int from, int to)
         }
         cnt = (p->size - 1) - to;
         while (cnt--) free_svalue(sv2++, "slice_array:3");
-        if(to-from+1 > max_array_size)
-            error("array slice too big"); //can't happen in theory
+	if(to-from+1 > max_array_size)
+	  error("array slice too big"); //can't happen in theory
         p = resize_array(p, to-from+1);
         p->ref = 1;
         return p;
     } else {
         array_t *d;
-        if(to-from+1 > max_array_size)
-            error("array slice too big"); //can't happen in theory
+	if(to-from+1 > max_array_size)
+	  error("array slice too big"); //can't happen in theory
         d = int_allocate_empty_array(to - from + 1);
         sv1 = d->item - from;
         sv2 = p->item;
         for (cnt = from; cnt <= to; cnt++)
-            assign_svalue_no_free(sv1 + cnt, sv2 + cnt);
+          assign_svalue_no_free(sv1 + cnt, sv2 + cnt);
         return d;
     }
 }
@@ -619,10 +619,10 @@ array_t *commands (object_t * ob)
    Runs all elements of an array through ob->func()
    and returns an array holding those elements that ob->func
    returned 1 for.
- */
+   */
 
 #ifdef F_FILTER
-    void
+void
 filter_array(svalue_t * arg, int num_arg)
 {
     array_t *vec = arg->u.arr, *r;
@@ -638,7 +638,7 @@ filter_array(svalue_t * arg, int num_arg)
 
         process_efun_callback(1, &ftc, F_FILTER);
 
-        /* allocate a full size array and push it onto the stack so that if an
+	/* allocate a full size array and push it onto the stack so that if an
          * error occurs, it'll get cleaned up.  can't use empty array because
          * if an error occurs, it'll contain garbage and crash the driver
          */
@@ -652,13 +652,13 @@ filter_array(svalue_t * arg, int num_arg)
                 assign_svalue_no_free(&r->item[res++], &vec->item[cnt]);
         }
 
-        sp--;/* pull the work array off the stack without freeing it */
+	sp--;/* pull the work array off the stack without freeing it */
         if (res) 
-            r = resize_array(r, res);
+	  r = resize_array(r, res);
         else {
-            free_array(r);
-            r = &the_null_array;
-        }
+	  free_array(r);
+	  r = &the_null_array;
+	}
 
         pop_n_elems(num_arg - 1);
         free_array(vec);
@@ -666,7 +666,7 @@ filter_array(svalue_t * arg, int num_arg)
     }
 }
 
-    void
+void
 filter_string (svalue_t * arg, int num_arg)
 {
     if (arg->u.string[0] == 0) {
@@ -691,7 +691,6 @@ filter_string (svalue_t * arg, int num_arg)
             if (!IS_ZERO(v))
                 str[idx++] = str[cnt];
         }
-
         str[idx] = 0;
 
         if (idx != cnt)
@@ -723,7 +722,7 @@ filter_string (svalue_t * arg, int num_arg)
    The basic purpose of this routine is to speed up the preparing of the
    array used for describing.
 
- */
+   */
 
 /* nonstatic, is used in mappings too */
 int sameval (svalue_t * arg1, svalue_t * arg2)
@@ -731,25 +730,25 @@ int sameval (svalue_t * arg1, svalue_t * arg2)
     DEBUG_CHECK(!arg1 || !arg2, "Null pointer passed to sameval.\n");
 
     switch (arg1->type | arg2->type) {
-        case T_NUMBER:
-            return arg1->u.number == arg2->u.number;
-        case T_ARRAY:
-        case T_CLASS:
-            return arg1->u.arr == arg2->u.arr;
-        case T_STRING:
-            if (SVALUE_STRLEN_DIFFERS(arg1, arg2)) return 0;
-            return !strcmp(arg1->u.string, arg2->u.string);
-        case T_OBJECT:
-            return arg1->u.ob == arg2->u.ob;
-        case T_MAPPING:
-            return arg1->u.map == arg2->u.map;
-        case T_FUNCTION:
-            return arg1->u.fp == arg2->u.fp;
-        case T_REAL:
-            return arg1->u.real == arg2->u.real;
+    case T_NUMBER:
+        return arg1->u.number == arg2->u.number;
+    case T_ARRAY:
+    case T_CLASS:
+        return arg1->u.arr == arg2->u.arr;
+    case T_STRING:
+        if (SVALUE_STRLEN_DIFFERS(arg1, arg2)) return 0;
+        return !strcmp(arg1->u.string, arg2->u.string);
+    case T_OBJECT:
+        return arg1->u.ob == arg2->u.ob;
+    case T_MAPPING:
+        return arg1->u.map == arg2->u.map;
+    case T_FUNCTION:
+        return arg1->u.fp == arg2->u.fp;
+    case T_REAL:
+        return arg1->u.real == arg2->u.real;
 #ifndef NO_BUFFER_TYPE
-        case T_BUFFER:
-            return arg1->u.buf == arg2->u.buf;
+    case T_BUFFER:
+        return arg1->u.buf == arg2->u.buf;
 #endif
     }
     return 0;
@@ -806,16 +805,16 @@ void f_unique_array (void) {
     if (num_arg == 3) {
         skipval = sp;
         if ((sp-1)->type == T_FUNCTION)
-            fptr = (sp-1)->u.fp;
+	    fptr = (sp-1)->u.fp;
         else
-            func = (sp-1)->u.string;
+	    func = (sp-1)->u.string;
     }
     else {
         skipval = &const0;
         if (sp->type == T_FUNCTION)
-            fptr = sp->u.fp;
+	    fptr = sp->u.fp;
         else
-            func = sp->u.string;
+	    func = sp->u.string;
     }
 
     unlist = ALLOCATE(unique_list_t, TAG_TEMPORARY, "f_unique_array:1");
@@ -841,7 +840,7 @@ void f_unique_array (void) {
             while (uptr) {
                 if (sameval(sv, &uptr->mark)) {
                     uptr->indices = RESIZE(uptr->indices, uptr->count + 1, int,
-                            TAG_TEMPORARY, "f_unique_array:2");
+                                           TAG_TEMPORARY, "f_unique_array:2");
                     uptr->indices[uptr->count++] = i;
                     break;
                 }
@@ -915,7 +914,7 @@ array_t *add_array (array_t * p, array_t * r)
 
     res = p->size + r->size;
     if (res < 0 || res > max_array_size)
-        error("result of array addition is greater than maximum array size.\n");
+      error("result of array addition is greater than maximum array size.\n");
 
     /* x += x */
     if ((p == r) && (p->ref == 2)) {
@@ -989,7 +988,7 @@ array_t *all_inventory (object_t * ob, int override)
         return &the_null_array;
 
     if(cnt > max_array_size)
-        cnt = max_array_size;
+      cnt = max_array_size;
 
     d = int_allocate_empty_array(cnt);
     cur = ob->contains;
@@ -1013,9 +1012,9 @@ array_t *all_inventory (object_t * ob, int override)
 
 /* Runs all elements of an array through ob::func
    and replaces each value in arr by the value returned by ob::func
- */
+   */
 #ifdef F_MAP
-    void
+void
 map_array (svalue_t * arg, int num_arg)
 {
     array_t *arr = arg->u.arr;
@@ -1047,7 +1046,7 @@ map_array (svalue_t * arg, int num_arg)
     push_refed_array(r);
 }
 
-    void
+void
 map_string (svalue_t * arg, int num_arg)
 {
     char *arr;
@@ -1069,33 +1068,33 @@ map_string (svalue_t * arg, int num_arg)
     if (arg[1].type == T_FUNCTION) {
         fptr = arg[1].u.fp;
         if (num_arg > 2) {
-            extra = arg + 2;
-            numex = num_arg - 2;
-        }
+	    extra = arg + 2;
+	    numex = num_arg - 2;
+	}
     } else {
         func = arg[1].u.string;
         if (num_arg < 3)
-            ob = current_object;
+	    ob = current_object;
         else {
             if (arg[2].type == T_OBJECT)
-                ob = arg[2].u.ob;
+		ob = arg[2].u.ob;
             else if (arg[2].type == T_STRING) {
                 if ((ob = find_object(arg[2].u.string)) && !object_visible(ob))
                     ob = 0;
             }
             if (num_arg > 3) {
-                extra = arg + 3;
-                numex = num_arg - 3;
-            }
+		extra = arg + 3;
+		numex = num_arg - 3;
+	    }
             if (!ob)
-                error("Bad argument 3 to map_string.\n");
+		error("Bad argument 3 to map_string.\n");
         }
     }
 
     for (p = arr; *p; p++) {
         push_number((unsigned char)*p);
         if (numex)
-            push_some_svalues(extra, numex);
+	    push_some_svalues(extra, numex);
         v = fptr ? call_function_pointer(fptr, numex + 1) : apply(func, ob, 1 + numex, ORIGIN_EFUN);
         /* no function or illegal return value is unaltered.
          * Anyone got a better idea?  A few idea:
@@ -1105,9 +1104,9 @@ map_string (svalue_t * arg, int num_arg)
          * (3) become ' ' or something
          */
         if (!v)
-            break;
+	    break;
         if (v->type == T_NUMBER && v->u.number != 0)
-            *p = ((char)(v->u.number));
+	    *p = ((char)(v->u.number));
     }
 
     pop_n_elems(num_arg - 1);
@@ -1123,7 +1122,7 @@ static function_to_call_t *sort_array_ftc;
 array_t *builtin_sort_array (array_t * inlist, int dir)
 {
     quickSort((char *) inlist->item, inlist->size, sizeof(inlist->item),
-            (dir<0) ? builtin_sort_array_cmp_rev : builtin_sort_array_cmp_fwd);
+              (dir<0) ? builtin_sort_array_cmp_rev : builtin_sort_array_cmp_fwd);
 
     return inlist;
 }
@@ -1134,49 +1133,49 @@ INLINE_STATIC int builtin_sort_array_cmp_fwd (void *vp1, void *vp2)
     svalue_t *p2 = (svalue_t *)vp2;
     switch(p1->type | p2->type) {
         case T_STRING:
-            {
-                return strcmp(p1->u.string, p2->u.string);
-            }
+        {
+            return strcmp(p1->u.string, p2->u.string);
+        }
 
         case T_NUMBER:
-            {
-                return COMPARE_NUMS(p1->u.number, p2->u.number);
-            }
+        {
+            return COMPARE_NUMS(p1->u.number, p2->u.number);
+        }
 
         case T_REAL:
-            {
-                return COMPARE_NUMS(p1->u.real, p2->u.real);
-            }
+        {
+            return COMPARE_NUMS(p1->u.real, p2->u.real);
+        }
 
         case T_ARRAY:
-            {
-                array_t *v1 = p1->u.arr, *v2 = p2->u.arr;
-                if (!v1->size  || !v2->size)
-                    error("Illegal to have empty array in array for sort_array()\n");
+        {
+            array_t *v1 = p1->u.arr, *v2 = p2->u.arr;
+            if (!v1->size  || !v2->size)
+                error("Illegal to have empty array in array for sort_array()\n");
 
 
-                switch(v1->item[0].type | v2->item[0].type) {
-                    case T_STRING:
-                        {
-                            return strcmp(v1->item[0].u.string, v2->item[0].u.string);
-                        }
+            switch(v1->item[0].type | v2->item[0].type) {
+                case T_STRING:
+                {
+                    return strcmp(v1->item[0].u.string, v2->item[0].u.string);
+                }
 
-                    case T_NUMBER:
-                        {
-                            return COMPARE_NUMS(v1->item[0].u.number, v2->item[0].u.number);
-                        }
+                case T_NUMBER:
+                {
+                    return COMPARE_NUMS(v1->item[0].u.number, v2->item[0].u.number);
+                }
 
-                    case T_REAL:
-                        {
-                            return COMPARE_NUMS(v1->item[0].u.real, v2->item[0].u.real);
-                        }
-                    default:
-                        {
-                            /* Temp. long err msg till I can think of a better one - Sym */
-                            error("sort_array() cannot handle arrays of arrays whose 1st elems\naren't strings/ints/floats\n");
-                        }
+                case T_REAL:
+                {
+                    return COMPARE_NUMS(v1->item[0].u.real, v2->item[0].u.real);
+                }
+                default:
+                {
+                    /* Temp. long err msg till I can think of a better one - Sym */
+                    error("sort_array() cannot handle arrays of arrays whose 1st elems\naren't strings/ints/floats\n");
                 }
             }
+        }
 
     }
     error("built-in sort_array() can only handle homogeneous arrays of strings/ints/floats/arrays\n");
@@ -1189,49 +1188,49 @@ INLINE_STATIC int builtin_sort_array_cmp_rev (void *vp1, void *vp2)
     svalue_t *p2 = (svalue_t *)vp2;
     switch(p1->type | p2->type) {
         case T_STRING:
-            {
-                return strcmp(p2->u.string, p1->u.string);
-            }
+        {
+            return strcmp(p2->u.string, p1->u.string);
+        }
 
         case T_NUMBER:
-            {
-                return COMPARE_NUMS(p2->u.number, p1->u.number);
-            }
+        {
+            return COMPARE_NUMS(p2->u.number, p1->u.number);
+        }
 
         case T_REAL:
-            {
-                return COMPARE_NUMS(p2->u.real, p1->u.real);
-            }
+        {
+            return COMPARE_NUMS(p2->u.real, p1->u.real);
+        }
 
         case T_ARRAY:
-            {
-                array_t *v1 = p1->u.arr, *v2 = p2->u.arr;
-                if (!v1->size  || !v2->size)
-                    error("Illegal to have empty array in array for sort_array()\n");
+        {
+            array_t *v1 = p1->u.arr, *v2 = p2->u.arr;
+            if (!v1->size  || !v2->size)
+                error("Illegal to have empty array in array for sort_array()\n");
 
 
-                switch(v1->item[0].type | v2->item[0].type) {
-                    case T_STRING:
-                        {
-                            return strcmp(v2->item[0].u.string, v1->item[0].u.string);
-                        }
+            switch(v1->item[0].type | v2->item[0].type) {
+                case T_STRING:
+                {
+                    return strcmp(v2->item[0].u.string, v1->item[0].u.string);
+                }
 
-                    case T_NUMBER:
-                        {
-                            return COMPARE_NUMS(v2->item[0].u.number, v1->item[0].u.number);
-                        }
+                case T_NUMBER:
+                {
+                    return COMPARE_NUMS(v2->item[0].u.number, v1->item[0].u.number);
+                }
 
-                    case T_REAL:
-                        {
-                            return COMPARE_NUMS(v2->item[0].u.real, v1->item[0].u.real);
-                        }
-                    default:
-                        {
-                            /* Temp. long err msg till I can think of a better one - Sym */
-                            error("sort_array() cannot handle arrays of arrays whose 1st elems\naren't strings/ints/floats\n");
-                        }
+                case T_REAL:
+                {
+                    return COMPARE_NUMS(v2->item[0].u.real, v1->item[0].u.real);
+                }
+                default:
+                {
+                    /* Temp. long err msg till I can think of a better one - Sym */
+                    error("sort_array() cannot handle arrays of arrays whose 1st elems\naren't strings/ints/floats\n");
                 }
             }
+        }
 
     }
     error("built-in sort_array() can only handle homogeneous arrays of strings/ints/floats/arrays\n");
@@ -1248,15 +1247,21 @@ int sort_array_cmp (void *vp1, void *vp2) {
     push_svalue(p2);
 
     d = call_efun_callback(sort_array_ftc, 2);
-
     if (!d || d->type != T_NUMBER) {
         return 0;
     } else {
-        return d->u.number;
+        long n = d->u.number;
+	//the sort functions all use int, so sometimes the numbers don't fit!
+	if(n)
+	  if(n>0)
+	    n=1;
+	  else
+	    n=-1;
+        return n;
     }
 }
 
-    void
+void
 f_sort_array (void)
 {
     svalue_t *arg = sp - st_num_arg + 1;
@@ -1267,37 +1272,38 @@ f_sort_array (void)
 
     switch(arg[1].type) {
         case T_NUMBER:
-            {
-                tmp = builtin_sort_array(copy_array(tmp), arg[1].u.number);
-                break;
-            }
+        {
+            tmp = builtin_sort_array(copy_array(tmp), arg[1].u.number);
+            break;
+        }
 
         case T_FUNCTION:
         case T_STRING:
-            {
-                /*
-                 * We use a global to communicate with the comparison function,
-                 * so we have to be careful to make sure we can recurse (the
-                 * callback might call sort_array itself).  For this reason, the
-                 * ftc structure is on the stack, and we just keep a pointer
-                 * to it in a global, being careful to save and restore the old
-                 * value.
-                 */
-                function_to_call_t ftc, *old_ptr;
+        {
+            /*
+             * We use a global to communicate with the comparison function,
+             * so we have to be careful to make sure we can recurse (the
+             * callback might call sort_array itself).  For this reason, the
+             * ftc structure is on the stack, and we just keep a pointer
+             * to it in a global, being careful to save and restore the old
+             * value.
+             */
+            function_to_call_t ftc, *old_ptr;
 
-                old_ptr = sort_array_ftc;
-                sort_array_ftc = &ftc;
-                process_efun_callback(1, &ftc, F_SORT_ARRAY);
+            old_ptr = sort_array_ftc;
+            sort_array_ftc = &ftc;
+            process_efun_callback(1, &ftc, F_SORT_ARRAY);
 
-                tmp = copy_array(tmp);
-                quickSort((char *) tmp->item, tmp->size, sizeof(tmp->item), sort_array_cmp);
-                sort_array_ftc = old_ptr;
-                break;
-            }
+            tmp = copy_array(tmp);
+            push_refed_array(tmp);
+            quickSort((char *) tmp->item, tmp->size, sizeof(tmp->item), sort_array_cmp);
+            sort_array_ftc = old_ptr;
+            sp--;//remove tmp from stack, but we don't want to free it!
+            break;
+        }
     }
-
     pop_n_elems(num_arg);
-    push_refed_array(tmp);
+    push_refed_array(tmp); //put it back
 }
 #endif
 
@@ -1312,6 +1318,8 @@ f_sort_array (void)
  * avoid costly temporary arrays (allocating, copying, adding, freeing, etc).
  * The recursive call routines are:
  *    deep_inventory_count() and deep_inventory_collect()
+ *
+ * 20100824 Tiz added function parameter to allow filtering of result.
  */
 #ifndef NO_ENVIRONMENT
 static int valid_hide_flag;
@@ -1346,40 +1354,57 @@ static int deep_inventory_count (object_t * ob)
     return cnt;
 }
 
-static void deep_inventory_collect (object_t * ob, array_t * inv, int * i)
+static void deep_inventory_collect (object_t * ob, array_t * inv, int * i, int max, funptr_t *fp)
 {
-    object_t *cur;
+    object_t *cur,*next;
+    svalue_t *fp_result;
 
     /* step through object's inventory and look for visible objects */
-    for (cur = ob->contains; cur; cur = cur->next_inv) {
-#ifdef F_SET_HIDE
-        if (cur->flags & O_HIDDEN) {
-            if (valid_hide_flag & 2) {
-                inv->item[*i].type = T_OBJECT;
-                inv->item[*i].u.ob = cur;
-                (*i)++;
-                add_ref(cur, "deep_inventory_collect");
-
-                deep_inventory_collect(cur, inv, i);
-            }
-        } else {
-#endif
-            inv->item[*i].type = T_OBJECT;
-            inv->item[*i].u.ob = cur;
-            (*i)++;
-            add_ref(cur, "deep_inventory_collect");
-
-            deep_inventory_collect(cur, inv, i);
-#ifdef F_SET_HIDE
+    for (cur = ob->contains; cur && *i<max; cur = next) {
+        next=cur->next_inv;
+        if(fp) {
+            push_object(cur);
+            fp_result=call_function_pointer(fp,1);
+            if(!fp_result || (current_object->flags & O_DESTRUCTED)) {
+                *i=0;
+                return;
+           }
         }
+        if(!fp || fp && fp_result->type==T_NUMBER && fp_result->u.number>0 && !(cur->flags & O_DESTRUCTED)) {
+#ifdef F_SET_HIDE
+            if (cur->flags & O_HIDDEN) {
+                if (valid_hide_flag & 2) {
+                    if(!fp || fp && fp_result->type==T_NUMBER && fp_result->u.number!=3) {
+                        inv->item[*i].type = T_OBJECT;
+                        inv->item[*i].u.ob = cur;
+                        (*i)++;
+                        add_ref(cur, "deep_inventory_collect");
+                    }
+                    if(!fp || fp && fp_result->type==T_NUMBER && (fp_result->u.number==1 || fp_result->u.number==3))
+                        deep_inventory_collect(cur, inv, i, max, fp);
+                }
+            } else {
 #endif
+                if(!fp || fp && fp_result->type==T_NUMBER && fp_result->u.number!=3) {
+                    inv->item[*i].type = T_OBJECT;
+                    inv->item[*i].u.ob = cur;
+                    (*i)++;
+                    add_ref(cur, "deep_inventory_collect");
+                }
+                if(!fp || fp && fp_result->type==T_NUMBER && (fp_result->u.number==1 || fp_result->u.number==3))
+                    deep_inventory_collect(cur, inv, i, max, fp);
+#ifdef F_SET_HIDE
+            }
+#endif
+        }
     }
 }
 
-array_t *deep_inventory (object_t * ob, int take_top)
+array_t *deep_inventory (object_t * ob, int take_top, funptr_t *fp)
 {
     array_t *dinv;
-    int i;
+    int i,o;
+    svalue_t *fp_result;
 
     valid_hide_flag = 0;
 
@@ -1395,23 +1420,117 @@ array_t *deep_inventory (object_t * ob, int take_top)
         return &the_null_array;
 
     if (i > max_array_size)
+      i = max_array_size;
+
+    /*
+     * allocate an array
+     */
+    dinv = int_allocate_array(o=i);
+    push_refed_array(dinv);
+    /*
+    * collect visible inventory objects recursively
+    */
+    if (take_top) {
+        if(fp) {
+            push_object(ob);
+            fp_result=call_function_pointer(fp,1);
+            if(!fp_result || (current_object->flags & O_DESTRUCTED)){
+            	pop_stack(); //dinv
+                return &the_null_array;
+            }
+        }
+        if(!fp || fp && fp_result->type==T_NUMBER && fp_result->u.number>0 &&
+          !(ob->flags & O_DESTRUCTED)) {
+            if(!fp || fp && fp_result->type==T_NUMBER && fp_result->u.number!=3) {
+                dinv->item[0].type = T_OBJECT;
+                dinv->item[0].u.ob = ob;
+                add_ref(ob, "deep_inventory");
+                i=1;
+            }
+            if(!fp || fp && fp_result->type==T_NUMBER && (fp_result->u.number==1 || fp_result->u.number==3))
+                deep_inventory_collect(ob, dinv, &i, o, fp);
+        }
+    }
+    else {
+        i = 0;
+        deep_inventory_collect(ob, dinv, &i, o, fp);
+    }
+
+    // resize the array if we have filtered out values
+    if(fp && i<o)
+       dinv=resize_array(dinv,i);
+    sp--; //get dinv off the stack, but don't free it;
+    return dinv;
+}
+
+array_t *deep_inventory_array (array_t *arr, int take_top, funptr_t *fp)
+{
+    array_t *dinv;
+    int i,o,c;
+    svalue_t *fp_result;
+
+    valid_hide_flag = 0;
+
+    /*
+     * count visible objects in an object's inventory, and in their
+     * inventory, etc
+     */
+    i=0;
+    for(c=0;c<arr->size;c++) {
+        if(arr->item[c].type==T_OBJECT) {
+            i += deep_inventory_count(arr->item[c].u.ob);
+            if(take_top)
+                i++;
+      }
+    }
+
+    if (i == 0)
+        return &the_null_array;
+
+    if (i > max_array_size)
         i = max_array_size;
 
     /*
      * allocate an array
      */
-    dinv = int_allocate_empty_array(i);
-    if (take_top) {
-        dinv->item[0].type = T_OBJECT;
-        dinv->item[0].u.ob = ob;
-        add_ref(ob, "deep_inventory");
-    }
+    dinv = int_allocate_array(o=i);
+    push_refed_array(dinv);
     /*
-     * collect visible inventory objects recursively
-     */
-    i = take_top;
-    deep_inventory_collect(ob, dinv, &i);
+    * collect visible inventory objects recursively
+    */
+    i=0;
+    for(c=0;i<o && c<arr->size;c++) {
+        if(arr->item[c].type==T_OBJECT) {
+            if(take_top){
+                  if(fp) {
+                      push_object(arr->item[c].u.ob);
+                      fp_result=call_function_pointer(fp,1);
+                      if(!fp_result || (current_object->flags & O_DESTRUCTED)){
+                    	  pop_stack(); //free dinv
+                          return &the_null_array;
+		      }
+                  }
+                  if(!fp || fp && fp_result->type==T_NUMBER && fp_result->u.number>0 &&
+                    !(arr->item[c].u.ob->flags & O_DESTRUCTED)) {       
+                      if(!fp || fp && fp_result->type==T_NUMBER && fp_result->u.number!=3) {
+                          dinv->item[i].type = T_OBJECT;
+                          dinv->item[i].u.ob = arr->item[c].u.ob;
+                          add_ref(arr->item[c].u.ob, "deep_inventory");
+                          i++;
+                      }
+                      if(!fp || fp && fp_result->type==T_NUMBER && (fp_result->u.number==1 || fp_result->u.number==3))
+                          deep_inventory_collect(arr->item[c].u.ob, dinv, &i, o, fp);
+                  }
+            }
+            else
+                deep_inventory_collect(arr->item[c].u.ob, dinv, &i, o, fp);
+        }
+    }
 
+    // resize the array if we have filtered out values
+    if(fp && i<o)
+        dinv=resize_array(dinv,i);
+    sp--; //get dinv of the stack but don't free it
     return dinv;
 }
 #endif
@@ -1421,8 +1540,8 @@ INLINE_STATIC long alist_cmp (svalue_t * p1, svalue_t * p2)
     long d;
 
     if ((d = p1->u.number - p2->u.number)){
-        if(d == LONG_MIN)
-            d = p1->u.number > p2->u.number;
+    	if(d == LONG_MIN)
+    		d = p1->u.number > p2->u.number;
         return d;
     }
     if ((d = p1->type - p2->type))
@@ -1498,8 +1617,8 @@ INLINE_STATIC svalue_t *alist_sort (array_t * inlist) {
             child2 = child1 + 1;
 
             if (child2 < size && sv_tab[child2].type != T_INVALID &&
-                    (sv_tab[child1].type == T_INVALID ||
-                     alist_cmp(sv_tab+child1, sv_tab+child2) > 0)) {
+                (sv_tab[child1].type == T_INVALID ||
+                 alist_cmp(sv_tab+child1, sv_tab+child2) > 0)) {
                 child1 = child2;
             }
             if (child1 < size && sv_tab[child1].type != T_INVALID) {
@@ -1531,7 +1650,7 @@ array_t *subtract_array (array_t * minuend, array_t * subtrahend) {
     svt = alist_sort(subtrahend);
     difference = ALLOC_ARRAY(msize);
     for (source = minuend->item, dest = difference->item, i = msize;
-            i--; source++) {
+         i--; source++) {
 
         l = 0;
         o = (h = size - 1) >> 1;
@@ -1668,8 +1787,8 @@ array_t *intersect_array (array_t * a1, array_t * a2) {
             child2 = child1 + 1;
 
             if (child2 < a2s && sv_tab[child2].type != T_INVALID &&
-                    (sv_tab[child1].type == T_INVALID ||
-                     alist_cmp(sv_tab + child1, sv_tab + child2) > 0)) {
+                (sv_tab[child1].type == T_INVALID ||
+                 alist_cmp(sv_tab + child1, sv_tab + child2) > 0)) {
                 child1 = child2;
             }
 
@@ -1682,7 +1801,7 @@ array_t *intersect_array (array_t * a1, array_t * a2) {
         sv_tab[curix].type = T_INVALID;
     }
 
-settle_business:
+ settle_business:
 
     curix = a2s;
     while (curix--) {
@@ -1809,8 +1928,8 @@ array_t *union_array (array_t * a1, array_t * a2) {
             child2 = child1 + 1;
 
             if (child2 < a2s && sv_tab[child2].type != T_INVALID &&
-                    (sv_tab[child1].type == T_INVALID ||
-                     alist_cmp(sv_tab + child1, sv_tab + child2) > 0)) {
+                (sv_tab[child1].type == T_INVALID ||
+                 alist_cmp(sv_tab + child1, sv_tab + child2) > 0)) {
                 child1 = child2;
             }
 
@@ -2027,8 +2146,10 @@ void f_objects (void)
             svalue_t *v;
 
             push_object(list[i]);
-            if (f) v = call_function_pointer(f, 1);
-            else v = apply(func, current_object, 1, ORIGIN_EFUN);
+            if (f){
+            	v = call_function_pointer(f, 1);
+            } else
+            	v = apply(func, current_object, 1, ORIGIN_EFUN);
             if (!v || (current_object->flags & O_DESTRUCTED)) {
                 pop_n_elems(num_arg + 1);
                 push_refed_array(&the_null_array);
@@ -2037,7 +2158,6 @@ void f_objects (void)
             if (v->type == T_NUMBER && !v->u.number)
                 list[i] = 0;
         }
-
         for (i = 0;  i < count;  i++) {
             if (!list[i] || (list[i]->flags & O_DESTRUCTED))
                 list[i--] = list[--count];
@@ -2070,7 +2190,7 @@ void f_objects (void)
  * })
  *
  */
-array_t *reg_assoc (const char * str, array_t * pat, array_t * tok, svalue_t * def) {
+array_t *reg_assoc (svalue_t *str, array_t *pat, array_t *tok, svalue_t *def) {
     int i, size;
     const char *tmp;
     array_t *ret;
@@ -2101,21 +2221,21 @@ array_t *reg_assoc (const char * str, array_t * pat, array_t * tok, svalue_t * d
 
         rgpp = CALLOCATE(size, struct regexp *, TAG_TEMPORARY, "reg_assoc : rgpp");
         for (i = 0; i < size; i++) {
-            if (!(rgpp[i] = regcomp((unsigned char *)pat->item[i].u.string, 0))) {
-                while (i--)
-                    FREE((char *)rgpp[i]);
-                FREE((char *) rgpp);
-                free_empty_array(ret);
-                error(regexp_error);
-            }
+             if (!(rgpp[i] = regcomp((unsigned char *)pat->item[i].u.string, 0))) {
+                 while (i--)
+                     FREE((char *)rgpp[i]);
+                 FREE((char *) rgpp);
+                 free_empty_array(ret);
+                 error(regexp_error);
+             }
         }
 
-        tmp = str;
-        while (*tmp) {
+         tmp = str->u.string;
+         while (*tmp) {
 
-            /* Sigh - need a kludge here - Randor */
-            /* In the future I may alter regexp.c to include branch info */
-            /* so as to minimize checks here - Randor 5/30/94 */
+             /* Sigh - need a kludge here - Randor */
+             /* In the future I may alter regexp.c to include branch info */
+             /* so as to minimize checks here - Randor 5/30/94 */
 
             laststart = 0;
             regindex = -1;
@@ -2138,7 +2258,7 @@ array_t *reg_assoc (const char * str, array_t * pat, array_t * tok, svalue_t * d
                 num_match++;
                 if (rmp) {
                     rmp->next = ALLOCATE(struct reg_match,
-                            TAG_TEMPORARY, "reg_assoc : rmp->next");
+                                         TAG_TEMPORARY, "reg_assoc : rmp->next");
                     rmp = rmp->next;
                 }
                 else rmph = rmp =
@@ -2166,10 +2286,10 @@ array_t *reg_assoc (const char * str, array_t * pat, array_t * tok, svalue_t * d
 
         rmp = rmph;
 
-        if(!rmp && num_match)
-            error("internal error in reg_assoc\n");
+	if(!rmp && num_match)
+	  error("internal error in reg_assoc\n");
 
-        tmp = str;
+        tmp = str->u.string;
 
         while (num_match--) {
             char *svtmp;
@@ -2214,9 +2334,7 @@ array_t *reg_assoc (const char * str, array_t * pat, array_t * tok, svalue_t * d
 
         (sv = ret->item)->type = T_ARRAY;
         temp = (sv->u.arr = int_allocate_empty_array(1))->item;
-        temp->subtype = STRING_MALLOC;
-        temp->type = T_STRING;
-        temp->u.string = string_copy(str, "reg_assoc");
+	assign_svalue_no_free(temp, str);
         sv = &ret->item[1];
         sv->type = T_ARRAY;
         assign_svalue_no_free((sv->u.arr = allocate_empty_array(1))->item, def);

@@ -6,9 +6,9 @@ void create(string arg) {
 #ifndef __NO_ENVIRONMENT__
     id = arg;
     if (!arg) {
-        new(__FILE__, "foo");
+	new(__FILE__, "foo");
     } else {
-        move_object(previous_object());
+	move_object(previous_object());
     }	
 #endif
 }

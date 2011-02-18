@@ -69,7 +69,7 @@ static void scratch_summary (void);
 static void scratch_summary() {
     unsigned char *p = scratchblock;
     int i;
-
+    
     while (p<=scr_tail) {
         if (*p == 0) printf("0");
         else if (*p < 32 || *p > 127) printf("*");
@@ -177,52 +177,52 @@ char *scratch_large_alloc (int size) {
 char *scratch_realloc (char * ptr, int size) {
     SDEBUG(printf("scratch_realloc(%s): ", ptr));
 
-    if (Ptr == scr_last) {
-        if (size < 256 && (scr_last + size) < scratch_end) {
-            SDEBUG(printf("on scratchpad\n"));
-            scr_tail = scr_last + size;
-            *scr_tail = size;
-            return ptr;
-        } else {
-            char *res;
-            SDEBUG(printf("copy off ... "));
-            res = scratch_large_alloc(size);
-            strcpy(res, ptr);
-            scratch_free_last();
-            return res;
-        }
-    } else if (*(Ptr - 2)) {
-        sp_block_t *sbt, *newsbt;
+     if (Ptr == scr_last) {
+         if (size < 256 && (scr_last + size) < scratch_end) {
+             SDEBUG(printf("on scratchpad\n"));
+             scr_tail = scr_last + size;
+             *scr_tail = size;
+             return ptr;
+         } else {
+             char *res;
+             SDEBUG(printf("copy off ... "));
+             res = scratch_large_alloc(size);
+             strcpy(res, ptr);
+             scratch_free_last();
+             return res;
+         }
+     } else if (*(Ptr - 2)) {
+         sp_block_t *sbt, *newsbt;
 
         DEBUG_CHECK(*(Ptr - 2) != SCRATCH_MAGIC, "scratch_realloc on non-scratchpad string.\n");
-        SDEBUG(printf("block\n"));
-        sbt = FIND_HDR(ptr);
-        newsbt = (sp_block_t *)DREALLOC(sbt, SIZE_WITH_HDR(size),
-                TAG_COMPILER, "scratch_realloc");
-        newsbt->prev->next = newsbt;
-        if (newsbt->next)
-            newsbt->next->prev = newsbt;
-        return (char *)&newsbt->block[2];
-    } else {
-        char *res;
+         SDEBUG(printf("block\n"));
+         sbt = FIND_HDR(ptr);
+         newsbt = (sp_block_t *)DREALLOC(sbt, SIZE_WITH_HDR(size),
+                                         TAG_COMPILER, "scratch_realloc");
+         newsbt->prev->next = newsbt;
+         if (newsbt->next)
+             newsbt->next->prev = newsbt;
+         return (char *)&newsbt->block[2];
+     } else {
+         char *res;
 
-        SDEBUG(printf("interior ... "));
-        /* ACK!! it's in the middle. */
-        if (size < 256 && (scr_tail + size + 1) < scratch_end) {
-            SDEBUG(printf("move to end\n"));
-            scr_last = scr_tail + 1;
-            Strcpy(scr_last, ptr);
-            scr_tail = scr_last + size;
-            *scr_tail = size;
-            res = (char *)scr_last;
-        } else {
-            SDEBUG(printf("copy off ... "));
-            res = scratch_large_alloc(size);
-            strcpy(res, ptr);
-        }
-        *ptr = 0; /* free the old version */
-        return res;
-    }
+         SDEBUG(printf("interior ... "));
+         /* ACK!! it's in the middle. */
+         if (size < 256 && (scr_tail + size + 1) < scratch_end) {
+             SDEBUG(printf("move to end\n"));
+             scr_last = scr_tail + 1;
+             Strcpy(scr_last, ptr);
+             scr_tail = scr_last + size;
+             *scr_tail = size;
+             res = (char *)scr_last;
+         } else {
+             SDEBUG(printf("copy off ... "));
+             res = scratch_large_alloc(size);
+             strcpy(res, ptr);
+         }
+         *ptr = 0; /* free the old version */
+         return res;
+     }
 }
 
 /* the routines above are better than this */
@@ -290,15 +290,15 @@ char *scratch_copy_string (char *s) {
     while (l--) {
         if (*s == '\\') {
             switch (*++s) {
-                case 'n': *to++ = '\n'; break;
-                case 't': *to++ = '\t'; break;
-                case 'r': *to++ = '\r'; break;
-                case 'b': *to++ = '\b'; break;
-                case '"':
-                case '\\': *to++ = *s; break;
-                default:
-                           *to++ = *s;
-                           yywarn("Unknown \\x char.");
+            case 'n': *to++ = '\n'; break;
+            case 't': *to++ = '\t'; break;
+            case 'r': *to++ = '\r'; break;
+            case 'b': *to++ = '\b'; break;
+            case '"':
+            case '\\': *to++ = *s; break;
+            default:
+                *to++ = *s;
+                yywarn("Unknown \\x char.");
             }
             s++;
         } else if (*s == '"') {
@@ -323,15 +323,15 @@ char *scratch_copy_string (char *s) {
     for (;;) {
         if (*s == '\\') {
             switch (*++s) {
-                case 'n': *to++ = '\n'; break;
-                case 't': *to++ = '\t'; break;
-                case 'r': *to++ = '\r'; break;
-                case 'b': *to++ = '\b'; break;
-                case '"':
-                case '\\': *to++ = *s; break;
-                default:
-                           *to++ = *s;
-                           yywarn("Unknown \\x char.");
+            case 'n': *to++ = '\n'; break;
+            case 't': *to++ = '\t'; break;
+            case 'r': *to++ = '\r'; break;
+            case 'b': *to++ = '\b'; break;
+            case '"':
+            case '\\': *to++ = *s; break;
+            default:
+                *to++ = *s;
+                yywarn("Unknown \\x char.");
             }
             s++;
         } else if (*s == '"') {

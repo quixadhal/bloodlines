@@ -16,9 +16,9 @@
 
 static Matrix identity =
 {1., 0., 0., 0.,
-    0., 1., 0., 0.,
-    0., 0., 1., 0.,
-    0., 0., 0., 1.};
+ 0., 1., 0., 0.,
+ 0., 0., 1., 0.,
+ 0., 0., 0., 1.};
 
 static void print_matrix (Matrix, char *);
 static void print_array (Vector *, char *);
@@ -49,10 +49,10 @@ void f_translate (void)
     int i;
 
     if ((sp - 1)->type != T_REAL) {
-        bad_arg(3, F_TRANSLATE);
+	bad_arg(3, F_TRANSLATE);
     }
     if (sp->type != T_REAL) {
-        bad_arg(4, F_TRANSLATE);
+	bad_arg(4, F_TRANSLATE);
     }
     /*
      * get arguments from stack.
@@ -67,7 +67,7 @@ void f_translate (void)
      * convert vec matrix to float matrix.
      */
     for (i = 0; i < 16; i++) {
-        current_matrix[i] = matrix->item[i].u.real;
+	current_matrix[i] = matrix->item[i].u.real;
     }
     /*
      * create translation matrix.
@@ -81,7 +81,7 @@ void f_translate (void)
      * convert float matrix to vec matrix.
      */
     for (i = 0; i < 16; i++) {
-        matrix->item[i].u.real = final_matrix[i];
+	matrix->item[i].u.real = final_matrix[i];
     }
 }
 
@@ -95,10 +95,10 @@ void f_scale (void)
     int i;
 
     if ((sp - 1)->type != T_REAL) {
-        bad_arg(3, F_SCALE);
+	bad_arg(3, F_SCALE);
     }
     if (sp->type != T_REAL) {
-        bad_arg(4, F_SCALE);
+	bad_arg(4, F_SCALE);
     }
     /*
      * get arguments from stack.
@@ -112,7 +112,7 @@ void f_scale (void)
      * convert vec matrix to float matrix.
      */
     for (i = 0; i < 16; i++) {
-        current_matrix[i] = matrix->item[i].u.real;
+	current_matrix[i] = matrix->item[i].u.real;
     }
     /*
      * create scaling matrix.
@@ -126,7 +126,7 @@ void f_scale (void)
      * convert float matrix to vec matrix.
      */
     for (i = 0; i < 16; i++) {
-        matrix->item[i].u.real = final_matrix[i];
+	matrix->item[i].u.real = final_matrix[i];
     }
 }
 
@@ -148,7 +148,7 @@ void f_rotate_x (void)
      * convert vec matrix to float matrix.
      */
     for (i = 0; i < 16; i++) {
-        current_matrix[i] = matrix->item[i].u.real;
+	current_matrix[i] = matrix->item[i].u.real;
     }
     /*
      * create x rotation matrix.
@@ -162,7 +162,7 @@ void f_rotate_x (void)
      * convert float matrix to vec matrix.
      */
     for (i = 0; i < 16; i++) {
-        matrix->item[i].u.real = final_matrix[i];
+	matrix->item[i].u.real = final_matrix[i];
     }
 }
 
@@ -184,7 +184,7 @@ void f_rotate_y (void)
      * convert vec matrix to float matrix.
      */
     for (i = 0; i < 16; i++) {
-        current_matrix[i] = matrix->item[i].u.real;
+	current_matrix[i] = matrix->item[i].u.real;
     }
     /*
      * create y rotation matrix.
@@ -198,7 +198,7 @@ void f_rotate_y (void)
      * convert float matrix to vec matrix.
      */
     for (i = 0; i < 16; i++) {
-        matrix->item[i].u.real = final_matrix[i];
+	matrix->item[i].u.real = final_matrix[i];
     }
 }
 
@@ -220,7 +220,7 @@ void f_rotate_z (void)
      * convert vec matrix to float matrix.
      */
     for (i = 0; i < 16; i++) {
-        current_matrix[i] = matrix->item[i].u.real;
+	current_matrix[i] = matrix->item[i].u.real;
     }
     /*
      * create z rotation matrix.
@@ -234,7 +234,7 @@ void f_rotate_z (void)
      * convert float matrix to vec matrix.
      */
     for (i = 0; i < 16; i++) {
-        matrix->item[i].u.real = final_matrix[i];
+	matrix->item[i].u.real = final_matrix[i];
     }
 }
 
@@ -247,10 +247,10 @@ void f_lookat_rotate (void)
     int i;
 
     if ((sp - 1)->type != T_REAL) {
-        bad_arg(3, F_LOOKAT_ROTATE);
+	bad_arg(3, F_LOOKAT_ROTATE);
     }
     if (sp->type != T_REAL) {
-        bad_arg(4, F_LOOKAT_ROTATE);
+	bad_arg(4, F_LOOKAT_ROTATE);
     }
     /*
      * get arguments from stack.
@@ -264,7 +264,7 @@ void f_lookat_rotate (void)
      * convert vec matrix to float matrix.
      */
     for (i = 0; i < 16; i++) {
-        current_matrix[i] = matrix->item[i].u.real;
+	current_matrix[i] = matrix->item[i].u.real;
     }
     /*
      * create new viewing transformation matrix.
@@ -274,7 +274,7 @@ void f_lookat_rotate (void)
      * convert float matrix to vec matrix.
      */
     for (i = 0; i < 16; i++) {
-        matrix->item[i].u.real = lookat_matrix[i];
+	matrix->item[i].u.real = lookat_matrix[i];
     }
 }
 
@@ -288,9 +288,9 @@ void f_lookat_rotate2 (void)
     int i, j;
 
     for (j = 4; j >= 0; j--) {
-        if ((sp - j)->type != T_REAL) {
-            bad_arg(7 - j, F_LOOKAT_ROTATE2);
-        }
+	if ((sp - j)->type != T_REAL) {
+	    bad_arg(7 - j, F_LOOKAT_ROTATE2);
+	}
     }
     /*
      * get arguments from stack.
@@ -309,7 +309,7 @@ void f_lookat_rotate2 (void)
      * convert vec matrix to float matrix.
      */
     for (i = 0; i < 16; i++) {
-        current_matrix[i] = matrix->item[i].u.real;
+	current_matrix[i] = matrix->item[i].u.real;
     }
     /*
      * create new viewing transformation matrix.
@@ -319,7 +319,7 @@ void f_lookat_rotate2 (void)
      * convert float matrix to vec matrix.
      */
     for (i = 0; i < 16; i++) {
-        matrix->item[i].u.real = lookat_matrix[i];
+	matrix->item[i].u.real = lookat_matrix[i];
     }
 }
 #endif
@@ -332,10 +332,10 @@ static void print_matrix (Matrix m, char * label)
 
     fprintf(stderr, "%s:\n", label);
     for (i = 0; i < 4; i++) {
-        for (j = 0; j < 4; j++) {
-            fprintf(stderr, "%f\t", m[i * 4 + j]);
-        }
-        fprintf(stderr, "\n");
+	for (j = 0; j < 4; j++) {
+	    fprintf(stderr, "%f\t", m[i * 4 + j]);
+	}
+	fprintf(stderr, "\n");
     }
 }
 
@@ -355,9 +355,9 @@ static Vector *normalize_array (Vector * v)
     mm = xx + yy + zz;
     m = sqrt(mm);
     if (m) {
-        v->x /= m;
-        v->y /= m;
-        v->z /= m;
+	v->x /= m;
+	v->y /= m;
+	v->z /= m;
     }
     return (v);
 }

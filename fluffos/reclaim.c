@@ -17,7 +17,7 @@ static void check_svalue (svalue_t *);
 
 static int cleaned, nested;
 
-    static void
+static void
 check_svalue (svalue_t * v)
 {
     register int idx;
@@ -27,51 +27,51 @@ check_svalue (svalue_t * v)
         return;
     }
     switch (v->type) {
-        case T_OBJECT:
-            if (v->u.ob->flags & O_DESTRUCTED) {
-                free_svalue(v, "reclaim_objects");
-                *v = const0u;
+    case T_OBJECT:
+        if (v->u.ob->flags & O_DESTRUCTED) {
+            free_svalue(v, "reclaim_objects");
+            *v = const0u;
+            cleaned++;
+        }
+        break;
+    case T_MAPPING:
+        gc_mapping(v->u.map);
+        break;
+    case T_ARRAY:
+    case T_CLASS:
+        for (idx = 0; idx < v->u.arr->size; idx++)
+            check_svalue(&v->u.arr->item[idx]);
+        break;
+    case T_FUNCTION:
+        {
+            svalue_t tmp;
+            program_t *prog;
+
+            if (v->u.fp->hdr.owner && (v->u.fp->hdr.owner->flags & O_DESTRUCTED)) {
+                if (v->u.fp->hdr.type == (FP_LOCAL | FP_NOT_BINDABLE)) {
+                    prog = v->u.fp->hdr.owner->prog;
+                    prog->func_ref--;
+                    debug(d_flag, ("subtr func ref /%s: now %i\n",
+                                prog->filename, prog->func_ref));
+                    if (!prog->ref && !prog->func_ref)
+                        deallocate_program(prog);
+                }
+                free_object(&v->u.fp->hdr.owner, "reclaim_objects");
+                v->u.fp->hdr.owner = 0;
                 cleaned++;
             }
-            break;
-        case T_MAPPING:
-            gc_mapping(v->u.map);
-            break;
-        case T_ARRAY:
-        case T_CLASS:
-            for (idx = 0; idx < v->u.arr->size; idx++)
-                check_svalue(&v->u.arr->item[idx]);
-            break;
-        case T_FUNCTION:
-            {
-                svalue_t tmp;
-                program_t *prog;
 
-                if (v->u.fp->hdr.owner && (v->u.fp->hdr.owner->flags & O_DESTRUCTED)) {
-                    if (v->u.fp->hdr.type == (FP_LOCAL | FP_NOT_BINDABLE)) {
-                        prog = v->u.fp->hdr.owner->prog;
-                        prog->func_ref--;
-                        debug(d_flag, ("subtr func ref /%s: now %i\n",
-                                    prog->filename, prog->func_ref));
-                        if (!prog->ref && !prog->func_ref)
-                            deallocate_program(prog);
-                    }
-                    free_object(&v->u.fp->hdr.owner, "reclaim_objects");
-                    v->u.fp->hdr.owner = 0;
-                    cleaned++;
-                }
-
-                tmp.type = T_ARRAY;
-                if ((tmp.u.arr = v->u.fp->hdr.args))
-                    check_svalue(&tmp);
-                break;
-            }
+            tmp.type = T_ARRAY;
+            if ((tmp.u.arr = v->u.fp->hdr.args))
+                check_svalue(&tmp);
+            break;
+        }
     }
     nested--;
     return;
 }
 
-    static void
+static void
 gc_mapping (mapping_t * m)
 {
     /* Be careful to correctly handle destructed mapping keys.  We can't
@@ -87,7 +87,7 @@ gc_mapping (mapping_t * m)
             if (elt->values[0].type == T_OBJECT) {
                 if (elt->values[0].u.ob->flags & O_DESTRUCTED) {
                     free_object(&elt->values[0].u.ob, "gc_mapping");
-                    elt->values[0].u.ob = 0;
+		    elt->values[0].u.ob = 0;
                     /* found one, do a map_delete() */
                     if (!(*prev = elt->next) && !m->table[j])
                         m->unfilled++;
@@ -120,6 +120,6 @@ int reclaim_objects()
         if (ob->prog)
             for (i = 0; i < ob->prog->num_variables_total; i++)
                 check_svalue(&ob->variables[i]);
-
+    
     return cleaned;
 }

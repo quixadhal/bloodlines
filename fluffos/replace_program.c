@@ -127,7 +127,7 @@ static program_t *search_inherited (char * str, program_t * prg, int * offpnt)
             *offpnt = prg->inherit[i].variable_index_offset;
             return prg->inherit[i].prog;
         } else if ((tmp = search_inherited(str, prg->inherit[i].prog,
-                        offpnt))) {
+                                          offpnt))) {
             debug(d_flag, ("deferred match found"));
 
             *offpnt += prg->inherit[i].variable_index_offset;
@@ -151,7 +151,7 @@ static replace_ob_t *retrieve_replace_program_entry (void)
     return 0;
 }
 
-    void
+void
 f_replace_program (void)
 {
     replace_ob_t *tmp;

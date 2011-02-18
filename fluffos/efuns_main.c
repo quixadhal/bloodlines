@@ -1,11 +1,11 @@
 /*
-   efuns_main.c: this file contains the efunctions called from
-   inside eval_instruction() in interpret.c.  Note: if you are adding
-   local efunctions that are specific to your driver, you would be better
-   off adding them to a separate source file.  Doing so will make it much
-   easier for you to upgrade (won't have to patch this file).  Be sure
-   to #include "lpc_incl.h" in that separate source file.
- */
+        efuns_main.c: this file contains the efunctions called from
+        inside eval_instruction() in interpret.c.  Note: if you are adding
+    local efunctions that are specific to your driver, you would be better
+    off adding them to a separate source file.  Doing so will make it much
+    easier for you to upgrade (won't have to patch this file).  Be sure
+    to #include "lpc_incl.h" in that separate source file.
+*/
 
 #include "std.h"
 #include "efuns_main.h"
@@ -34,7 +34,7 @@ int data_size (object_t * ob);
 void reload_object (object_t * obj);
 
 #ifdef F_ALL_INVENTORY
-    void
+void
 f_all_inventory (void)
 {
     array_t *vec = all_inventory(sp->u.ob, 0);
@@ -45,7 +45,7 @@ f_all_inventory (void)
 #endif
 
 #ifdef F_ALLOCATE
-    void
+void
 f_allocate (void)
 {
     if (st_num_arg == 2) {
@@ -59,7 +59,7 @@ f_allocate (void)
 #endif
 
 #ifdef F_ALLOCATE_BUFFER
-    void
+void
 f_allocate_buffer (void)
 {
     buffer_t *buf;
@@ -75,7 +75,7 @@ f_allocate_buffer (void)
 #endif
 
 #ifdef F_ALLOCATE_MAPPING
-    void
+void
 f_allocate_mapping (void)
 {
     array_t *arr;
@@ -97,14 +97,14 @@ f_allocate_mapping (void)
     } else if (sp->type == T_NUMBER) {
         sp->u.map = allocate_mapping(sp->u.number);
     } else {
-        error("Bad argument 1 to allocate_mapping()\n");
+      error("Bad argument 1 to allocate_mapping()\n");
     }
     sp->type = T_MAPPING;
 }
 #endif
 
 #ifdef F_BIND
-    void
+void
 f_bind (void)
 {
     object_t *ob = sp->u.ob;
@@ -146,8 +146,8 @@ f_bind (void)
     if ((old_fp->hdr.type & 0x0f) == FP_FUNCTIONAL) {
         new_fp->f.functional.prog->func_ref++;
         debug(d_flag, ("add func ref /%s: now %i\n",
-                    new_fp->f.functional.prog->filename,
-                    new_fp->f.functional.prog->func_ref));
+                   new_fp->f.functional.prog->filename,
+                   new_fp->f.functional.prog->func_ref));
     }
 
     free_funp(old_fp);
@@ -162,16 +162,16 @@ static void print_cache_stats (outbuffer_t * ob)
     outbuf_add(ob, "Function cache information\n");
     outbuf_add(ob, "-------------------------------\n");
     outbuf_addv(ob, "%% cache hits:    %10.2f\n",
-            100 * ((double) apply_low_cache_hits / apply_low_call_others));
+             100 * ((double) apply_low_cache_hits / apply_low_call_others));
     outbuf_addv(ob, "call_others:     %10lu\n", apply_low_call_others);
     outbuf_addv(ob, "cache hits:      %10lu\n", apply_low_cache_hits);
     outbuf_addv(ob, "cache size:      %10lu\n", APPLY_CACHE_SIZE);
     outbuf_addv(ob, "slots used:      %10lu\n", apply_low_slots_used);
     outbuf_addv(ob, "%% slots used:    %10.2f\n",
-            100 * ((double) apply_low_slots_used / APPLY_CACHE_SIZE));
+                100 * ((double) apply_low_slots_used / APPLY_CACHE_SIZE));
     outbuf_addv(ob, "collisions:      %10lu\n", apply_low_collisions);
     outbuf_addv(ob, "%% collisions:    %10.2f\n",
-            100 * ((double) apply_low_collisions / apply_low_call_others));
+             100 * ((double) apply_low_collisions / apply_low_call_others));
 }
 
 void f_cache_stats (void)
@@ -185,8 +185,8 @@ void f_cache_stats (void)
 #endif
 
 #ifdef F__CALL_OTHER
-/* enhanced call_other written 930314 by Luke Mewburn <zak@rmit.edu.au> */
-    void
+ /* enhanced call_other written 930314 by Luke Mewburn <zak@rmit.edu.au> */
+void
 f__call_other (void)
 {
     svalue_t *arg;
@@ -253,7 +253,7 @@ f__call_other (void)
 #endif
 
 #ifdef F_CALL_OUT
-    void
+void
 f_call_out (void)
 {
     svalue_t *arg = sp - st_num_arg + 1;
@@ -288,7 +288,7 @@ f_call_out (void)
 #endif
 
 #ifdef F_CALL_OUT_INFO
-    void
+void
 f_call_out_info (void)
 {
     push_refed_array(get_all_call_outs());
@@ -315,7 +315,7 @@ static const char *origin_name (int orig) {
 #endif
 
 #ifdef F_CALL_STACK
-    void
+void
 f_call_stack (void)
 {
     int i, n = csp - &control_stack[0] + 1;
@@ -327,61 +327,61 @@ f_call_stack (void)
     ret = allocate_empty_array(n);
 
     switch (sp->u.number) {
-        case 0:
-            ret->item[0].type = T_STRING;
-            ret->item[0].subtype = STRING_MALLOC;
-            ret->item[0].u.string = add_slash(current_prog->filename);
-            for (i = 1; i < n; i++) {
-                ret->item[i].type = T_STRING;
-                ret->item[i].subtype = STRING_MALLOC;
-                ret->item[i].u.string = add_slash((csp - i + 1)->prog->filename);
-            }
-            break;
-        case 1:
-            ret->item[0].type = T_OBJECT;
-            ret->item[0].u.ob = current_object;
-            add_ref(current_object, "f_call_stack: curr");
-            for (i = 1; i < n; i++) {
-                ret->item[i].type = T_OBJECT;
-                ret->item[i].u.ob = (csp - i + 1)->ob;
-                add_ref((csp - i + 1)->ob, "f_call_stack");
-            }
-            break;
-        case 2:
-            for (i = 0; i < n; i++) {
-                ret->item[i].type = T_STRING;
-                if (((csp - i)->framekind & FRAME_MASK) == FRAME_FUNCTION) {
-                    const program_t *prog = (i ? (csp-i+1)->prog : current_prog);
-                    int index = (csp-i)->fr.table_index;
-                    function_t *cfp = &prog->function_table[index];
+    case 0:
+        ret->item[0].type = T_STRING;
+        ret->item[0].subtype = STRING_MALLOC;
+        ret->item[0].u.string = add_slash(current_prog->filename);
+        for (i = 1; i < n; i++) {
+            ret->item[i].type = T_STRING;
+            ret->item[i].subtype = STRING_MALLOC;
+            ret->item[i].u.string = add_slash((csp - i + 1)->prog->filename);
+        }
+        break;
+    case 1:
+        ret->item[0].type = T_OBJECT;
+        ret->item[0].u.ob = current_object;
+        add_ref(current_object, "f_call_stack: curr");
+        for (i = 1; i < n; i++) {
+            ret->item[i].type = T_OBJECT;
+            ret->item[i].u.ob = (csp - i + 1)->ob;
+            add_ref((csp - i + 1)->ob, "f_call_stack");
+        }
+        break;
+    case 2:
+        for (i = 0; i < n; i++) {
+            ret->item[i].type = T_STRING;
+            if (((csp - i)->framekind & FRAME_MASK) == FRAME_FUNCTION) {
+                const program_t *prog = (i ? (csp-i+1)->prog : current_prog);
+                int index = (csp-i)->fr.table_index;
+                function_t *cfp = &prog->function_table[index];
 
-                    ret->item[i].subtype = STRING_SHARED;
-                    ret->item[i].u.string = cfp->funcname;
-                    ref_string(cfp->funcname);
-                } else {
-                    ret->item[i].subtype = STRING_CONSTANT;
-                    ret->item[i].u.string = (((csp - i)->framekind & FRAME_MASK) == FRAME_CATCH) ? "CATCH" : "<function>";
-                }
-            }
-            break;
-        case 3:
-            ret->item[0].type = T_STRING;
-            ret->item[0].subtype = STRING_CONSTANT;
-            ret->item[0].u.string = origin_name(caller_type);
-
-            for (i = 1; i < n; i++) {
-                ret->item[i].type = T_STRING;
+                ret->item[i].subtype = STRING_SHARED;
+                ret->item[i].u.string = cfp->funcname;
+                ref_string(cfp->funcname);
+            } else {
                 ret->item[i].subtype = STRING_CONSTANT;
-                ret->item[i].u.string = origin_name((csp-i+1)->caller_type);
+                ret->item[i].u.string = (((csp - i)->framekind & FRAME_MASK) == FRAME_CATCH) ? "CATCH" : "<function>";
             }
-            break;
+        }
+        break;
+    case 3:
+        ret->item[0].type = T_STRING;
+        ret->item[0].subtype = STRING_CONSTANT;
+        ret->item[0].u.string = origin_name(caller_type);
+
+        for (i = 1; i < n; i++) {
+            ret->item[i].type = T_STRING;
+            ret->item[i].subtype = STRING_CONSTANT;
+            ret->item[i].u.string = origin_name((csp-i+1)->caller_type);
+        }
+        break;
     }
     put_array(ret);
 }
 #endif
 
 #ifdef F_CAPITALIZE
-    void
+void
 f_capitalize (void)
 {
     if (uislower(sp->u.string[0])) {
@@ -393,7 +393,7 @@ f_capitalize (void)
 #endif
 
 #ifdef F_CHILDREN
-    void
+void
 f_children (void)
 {
     array_t *vec;
@@ -405,7 +405,7 @@ f_children (void)
 #endif
 
 #ifdef F_CLASSP
-    void
+void
 f_classp (void)
 {
     if (sp->type == T_CLASS) {
@@ -419,7 +419,7 @@ f_classp (void)
 #endif
 
 #ifdef F_CLEAR_BIT
-    void
+void
 f_clear_bit (void)
 {
     char *str;
@@ -445,7 +445,7 @@ f_clear_bit (void)
 #endif
 
 #ifdef F_CLONEP
-    void
+void
 f_clonep (void)
 {
     if ((sp->type == T_OBJECT) && (sp->u.ob->flags & O_CLONE)) {
@@ -459,7 +459,7 @@ f_clonep (void)
 #endif
 
 #ifdef F__NEW
-    void
+void
 f__new (void)
 {
     svalue_t *arg = sp - st_num_arg + 1;
@@ -475,7 +475,7 @@ f__new (void)
 #endif
 
 #ifdef F_CP
-    void
+void
 f_cp (void)
 {
     int i;
@@ -488,7 +488,7 @@ f_cp (void)
 #endif
 
 #ifdef F_CRC32
-    void
+void
 f_crc32 (void)
 {
     int len;
@@ -517,17 +517,17 @@ f_crc32 (void)
 #endif
 
 #ifdef F_CTIME
-    void
+void
 f_ctime (void)
 {
     const char *cp, *nl;
     char *p;
     int l;
     if(st_num_arg)
-        cp = time_string((time_t)sp->u.number);
+      cp = time_string((time_t)sp->u.number);
     else {
-        push_number(0);
-        cp = time_string((time_t)current_time);
+      push_number(0);
+      cp = time_string((time_t)current_time);
     }
     if ((nl = strchr(cp, '\n')))
         l = nl - cp;
@@ -542,7 +542,7 @@ f_ctime (void)
 #endif
 
 #ifdef F_DEEP_INHERIT_LIST
-    void
+void
 f_deep_inherit_list (void)
 {
     array_t *vec;
@@ -556,7 +556,7 @@ f_deep_inherit_list (void)
 #ifdef DEBUG_MACRO
 
 #ifdef F_SET_DEBUG_LEVEL
-    void
+void
 f_set_debug_level (void)
 {
     if (sp->type == T_STRING) {
@@ -584,19 +584,35 @@ f_debug_levels (void) {
 #endif
 
 #ifdef F_DEEP_INVENTORY
-    void
+void
 f_deep_inventory (void)
 {
     array_t *vec;
+    int args = st_num_arg;
+    if(st_num_arg==2 && sp->type == T_FUNCTION && ((sp-1)->type==T_ARRAY || (sp-1)->type==T_OBJECT) ) {
+        if((sp-1)->type==T_ARRAY)
+            vec = deep_inventory_array((sp-1)->u.arr, 1 , sp->u.fp); 
+        else /*(sp-1)->type==T_OBJECT*/
+            vec = deep_inventory((sp-1)->u.ob, 0 , sp->u.fp);
+    }
+    else if(st_num_arg==1 && (sp->type==T_FUNCTION || sp->type==T_ARRAY || sp->type==T_OBJECT) ) {
+        if(sp->type==T_FUNCTION)
+            vec = deep_inventory(current_object, 0 , sp->u.fp);
+	else if(sp->type==T_ARRAY)
+	    vec = deep_inventory_array(sp->u.arr, 1 , 0);
+	else /*sp->type==T_OBJECT*/
+            vec = deep_inventory(sp->u.ob, 0 , 0);
+    }
+    else
+        vec = &the_null_array;
 
-    vec = deep_inventory(sp->u.ob, 0);
-    free_object(&sp->u.ob, "f_deep_inventory");
-    put_array(vec);
+    pop_n_elems(args);
+    push_refed_array(vec);
 }
 #endif
 
 #ifdef F_DESTRUCT
-    void
+void
 f_destruct (void)
 {
     destruct_object(sp->u.ob);
@@ -605,7 +621,7 @@ f_destruct (void)
 #endif
 
 #ifdef F_DUMPALLOBJ
-    void
+void
 f_dumpallobj (void)
 {
     if (st_num_arg) {
@@ -618,7 +634,7 @@ f_dumpallobj (void)
 #endif
 
 #ifdef F_ED
-    void
+void
 f_ed (void)
 {
     if (!command_giver || !command_giver->interactive) {
@@ -636,25 +652,25 @@ f_ed (void)
     } else if (st_num_arg == 2) {
         /* ed(fname,exitfn) / ed(fname, scroll_lines) */
         if(sp->type == T_STRING)
-            ed_start((sp - 1)->u.string, 0, sp->u.string, 0, current_object, 0);
+          ed_start((sp - 1)->u.string, 0, sp->u.string, 0, current_object, 0);
         else if(sp->type == T_NUMBER)
-            ed_start((sp - 1)->u.string, 0, 0, 0, 0, sp->u.number);
+          ed_start((sp - 1)->u.string, 0, 0, 0, 0, sp->u.number);
         else
-            bad_argument(sp, T_NUMBER | T_STRING, 2, F_ED);
+          bad_argument(sp, T_NUMBER | T_STRING, 2, F_ED);
         pop_2_elems();
     } else if (st_num_arg == 3) {
         /* ed(fname,exitfn,restricted) / ed(fname,writefn,exitfn) /
            ed(fname,exitfn,scroll_lines) */
         if (sp->type == T_NUMBER) {
             if(sp->u.number == 1)
-                ed_start((sp - 2)->u.string, 0, (sp - 1)->u.string, sp->u.number,
-                        current_object, 0);
+              ed_start((sp - 2)->u.string, 0, (sp - 1)->u.string, sp->u.number,
+                       current_object, 0);
             else
-                ed_start((sp - 2)->u.string, 0, (sp - 1)->u.string, 0,
-                        current_object, sp->u.number);
+              ed_start((sp - 2)->u.string, 0, (sp - 1)->u.string, 0,
+                       current_object, sp->u.number);
         } else if (sp->type == T_STRING) {
             ed_start((sp - 2)->u.string, (sp - 1)->u.string, sp->u.string, 0,
-                    current_object, 0);
+                     current_object, 0);
         } else {
             bad_argument(sp, T_NUMBER | T_STRING, 3, F_ED);
         }
@@ -667,23 +683,23 @@ f_ed (void)
         if (!(sp->type == T_NUMBER))
             bad_argument(sp, T_NUMBER, 4, F_ED);
         if(sp->u.number == 1)
-            ed_start((sp - 3)->u.string, (sp - 2)->u.string, (sp - 1)->u.string,
-                    sp->u.number, current_object, 0);
+          ed_start((sp - 3)->u.string, (sp - 2)->u.string, (sp - 1)->u.string,
+                   sp->u.number, current_object, 0);
         else
-            ed_start((sp - 3)->u.string, (sp - 2)->u.string, (sp - 1)->u.string,
-                    0, current_object, sp->u.number);
+          ed_start((sp - 3)->u.string, (sp - 2)->u.string, (sp - 1)->u.string,
+                   0, current_object, sp->u.number);
         pop_n_elems(4);
     } else { /* st_num_arg == 5 */
         /* ed(fname, writefn, exitfn, restricted, scroll_lines) */
         if(!(sp->type == T_NUMBER))
-            bad_argument(sp, T_NUMBER, 5, F_ED);
+          bad_argument(sp, T_NUMBER, 5, F_ED);
         if(!((sp-1)->type == T_NUMBER))
-            bad_argument(sp-1, T_NUMBER, 4, F_ED);
+          bad_argument(sp-1, T_NUMBER, 4, F_ED);
         if(!((sp-2)->type == T_STRING))
-            bad_argument(sp-2, T_STRING, 3, F_ED);
+          bad_argument(sp-2, T_STRING, 3, F_ED);
 
         ed_start((sp - 4)->u.string, (sp - 3)->u.string, (sp - 2)->u.string,
-                (sp - 1)->u.number, current_object, sp->u.number);
+                 (sp - 1)->u.number, current_object, sp->u.number);
 
         pop_n_elems(5);
     }
@@ -723,15 +739,15 @@ void f_ed_start (void)
     int scroll_lines = 20;
 
     if (st_num_arg == 3) {
-        scroll_lines = (sp--)->u.number;
-        restr = (sp--)->u.number;
+      scroll_lines = (sp--)->u.number;
+      restr = (sp--)->u.number;
     }
 
     if (st_num_arg == 2) {
         if(sp->u.number == 1)
-            restr = (sp--)->u.number;
+          restr = (sp--)->u.number;
         else
-            scroll_lines = (sp--)->u.number;
+          scroll_lines = (sp--)->u.number;
     }
 
     if (st_num_arg)
@@ -764,7 +780,7 @@ void f_ed_start (void)
 #endif
 
 #ifdef F_ENABLE_WIZARD
-    void
+void
 f_enable_wizard (void)
 {
     if (current_object->interactive)
@@ -773,7 +789,7 @@ f_enable_wizard (void)
 #endif
 
 #ifdef F_ERROR
-    void
+void
 f_error (void)
 {
     int l = SVALUE_STRLEN(sp);
@@ -793,7 +809,7 @@ f_error (void)
 #endif
 
 #ifdef F_DISABLE_WIZARD
-    void
+void
 f_disable_wizard (void)
 {
     if (current_object->interactive)
@@ -802,7 +818,7 @@ f_disable_wizard (void)
 #endif
 
 #ifdef F_ENVIRONMENT
-    void
+void
 f_environment (void)
 {
     object_t *ob;
@@ -815,17 +831,17 @@ f_environment (void)
     } else if (!(current_object->flags & O_DESTRUCTED))
         ob = current_object->super;
     else
-        error("environment() of destructed object.\n");
+	error("environment() of destructed object.\n");
 
     if (ob && object_visible(ob))
-        push_object(ob);
+	push_object(ob);
     else
-        push_number(0);
+	push_number(0);
 }
 #endif
 
 #ifdef F_EXEC
-    void
+void
 f_exec (void)
 {
     int i;
@@ -842,7 +858,7 @@ f_exec (void)
 #endif
 
 #ifdef F_EXPLODE
-    void
+void
 f_explode (void)
 {
     array_t *vec;
@@ -850,7 +866,7 @@ f_explode (void)
     int len = SVALUE_STRLEN(sp-1);
 
     vec = explode_string((sp - 1)->u.string, len,
-            sp->u.string, SVALUE_STRLEN(sp));
+                         sp->u.string, SVALUE_STRLEN(sp));
     free_string_svalue(sp--);
     free_string_svalue(sp);
     put_array(vec);
@@ -858,7 +874,7 @@ f_explode (void)
 #endif
 
 #ifdef F_FILE_NAME
-    void
+void
 f_file_name (void)
 {
     char *res;
@@ -871,7 +887,7 @@ f_file_name (void)
 #endif
 
 #ifdef F_FILE_SIZE
-    void
+void
 f_file_size (void)
 {
     long i = file_size(sp->u.string);
@@ -881,7 +897,7 @@ f_file_size (void)
 #endif
 
 #ifdef F_FILTER
-    void
+void
 f_filter (void)
 {
     svalue_t *arg = sp - st_num_arg + 1;
@@ -893,7 +909,7 @@ f_filter (void)
 #endif
 
 #ifdef F_FIND_CALL_OUT
-    void
+void
 f_find_call_out (void)
 {
     int i;
@@ -912,7 +928,7 @@ f_find_call_out (void)
 #endif
 
 #ifdef F_FIND_OBJECT
-    void
+void
 f_find_object (void)
 {
     object_t *ob;
@@ -932,7 +948,7 @@ f_find_object (void)
 
 #ifdef F_FUNCTION_PROFILE
 /* f_function_profile: John Garnett, 1993/05/31, 0.9.17.3 */
-    void
+void
 f_function_profile (void)
 {
     array_t *vec;
@@ -950,7 +966,7 @@ f_function_profile (void)
         map = allocate_mapping(3);
         add_mapping_pair(map, "calls", prog->function_table[j].calls);
         add_mapping_pair(map, "self", prog->function_table[j].self
-                - prog->function_table[j].children);
+                         - prog->function_table[j].children);
         add_mapping_pair(map, "children", prog->function_table[j].children);
         add_mapping_shared_string(map, "name", prog->function_table[j].funcname);
         vec->item[j].type = T_MAPPING;
@@ -966,7 +982,7 @@ f_function_profile (void)
 #endif
 
 #ifdef F_FUNCTION_EXISTS
-    void
+void
 f_function_exists (void)
 {
     const char *str;
@@ -1020,7 +1036,7 @@ void f_generate_source (void)
 #endif
 
 #ifdef F_GET_CHAR
-    void
+void
 f_get_char (void)
 {
     svalue_t *arg;
@@ -1045,7 +1061,7 @@ f_get_char (void)
 #endif
 
 #ifdef F_GET_CONFIG
-    void
+void
 f_get_config (void)
 {
     if (!get_config_item(sp, sp))
@@ -1054,7 +1070,7 @@ f_get_config (void)
 #endif
 
 #ifdef F_GET_DIR
-    void
+void
 f_get_dir (void)
 {
     array_t *vec;
@@ -1067,7 +1083,7 @@ f_get_dir (void)
 #endif
 
 #ifdef F_IMPLODE
-    void
+void
 f_implode (void)
 {
     array_t *arr;
@@ -1091,7 +1107,7 @@ f_implode (void)
         char *str;
 
         str = implode_string(arr, sp->u.string,
-                SVALUE_STRLEN(sp));
+                             SVALUE_STRLEN(sp));
         free_string_svalue(sp--);
         free_array(arr);
         put_malloced_string(str);
@@ -1106,7 +1122,7 @@ f_implode (void)
 #endif
 
 #ifdef F_IN_EDIT
-    void
+void
 f_in_edit (void)
 {
     char *fn;
@@ -1131,7 +1147,7 @@ f_in_edit (void)
 #endif
 
 #ifdef F_IN_INPUT
-    void
+void
 f_in_input (void)
 {
     int i;
@@ -1143,7 +1159,7 @@ f_in_input (void)
 #endif
 
 #ifdef F_INHERITS
-    int
+int
 inherits (program_t * prog, program_t * thep)
 {
     int j, k = prog->num_inherited, l;
@@ -1160,7 +1176,7 @@ inherits (program_t * prog, program_t * thep)
     return 0;
 }
 
-    void
+void
 f_inherits (void)
 {
     object_t *ob, *base;
@@ -1181,7 +1197,7 @@ f_inherits (void)
 #endif
 
 #ifdef F_SHALLOW_INHERIT_LIST
-    void
+void
 f_shallow_inherit_list (void)
 {
     array_t *vec;
@@ -1193,7 +1209,7 @@ f_shallow_inherit_list (void)
 #endif
 
 #ifdef F_INPUT_TO
-    void
+void
 f_input_to (void)
 {
     svalue_t *arg;
@@ -1217,7 +1233,7 @@ f_input_to (void)
 #endif
 
 #ifdef F_INTERACTIVE
-    void
+void
 f_interactive (void)
 {
     int i;
@@ -1229,15 +1245,15 @@ f_interactive (void)
 #endif
 
 #ifdef F_HAS_MXP
-    void
+void
 f_has_mxp (void)
 {
     int i=0;
 
     if (sp->u.ob->interactive)
     {
-        i = sp->u.ob->interactive->iflags & USING_MXP;
-        i = !!i; //force 1 or 0
+       i = sp->u.ob->interactive->iflags & USING_MXP;
+       i = !!i; //force 1 or 0
     }
     free_object(&sp->u.ob, "f_has_mxp");
     put_number(i);
@@ -1247,20 +1263,34 @@ f_has_mxp (void)
 #ifdef F_HAS_ZMP
 void f_has_zmp (void)
 {
-    int i=0;
+	int i=0;
 
-    if (sp->u.ob->interactive)
-    {
-        i = sp->u.ob->interactive->iflags & USING_ZMP;
-        i = !!i; //force 1 or 0
-    }
-    free_object(&sp->u.ob, "f_has_zmp");
-    put_number(i);
+	if (sp->u.ob->interactive)
+	{
+		i = sp->u.ob->interactive->iflags & USING_ZMP;
+		i = !!i; //force 1 or 0
+	}
+	free_object(&sp->u.ob, "f_has_zmp");
+	put_number(i);
+}
+#endif
+
+#ifdef F_HAS_GMCP
+void f_has_gmcp(){
+	int i=0;
+
+	if (sp->u.ob->interactive)
+	{
+		i = sp->u.ob->interactive->iflags & USING_GMCP;
+		i = !!i; //force 1 or 0
+	}
+	free_object(&sp->u.ob, "f_has_zmp");
+	put_number(i);
 }
 #endif
 
 #ifdef F_INTP
-    void
+void
 f_intp (void)
 {
     if (sp->type == T_NUMBER) sp->u.number = 1;
@@ -1272,7 +1302,7 @@ f_intp (void)
 #endif
 
 #ifdef F_FUNCTIONP
-    void
+void
 f_functionp (void)
 {
     int i;
@@ -1292,7 +1322,7 @@ f_functionp (void)
 #endif
 
 #ifdef F_KEYS
-    void
+void
 f_keys (void)
 {
     array_t *vec;
@@ -1304,7 +1334,7 @@ f_keys (void)
 #endif
 
 #ifdef F_VALUES
-    void
+void
 f_values (void)
 {
     array_t *vec;
@@ -1316,7 +1346,7 @@ f_values (void)
 #endif
 
 #ifdef F_LINK
-    void
+void
 f_link (void)
 {
     svalue_t *ret, *arg;
@@ -1337,7 +1367,7 @@ f_link (void)
 #endif                          /* F_LINK */
 
 #ifdef F_LOWER_CASE
-    void
+void
 f_lower_case (void)
 {
     char *str;
@@ -1397,7 +1427,7 @@ void f_malloc_status (void)
 #endif
 
 #ifdef F_MAP_DELETE
-    void
+void
 f_map_delete (void)
 {
     mapping_delete((sp - 1)->u.map, sp);
@@ -1409,7 +1439,7 @@ f_map_delete (void)
 #endif
 
 #ifdef F_MAPP
-    void
+void
 f_mapp (void)
 {
     if (sp->type == T_MAPPING) {
@@ -1423,7 +1453,7 @@ f_mapp (void)
 #endif
 
 #ifdef F_MAP
-    void
+void
 f_map (void)
 {
     svalue_t *arg = sp - st_num_arg + 1;
@@ -1435,7 +1465,7 @@ f_map (void)
 #endif
 
 #ifdef F_MASTER
-    void
+void
 f_master (void)
 {
     if (!master_ob)
@@ -1446,19 +1476,19 @@ f_master (void)
 #endif
 
 /*
-   This efun searches a mapping for a path.  Each key is assumed to be a
-   string.  The value is completely arbitrary.  The efun finds the largest
-   matching path in the mapping.  Keys ended in '/' are assumed to match
-   paths with character that follow the '/', i.e. / is a wildcard for anything
-   below this directory.  DO NOT CHANGE THIS EFUN TIL YOU UNDERSTAND IT.  It
-   catches folks by suprise at first, but it is coded the way it is for a reason.
-   It effectively implements the search loop in TMI's access object as a single
-   efun.
+This efun searches a mapping for a path.  Each key is assumed to be a
+string.  The value is completely arbitrary.  The efun finds the largest
+matching path in the mapping.  Keys ended in '/' are assumed to match
+paths with character that follow the '/', i.e. / is a wildcard for anything
+below this directory.  DO NOT CHANGE THIS EFUN TIL YOU UNDERSTAND IT.  It
+catches folks by suprise at first, but it is coded the way it is for a reason.
+It effectively implements the search loop in TMI's access object as a single
+efun.
 
-   Cygnus
- */
+        Cygnus
+*/
 #ifdef F_MATCH_PATH
-    void
+void
 f_match_path (void)
 {
     svalue_t *value;
@@ -1501,7 +1531,7 @@ f_match_path (void)
 #endif                          /* F_MATCH_PATH */
 
 #ifdef F_MEMBER_ARRAY
-    void
+void
 f_member_array (void)
 {
     array_t *v;
@@ -1519,12 +1549,12 @@ f_member_array (void)
         i = (sp--)->u.number;
         if (i<0) bad_arg(3, F_MEMBER_ARRAY);
     } else
-        i = 0;
+	i = 0;
 
     if (sp->type == T_STRING) {
         const char *res;
         if(flag & 2)
-            error("member_array: can not search backwards in strings");
+          error("member_array: can not search backwards in strings");
         CHECK_TYPES(sp-1, T_NUMBER, 1, F_MEMBER_ARRAY);
         if (i > SVALUE_STRLEN(sp)) error("Index to start search from in member_array() is > string length.\n");
         if ((res = strchr(sp->u.string + i, (sp-1)->u.number)))
@@ -1554,66 +1584,66 @@ f_member_array (void)
             if(flag & 2)
                 tmp = size - tmp - 1;
             switch (find->type|(sv= v->item + tmp)->type) {
-                case T_STRING:
-                    if (flag & 1) {
-                        if (flen && (sv->subtype & STRING_COUNTED)
-                                && flen > MSTR_SIZE(sv->u.string))
-                            continue;
-                        if (strncmp(find->u.string, sv->u.string, flen)) continue;
-                    } else {
-                        if (flen && (sv->subtype & STRING_COUNTED)
-                                && flen != MSTR_SIZE(sv->u.string))
-                            continue;
-                        if (strcmp(find->u.string, sv->u.string)) continue;
-                    }
-                    break;
-                case T_NUMBER:
-                    if (find->u.number == sv->u.number)
-                        break;
+            case T_STRING:
+                if (flag & 1) {
+                    if (flen && (sv->subtype & STRING_COUNTED)
+                        && flen > MSTR_SIZE(sv->u.string))
+                      continue;
+                    if (strncmp(find->u.string, sv->u.string, flen)) continue;
+                } else {
+                  if (flen && (sv->subtype & STRING_COUNTED)
+                      && flen != MSTR_SIZE(sv->u.string))
                     continue;
-                case T_REAL:
-                    if (find->u.real == sv->u.real)
-                        break;
+                  if (strcmp(find->u.string, sv->u.string)) continue;
+                }
+                break;
+            case T_NUMBER:
+                if (find->u.number == sv->u.number)
+                	break;
+                continue;
+            case T_REAL:
+                if (find->u.real == sv->u.real)
+                	break;
+                continue;
+            case T_ARRAY:
+                if (find->u.arr == sv->u.arr)
+                	break;
+                continue;
+            case T_CLASS:
+            	if (find->u.arr == sv->u.arr)
+            		break;
+            	continue;
+            case T_OBJECT:
+            {
+                if (sv->u.ob->flags & O_DESTRUCTED) {
+                    assign_svalue(sv, &const0u);
                     continue;
-                case T_ARRAY:
-                    if (find->u.arr == sv->u.arr)
-                        break;
-                    continue;
-                case T_CLASS:
-                    if (find->u.arr == sv->u.arr)
-                        break;
-                    continue;
-                case T_OBJECT:
-                    {
-                        if (sv->u.ob->flags & O_DESTRUCTED) {
-                            assign_svalue(sv, &const0u);
-                            continue;
-                        }
-                        if (find->u.ob == sv->u.ob)
-                            break;
-                        continue;
-                    }
-                case T_MAPPING:
-                    if (find->u.map == sv->u.map)
-                        break;
-                    continue;
-                case T_FUNCTION:
-                    if (find->u.fp == sv->u.fp)
-                        break;
-                    continue;
+                }
+                if (find->u.ob == sv->u.ob)
+                	break;
+                continue;
+            }
+            case T_MAPPING:
+                if (find->u.map == sv->u.map)
+                	break;
+                continue;
+            case T_FUNCTION:
+                if (find->u.fp == sv->u.fp)
+                	break;
+                continue;
 #ifndef NO_BUFFER_TYPE
-                case T_BUFFER:
-                    if (find->u.buf == sv->u.buf)
-                        break;
-                    continue;
+            case T_BUFFER:
+                if (find->u.buf == sv->u.buf)
+                	break;
+                continue;
 #endif
-                default:
-                    if (sv->type == T_OBJECT && (sv->u.ob->flags & O_DESTRUCTED)) {
-                        assign_svalue(sv, &const0u);
-                        if (find->type == T_NUMBER && !find->u.number)
-                            break;
-                    }
-                    continue;
+            default:
+                if (sv->type == T_OBJECT && (sv->u.ob->flags & O_DESTRUCTED)) {
+                    assign_svalue(sv, &const0u);
+                    if (find->type == T_NUMBER && !find->u.number)
+                    	break;
+                }
+                continue;
             }
             break;
         }
@@ -1630,7 +1660,7 @@ f_member_array (void)
 #endif
 
 #ifdef F_MESSAGE
-    void
+void
 f_message (void)
 {
     array_t *use, *avoid;
@@ -1639,50 +1669,50 @@ f_message (void)
 
     args = sp - num_arg + 1;
     switch (args[2].type) {
-        case T_OBJECT:
-        case T_STRING:
-            use = allocate_empty_array(1);
-            use->item[0] = args[2];
-            args[2].type = T_ARRAY;
-            args[2].u.arr = use;
-            break;
-        case T_ARRAY:
-            use = args[2].u.arr;
-            break;
-        case T_NUMBER:
-            if (args[2].u.number == 0) {
-                int len = SVALUE_STRLEN(args + 1);
+    case T_OBJECT:
+    case T_STRING:
+        use = allocate_empty_array(1);
+        use->item[0] = args[2];
+        args[2].type = T_ARRAY;
+        args[2].u.arr = use;
+        break;
+    case T_ARRAY:
+        use = args[2].u.arr;
+        break;
+    case T_NUMBER:
+        if (args[2].u.number == 0) {
+            int len = SVALUE_STRLEN(args + 1);
 
-                /* this is really bad and probably should be rm'ed -Beek;
-                 * on the other hand, we don't have a debug_message() efun yet.
-                 * Well, there is one in contrib now ...
-                 */
-                /* for compatibility (write() simul_efuns, etc)  -bobf */
-                if (len > LARGEST_PRINTABLE_STRING)
-                    error("Printable strings limited to length of %d.\n",
-                            LARGEST_PRINTABLE_STRING);
+            /* this is really bad and probably should be rm'ed -Beek;
+             * on the other hand, we don't have a debug_message() efun yet.
+             * Well, there is one in contrib now ...
+             */
+            /* for compatibility (write() simul_efuns, etc)  -bobf */
+            if (len > LARGEST_PRINTABLE_STRING)
+                error("Printable strings limited to length of %d.\n",
+                      LARGEST_PRINTABLE_STRING);
 
-                add_message(command_giver, args[1].u.string, len);
-                pop_n_elems(num_arg);
-                return;
-            }
-        default:
-            bad_argument(&args[2], T_OBJECT | T_STRING | T_ARRAY | T_NUMBER,
-                    3, F_MESSAGE);
+            add_message(command_giver, args[1].u.string, len);
+            pop_n_elems(num_arg);
+            return;
+        }
+    default:
+        bad_argument(&args[2], T_OBJECT | T_STRING | T_ARRAY | T_NUMBER,
+                     3, F_MESSAGE);
     }
     if (num_arg == 4) {
         switch (args[3].type) {
-            case T_OBJECT:
-                avoid = allocate_empty_array(1);
-                avoid->item[0] = args[3];
-                args[3].type = T_ARRAY;
-                args[3].u.arr = avoid;
-                break;
-            case T_ARRAY:
-                avoid = args[3].u.arr;
-                break;
-            default:
-                avoid = &the_null_array;
+        case T_OBJECT:
+            avoid = allocate_empty_array(1);
+            avoid->item[0] = args[3];
+            args[3].type = T_ARRAY;
+            args[3].u.arr = avoid;
+            break;
+        case T_ARRAY:
+            avoid = args[3].u.arr;
+            break;
+        default:
+            avoid = &the_null_array;
         }
     } else
         avoid = &the_null_array;
@@ -1692,7 +1722,7 @@ f_message (void)
 #endif
 
 #ifdef F_MKDIR
-    void
+void
 f_mkdir (void)
 {
     const char *path;
@@ -1710,7 +1740,7 @@ f_mkdir (void)
 #endif
 
 #ifdef F_MOVE_OBJECT
-    void
+void
 f_move_object (void)
 {
     object_t *o1, *o2;
@@ -1758,11 +1788,11 @@ void f_mud_status (void)
         }
 
         outbuf_addv(&ob, "current working directory: %s\n\n",
-                get_current_dir(dir_buf, 1024));
+                    get_current_dir(dir_buf, 1024));
         outbuf_add(&ob, "add_message statistics\n");
         outbuf_add(&ob, "------------------------------\n");
         outbuf_addv(&ob, "Calls to add_message: %d   Packets: %d   Average packet size: %f\n\n",
-                add_message_calls, inet_packets, (float) inet_volume / inet_packets);
+        add_message_calls, inet_packets, (float) inet_volume / inet_packets);
 
         stat_living_objects(&ob);
 
@@ -1780,34 +1810,34 @@ void f_mud_status (void)
     } else {
         /* !verbose */
         outbuf_addv(&ob, "Sentences:\t\t\t%8d %8d\n", tot_alloc_sentence,
-                tot_alloc_sentence * sizeof(sentence_t));
+                    tot_alloc_sentence * sizeof(sentence_t));
 #ifndef DEBUG
         outbuf_addv(&ob, "Objects:\t\t\t%8d %8d\n",
-                tot_alloc_object, tot_alloc_object_size);
+                    tot_alloc_object, tot_alloc_object_size);
 #else
         outbuf_addv(&ob, "Objects:\t\t\t%8d %8d (%8d dangling)\n",
-                tot_alloc_object, tot_alloc_object_size, tot_dangling_object);
+                    tot_alloc_object, tot_alloc_object_size, tot_dangling_object);
 #endif
         outbuf_addv(&ob, "Prog blocks:\t\t\t%8d %8d\n",
-                total_num_prog_blocks, total_prog_block_size);
+                    total_num_prog_blocks, total_prog_block_size);
 #ifdef ARRAY_STATS
         outbuf_addv(&ob, "Arrays:\t\t\t\t%8d %8d\n", num_arrays,
-                total_array_size);
+                    total_array_size);
 #else
         outbuf_add(&ob, "<Array statistics disabled, no information available>\n");
 #endif
 #ifdef CLASS_STATS
         outbuf_addv(&ob, "Classes:\t\t\t%8d %8d\n", num_classes,
-                total_class_size);
+                    total_class_size);
 #else
         outbuf_add(&ob, "<Class statistics disabled, no information available>\n");
 #endif
 
         outbuf_addv(&ob, "Mappings:\t\t\t%8d %8d\n", num_mappings,
-                total_mapping_size);
+                    total_mapping_size);
         outbuf_addv(&ob, "Mappings(nodes):\t\t%8d\n", total_mapping_nodes);
         outbuf_addv(&ob, "Interactives:\t\t\t%8d %8d\n", num_user,
-                num_user * sizeof(interactive_t));
+                    num_user * sizeof(interactive_t));
 
         tot = show_otable_status(&ob, verbose) +
             heart_beat_status(&ob, verbose) +
@@ -1837,7 +1867,7 @@ void f_mud_status (void)
 #endif
 
 #ifdef F_OBJECTP
-    void
+void
 f_objectp (void)
 {
     if (sp->type == T_OBJECT && !(sp->u.ob->flags & O_DESTRUCTED)) {
@@ -1851,7 +1881,7 @@ f_objectp (void)
 #endif
 
 #ifdef F_OPCPROF
-    void
+void
 f_opcprof (void)
 {
     if (st_num_arg == 1) {
@@ -1863,7 +1893,7 @@ f_opcprof (void)
 #endif
 
 #ifdef F_ORIGIN
-    void
+void
 f_origin (void)
 {
     push_constant_string(origin_name(caller_type));
@@ -1871,7 +1901,7 @@ f_origin (void)
 #endif
 
 #ifdef F_POINTERP
-    void
+void
 f_pointerp (void)
 {
     if (sp->type == T_ARRAY) {
@@ -1885,7 +1915,7 @@ f_pointerp (void)
 #endif
 
 #ifdef F_PRESENT
-    void
+void
 f_present (void)
 {
     int num_arg = st_num_arg;
@@ -1905,7 +1935,7 @@ f_present (void)
 #endif
 
 #ifdef F_PREVIOUS_OBJECT
-    void
+void
 f_previous_object (void)
 {
     control_stack_t *p;
@@ -1932,7 +1962,7 @@ f_previous_object (void)
         p = csp;
         do {
             if ((p->framekind & FRAME_OB_CHANGE) && p->prev_ob)
-                i++;
+		i++;
         } while (--p >= control_stack);
         v = allocate_empty_array(i);
         p = csp;
@@ -1942,10 +1972,10 @@ f_previous_object (void)
                 v->item[0].u.ob = previous_ob;
                 add_ref(previous_ob, "previous_object(-1)");
             } else
-                v->item[0] = const0u;
+		v->item[0] = const0u;
             i = 1;
         } else
-            i = 0;
+	    i = 0;
         do {
             if ((p->framekind & FRAME_OB_CHANGE) && (ob = p->prev_ob)) {
                 if (!(ob->flags & O_DESTRUCTED)) {
@@ -1971,7 +2001,7 @@ f_previous_object (void)
 #endif
 
 #ifdef F_PRINTF
-    void
+void
 f_printf (void)
 {
     int num_arg = st_num_arg;
@@ -1979,7 +2009,7 @@ f_printf (void)
 
     if (command_giver) {
         ret = string_print_formatted((sp - num_arg + 1)->u.string,
-                num_arg - 1, sp - num_arg + 2);
+                                     num_arg - 1, sp - num_arg + 2);
         if (ret) {
             tell_object(command_giver, ret, COUNTED_STRLEN(ret));
             FREE_MSTR(ret);
@@ -1991,7 +2021,7 @@ f_printf (void)
 #endif
 
 #ifdef F_PROCESS_STRING
-    void
+void
 f_process_string (void)
 {
     char *str;
@@ -2005,7 +2035,7 @@ f_process_string (void)
 #endif
 
 #ifdef F_PROCESS_VALUE
-    void
+void
 f_process_value (void)
 {
     svalue_t *ret;
@@ -2018,7 +2048,7 @@ f_process_value (void)
 #endif
 
 #ifdef F_QUERY_ED_MODE
-    void
+void
 f_query_ed_mode (void)
 {
     /* n = prompt for line 'n'
@@ -2033,7 +2063,7 @@ f_query_ed_mode (void)
 #endif
 
 #ifdef F_QUERY_HOST_NAME
-    void
+void
 f_query_host_name (void)
 {
     char *tmp;
@@ -2046,7 +2076,7 @@ f_query_host_name (void)
 #endif
 
 #ifdef F_QUERY_IDLE
-    void
+void
 f_query_idle (void)
 {
     int i;
@@ -2058,7 +2088,7 @@ f_query_idle (void)
 #endif
 
 #ifdef F_QUERY_IP_NAME
-    void
+void
 f_query_ip_name (void)
 {
     char *tmp;
@@ -2071,7 +2101,7 @@ f_query_ip_name (void)
 #endif
 
 #ifdef F_QUERY_IP_NUMBER
-    void
+void
 f_query_ip_number (void)
 {
     const char *tmp;
@@ -2084,7 +2114,7 @@ f_query_ip_number (void)
 #endif
 
 #ifdef F_QUERY_LOAD_AVERAGE
-    void
+void
 f_query_load_average (void)
 {
     copy_and_push_string(query_load_av());
@@ -2092,7 +2122,7 @@ f_query_load_average (void)
 #endif
 
 #ifdef F_QUERY_PRIVS
-    void
+void
 f_query_privs (void)
 {
     object_t *ob;
@@ -2102,7 +2132,7 @@ f_query_privs (void)
         sp->type = T_STRING;
         sp->u.string = make_shared_string(ob->privs);
         sp->subtype = STRING_SHARED;
-        free_object(&ob, "f_query_privs");
+	free_object(&ob, "f_query_privs");
     } else {
         free_object(&ob, "f_query_privs");
         *sp = const0;
@@ -2111,7 +2141,7 @@ f_query_privs (void)
 #endif
 
 #ifdef F_QUERY_SNOOPING
-    void
+void
 f_query_snooping (void)
 {
     object_t *ob;
@@ -2124,7 +2154,7 @@ f_query_snooping (void)
 #endif
 
 #ifdef F_QUERY_SNOOP
-    void
+void
 f_query_snoop (void)
 {
     object_t *ob;
@@ -2137,7 +2167,7 @@ f_query_snoop (void)
 #endif
 
 #ifdef F_RANDOM
-    void
+void
 f_random (void)
 {
     if (sp->u.number <= 0) {
@@ -2149,7 +2179,7 @@ f_random (void)
 #endif
 
 #ifdef F_READ_BYTES
-    void
+void
 f_read_bytes (void)
 {
     char *str;
@@ -2173,7 +2203,7 @@ f_read_bytes (void)
 #endif
 
 #ifdef F_READ_BUFFER
-    void
+void
 f_read_buffer (void)
 {
     char *str;
@@ -2182,10 +2212,10 @@ f_read_buffer (void)
     svalue_t *arg = sp - num_arg + 1;
 
     if (num_arg > 1) {
-        start = arg[1].u.number;
-        if (num_arg == 3) {
-            len = arg[2].u.number;
-        }
+       start = arg[1].u.number;
+       if (num_arg == 3) {
+           len = arg[2].u.number;
+       }
     }
     if (arg[0].type == T_STRING) {
         from_file = 1;          /* new line */
@@ -2212,7 +2242,7 @@ f_read_buffer (void)
 #endif
 
 #ifdef F_READ_FILE
-    void
+void
 f_read_file (void)
 {
     char *str;
@@ -2233,7 +2263,7 @@ f_read_file (void)
 #endif
 
 #ifdef F_RECEIVE
-    void
+void
 f_receive (void)
 {
     if (sp->type == T_STRING) {
@@ -2242,7 +2272,7 @@ f_receive (void)
 
             if (len > LARGEST_PRINTABLE_STRING)
                 error("Printable strings limited to length of %d.\n",
-                        LARGEST_PRINTABLE_STRING);
+                      LARGEST_PRINTABLE_STRING);
 
             add_message(current_object, sp->u.string, len);
         }
@@ -2270,7 +2300,7 @@ f_reg_assoc (void) {
     if (!(arg[2].type == T_ARRAY))
         error("Bad argument 3 to reg_assoc()\n");
 
-    vec = reg_assoc(arg[0].u.string, arg[1].u.arr, arg[2].u.arr, st_num_arg > 3 ? &arg[3] : &const0);
+    vec = reg_assoc(arg, arg[1].u.arr, arg[2].u.arr, st_num_arg > 3 ? &arg[3] : &const0);
 
     if (st_num_arg == 4)
         pop_3_elems();
@@ -2283,7 +2313,7 @@ f_reg_assoc (void) {
 #endif
 
 #ifdef F_REGEXP
-    void
+void
 f_regexp (void)
 {
     array_t *v;
@@ -2310,7 +2340,7 @@ f_regexp (void)
 #endif
 
 #ifdef F_REMOVE_CALL_OUT
-    void
+void
 f_remove_call_out (void)
 {
     int i;
@@ -2336,7 +2366,7 @@ f_remove_call_out (void)
 #endif
 
 #ifdef F_RENAME
-    void
+void
 f_rename (void)
 {
     int i;
@@ -2358,45 +2388,45 @@ f_rename (void)
    on the relative frequency with which the letters in the search string
    appear in the string to be searched).
 
-Note: this version should behave identically to the old version (except
-for runtime).  When the search pattern is only one character long, the
-old algorithm is used.  The new algorithm is actually about 10% slower
-than the old one when the search string is only one character long.
+   Note: this version should behave identically to the old version (except
+   for runtime).  When the search pattern is only one character long, the
+   old algorithm is used.  The new algorithm is actually about 10% slower
+   than the old one when the search string is only one character long.
 
-This enhancement to f_replace_string() was written by John Garnett
-(aka Truilkan) on 1995/04/29.  I believe the original replace_string()
-was written by Dave Richards (Cygnus).
+   This enhancement to f_replace_string() was written by John Garnett
+   (aka Truilkan) on 1995/04/29.  I believe the original replace_string()
+   was written by Dave Richards (Cygnus).
 
-I didn't come up with the idea of this algorithm (learned it in
-a university programming course way back when).  For those interested
-in the workings of the algorithm, you can probably find it in a book on
-string processing algorithms.  Its also fairly easy to figure out the
-algorithm by tracing through it for a small example.
- */
+   I didn't come up with the idea of this algorithm (learned it in
+   a university programming course way back when).  For those interested
+   in the workings of the algorithm, you can probably find it in a book on
+   string processing algorithms.  Its also fairly easy to figure out the
+   algorithm by tracing through it for a small example.
+*/
 #ifdef F_REPLACE_STRING
 
 /*
-   syntax for replace_string is now:
-   string replace_string(src, pat, rep);   // or
-   string replace_string(src, pat, rep, max);  // or
-   string replace_string(src, pat, rep, first, last);
+syntax for replace_string is now:
+    string replace_string(src, pat, rep);   // or
+    string replace_string(src, pat, rep, max);  // or
+    string replace_string(src, pat, rep, first, last);
 
-   The 4th/5th args are optional (to retain backward compatibility).
-   - src, pat, and rep are all strings.
-   - max is an integer. It will replace all occurances up to max
-   matches (starting as 1 as the first), with a value of 0 meaning
-   'replace all')
-   - first and last are just a range to replace between, with
-   the following constraints
-   first < 1: change all from start
-   last == 0 || last > max matches:    change all to end
-   first > last: return unmodified array.
-   (i.e, with 4 args, it's like calling it with:
-   replace_string(src, pat, rep, 0, max);
-   )
- */
+The 4th/5th args are optional (to retain backward compatibility).
+- src, pat, and rep are all strings.
+- max is an integer. It will replace all occurances up to max
+  matches (starting as 1 as the first), with a value of 0 meaning
+  'replace all')
+- first and last are just a range to replace between, with
+  the following constraints
+    first < 1: change all from start
+    last == 0 || last > max matches:    change all to end
+    first > last: return unmodified array.
+(i.e, with 4 args, it's like calling it with:
+    replace_string(src, pat, rep, 0, max);
+)
+*/
 
-    void
+void
 f_replace_string (void)
 {
     int plen, rlen, dlen, slen, first, last, cur, j;
@@ -2503,7 +2533,8 @@ f_replace_string (void)
                     *dst2++ = *src++;
                 }
             }
-            memcpy(dst2, src, slimit - src);
+            memmove(dst2, src, slimit - src);
+            //memcpy(dst2, src, slimit - src);
             dst2 += (slimit - src);
             *dst2 = 0;
             arg->u.string = extend_string(dst1, dst2 - dst1);
@@ -2649,7 +2680,7 @@ f_replace_string (void)
 #endif
 
 #ifdef F_RESOLVE
-    void
+void
 f_resolve (void)
 {
     int i;
@@ -2662,10 +2693,10 @@ f_resolve (void)
 #endif
 
 #ifdef F_RESTORE_OBJECT
-    void
+void
 f_restore_object (void)
 {
-    int flag, tmp_eval;
+    int flag;
 
     flag = (st_num_arg > 1) ? (sp--)->u.number : 0;
 
@@ -2692,7 +2723,7 @@ f_restore_variable (void) {
 #endif
 
 #ifdef F_RM
-    void
+void
 f_rm (void)
 {
     int i;
@@ -2704,7 +2735,7 @@ f_rm (void)
 #endif
 
 #ifdef F_RMDIR
-    void
+void
 f_rmdir (void)
 {
     const char *path;
@@ -2722,10 +2753,10 @@ f_rmdir (void)
 #endif
 
 #ifdef F_SAVE_OBJECT
-    void
+void
 f_save_object (void)
 {
-    int flag, tmp_eval;
+    int flag;
 
     if (st_num_arg == 2 ) {
         flag = (sp--)->u.number;
@@ -2734,27 +2765,27 @@ f_save_object (void)
     }
 
     if(st_num_arg == 1 && sp->type == T_NUMBER)
-        flag = sp->u.number;
+    	flag = sp->u.number;
 
     if(st_num_arg && sp->type == T_STRING){
-        flag = save_object(current_object, sp->u.string, flag);
+    	flag = save_object(current_object, sp->u.string, flag);
 
-        free_string_svalue(sp);
-        put_number(flag);
+    	free_string_svalue(sp);
+    	put_number(flag);
     } else {
-        pop_n_elems(st_num_arg);
-        char *saved = new_string(MAX_STRING_LENGTH, "save_object_str");
-        push_malloced_string(saved);
+    	pop_n_elems(st_num_arg);
+    	char *saved = new_string(MAX_STRING_LENGTH, "save_object_str");
+    	push_malloced_string(saved);
         int left = MAX_STRING_LENGTH;
         flag = save_object_str(current_object, flag, saved, left);
         if(!flag){
-            pop_stack();
-            push_undefined();
+        	pop_stack();
+        	push_undefined();
         } else {
-            saved = new_string(strlen(sp->u.string), "save_object_str2");
-            strcpy(saved, sp->u.string);
-            pop_stack();
-            push_malloced_string(saved);
+        	saved = new_string(strlen(sp->u.string), "save_object_str2");
+        	strcpy(saved, sp->u.string);
+        	pop_stack();
+        	push_malloced_string(saved);
         }
     }
 }
@@ -2772,18 +2803,18 @@ f_save_variable (void) {
 #endif
 
 #ifdef F_SAY
-    void
+void
 f_say (void)
 {
     array_t *avoid;
     static array_t vtmp =
     {1,
 #ifdef DEBUG
-        1,
+     1,
 #endif
-        1,
+     1,
 #ifdef PACKAGE_MUDLIB_STATS
-        {(mudlib_stats_t *) NULL, (mudlib_stats_t *) NULL}
+     {(mudlib_stats_t *) NULL, (mudlib_stats_t *) NULL}
 #endif
     };
 
@@ -2808,30 +2839,30 @@ f_say (void)
 #ifdef F_SET_EVAL_LIMIT
 /* warning: do not enable this without using valid_override() in the master
    object and a set_eval_limit() simul_efun to restrict access.
- */
-    void
+*/
+void
 f_set_eval_limit (void)
 {
     switch (sp->u.number) {
-        case 0:
-            sp->u.number = max_cost;
-            set_eval(max_cost);
-            break;
-        case -1:
-            sp->u.number = get_eval();
-            break;
-        case 1:
-            sp->u.number = max_cost;
-            break;
-        default:
-            max_cost = sp->u.number;
-            break;
+    case 0:
+        sp->u.number = max_cost;
+	set_eval(max_cost);
+        break;
+    case -1:
+        sp->u.number = get_eval();
+        break;
+    case 1:
+        sp->u.number = max_cost;
+        break;
+    default:
+        max_cost = sp->u.number;
+        break;
     }
 }
 #endif
 
 #ifdef F_SET_BIT
-    void
+void
 f_set_bit (void)
 {
     char *str;
@@ -2869,7 +2900,7 @@ f_set_bit (void)
 #endif
 
 #ifdef F_SET_HEART_BEAT
-    void
+void
 f_set_heart_beat (void)
 {
     set_heart_beat(current_object, (sp--)->u.number);
@@ -2877,7 +2908,7 @@ f_set_heart_beat (void)
 #endif
 
 #ifdef F_QUERY_HEART_BEAT
-    void
+void
 f_query_heart_beat (void)
 {
     int num = query_heart_beat(sp->u.ob);
@@ -2887,7 +2918,7 @@ f_query_heart_beat (void)
 #endif
 
 #ifdef F_SET_HIDE
-    void
+void
 f_set_hide (void)
 {
     if (!valid_hide(current_object)) {
@@ -2909,7 +2940,7 @@ f_set_hide (void)
 #endif
 
 #ifdef F_SET_LIGHT
-    void
+void
 f_set_light (void)
 {
     object_t *o1;
@@ -2925,7 +2956,7 @@ f_set_light (void)
 #endif
 
 #ifdef F_SET_PRIVS
-    void
+void
 f_set_privs (void)
 {
     object_t *ob;
@@ -2946,7 +2977,7 @@ f_set_privs (void)
 #endif
 
 #ifdef F_SHADOW
-    void
+void
 f_shadow (void)
 {
     object_t *ob;
@@ -2956,8 +2987,8 @@ f_shadow (void)
         ob = ob->shadowed;
         free_object(&sp->u.ob, "f_shadow:1");
         if (ob) {
-            add_ref(ob, "shadow(ob, 0)");
-            sp->u.ob = ob;
+          add_ref(ob, "shadow(ob, 0)");
+          sp->u.ob = ob;
         }
         else *sp = const0;
         return;
@@ -2989,7 +3020,7 @@ f_shadow (void)
 #endif
 
 #ifdef F_SHOUT
-    void
+void
 f_shout (void)
 {
     shout_string(sp->u.string);
@@ -2998,7 +3029,7 @@ f_shout (void)
 #endif
 
 #ifdef F_SHUTDOWN
-    void
+void
 f_shutdown (void)
 {
     if (st_num_arg) {
@@ -3011,37 +3042,37 @@ f_shutdown (void)
 #endif
 
 #ifdef F_SIZEOF
-    void
+void
 f_sizeof (void)
 {
     int i;
 
     switch (sp->type) {
-        case T_CLASS:
-            i = sp->u.arr->size;
-            free_class(sp->u.arr);
-            break;
-        case T_ARRAY:
-            i = sp->u.arr->size;
-            free_array(sp->u.arr);
-            break;
-        case T_MAPPING:
-            i = sp->u.map->count;
-            free_mapping(sp->u.map);
-            break;
+    case T_CLASS:
+        i = sp->u.arr->size;
+        free_class(sp->u.arr);
+        break;
+    case T_ARRAY:
+        i = sp->u.arr->size;
+        free_array(sp->u.arr);
+        break;
+    case T_MAPPING:
+        i = sp->u.map->count;
+        free_mapping(sp->u.map);
+        break;
 #ifndef NO_BUFFER_TYPE
-        case T_BUFFER:
-            i = sp->u.buf->size;
-            free_buffer(sp->u.buf);
-            break;
+    case T_BUFFER:
+        i = sp->u.buf->size;
+        free_buffer(sp->u.buf);
+        break;
 #endif
-        case T_STRING:
-            i = SVALUE_STRLEN(sp);
-            free_string_svalue(sp);
-            break;
-        default:
-            i = 0;
-            free_svalue(sp, "f_sizeof");
+    case T_STRING:
+        i = SVALUE_STRLEN(sp);
+        free_string_svalue(sp);
+        break;
+    default:
+        i = 0;
+        free_svalue(sp, "f_sizeof");
     }
     sp->type = T_NUMBER;
     sp->u.number = i;
@@ -3049,7 +3080,7 @@ f_sizeof (void)
 #endif
 
 #ifdef F_SNOOP
-    void
+void
 f_snoop (void)
 {
     /*
@@ -3063,7 +3094,7 @@ f_snoop (void)
         }
     } else {
         if (!new_set_snoop((sp - 1)->u.ob, sp->u.ob) ||
-                (sp->u.ob->flags & O_DESTRUCTED)) {
+            (sp->u.ob->flags & O_DESTRUCTED)) {
             free_object(&(sp--)->u.ob, "f_snoop:2");
             free_object(&sp->u.ob, "f_snoop:3");
             *sp = const0;
@@ -3076,14 +3107,14 @@ f_snoop (void)
 #endif
 
 #ifdef F_SPRINTF
-    void
+void
 f_sprintf (void)
 {
     char *s;
     int num_arg = st_num_arg;
 
     s = string_print_formatted((sp - num_arg + 1)->u.string,
-            num_arg - 1, sp - num_arg + 2);
+                               num_arg - 1, sp - num_arg + 2);
     pop_n_elems(num_arg);
 
     STACK_INC;
@@ -3099,7 +3130,7 @@ f_sprintf (void)
 #endif
 
 #ifdef F_STAT
-    void
+void
 f_stat (void)
 {
     struct stat buf;
@@ -3149,7 +3180,7 @@ f_stat (void)
  * Written 930706 by Luke Mewburn <zak@rmit.edu.au>
  */
 
-    void
+void
 f_strsrch (void)
 {
     register const char *big, *little, *pos;
@@ -3192,7 +3223,7 @@ f_strsrch (void)
                 do {
                     if (*pos == c) break;
                 } while (--pos >= big);
-                if (*pos != c) {
+                if (pos < big) {
                     pos = NULL;
                     break;
                 }
@@ -3214,7 +3245,7 @@ f_strsrch (void)
 #endif
 
 #ifdef F_STRCMP
-    void
+void
 f_strcmp (void)
 {
     int i;
@@ -3227,7 +3258,7 @@ f_strcmp (void)
 #endif
 
 #ifdef F_STRINGP
-    void
+void
 f_stringp (void)
 {
     if (sp->type == T_STRING) {
@@ -3242,7 +3273,7 @@ f_stringp (void)
 #endif
 
 #ifdef F_BUFFERP
-    void
+void
 f_bufferp (void)
 {
     if (sp->type == T_BUFFER) {
@@ -3256,7 +3287,7 @@ f_bufferp (void)
 #endif
 
 #ifdef F_TELL_OBJECT
-    void
+void
 f_tell_object (void)
 {
     tell_object((sp - 1)->u.ob, sp->u.string, SVALUE_STRLEN(sp));
@@ -3266,18 +3297,18 @@ f_tell_object (void)
 #endif
 
 #ifdef F_TELL_ROOM
-    void
+void
 f_tell_room (void)
 {
     array_t *avoid;
     static array_t vtmp =
     {1,
 #ifdef DEBUG
-        1,
+     1,
 #endif
-        1,
+     1,
 #ifdef PACKAGE_MUDLIB_STATS
-        {(mudlib_stats_t *) NULL, (mudlib_stats_t *) NULL}
+     {(mudlib_stats_t *) NULL, (mudlib_stats_t *) NULL}
 #endif
     };
 
@@ -3315,7 +3346,7 @@ f_tell_room (void)
 #endif
 
 #ifdef F_TEST_BIT
-    void
+void
 f_test_bit (void)
 {
     int ind = (sp--)->u.number;
@@ -3337,7 +3368,7 @@ f_test_bit (void)
 #endif
 
 #ifdef F_NEXT_BIT
-    void
+void
 f_next_bit (void)
 {
     int start = (sp--)->u.number;
@@ -3399,7 +3430,7 @@ f_next_bit (void)
 #endif
 
 #ifdef F__THIS_OBJECT
-    void
+void
 f__this_object (void)
 {
     push_object(current_object);
@@ -3407,7 +3438,7 @@ f__this_object (void)
 #endif
 
 #ifdef F_THIS_PLAYER
-    void
+void
 f_this_player (void)
 {
     if (sp->u.number) {
@@ -3423,7 +3454,7 @@ f_this_player (void)
 #endif
 
 #ifdef F_SET_THIS_PLAYER
-    void
+void
 f_set_this_player (void)
 {
     if (sp->type == T_NUMBER)
@@ -3435,7 +3466,7 @@ f_set_this_player (void)
 #endif
 
 #ifdef F_THROW
-    void
+void
 f_throw (void)
 {
     free_svalue(&catch_value, "f_throw");
@@ -3445,7 +3476,7 @@ f_throw (void)
 #endif
 
 #ifdef F_TIME
-    void
+void
 f_time (void)
 {
     push_number(current_time);
@@ -3453,7 +3484,7 @@ f_time (void)
 #endif
 
 #ifdef F__TO_FLOAT
-    void
+void
 f__to_float (void)
 {
     double temp = 0;
@@ -3473,7 +3504,7 @@ f__to_float (void)
 #endif
 
 #ifdef F__TO_INT
-    void
+void
 f__to_int (void)
 {
     switch(sp->type) {
@@ -3482,40 +3513,40 @@ f__to_int (void)
             sp->u.number = (long) sp->u.real;
             break;
         case T_STRING:
-            {
-                long temp;
-                char *p;
+        {
+            long temp;
+            char *p;
 
-                temp = strtol(sp->u.string, &p, 10);
-                if (*p) {
-                    /* have to be a little careful here.  Checkign if p ==
-                     * sp->u.string isn't good enough.
-                     *
-                     * Odd cases:
-                     * to_int("  foo")  // p == sp->u.string + 2
-                     *
-                     * POSIX guarantees the strtol() works in terms of isspace(),
-                     * though.  If there is something other than whitespace, then
-                     * there was a valid character consistent with the base,
-                     * so we were successful.
-                     *
-                     * (note: this means to_int("10x") == 10.  If you want to
-                     *  detect trailing garbage, use sscanf(str, "%d%s", ...).
-                     */
-                    while (p > sp->u.string && uisspace(*(p - 1)))
-                        p--;
+            temp = strtol(sp->u.string, &p, 10);
+            if (*p) {
+                /* have to be a little careful here.  Checkign if p ==
+                 * sp->u.string isn't good enough.
+                 *
+                 * Odd cases:
+                 * to_int("  foo")  // p == sp->u.string + 2
+                 *
+                 * POSIX guarantees the strtol() works in terms of isspace(),
+                 * though.  If there is something other than whitespace, then
+                 * there was a valid character consistent with the base,
+                 * so we were successful.
+                 *
+                 * (note: this means to_int("10x") == 10.  If you want to
+                 *  detect trailing garbage, use sscanf(str, "%d%s", ...).
+                 */
+                while (p > sp->u.string && uisspace(*(p - 1)))
+                    p--;
 
-                    if (p == sp->u.string) {
-                        free_string_svalue(sp);
-                        *sp = const0u;
-                        break;
-                    }
+                if (p == sp->u.string) {
+                    free_string_svalue(sp);
+                    *sp = const0u;
+                    break;
                 }
-                free_string_svalue(sp);
-                sp->u.number = temp;
-                sp->type = T_NUMBER;
-                break;
             }
+            free_string_svalue(sp);
+            sp->u.number = temp;
+            sp->type = T_NUMBER;
+            break;
+        }
 #ifndef NO_BUFFER_TYPE
         case T_BUFFER:
             if (sp->u.buf->size < sizeof(int)) {
@@ -3535,7 +3566,7 @@ f__to_int (void)
 #endif
 
 #ifdef F_TYPEOF
-    void
+void
 f_typeof (void)
 {
     const char *t = type_name(sp->type);
@@ -3546,7 +3577,7 @@ f_typeof (void)
 #endif
 
 #ifdef F_UNDEFINEDP
-    void
+void
 f_undefinedp (void)
 {
     if (sp->type == T_NUMBER) {
@@ -3561,7 +3592,7 @@ f_undefinedp (void)
 #endif
 
 #ifdef F_UPTIME
-    void
+void
 f_uptime (void)
 {
     push_number(current_time - boot_time);
@@ -3569,7 +3600,7 @@ f_uptime (void)
 #endif
 
 #ifdef F_USERP
-    void
+void
 f_userp (void)
 {
     int i;
@@ -3581,7 +3612,7 @@ f_userp (void)
 #endif
 
 #ifdef F_USERS
-    void
+void
 f_users (void)
 {
     push_refed_array(users());
@@ -3589,7 +3620,7 @@ f_users (void)
 #endif
 
 #ifdef F_WIZARDP
-    void
+void
 f_wizardp (void)
 {
     int i;
@@ -3601,7 +3632,7 @@ f_wizardp (void)
 #endif
 
 #ifdef F_VIRTUALP
-    void
+void
 f_virtualp (void)
 {
     int i;
@@ -3613,7 +3644,7 @@ f_virtualp (void)
 #endif
 
 #ifdef F_WRITE
-    void
+void
 f_write (void)
 {
     do_write(sp);
@@ -3622,51 +3653,51 @@ f_write (void)
 #endif
 
 #ifdef F_WRITE_BYTES
-    void
+void
 f_write_bytes (void)
 {
     int i;
 
     switch(sp->type) {
         case T_NUMBER:
-            {
-                int netint;
-                char *netbuf;
+        {
+            int netint;
+            char *netbuf;
 
-                if (!sp->u.number)
-                    bad_arg(3, F_WRITE_BYTES);
-                netint = htonl(sp->u.number);       /* convert to network
-                                                     * byte-order */
-                netbuf = (char *) &netint;
-                i = write_bytes((sp - 2)->u.string, (sp - 1)->u.number, netbuf,
-                        sizeof(int));
-                break;
-            }
+            if (!sp->u.number)
+		bad_arg(3, F_WRITE_BYTES);
+            netint = htonl(sp->u.number);       /* convert to network
+                                                 * byte-order */
+            netbuf = (char *) &netint;
+            i = write_bytes((sp - 2)->u.string, (sp - 1)->u.number, netbuf,
+                            sizeof(int));
+            break;
+        }
 
 #ifndef NO_BUFFER_TYPE
         case T_BUFFER:
-            {
-                i = write_bytes((sp - 2)->u.string, (sp - 1)->u.number,
-                        (char *) sp->u.buf->item, sp->u.buf->size);
-                break;
-            }
+        {
+            i = write_bytes((sp - 2)->u.string, (sp - 1)->u.number,
+                            (char *) sp->u.buf->item, sp->u.buf->size);
+            break;
+        }
 #endif
 
         case T_STRING:
-            {
-                i = write_bytes((sp - 2)->u.string, (sp - 1)->u.number,
-                        sp->u.string, SVALUE_STRLEN(sp));
-                break;
-            }
+        {
+            i = write_bytes((sp - 2)->u.string, (sp - 1)->u.number,
+                            sp->u.string, SVALUE_STRLEN(sp));
+            break;
+        }
 
         default:
-            {
+        {
 #ifdef NO_BUFFER_TYPE
-                bad_argument(sp, T_STRING | T_NUMBER, 3, F_WRITE_BYTES);
+            bad_argument(sp, T_STRING | T_NUMBER, 3, F_WRITE_BYTES);
 #else
-                bad_argument(sp, T_BUFFER | T_STRING | T_NUMBER, 3, F_WRITE_BYTES);
+            bad_argument(sp, T_BUFFER | T_STRING | T_NUMBER, 3, F_WRITE_BYTES);
 #endif
-            }
+        }
     }
     free_svalue(sp--, "f_write_bytes");
     free_string_svalue(--sp);
@@ -3675,7 +3706,7 @@ f_write_bytes (void)
 #endif
 
 #ifdef F_WRITE_BUFFER
-    void
+void
 f_write_buffer (void)
 {
     int i;
@@ -3687,36 +3718,36 @@ f_write_buffer (void)
 
     switch(sp->type) {
         case T_NUMBER:
-            {
-                int netint;
-                char *netbuf;
+        {
+            int netint;
+            char *netbuf;
 
-                netint = htonl(sp->u.number);       /* convert to network
-                                                     * byte-order */
-                netbuf = (char *) &netint;
-                i = write_buffer((sp - 2)->u.buf, (sp - 1)->u.number, netbuf,
-                        sizeof(int));
-                break;
-            }
+            netint = htonl(sp->u.number);       /* convert to network
+                                                 * byte-order */
+            netbuf = (char *) &netint;
+            i = write_buffer((sp - 2)->u.buf, (sp - 1)->u.number, netbuf,
+                            sizeof(int));
+            break;
+        }
 
         case T_BUFFER:
-            {
-                i = write_buffer((sp - 2)->u.buf, (sp - 1)->u.number,
-                        (char *) sp->u.buf->item, sp->u.buf->size);
-                break;
-            }
+        {
+            i = write_buffer((sp - 2)->u.buf, (sp - 1)->u.number,
+                            (char *) sp->u.buf->item, sp->u.buf->size);
+            break;
+        }
 
         case T_STRING:
-            {
-                i = write_buffer((sp - 2)->u.buf, (sp - 1)->u.number,
-                        sp->u.string, SVALUE_STRLEN(sp));
-                break;
-            }
+        {
+            i = write_buffer((sp - 2)->u.buf, (sp - 1)->u.number,
+                            sp->u.string, SVALUE_STRLEN(sp));
+            break;
+        }
 
         default:
-            {
-                bad_argument(sp, T_BUFFER | T_STRING | T_NUMBER, 3, F_WRITE_BUFFER);
-            }
+        {
+            bad_argument(sp, T_BUFFER | T_STRING | T_NUMBER, 3, F_WRITE_BUFFER);
+        }
     }
     free_svalue(sp--, "f_write_buffer");
     free_svalue(--sp, "f_write_buffer");
@@ -3725,14 +3756,12 @@ f_write_buffer (void)
 #endif
 
 #ifdef F_WRITE_FILE
-    void
+void
 f_write_file (void)
 {
     int flags = 0;
 
-    if (st_num_arg == 3) {
-        flags = (sp--)->u.number;
-    }
+    flags = (sp--)->u.number;
     flags = write_file((sp - 1)->u.string, sp->u.string, flags);
     free_string_svalue(sp--);
     free_string_svalue(sp);
@@ -3741,7 +3770,7 @@ f_write_file (void)
 #endif
 
 #ifdef F_DUMP_FILE_DESCRIPTORS
-    void
+void
 f_dump_file_descriptors (void)
 {
     outbuffer_t out;
@@ -3760,7 +3789,7 @@ void f_reclaim_objects (void)
 #endif
 
 #ifdef F_MEMORY_INFO
-    void
+void
 f_memory_info (void)
 {
     long mem;
@@ -3807,7 +3836,7 @@ f_memory_info (void)
 #endif
 
 #ifdef F_RELOAD_OBJECT
-    void
+void
 f_reload_object (void)
 {
     reload_object(sp->u.ob);
@@ -3816,7 +3845,7 @@ f_reload_object (void)
 #endif
 
 #ifdef F_QUERY_SHADOWING
-    void
+void
 f_query_shadowing (void)
 {
     object_t *ob;
@@ -3833,7 +3862,7 @@ f_query_shadowing (void)
 #endif
 
 #ifdef F_SET_RESET
-    void
+void
 f_set_reset (void)
 {
     if (st_num_arg == 2) {
@@ -3849,7 +3878,7 @@ f_set_reset (void)
 #endif
 
 #ifdef F_FLOATP
-    void
+void
 f_floatp (void)
 {
     if (sp->type == T_REAL) {
@@ -3882,7 +3911,7 @@ f_flush_messages (void) {
 #endif
 
 #ifdef F_FIRST_INVENTORY
-    void
+void
 f_first_inventory (void)
 {
     object_t *ob;
@@ -3895,7 +3924,7 @@ f_first_inventory (void)
 #endif
 
 #ifdef F_NEXT_INVENTORY
-    void
+void
 f_next_inventory (void)
 {
     object_t *ob;

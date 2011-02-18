@@ -1,7 +1,7 @@
 /*
    wrapper functions for system malloc -- keep malloc stats.
    Truilkan@TMI - 92/04/17
- */
+*/
 
 #define IN_MALLOC_WRAPPER
 #define NO_OPCODES
@@ -45,15 +45,15 @@ INLINE void *debugrealloc (void * ptr, int size, int tag, char * desc)
     void *tmp;
 
     if (size <= 0)
-        fatal("illegal size in debugrealloc()");
+	fatal("illegal size in debugrealloc()");
 
     NOISY3("realloc: %i (%x), %s\n", size, ptr, desc);
     stats.realloc_calls++;
     tmp = (md_node_t *) ptr - 1;
     if (MDfree(tmp)) {
-        tmp = (void *) REALLOC(tmp, size + MD_OVERHEAD);
-        MDmalloc(tmp, size, tag, desc);
-        return (md_node_t *) tmp + 1;
+	tmp = (void *) REALLOC(tmp, size + MD_OVERHEAD);
+	MDmalloc(tmp, size, tag, desc);
+	return (md_node_t *) tmp + 1;
     }
     return (void *) 0;
 }
@@ -63,7 +63,7 @@ INLINE void *debugmalloc (int size, int tag, char * desc)
     void *tmp;
 
     if (size <= 0)
-        fatal("illegal size in debugmalloc()");
+	fatal("illegal size in debugmalloc()");
     stats.alloc_calls++;
     tmp = (void *) MALLOC(size + MD_OVERHEAD);
     MDmalloc(tmp, size, tag, desc);
@@ -76,7 +76,7 @@ INLINE void *debugcalloc (int nitems, int size, int tag, char * desc)
     void *tmp;
 
     if (size <= 0)
-        fatal("illegal size in debugcalloc()");
+	fatal("illegal size in debugcalloc()");
 
     stats.alloc_calls++;
     tmp = (void *) CALLOC(nitems * size + MD_OVERHEAD, 1);
@@ -93,8 +93,8 @@ INLINE void debugfree (void * ptr)
     stats.free_calls++;
     tmp = (md_node_t *) ptr - 1;
     if (MDfree(tmp)) {
-        memset(ptr, 'x', tmp->size);
-        FREE(tmp);		/* only free if safe to do so */
+	memset(ptr, 'x', tmp->size);
+	FREE(tmp);		/* only free if safe to do so */
     }
 }
 
@@ -107,7 +107,7 @@ void dump_malloc_data (outbuffer_t * ob)
     outbuf_addv(ob, "total malloc'd:   %10lu\n", total_malloced);
     outbuf_addv(ob, "high water mark:  %10lu\n", hiwater);
     outbuf_addv(ob, "overhead:         %10lu\n",
-            (MD_TABLE_SIZE * sizeof(md_node_t *)) + (net * MD_OVERHEAD));
+		(MD_TABLE_SIZE * sizeof(md_node_t *)) + (net * MD_OVERHEAD));
     outbuf_addv(ob, "#alloc calls:     %10lu\n", stats.alloc_calls);
     outbuf_addv(ob, "#free calls:      %10lu\n", stats.free_calls);
     outbuf_addv(ob, "#alloc - #free:   %10lu\n", net);

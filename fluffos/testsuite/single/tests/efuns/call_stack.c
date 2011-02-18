@@ -1,7 +1,7 @@
 void do_tests() {
     mixed stack, entry;
     int n = sizeof(call_stack(0));
-
+    
     stack = call_stack(0);
     ASSERT(stack[0] == __FILE__);
     ASSERT(sizeof(filter(stack, (: stringp :))) == n);
@@ -17,4 +17,4 @@ void do_tests() {
     ASSERT(catch(call_stack(4)));
 }
 
-
+	

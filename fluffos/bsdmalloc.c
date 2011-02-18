@@ -74,11 +74,11 @@ typedef unsigned int u_int;
 union overhead {
     union overhead *ov_next;	/* when free */
     struct {
-        u_char ovu_magic;	/* magic number */
-        u_char ovu_index;	/* bucket # */
+	u_char ovu_magic;	/* magic number */
+	u_char ovu_index;	/* bucket # */
 #ifdef RCHECK
-        u_short ovu_rmagic;	/* range magic number */
-        u_int ovu_size;		/* actual block size */
+	u_short ovu_rmagic;	/* range magic number */
+	u_int ovu_size;		/* actual block size */
 #endif
     }      ovu;
 #define	ov_magic	ovu.ovu_magic
@@ -152,25 +152,25 @@ void *bsdmalloc_malloc (size_t nbytes)
      */
     if (pagesz == 0) {
 #ifdef MEMPAGESIZE
-        pagesz = n = MEMPAGESIZE;
+	pagesz = n = MEMPAGESIZE;
 #else
-        pagesz = n = getpagesize();
+	pagesz = n = getpagesize();
 #endif
-        op = (union overhead *) sbrkx(0);
-        n = n - sizeof(*op) - ((long) op & (n - 1));
-        if (n < 0)
-            n += pagesz;
-        if (n) {
-            if ((char *)sbrkx(n) == (char *) -1)
-                return (NULL);
-        }
-        bucket = 0;
-        amt = 8;
-        while (pagesz > amt) {
-            amt <<= 1;
-            bucket++;
-        }
-        pagebucket = bucket;
+	op = (union overhead *) sbrkx(0);
+	n = n - sizeof(*op) - ((long) op & (n - 1));
+	if (n < 0)
+	    n += pagesz;
+	if (n) {
+	    if ((char *)sbrkx(n) == (char *) -1)
+		return (NULL);
+	}
+	bucket = 0;
+	amt = 8;
+	while (pagesz > amt) {
+	    amt <<= 1;
+	    bucket++;
+	}
+	pagebucket = bucket;
     }
     /*
      * Convert amount of memory requested into closest block size stored in
@@ -179,31 +179,31 @@ void *bsdmalloc_malloc (size_t nbytes)
      */
     if (nbytes <= (n = pagesz - sizeof(*op) - RSLOP)) {
 #ifndef RCHECK
-        amt = 8;		/* size of first bucket */
-        bucket = 0;
+	amt = 8;		/* size of first bucket */
+	bucket = 0;
 #else
-        amt = 16;		/* size of first bucket */
-        bucket = 1;
+	amt = 16;		/* size of first bucket */
+	bucket = 1;
 #endif
-        n = -(sizeof(*op) + RSLOP);
+	n = -(sizeof(*op) + RSLOP);
     } else {
-        amt = pagesz;
-        bucket = pagebucket;
+	amt = pagesz;
+	bucket = pagebucket;
     }
     while (nbytes > amt + n) {
-        amt <<= 1;
-        if (amt == 0)
-            return (NULL);
-        bucket++;
+	amt <<= 1;
+	if (amt == 0)
+	    return (NULL);
+	bucket++;
     }
     /*
      * If nothing in hash bucket right now, request more memory from the
      * system.
      */
     if ((op = nextf[bucket]) == NULL) {
-        morecore(bucket);
-        if ((op = nextf[bucket]) == NULL)
-            return (NULL);
+	morecore(bucket);
+	if ((op = nextf[bucket]) == NULL)
+	    return (NULL);
     }
     /* remove from linked list */
     nextf[bucket] = op->ov_next;
@@ -226,7 +226,7 @@ void *bsdmalloc_malloc (size_t nbytes)
 /*
  * Allocate more memory to the indicated bucket.
  */
-    static void
+static void
 morecore (int bucket)
 {
     register union overhead *op;
@@ -243,43 +243,43 @@ morecore (int bucket)
     ASSERT(sz > 0);
 #else
     if (sz <= 0)
-        return;
+	return;
 #endif
     if (sz < pagesz) {
-        amt = pagesz;
-        nblks = amt / sz;
+	amt = pagesz;
+	nblks = amt / sz;
     } else {
-        amt = sz + pagesz;
-        nblks = 1;
+	amt = sz + pagesz;
+	nblks = 1;
     }
     op = (union overhead *) sbrkx(amt);
     /* no more room! */
     if ((long) op == -1)
-        return;
+	return;
     /*
      * Add new memory allocated to that on free list for this hash bucket.
      */
     nextf[bucket] = op;
     while (--nblks > 0) {
-        op->ov_next = (union overhead *) ((caddr_t) op + sz);
-        op = (union overhead *) ((caddr_t) op + sz);
+	op->ov_next = (union overhead *) ((caddr_t) op + sz);
+	op = (union overhead *) ((caddr_t) op + sz);
     }
 }
 
-    INLINE void
+INLINE void
 bsdmalloc_free (void * cp)
 {
     register int size;
     register union overhead *op;
 
     if (cp == NULL)
-        return;
+	return;
     op = (union overhead *) ((caddr_t) cp - sizeof(union overhead));
 #ifdef DEBUG
     ASSERT(op->ov_magic == MAGIC);	/* make sure it was in use */
 #else
     if (op->ov_magic != MAGIC)
-        return;			/* sanity */
+	return;			/* sanity */
 #endif
 #ifdef RCHECK
     ASSERT(op->ov_rmagic == RMAGIC);
@@ -316,55 +316,55 @@ void *bsdmalloc_realloc (void * cp, size_t nbytes)
     int was_alloced = 0;
 
     if (cp == NULL)
-        return (bsdmalloc_malloc(nbytes));
+	return (bsdmalloc_malloc(nbytes));
     op = (union overhead *) ((caddr_t) cp - sizeof(union overhead));
     if (op->ov_magic == MAGIC) {
-        was_alloced++;
-        i = op->ov_index;
+	was_alloced++;
+	i = op->ov_index;
     } else {
-        /*
-         * Already free, doing "compaction".
-         * 
-         * Search for the old block of memory on the free list.  First, check
-         * the most common case (last element free'd), then (this failing)
-         * the last ``realloc_srchlen'' items free'd. If all lookups fail,
-         * then assume the size of the memory block being realloc'd is the
-         * largest possible (so that all "nbytes" of new memory are copied
-         * into).  Note that this could cause a memory fault if the old area
-         * was tiny, and the moon is gibbous.  However, that is very
-         * unlikely.
-         */
-        if ((i = findbucket(op, 1)) < 0 &&
-                (i = findbucket(op, realloc_srchlen)) < 0)
-            i = NBUCKETS;
+	/*
+	 * Already free, doing "compaction".
+	 * 
+	 * Search for the old block of memory on the free list.  First, check
+	 * the most common case (last element free'd), then (this failing)
+	 * the last ``realloc_srchlen'' items free'd. If all lookups fail,
+	 * then assume the size of the memory block being realloc'd is the
+	 * largest possible (so that all "nbytes" of new memory are copied
+	 * into).  Note that this could cause a memory fault if the old area
+	 * was tiny, and the moon is gibbous.  However, that is very
+	 * unlikely.
+	 */
+	if ((i = findbucket(op, 1)) < 0 &&
+	    (i = findbucket(op, realloc_srchlen)) < 0)
+	    i = NBUCKETS;
     }
     onb = 1 << (i + 3);
     if (onb < pagesz)
-        onb -= sizeof(*op) + RSLOP;
+	onb -= sizeof(*op) + RSLOP;
     else
-        onb += pagesz - sizeof(*op) - RSLOP;
+	onb += pagesz - sizeof(*op) - RSLOP;
     /* avoid the copy if same size block */
     if (was_alloced) {
-        if (i) {
-            i = 1 << (i + 2);
-            if (i < pagesz)
-                i -= sizeof(*op) + RSLOP;
-            else
-                i += pagesz - sizeof(*op) - RSLOP;
-        }
-        if (nbytes <= onb && nbytes > i) {
+	if (i) {
+	    i = 1 << (i + 2);
+	    if (i < pagesz)
+		i -= sizeof(*op) + RSLOP;
+	    else
+		i += pagesz - sizeof(*op) - RSLOP;
+	}
+	if (nbytes <= onb && nbytes > i) {
 #ifdef RCHECK
-            op->ov_size = (nbytes + RSLOP - 1) & ~(RSLOP - 1);
-            *(u_short *) ((caddr_t) (op + 1) + op->ov_size) = RMAGIC;
+	    op->ov_size = (nbytes + RSLOP - 1) & ~(RSLOP - 1);
+	    *(u_short *) ((caddr_t) (op + 1) + op->ov_size) = RMAGIC;
 #endif
-            return (cp);
-        } else
-            bsdmalloc_free(cp);
+	    return (cp);
+	} else
+	    bsdmalloc_free(cp);
     }
     if ((res = bsdmalloc_malloc(nbytes)) == NULL)
-        return (NULL);
+	return (NULL);
     if (cp != res)		/* common optimization if "compacting" */
-        memcpy(res, cp, (nbytes < onb) ? nbytes : onb);
+	memcpy(res, cp, (nbytes < onb) ? nbytes : onb);
     return (res);
 }
 
@@ -373,19 +373,19 @@ void *bsdmalloc_realloc (void * cp, size_t nbytes)
  * header starts at ``freep''.  If srchlen is -1 search the whole list.
  * Return bucket number, or -1 if not found.
  */
-    static int
+static int
 findbucket (union overhead * freep, int srchlen)
 {
     register union overhead *p;
     register int i, j;
 
     for (i = 0; i < NBUCKETS; i++) {
-        j = 0;
-        for (p = nextf[i]; p && j != srchlen; p = p->ov_next) {
-            if (p == freep)
-                return (i);
-            j++;
-        }
+	j = 0;
+	for (p = nextf[i]; p && j != srchlen; p = p->ov_next) {
+	    if (p == freep)
+		return (i);
+	    j++;
+	}
     }
     return (-1);
 }
@@ -398,7 +398,7 @@ findbucket (union overhead * freep, int srchlen)
  * for each size category, the second showing the number of mallocs -
  * frees for each size category.
  */
-    void
+void
 show_mstats (outbuffer_t * ob, char * s)
 {
     register int i, j;
@@ -407,17 +407,17 @@ show_mstats (outbuffer_t * ob, char * s)
 
     outbuf_addv(ob, "Memory allocation statistics %s\nfree:\t", s);
     for (i = 0; i < NBUCKETS; i++) {
-        for (j = 0, p = nextf[i]; p; p = p->ov_next, j++);
-        outbuf_addv(ob, " %d", j);
-        totfree += j * (1 << (i + 3));
+	for (j = 0, p = nextf[i]; p; p = p->ov_next, j++);
+	outbuf_addv(ob, " %d", j);
+	totfree += j * (1 << (i + 3));
     }
     outbuf_add(ob, "\nused:\t");
     for (i = 0; i < NBUCKETS; i++) {
-        outbuf_addv(ob, " %d", nmalloc[i]);
-        totused += nmalloc[i] * (1 << (i + 3));
+	outbuf_addv(ob, " %d", nmalloc[i]);
+	totused += nmalloc[i] * (1 << (i + 3));
     }
     outbuf_addv(ob, "\n\tTotal in use: %d, total free: %d\n",
-            totused, totfree);
+		totused, totfree);
 }
 #endif
 
@@ -432,6 +432,6 @@ INLINE void *bsdmalloc_calloc (size_t num, register size_t size)
 
     size *= num;
     if ((p = bsdmalloc_malloc(size)))
-        memset(p, 0, size);
+	memset(p, 0, size);
     return (p);
 }

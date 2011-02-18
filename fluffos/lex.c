@@ -30,22 +30,23 @@
 #include "file.h"
 #include "main.h"
 #include "cc.h"
+#include "master.h"
 
 #define NELEM(a) (sizeof (a) / sizeof((a)[0]))
 #define LEX_EOF ((unsigned char) EOF)
 
 char lex_ctype[256] = {0,0,0,0,0,0,0,0,0,1,0,1,1,1,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0};
+                       0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                       0,0,0};
 
 #define is_wspace(c) lex_ctype[(unsigned char)(c)]
 
@@ -327,14 +328,14 @@ yyerrorp (const char * s) {
     lex_fatal++;
 }
 
-    static void
+static void
 lexerror (const char * s)
 {
     yyerror(s);
     lex_fatal++;
 }
 
-    static int
+static int
 skip_to (const char * token, const char * atoken)
 {
     char b[20], *p;
@@ -389,15 +390,16 @@ skip_to (const char * token, const char * atoken)
     }
 }
 
-    static int
+static int
 inc_open (char * buf, char * name, int check_local)
 {
     int i, f;
     char *p;
-
+	const char *tmp;
     if (check_local) {
         merge(name, buf);
-        if ((f = open(buf, O_RDONLY)) != -1)
+        tmp = check_valid_path(buf, master_ob, "include", 0);
+        if (tmp && (f = open(tmp, O_RDONLY)) != -1)
             return f;
     }
     /*
@@ -409,14 +411,15 @@ inc_open (char * buf, char * name, int check_local)
     }
     for (i = 0; i < inc_list_size; i++) {
         sprintf(buf, "%s/%s", inc_list[i], name);
-        if ((f = open(buf, O_RDONLY)) != -1) {
+        tmp = check_valid_path(buf, master_ob, "include", 0);
+        if (tmp && (f = open(tmp, O_RDONLY)) != -1) {
             return f;
         }
     }
     return -1;
 }
 
-    static void
+static void
 include_error (const char * msg, int global)
 {
     current_line--;
@@ -434,7 +437,7 @@ include_error (const char * msg, int global)
     current_line++;
 }
 
-    static void
+static void
 handle_include (char * name, int global)
 {
     char *p, *nameptr;
@@ -457,16 +460,17 @@ handle_include (char * name, int global)
         }
         return;
     }
-    name = nameptr = string_copy(name, "handle_include");
+    name = string_copy(name, "handle_include");
+    push_malloced_string(name);
     delim = *name++ == '"' ? '"' : '>';
     for (p = name; *p && *p != delim; p++);
     if (!*p) {
-        FREE_MSTR(nameptr);
+        pop_stack();
         include_error("Missing trailing \" or > in #include", global);
         return;
     }
     if (strlen(name) > sizeof(buf) - 100) {
-        FREE_MSTR(nameptr);
+        pop_stack();
         include_error("Include name too long.", global);
         return;
     }
@@ -496,10 +500,10 @@ handle_include (char * name, int global)
         sprintf(buf, "Cannot #include %s", name);
         include_error(buf, global);
     }
-    FREE_MSTR(nameptr);
+    pop_stack();
 }
 
-    static int
+static int
 get_terminator (char * terminator)
 {
     unsigned char c;
@@ -537,11 +541,11 @@ get_terminator (char * terminator)
             break; \
         } \
         line[++curchunk] = \
-        (char *)DXALLOC(MAXCHUNK, TAG_COMPILER, "array/text chunk"); \
+              (char *)DXALLOC(MAXCHUNK, TAG_COMPILER, "array/text chunk"); \
         len = 0; \
     }
 
-    static int
+static int
 get_array_block (char * term)
 {
     int termlen;                /* length of terminator */
@@ -580,7 +584,7 @@ get_array_block (char * term)
         }
 
         if (c == '\n' && (yyp == last_nl + 1)) {
-            outp = yyp; refill_buffer(); yyp = outp;
+           outp = yyp; refill_buffer(); yyp = outp;
         }
 
         /*
@@ -597,8 +601,8 @@ get_array_block (char * term)
          * check for terminator
          */
         if ((!strncmp(array_line[startchunk] + startpos, term, termlen)) &&
-                (!uisalnum(*(array_line[startchunk] + startpos + termlen))) &&
-                (*(array_line[startchunk] + startpos + termlen) != '_')) {
+            (!uisalnum(*(array_line[startchunk] + startpos + termlen))) &&
+            (*(array_line[startchunk] + startpos + termlen) != '_')) {
             /*
              * handle lone terminator on line
              */
@@ -631,58 +635,58 @@ get_array_block (char * term)
 
             res = 1;
             break;
-    } else {
-        /*
-         * only report end of file in array block, if not an include file
-         */
-        if (c == LEX_EOF && inctop == 0) {
-            res = -1;
-            outp = yyp;
-            break;
-        }
-        if (c == '\n') {
-            current_line++;
-        }
-        /*
-         * make sure there's room in the current chunk for terminator (ie
-         * it's simpler if we don't have to deal with a terminator that
-         * spans across chunks) fudge for "\",\"TERMINAL?\0", where '?'
-         * is unknown
-         */
-        if (len + termlen + 5 > MAXCHUNK) {
-            if (curchunk == NUMCHUNKS - 1) {
-                res = -2;
+        } else {
+            /*
+             * only report end of file in array block, if not an include file
+             */
+            if (c == LEX_EOF && inctop == 0) {
+                res = -1;
                 outp = yyp;
                 break;
             }
-            array_line[++curchunk] =
-                (char *) DXALLOC(MAXCHUNK, TAG_COMPILER, "array_block");
-            len = 0;
+            if (c == '\n') {
+                current_line++;
+            }
+            /*
+             * make sure there's room in the current chunk for terminator (ie
+             * it's simpler if we don't have to deal with a terminator that
+             * spans across chunks) fudge for "\",\"TERMINAL?\0", where '?'
+             * is unknown
+             */
+            if (len + termlen + 5 > MAXCHUNK) {
+                if (curchunk == NUMCHUNKS - 1) {
+                    res = -2;
+                    outp = yyp;
+                    break;
+                }
+                array_line[++curchunk] =
+                    (char *) DXALLOC(MAXCHUNK, TAG_COMPILER, "array_block");
+                len = 0;
+            }
+            /*
+             * header
+             */
+            array_line[curchunk][len++] = '"';
+            array_line[curchunk][len++] = ',';
+            array_line[curchunk][len++] = '"';
+            array_line[curchunk][len] = '\0';
+
+            startchunk = curchunk;
+            startpos = len;
+            header = 2;
         }
-        /*
-         * header
-         */
-        array_line[curchunk][len++] = '"';
-        array_line[curchunk][len++] = ',';
-        array_line[curchunk][len++] = '"';
-        array_line[curchunk][len] = '\0';
-
-        startchunk = curchunk;
-        startpos = len;
-        header = 2;
     }
+
+    /*
+     * free chunks
+     */
+    for (i = curchunk; i >= 0; i--)
+        FREE(array_line[i]);
+
+    return res;
 }
 
-/*
- * free chunks
- */
-for (i = curchunk; i >= 0; i--)
-FREE(array_line[i]);
-
-return res;
-}
-
-    static int
+static int
 get_text_block (char * term)
 {
     int termlen;                /* length of terminator */
@@ -737,8 +741,8 @@ get_text_block (char * term)
          * check for terminator
          */
         if ((!strncmp(text_line[startchunk] + startpos, term, termlen)) &&
-                (!uisalnum(*(text_line[startchunk] + startpos + termlen))) &&
-                (*(text_line[startchunk] + startpos + termlen) != '_')) {
+            (!uisalnum(*(text_line[startchunk] + startpos + termlen))) &&
+            (*(text_line[startchunk] + startpos + termlen) != '_')) {
             if (strlen(text_line[startchunk] + startpos) == termlen) {
                 current_line++;
                 outp = yyp;
@@ -898,7 +902,7 @@ static void skip_comment()
     }
 }
 
-    static void
+static void
 deltrail (char * sp)
 {
     char *p;
@@ -915,11 +919,11 @@ deltrail (char * sp)
 
 #define SAVEC \
     if (yyp < yytext+MAXLINE-5)\
-*yyp++ = c;\
-else {\
-    lexerror("Line too long");\
-    break;\
-}
+       *yyp++ = c;\
+    else {\
+       lexerror("Line too long");\
+       break;\
+    }
 
 typedef struct {
     const char *name;
@@ -1014,7 +1018,7 @@ int correct_read(int handle, char *buf, unsigned int count)
 static void refill_buffer() {
     if (cur_lbuf != &head_lbuf) {
         if (outp >= cur_lbuf->buf_end &&
-                cur_lbuf->term_type == TERM_ADD_INPUT) {
+            cur_lbuf->term_type == TERM_ADD_INPUT) {
             /* In this case it cur_lbuf cannot have been
                allocated due to #include */
             linked_buf_t *prev_lbuf = cur_lbuf->prev;
@@ -1024,7 +1028,7 @@ static void refill_buffer() {
             outp = cur_lbuf->outp;
             last_nl = cur_lbuf->last_nl;
             if (cur_lbuf->term_type == TERM_ADD_INPUT
-                    || (outp != last_nl + 1))
+                || (outp != last_nl + 1))
                 return;
         }
     }
@@ -1054,7 +1058,16 @@ static void refill_buffer() {
 
             size = correct_read(yyin_desc, p, MAXLINE);
             cur_lbuf->buf_end = p += size;
-            if (size < MAXLINE) { *(last_nl = p) = LEX_EOF; return; }
+            if (size < MAXLINE) {
+            	*(last_nl = p) = LEX_EOF;
+            	if(*(last_nl-1) != '\n'){
+            		if(size +1 > MAXLINE)
+            			yyerror("No newline at end of file.");
+            		*p++ = '\n';
+            		*(last_nl = p) = LEX_EOF;
+            	}
+            	return;
+			}
             while (*--p != '\n');
             if (p == outp - 1) {
                 lexerror("Line too long.");
@@ -1072,7 +1085,7 @@ static void refill_buffer() {
 
             /* See if we are the last include in a different linked buffer */
             if (cur_lbuf->term_type == TERM_INCLUDE &&
-                    !(end >= cur_lbuf->buf && end < cur_lbuf->buf + DEFMAX)) {
+                !(end >= cur_lbuf->buf && end < cur_lbuf->buf + DEFMAX)) {
                 end = cur_lbuf->buf_end;
                 flag = 1;
             }
@@ -1106,7 +1119,14 @@ static void refill_buffer() {
             end = p += size;
             if (flag) cur_lbuf->buf_end = p;
             if (size < MAXLINE) {
-                *(last_nl = p) = LEX_EOF; return;
+            	*(last_nl = p) = LEX_EOF;
+            	if(*(last_nl-1) != '\n'){
+            		if(size +1 > MAXLINE)
+            			yyerror("No newline at end of file.");
+            		*p++ = '\n';
+            		*(last_nl = p) = LEX_EOF;
+            	}
+            	return;
             }
             while (*--p != '\n');
             if (p == outp - 1) {
@@ -1185,883 +1205,883 @@ int yylex()
             return -1;
         }
         switch (c = *outp++) {
-            case LEX_EOF:
-                if (inctop) {
-                    incstate_t *p;
+        case LEX_EOF:
+            if (inctop) {
+                incstate_t *p;
 
-                    p = inctop;
-                    close(yyin_desc);
-                    save_file_info(current_file_id, current_line - current_line_saved);
-                    current_line_saved = p->line - 1;
-                    /* add the lines from this file, and readjust to be relative
-                       to the file we're returning to */
-                    current_line_base += current_line - current_line_saved;
-                    free_string(current_file);
-                    nexpands = 0;
-                    if (outp >= cur_lbuf->buf_end) {
-                        linked_buf_t *prev_lbuf;
-                        if ((prev_lbuf = cur_lbuf->prev)) {
-                            FREE(cur_lbuf);
-                            cur_lbuf = prev_lbuf;
+                p = inctop;
+                close(yyin_desc);
+                save_file_info(current_file_id, current_line - current_line_saved);
+                current_line_saved = p->line - 1;
+                /* add the lines from this file, and readjust to be relative
+                   to the file we're returning to */
+                current_line_base += current_line - current_line_saved;
+                free_string(current_file);
+                nexpands = 0;
+                if (outp >= cur_lbuf->buf_end) {
+                    linked_buf_t *prev_lbuf;
+                    if ((prev_lbuf = cur_lbuf->prev)) {
+                        FREE(cur_lbuf);
+                        cur_lbuf = prev_lbuf;
+                    }
+                }
+
+                current_file = p->file;
+                current_file_id = p->file_id;
+                current_line = p->line;
+
+                yyin_desc = p->yyin_desc;
+                last_nl = p->last_nl;
+                outp = p->outp;
+                inctop = p->next;
+                incnum--;
+                FREE((char *) p);
+                outp[-1] = '\n';
+                if (outp == last_nl + 1) refill_buffer();
+                break;
+            }
+            if (iftop) {
+                ifstate_t *p = iftop;
+
+                yyerror(p->state == EXPECT_ENDIF ? "Missing #endif" : "Missing #else/#elif");
+                while (iftop) {
+                    p = iftop;
+                    iftop = p->next;
+                    FREE((char *) p);
+                }
+            }
+            outp--;
+            return -1;
+        case '\r':
+	    yywarn("^M");
+	    break;
+	case '\t':
+#ifdef WARN_TAB
+	    yywarn("<TAB>");
+#endif
+	    break;
+        case '\n':
+	    nexpands = 0;
+	    current_line++;
+	    total_lines++;
+	    if (outp == last_nl + 1)
+	      refill_buffer();
+        case ' ':
+        case '\f':
+        case '\v':
+            break;
+        case '+':
+        {
+            switch(*outp++) {
+                case '+': return L_INC;
+                case '=': return_assign(F_ADD_EQ);
+                default: outp--; return '+';
+            }
+        }
+        case '-':
+        {
+            switch(*outp++) {
+                case '>': return L_ARROW;
+                case '-': return L_DEC;
+                case '=': return_assign(F_SUB_EQ);
+                default: outp--; return '-';
+            }
+        }
+        case '&':
+        {
+            switch(*outp++) {
+                case '&': return L_LAND;
+                case '=': return_assign(F_AND_EQ);
+                default: outp--; return '&';
+            }
+        }
+        case '|':
+        {
+            switch(*outp++) {
+                case '|': return L_LOR;
+                case '=': return_assign(F_OR_EQ);
+                default: outp--; return '|';
+            }
+        }
+        case '^':
+        {
+            if (*outp++ == '=') return_assign(F_XOR_EQ);
+            outp--;
+            return '^';
+        }
+        case '<':
+        {
+            switch(*outp++) {
+                case '<':
+                {
+                    if (*outp++ == '=') return_assign(F_LSH_EQ);
+                    outp--;
+                    return L_LSH;
+                }
+                case '=': return_order(F_LE);
+                default: outp--; return '<';
+            }
+        }
+        case '>':
+        {
+            switch(*outp++) {
+                case '>':
+                {
+                    if (*outp++ == '=') return_assign(F_RSH_EQ);
+                    outp--;
+                    return L_RSH;
+                }
+                case '=': return_order(F_GE);
+                default: outp--; return_order(F_GT);
+            }
+        }
+        case '*':
+        {
+            if (*outp++ == '=') return_assign(F_MULT_EQ);
+            outp--;
+            return '*';
+        }
+        case '%':
+        {
+            if (*outp++ == '=') return_assign(F_MOD_EQ);
+            outp--;
+            return '%';
+        }
+        case '/':
+            switch(*outp++) {
+                case '*': skip_comment(); break;
+                case '/': skip_line(); break;
+                case '=': return_assign(F_DIV_EQ);
+                default: outp--; return '/';
+            }
+            break;
+        case '=':
+            if (*outp++ == '=') return L_EQ;
+            outp--;
+            yylval.number = F_ASSIGN;
+            return L_ASSIGN;
+        case '(':
+            yyp = outp;
+#ifdef WOMBLES
+            c = *yyp++;
+#else
+            while (isspace(c = *yyp++)) {
+                if (c == '\n') {
+                    current_line++;
+                    if (yyp == last_nl + 1) {
+                        outp = yyp;
+                        refill_buffer();
+                        yyp = outp;
+                    }
+                }
+            }
+#endif
+            switch(c) {
+                case '{' : { outp = yyp; return L_ARRAY_OPEN; }
+                case '[' : { outp = yyp; return L_MAPPING_OPEN; }
+                case ':' :
+                {
+                    if ((c = *yyp++) == ':') {
+                        outp = yyp -= 2;
+                        return '(';
+                    } else {
+                        while (isspace(c)) {
+                            if (c == '\n') {
+                                if ((yyp == last_nl + 1)) {
+                                    outp = yyp;
+                                    refill_buffer();
+                                    yyp = outp;
+                                }
+                                current_line++;
+                            }
+                            c = *yyp++;
                         }
+
+                        outp = yyp;
+
+                        if (isalpha(c) || c == '_') {
+                            function_flag = 1;
+                            goto parse_identifier;
+                        }
+
+                        outp--;
+                        push_function_context();
+                        return L_FUNCTION_OPEN;
                     }
 
-                    current_file = p->file;
-                    current_file_id = p->file_id;
-                    current_line = p->line;
+                }
+                default:
+                {
+                    outp = yyp - 1;
+                    return '(';
+                }
+            }
 
-                    yyin_desc = p->yyin_desc;
-                    last_nl = p->last_nl;
-                    outp = p->outp;
-                    inctop = p->next;
-                    incnum--;
-                    FREE((char *) p);
-                    outp[-1] = '\n';
+        case '$':
+            if (!current_function_context) {
+                yyerror("$var illegal outside of function pointer.");
+                return '$';
+            }
+            if (current_function_context->num_parameters == -2) {
+                yyerror("$var illegal inside anonymous function pointer.");
+                return '$';
+            } else {
+                if (!isdigit(c = *outp++)) {
+                    outp--;
+                    return '$';
+                }
+                yyp = yytext;
+                SAVEC;
+                for (;;) {
+                    if (!isdigit(c = *outp++)) break;
+                    SAVEC;
+                }
+                outp--;
+                *yyp = 0;
+                yylval.number = atol(yytext) - 1;
+                if (yylval.number < 0)
+                    yyerror("In function parameter $num, num must be >= 1.");
+                else if (yylval.number > 254)
+                    yyerror("only 255 parameters allowed.");
+                else if (yylval.number >= current_function_context->num_parameters)
+                    current_function_context->num_parameters = yylval.number + 1;
+                return L_PARAMETER;
+            }
+        case ')':
+        case '{':
+        case '}':
+        case '[':
+        case ']':
+        case ';':
+        case ',':
+        case '~':
+#ifndef USE_TRIGRAPHS
+        case '?':
+            return c;
+#else
+            return c;
+        /*
+         * You're probably asking, what the heck are trigraphs?
+         * The character set of C source is contained within seven-bit
+         * ASCII, a superset of ISO 646-1983 Invariant Code Set;
+         * to allow programs to be represented in the reduced set,
+         * certain single characters are replaced by a corresponding
+         * trigraph (3 character) sequence.  These are:
+         *     ??=   #       ??(   [       ??<   {
+         *     ??/   \       ??)   ]       ??>   }
+         *     ??'   ^       ??!   |       ??-   ~
+         */
+        case '?':
+            if (*outp++ != '?') { outp--; return '?'; }
+            switch (*outp++) {
+                case '=':  return '#';
+                case '/':  return '\\';
+                case '\'': return '^';
+                case '(':  return '[';
+                case ')':  return ']';
+                case '!':  return '|';
+                case '<':  return '{';
+                case '>':  return '}';
+                case '-':  return '~';
+                default:
+                    outp -= 2;
+                    return '?';
+            }
+#endif
+        case '!':
+            if (*outp++ == '=') return L_NE;
+            outp--;
+            return L_NOT;
+        case ':':
+            if (*outp++ == ':') return L_COLON_COLON;
+            outp--;
+            return ':';
+        case '.':
+            if (*outp++ == '.') {
+                if (*outp++ == '.')
+                    return L_DOT_DOT_DOT;
+                outp--;
+                return L_RANGE;
+            }
+            outp--;
+            goto badlex;
+        case '#':
+            if (*(outp - 2) == '\n') {
+                char *sp = 0;
+                int quote;
+
+                while (is_wspace(c = *outp++));
+
+                yyp = yytext;
+
+                for (quote = 0;;) {
+
+                    if (c == '"')
+                        quote ^= 1;
+                    else if (c == '/' && !quote) {
+                        if (*outp == '*') {
+                            outp++;
+                            skip_comment();
+                            c = *outp++;
+                        } else
+                        if (*outp == '/') {
+                            outp++;
+                            skip_line();
+                            c = *outp++;
+                        }
+                    }
+                    if (!sp && isspace(c))
+                        sp = yyp;
+                    if (c == '\n' || c == LEX_EOF) break;
+                    SAVEC;
+                    c = *outp++;
+                }
+                if (sp) {
+                    *sp++ = 0;
+                    while (uisspace(*sp))
+                        sp++;
+                } else {
+                    sp = yyp;
+                }
+                *yyp = 0;
+                if (!strcmp("include", yytext)) {
+                    current_line++;
+                    if (c == LEX_EOF) {
+                        *(last_nl = --outp) = LEX_EOF;
+                        outp[-1] = '\n';
+                    }
+                    handle_include(sp, 0);
+                    break;
+                } else {
                     if (outp == last_nl + 1) refill_buffer();
+
+                    if (strcmp("define", yytext) == 0) {
+                        handle_define(sp);
+                    } else if (strcmp("if", yytext) == 0) {
+                        int cond;
+
+                        *--outp = '\0';
+                        add_input(sp);
+                        cond = cond_get_exp(0);
+                        if (*outp++) {
+                            yyerror("Condition too complex in #if");
+                            while (*outp++);
+                        } else
+                            handle_cond(cond);
+                    } else if (strcmp("ifdef", yytext) == 0) {
+                        deltrail(sp);
+                        handle_cond(lookup_define(sp) != 0);
+                    } else if (strcmp("ifndef", yytext) == 0) {
+                        deltrail(sp);
+                        handle_cond(lookup_define(sp) == 0);
+                    } else if (strcmp("elif", yytext) == 0) {
+                        handle_elif(sp);
+                    } else if (strcmp("else", yytext) == 0) {
+                        handle_else();
+                    } else if (strcmp("endif", yytext) == 0) {
+                        handle_endif();
+                    } else if (strcmp("undef", yytext) == 0) {
+                        defn_t *d;
+
+                        deltrail(sp);
+                        if ((d = lookup_define(sp))) {
+                            if (d->flags & DEF_IS_PREDEF)
+                                yyerror("Illegal to #undef a predefined value.");
+                            else
+                                d->flags |= DEF_IS_UNDEFINED;
+                        }
+                    } else if (strcmp("echo", yytext) == 0) {
+                        debug_message("%s\n", sp);
+                    } else if (strcmp("error", yytext) == 0) {
+                        char buf[MAXLINE+1];
+                        strcpy(buf, yytext);
+                        strcat(buf, "\n");
+                        yyerror(buf);
+                    } else if (strcmp("warn", yytext) == 0) {
+                        char buf[MAXLINE+1];
+                        strcpy(buf, yytext);
+                        strcat(buf, "\n");
+                        yywarn(buf);
+                    } else if (strcmp("pragma", yytext) == 0) {
+                        handle_pragma(sp);
+                    } else if (strcmp("breakpoint", yytext) == 0) {
+                        lex_breakpoint();
+                    } else {
+                        yyerror("Unrecognised # directive");
+                    }
+                    *--outp = '\n';
                     break;
                 }
-                if (iftop) {
-                    ifstate_t *p = iftop;
-
-                    yyerror(p->state == EXPECT_ENDIF ? "Missing #endif" : "Missing #else/#elif");
-                    while (iftop) {
-                        p = iftop;
-                        iftop = p->next;
-                        FREE((char *) p);
-                    }
-                }
-                outp--;
-                return -1;
-            case '\r':
-                yywarn("^M");
-                break;
-            case '\t':
-#ifdef WARN_TAB
-                yywarn("<TAB>");
-#endif
-                break;
-            case '\n':
-                nexpands = 0;
-                current_line++;
-                total_lines++;
-                if (outp == last_nl + 1)
-                    refill_buffer();
-            case ' ':
-            case '\f':
-            case '\v':
-                break;
-            case '+':
-                {
-                    switch(*outp++) {
-                        case '+': return L_INC;
-                        case '=': return_assign(F_ADD_EQ);
-                        default: outp--; return '+';
-                    }
-                }
-            case '-':
-                {
-                    switch(*outp++) {
-                        case '>': return L_ARROW;
-                        case '-': return L_DEC;
-                        case '=': return_assign(F_SUB_EQ);
-                        default: outp--; return '-';
-                    }
-                }
-            case '&':
-                {
-                    switch(*outp++) {
-                        case '&': return L_LAND;
-                        case '=': return_assign(F_AND_EQ);
-                        default: outp--; return '&';
-                    }
-                }
-            case '|':
-                {
-                    switch(*outp++) {
-                        case '|': return L_LOR;
-                        case '=': return_assign(F_OR_EQ);
-                        default: outp--; return '|';
-                    }
-                }
-            case '^':
-                {
-                    if (*outp++ == '=') return_assign(F_XOR_EQ);
-                    outp--;
-                    return '^';
-                }
-            case '<':
-                {
-                    switch(*outp++) {
-                        case '<':
-                            {
-                                if (*outp++ == '=') return_assign(F_LSH_EQ);
-                                outp--;
-                                return L_LSH;
-                            }
-                        case '=': return_order(F_LE);
-                        default: outp--; return '<';
-                    }
-                }
-            case '>':
-                {
-                    switch(*outp++) {
-                        case '>':
-                            {
-                                if (*outp++ == '=') return_assign(F_RSH_EQ);
-                                outp--;
-                                return L_RSH;
-                            }
-                        case '=': return_order(F_GE);
-                        default: outp--; return_order(F_GT);
-                    }
-                }
-            case '*':
-                {
-                    if (*outp++ == '=') return_assign(F_MULT_EQ);
-                    outp--;
-                    return '*';
-                }
-            case '%':
-                {
-                    if (*outp++ == '=') return_assign(F_MOD_EQ);
-                    outp--;
-                    return '%';
-                }
-            case '/':
-                switch(*outp++) {
-                    case '*': skip_comment(); break;
-                    case '/': skip_line(); break;
-                    case '=': return_assign(F_DIV_EQ);
-                    default: outp--; return '/';
-                }
-                break;
-            case '=':
-                if (*outp++ == '=') return L_EQ;
-                outp--;
-                yylval.number = F_ASSIGN;
-                return L_ASSIGN;
-            case '(':
-                yyp = outp;
-#ifdef WOMBLES
-                c = *yyp++;
-#else
-                while (isspace(c = *yyp++)) {
-                    if (c == '\n') {
-                        current_line++;
-                        if (yyp == last_nl + 1) {
-                            outp = yyp;
-                            refill_buffer();
-                            yyp = outp;
-                        }
-                    }
-                }
-#endif
-                switch(c) {
-                    case '{' : { outp = yyp; return L_ARRAY_OPEN; }
-                    case '[' : { outp = yyp; return L_MAPPING_OPEN; }
-                    case ':' :
-                               {
-                                   if ((c = *yyp++) == ':') {
-                                       outp = yyp -= 2;
-                                       return '(';
-                                   } else {
-                                       while (isspace(c)) {
-                                           if (c == '\n') {
-                                               if ((yyp == last_nl + 1)) {
-                                                   outp = yyp;
-                                                   refill_buffer();
-                                                   yyp = outp;
-                                               }
-                                               current_line++;
-                                           }
-                                           c = *yyp++;
-                                       }
-
-                                       outp = yyp;
-
-                                       if (isalpha(c) || c == '_') {
-                                           function_flag = 1;
-                                           goto parse_identifier;
-                                       }
-
-                                       outp--;
-                                       push_function_context();
-                                       return L_FUNCTION_OPEN;
-                                   }
-
-                               }
-                    default:
-                               {
-                                   outp = yyp - 1;
-                                   return '(';
-                               }
-                }
-
-                    case '$':
-                if (!current_function_context) {
-                    yyerror("$var illegal outside of function pointer.");
-                    return '$';
-                }
-                if (current_function_context->num_parameters == -2) {
-                    yyerror("$var illegal inside anonymous function pointer.");
-                    return '$';
-                } else {
-                    if (!isdigit(c = *outp++)) {
-                        outp--;
-                        return '$';
-                    }
-                    yyp = yytext;
-                    SAVEC;
-                    for (;;) {
-                        if (!isdigit(c = *outp++)) break;
-                        SAVEC;
-                    }
-                    outp--;
-                    *yyp = 0;
-                    yylval.number = atol(yytext) - 1;
-                    if (yylval.number < 0)
-                        yyerror("In function parameter $num, num must be >= 1.");
-                    else if (yylval.number > 254)
-                        yyerror("only 255 parameters allowed.");
-                    else if (yylval.number >= current_function_context->num_parameters)
-                        current_function_context->num_parameters = yylval.number + 1;
-                    return L_PARAMETER;
-                }
-                    case ')':
-                    case '{':
-                    case '}':
-                    case '[':
-                    case ']':
-                    case ';':
-                    case ',':
-                    case '~':
-#ifndef USE_TRIGRAPHS
-                    case '?':
-                return c;
-#else
-                return c;
-                /*
-                 * You're probably asking, what the heck are trigraphs?
-                 * The character set of C source is contained within seven-bit
-                 * ASCII, a superset of ISO 646-1983 Invariant Code Set;
-                 * to allow programs to be represented in the reduced set,
-                 * certain single characters are replaced by a corresponding
-                 * trigraph (3 character) sequence.  These are:
-                 *     ??=   #       ??(   [       ??<   {
-                 *     ??/   \       ??)   ]       ??>   }
-                 *     ??'   ^       ??!   |       ??-   ~
-                 */
-                    case '?':
-                if (*outp++ != '?') { outp--; return '?'; }
-                switch (*outp++) {
-                    case '=':  return '#';
-                    case '/':  return '\\';
-                    case '\'': return '^';
-                    case '(':  return '[';
-                    case ')':  return ']';
-                    case '!':  return '|';
-                    case '<':  return '{';
-                    case '>':  return '}';
-                    case '-':  return '~';
-                    default:
-                               outp -= 2;
-                               return '?';
-                }
-#endif
-                    case '!':
-                if (*outp++ == '=') return L_NE;
-                outp--;
-                return L_NOT;
-                    case ':':
-                if (*outp++ == ':') return L_COLON_COLON;
-                outp--;
-                return ':';
-                    case '.':
-                if (*outp++ == '.') {
-                    if (*outp++ == '.')
-                        return L_DOT_DOT_DOT;
-                    outp--;
-                    return L_RANGE;
-                }
-                outp--;
-                goto badlex;
-                    case '#':
-                if (*(outp - 2) == '\n') {
-                    char *sp = 0;
-                    int quote;
-
-                    while (is_wspace(c = *outp++));
-
-                    yyp = yytext;
-
-                    for (quote = 0;;) {
-
-                        if (c == '"')
-                            quote ^= 1;
-                        else if (c == '/' && !quote) {
-                            if (*outp == '*') {
-                                outp++;
-                                skip_comment();
-                                c = *outp++;
-                            } else
-                                if (*outp == '/') {
-                                    outp++;
-                                    skip_line();
-                                    c = *outp++;
-                                }
-                        }
-                        if (!sp && isspace(c))
-                            sp = yyp;
-                        if (c == '\n' || c == LEX_EOF) break;
-                        SAVEC;
-                        c = *outp++;
-                    }
-                    if (sp) {
-                        *sp++ = 0;
-                        while (uisspace(*sp))
-                            sp++;
-                    } else {
-                        sp = yyp;
-                    }
-                    *yyp = 0;
-                    if (!strcmp("include", yytext)) {
-                        current_line++;
-                        if (c == LEX_EOF) {
-                            *(last_nl = --outp) = LEX_EOF;
-                            outp[-1] = '\n';
-                        }
-                        handle_include(sp, 0);
-                        break;
-                    } else {
-                        if (outp == last_nl + 1) refill_buffer();
-
-                        if (strcmp("define", yytext) == 0) {
-                            handle_define(sp);
-                        } else if (strcmp("if", yytext) == 0) {
-                            int cond;
-
-                            *--outp = '\0';
-                            add_input(sp);
-                            cond = cond_get_exp(0);
-                            if (*outp++) {
-                                yyerror("Condition too complex in #if");
-                                while (*outp++);
-                            } else
-                                handle_cond(cond);
-                        } else if (strcmp("ifdef", yytext) == 0) {
-                            deltrail(sp);
-                            handle_cond(lookup_define(sp) != 0);
-                        } else if (strcmp("ifndef", yytext) == 0) {
-                            deltrail(sp);
-                            handle_cond(lookup_define(sp) == 0);
-                        } else if (strcmp("elif", yytext) == 0) {
-                            handle_elif(sp);
-                        } else if (strcmp("else", yytext) == 0) {
-                            handle_else();
-                        } else if (strcmp("endif", yytext) == 0) {
-                            handle_endif();
-                        } else if (strcmp("undef", yytext) == 0) {
-                            defn_t *d;
-
-                            deltrail(sp);
-                            if ((d = lookup_define(sp))) {
-                                if (d->flags & DEF_IS_PREDEF)
-                                    yyerror("Illegal to #undef a predefined value.");
-                                else
-                                    d->flags |= DEF_IS_UNDEFINED;
-                            }
-                        } else if (strcmp("echo", yytext) == 0) {
-                            debug_message("%s\n", sp);
-                        } else if (strcmp("error", yytext) == 0) {
-                            char buf[MAXLINE+1];
-                            strcpy(buf, yytext);
-                            strcat(buf, "\n");
-                            yyerror(buf);
-                        } else if (strcmp("warn", yytext) == 0) {
-                            char buf[MAXLINE+1];
-                            strcpy(buf, yytext);
-                            strcat(buf, "\n");
-                            yywarn(buf);
-                        } else if (strcmp("pragma", yytext) == 0) {
-                            handle_pragma(sp);
-                        } else if (strcmp("breakpoint", yytext) == 0) {
-                            lex_breakpoint();
-                        } else {
-                            yyerror("Unrecognised # directive");
-                        }
-                        *--outp = '\n';
-                        break;
-                    }
-                } else {
+            } else {
 #ifdef COMPAT_32
-                    if (*outp == '\'') {
-                        outp++;
-                        return L_LAMBDA;
-                    }
-#endif
-                    goto badlex;
+                if (*outp == '\'') {
+                    outp++;
+                    return L_LAMBDA;
                 }
-                    case '\'':
+#endif
+                goto badlex;
+            }
+        case '\'':
 
-                if (*outp++ == '\\') {
-                    switch(*outp++) {
-                        case 'n': yylval.number = '\n'; break;
-                        case 't': yylval.number = '\t'; break;
-                        case 'r': yylval.number = '\r'; break;
-                        case 'b': yylval.number = '\b'; break;
-                        case 'a': yylval.number = '\x07'; break;
-                        case 'e': yylval.number = '\x1b'; break;
-                        case '\'': yylval.number = '\''; break;
-                        case '"': yylval.number = '"'; break;
-                        case '\\': yylval.number = '\\'; break;
+            if (*outp++ == '\\') {
+                switch(*outp++) {
+                case 'n': yylval.number = '\n'; break;
+                case 't': yylval.number = '\t'; break;
+                case 'r': yylval.number = '\r'; break;
+                case 'b': yylval.number = '\b'; break;
+                case 'a': yylval.number = '\x07'; break;
+                case 'e': yylval.number = '\x1b'; break;
+                case '\'': yylval.number = '\''; break;
+                case '"': yylval.number = '"'; break;
+                case '\\': yylval.number = '\\'; break;
+                case '0': case '1': case '2': case '3': case '4':
+                case '5': case '6': case '7': case '8': case '9':
+                    outp--;
+                    yylval.number = strtol(outp, &outp, 8);
+                    if (yylval.number > 255) {
+                        yywarn("Illegal character constant.");
+                        yylval.number = 'x';
+                    }
+                    break;
+                case 'x':
+                    if (!isxdigit((unsigned char)*outp)) {
+                        yylval.number = 'x';
+                        yywarn("\\x must be followed by a valid hex value; interpreting as 'x' instead.");
+                    } else {
+                        yylval.number = strtol(outp, &outp, 16);
+                        if (yylval.number > 255) {
+                            yywarn("Illegal character constant.");
+                            yylval.number = 'x';
+                        }
+                    }
+                    break;
+                case '\n':
+                    yylval.number = '\n';
+                    current_line++;
+                    total_lines++;
+                    if ((outp = last_nl + 1))
+                        refill_buffer();
+                    break;
+                default:
+                    yywarn("Unknown \\ escape.");
+                    yylval.number = *(outp - 1);
+                    break;
+                }
+            } else {
+                yylval.number = *(outp - 1);
+            }
+
+            if (*outp++ != '\'') {
+                outp--;
+                yyerror("Illegal character constant");
+                yylval.number = 0;
+            }
+            return L_NUMBER;
+        case '@':
+            {
+                int rc;
+                int tmp;
+
+                if ((tmp = *outp++) != '@') {
+                    /* check for Robocoder's @@ block */
+                    outp--;
+                }
+                if (!get_terminator(terminator)) {
+                    lexerror("Illegal terminator");
+                    break;
+                }
+                if (tmp == '@') {
+                    rc = get_array_block(terminator);
+
+                    if (rc > 0) {
+                        /* outp is pointing at "({" for histortical reasons */
+                        outp += 2;
+                        return L_ARRAY_OPEN;
+                    } else if (rc == -1) {
+                        lexerror("End of file in array block");
+                        return LEX_EOF;
+                    } else {    /* if rc == -2 */
+                        yyerror("Array block exceeded maximum length");
+                    }
+                } else {
+                    rc = get_text_block(terminator);
+
+                    if (rc > 0) {
+                        int n;
+
+                        /*
+                         * make string token and clean up
+                         */
+                        yylval.string = scratch_copy_string(outp);
+
+                        n = strlen(outp) + 1;
+                        outp += n;
+
+                        return L_STRING;
+                    } else if (rc == -1) {
+                        lexerror("End of file in text block");
+                        return LEX_EOF;
+                    } else {    /* if (rc == -2) */
+                        yyerror("Text block exceeded maximum length");
+                    }
+                }
+            }
+            break;
+        case '"':
+            {
+                int l;
+                register unsigned char *to = scr_tail + 1;
+
+                if ((l = scratch_end - to) > 255) l = 255;
+                while (l--) {
+                    switch(c = *outp++) {
+                    case LEX_EOF:
+                        lexerror("End of file in string");
+                        return LEX_EOF;
+
+                    case '"':
+                        *to++ = 0;
+                        if (!l && (to == scratch_end)) {
+                            char *res = scratch_large_alloc(to - scr_tail - 1);
+                            strcpy(res, (char *) (scr_tail + 1));
+                            yylval.string = res;
+                            return L_STRING;
+                        }
+
+                        scr_last = scr_tail + 1;
+                        scr_tail = to;
+                        *to = to - scr_last;
+                        yylval.string = (char *) scr_last;
+                        return L_STRING;
+
+                    case '\n':
+                        current_line++;
+                        total_lines++;
+                        if (outp == last_nl + 1) refill_buffer();
+                        *to++ = '\n';
+                        break;
+
+                    case '\\':
+                        /* Don't copy the \ in yet */
+                        switch((unsigned char)*outp++) {
+                        case '\n':
+                            current_line++;
+                            total_lines++;
+                            if (outp == last_nl + 1) refill_buffer();
+                            l++; /* Nothing is copied */
+                            break;
+                        case LEX_EOF:
+                            lexerror("End of file in string");
+                            return LEX_EOF;
+                        case 'n': *to++ = '\n'; break;
+                        case 't': *to++ = '\t'; break;
+                        case 'r': *to++ = '\r'; break;
+                        case 'b': *to++ = '\b'; break;
+                        case 'a': *to++ = '\x07'; break;
+                        case 'e': *to++ = '\x1b'; break;
+                        case '"': *to++ = '"'; break;
+                        case '\\': *to++ = '\\'; break;
                         case '0': case '1': case '2': case '3': case '4':
                         case '5': case '6': case '7': case '8': case '9':
-                                   outp--;
-                                   yylval.number = strtol(outp, &outp, 8);
-                                   if (yylval.number > 255) {
-                                       yywarn("Illegal character constant.");
-                                       yylval.number = 'x';
-                                   }
-                                   break;
+                        {
+                            int tmp;
+                            outp--;
+                            tmp = strtol(outp, &outp, 8);
+                            if (tmp > 255) {
+                                yywarn("Illegal character constant in string.");
+                                tmp = 'x';
+                            }
+                            *to++ = tmp;
+                            break;
+                        }
                         case 'x':
-                                   if (!isxdigit((unsigned char)*outp)) {
-                                       yylval.number = 'x';
-                                       yywarn("\\x must be followed by a valid hex value; interpreting as 'x' instead.");
-                                   } else {
-                                       yylval.number = strtol(outp, &outp, 16);
-                                       if (yylval.number > 255) {
-                                           yywarn("Illegal character constant.");
-                                           yylval.number = 'x';
-                                       }
-                                   }
-                                   break;
-                        case '\n':
-                                   yylval.number = '\n';
-                                   current_line++;
-                                   total_lines++;
-                                   if ((outp = last_nl + 1))
-                                       refill_buffer();
-                                   break;
+                        {
+                            int tmp;
+                            if (!isxdigit((unsigned char)*outp)) {
+                                *to++ = 'x';
+                                yywarn("\\x must be followed by a valid hex value; interpreting as 'x' instead.");
+                            } else {
+                                tmp = strtol(outp, &outp, 16);
+                                if (tmp > 255) {
+                                    yywarn("Illegal character constant.");
+                                    tmp = 'x';
+                                }
+                                *to++ = tmp;
+                            }
+                            break;
+                        }
                         default:
-                                   yywarn("Unknown \\ escape.");
-                                   yylval.number = *(outp - 1);
-                                   break;
-                    }
-                } else {
-                    yylval.number = *(outp - 1);
-                }
-
-                if (*outp++ != '\'') {
-                    outp--;
-                    yyerror("Illegal character constant");
-                    yylval.number = 0;
-                }
-                return L_NUMBER;
-                    case '@':
-                {
-                    int rc;
-                    int tmp;
-
-                    if ((tmp = *outp++) != '@') {
-                        /* check for Robocoder's @@ block */
-                        outp--;
-                    }
-                    if (!get_terminator(terminator)) {
-                        lexerror("Illegal terminator");
+                            *to++ = *(outp - 1);
+                            yywarn("Unknown \\ escape.");
+                        }
                         break;
+                    default:
+                        *to++ = c;
                     }
-                    if (tmp == '@') {
-                        rc = get_array_block(terminator);
+                }
 
-                        if (rc > 0) {
-                            /* outp is pointing at "({" for histortical reasons */
-                            outp += 2;
-                            return L_ARRAY_OPEN;
-                        } else if (rc == -1) {
-                            lexerror("End of file in array block");
+                /* Not enough space, we now copy the rest into yytext */
+                l = MAXLINE - (to - scr_tail);
+
+                yyp = yytext;
+                while (l--) {
+                    switch(c = *outp++) {
+                        case LEX_EOF:
+                            lexerror("End of file in string");
                             return LEX_EOF;
-                        } else {    /* if rc == -2 */
-                            yyerror("Array block exceeded maximum length");
-                        }
-                        } else {
-                            rc = get_text_block(terminator);
 
-                            if (rc > 0) {
-                                int n;
-
-                                /*
-                                 * make string token and clean up
-                                 */
-                                yylval.string = scratch_copy_string(outp);
-
-                                n = strlen(outp) + 1;
-                                outp += n;
-
-                                return L_STRING;
-                            } else if (rc == -1) {
-                                lexerror("End of file in text block");
-                                return LEX_EOF;
-                            } else {    /* if (rc == -2) */
-                                yyerror("Text block exceeded maximum length");
-                            }
-                        }
-                    }
-                    break;
-                    case '"':
-                    {
-                        int l;
-                        register unsigned char *to = scr_tail + 1;
-
-                        if ((l = scratch_end - to) > 255) l = 255;
-                        while (l--) {
-                            switch(c = *outp++) {
-                                case LEX_EOF:
-                                    lexerror("End of file in string");
-                                    return LEX_EOF;
-
-                                case '"':
-                                    *to++ = 0;
-                                    if (!l && (to == scratch_end)) {
-                                        char *res = scratch_large_alloc(to - scr_tail - 1);
-                                        strcpy(res, (char *) (scr_tail + 1));
-                                        yylval.string = res;
-                                        return L_STRING;
-                                    }
-
-                                    scr_last = scr_tail + 1;
-                                    scr_tail = to;
-                                    *to = to - scr_last;
-                                    yylval.string = (char *) scr_last;
-                                    return L_STRING;
-
-                                case '\n':
-                                    current_line++;
-                                    total_lines++;
-                                    if (outp == last_nl + 1) refill_buffer();
-                                    *to++ = '\n';
-                                    break;
-
-                                case '\\':
-                                    /* Don't copy the \ in yet */
-                                    switch((unsigned char)*outp++) {
-                                        case '\n':
-                                            current_line++;
-                                            total_lines++;
-                                            if (outp == last_nl + 1) refill_buffer();
-                                            l++; /* Nothing is copied */
-                                            break;
-                                        case LEX_EOF:
-                                            lexerror("End of file in string");
-                                            return LEX_EOF;
-                                        case 'n': *to++ = '\n'; break;
-                                        case 't': *to++ = '\t'; break;
-                                        case 'r': *to++ = '\r'; break;
-                                        case 'b': *to++ = '\b'; break;
-                                        case 'a': *to++ = '\x07'; break;
-                                        case 'e': *to++ = '\x1b'; break;
-                                        case '"': *to++ = '"'; break;
-                                        case '\\': *to++ = '\\'; break;
-                                        case '0': case '1': case '2': case '3': case '4':
-                                        case '5': case '6': case '7': case '8': case '9':
-                                                   {
-                                                       int tmp;
-                                                       outp--;
-                                                       tmp = strtol(outp, &outp, 8);
-                                                       if (tmp > 255) {
-                                                           yywarn("Illegal character constant in string.");
-                                                           tmp = 'x';
-                                                       }
-                                                       *to++ = tmp;
-                                                       break;
-                                                   }
-                                        case 'x':
-                                                   {
-                                                       int tmp;
-                                                       if (!isxdigit((unsigned char)*outp)) {
-                                                           *to++ = 'x';
-                                                           yywarn("\\x must be followed by a valid hex value; interpreting as 'x' instead.");
-                                                       } else {
-                                                           tmp = strtol(outp, &outp, 16);
-                                                           if (tmp > 255) {
-                                                               yywarn("Illegal character constant.");
-                                                               tmp = 'x';
-                                                           }
-                                                           *to++ = tmp;
-                                                       }
-                                                       break;
-                                                   }
-                                        default:
-                                                   *to++ = *(outp - 1);
-                                                   yywarn("Unknown \\ escape.");
-                                    }
-                                    break;
-                                default:
-                                    *to++ = c;
-                            }
-                        }
-
-                        /* Not enough space, we now copy the rest into yytext */
-                        l = MAXLINE - (to - scr_tail);
-
-                        yyp = yytext;
-                        while (l--) {
-                            switch(c = *outp++) {
-                                case LEX_EOF:
-                                    lexerror("End of file in string");
-                                    return LEX_EOF;
-
-                                case '"':
-                                    {
-                                        char *res;
-                                        *yyp++ = '\0';
-                                        res = scratch_large_alloc((yyp - yytext) + (to - scr_tail) - 1);
-                                        strncpy(res, (char *) (scr_tail + 1), (to - scr_tail) - 1);
-                                        strcpy(res + (to - scr_tail) - 1, yytext);
-                                        yylval.string = res;
-                                        return L_STRING;
-                                    }
-
-                                case '\n':
-                                    current_line++;
-                                    total_lines++;
-                                    if (outp == last_nl + 1) refill_buffer();
-                                    *yyp++ = '\n';
-                                    break;
-
-                                case '\\':
-                                    /* Don't copy the \ in yet */
-                                    switch((unsigned char)*outp++) {
-                                        case '\n':
-                                            current_line++;
-                                            total_lines++;
-                                            if (outp == last_nl + 1) refill_buffer();
-                                            l++; /* Nothing is copied */
-                                            break;
-                                        case LEX_EOF:
-                                            lexerror("End of file in string");
-                                            return LEX_EOF;
-                                        case 'n': *yyp++ = '\n'; break;
-                                        case 't': *yyp++ = '\t'; break;
-                                        case 'r': *yyp++ = '\r'; break;
-                                        case 'b': *yyp++ = '\b'; break;
-                                        case 'a': *yyp++ = '\x07'; break;
-                                        case 'e': *yyp++ = '\x1b'; break;
-                                        case '"': *yyp++ = '"'; break;
-                                        case '\\': *yyp++ = '\\'; break;
-                                        case '0': case '1': case '2': case '3': case '4':
-                                        case '5': case '6': case '7': case '8': case '9':
-                                                   {
-                                                       int tmp;
-                                                       outp--;
-                                                       tmp = strtol(outp, &outp, 8);
-                                                       if (tmp > 255) {
-                                                           yywarn("Illegal character constant in string.");
-                                                           tmp = 'x';
-                                                       }
-                                                       *yyp++ = tmp;
-                                                       break;
-                                                   }
-                                        case 'x':
-                                                   {
-                                                       int tmp;
-                                                       if (!isxdigit((unsigned char)*outp)) {
-                                                           *yyp++ = 'x';
-                                                           yywarn("\\x must be followed by a valid hex value; interpreting as 'x' instead.");
-                                                       } else {
-                                                           tmp = strtol(outp, &outp, 16);
-                                                           if (tmp > 255) {
-                                                               yywarn("Illegal character constant.");
-                                                               tmp = 'x';
-                                                           }
-                                                           *yyp++ = tmp;
-                                                       }
-                                                       break;
-                                                   }
-                                        default:
-                                                   *yyp++ = *(outp - 1);
-                                                   yywarn("Unknown \\ escape.");
-                                    }
-                                    break;
-
-                                default: *yyp++ = c;
-                            }
-                        }
-
-                        /* Not even enough length, declare too long string error */
-                        lexerror("String too long");
-                        *yyp++ = '\0';
+                        case '"':
                         {
                             char *res;
+                            *yyp++ = '\0';
                             res = scratch_large_alloc((yyp - yytext) + (to - scr_tail) - 1);
                             strncpy(res, (char *) (scr_tail + 1), (to - scr_tail) - 1);
                             strcpy(res + (to - scr_tail) - 1, yytext);
                             yylval.string = res;
                             return L_STRING;
                         }
-                    }
-                    case '0':
-                    c = *outp++;
-                    if (c == 'X' || c == 'x') {
-                        yyp = yytext;
-                        for (;;) {
-                            c = *outp++;
-                            SAVEC;
-                            if (!isxdigit((unsigned char)c))
-                                break;
-                        }
-                        outp--;
-                        yylval.number = strtol(yytext, (char **) NULL, 0x10);
-                        return L_NUMBER;
-                    }
-                    outp--;
-                    c = '0';
-                    /* fall through */
-                    case '1':
-                    case '2':
-                    case '3':
-                    case '4':
-                    case '5':
-                    case '6':
-                    case '7':
-                    case '8':
-                    case '9':
-                    is_float = 0;
-                    yyp = yytext;
-                    *yyp++ = c;
-                    for (;;) {
-                        c = *outp++;
-                        if (c == '.') {
-                            if (!is_float) {
-                                is_float = 1;
-                            } else {
-                                is_float = 0;
-                                outp--;
-                                break;
-                            }
-                        } else if (!isdigit((unsigned char)c))
+
+                        case '\n':
+                            current_line++;
+                            total_lines++;
+                            if (outp == last_nl + 1) refill_buffer();
+                            *yyp++ = '\n';
                             break;
-                        SAVEC;
+
+                       case '\\':
+                           /* Don't copy the \ in yet */
+                           switch((unsigned char)*outp++) {
+                           case '\n':
+                               current_line++;
+                               total_lines++;
+                               if (outp == last_nl + 1) refill_buffer();
+                               l++; /* Nothing is copied */
+                               break;
+                           case LEX_EOF:
+                               lexerror("End of file in string");
+                               return LEX_EOF;
+                           case 'n': *yyp++ = '\n'; break;
+                           case 't': *yyp++ = '\t'; break;
+                           case 'r': *yyp++ = '\r'; break;
+                           case 'b': *yyp++ = '\b'; break;
+                           case 'a': *yyp++ = '\x07'; break;
+                           case 'e': *yyp++ = '\x1b'; break;
+                           case '"': *yyp++ = '"'; break;
+                           case '\\': *yyp++ = '\\'; break;
+                           case '0': case '1': case '2': case '3': case '4':
+                           case '5': case '6': case '7': case '8': case '9':
+                           {
+                               int tmp;
+                               outp--;
+                               tmp = strtol(outp, &outp, 8);
+                               if (tmp > 255) {
+                                   yywarn("Illegal character constant in string.");
+                                   tmp = 'x';
+                               }
+                               *yyp++ = tmp;
+                               break;
+                           }
+                           case 'x':
+                           {
+                               int tmp;
+                               if (!isxdigit((unsigned char)*outp)) {
+                                   *yyp++ = 'x';
+                                   yywarn("\\x must be followed by a valid hex value; interpreting as 'x' instead.");
+                               } else {
+                                   tmp = strtol(outp, &outp, 16);
+                                   if (tmp > 255) {
+                                       yywarn("Illegal character constant.");
+                                       tmp = 'x';
+                                   }
+                                   *yyp++ = tmp;
+                               }
+                               break;
+                           }
+                           default:
+                               *yyp++ = *(outp - 1);
+                               yywarn("Unknown \\ escape.");
+                           }
+                           break;
+
+                    default: *yyp++ = c;
                     }
-                    outp--;
-                    *yyp = 0;
-                    if (is_float) {
-                        sscanf(yytext, "%f", &myreal);
-                        yylval.real = (float)myreal;
-                        return L_REAL;
+                }
+
+                /* Not even enough length, declare too long string error */
+                lexerror("String too long");
+                *yyp++ = '\0';
+                {
+                    char *res;
+                    res = scratch_large_alloc((yyp - yytext) + (to - scr_tail) - 1);
+                    strncpy(res, (char *) (scr_tail + 1), (to - scr_tail) - 1);
+                    strcpy(res + (to - scr_tail) - 1, yytext);
+                    yylval.string = res;
+                    return L_STRING;
+                }
+            }
+        case '0':
+            c = *outp++;
+            if (c == 'X' || c == 'x') {
+                yyp = yytext;
+                for (;;) {
+                    c = *outp++;
+                    SAVEC;
+                    if (!isxdigit((unsigned char)c))
+                        break;
+                }
+                outp--;
+                yylval.number = strtol(yytext, (char **) NULL, 0x10);
+                return L_NUMBER;
+            }
+            outp--;
+            c = '0';
+            /* fall through */
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            is_float = 0;
+            yyp = yytext;
+            *yyp++ = c;
+            for (;;) {
+                c = *outp++;
+                if (c == '.') {
+                    if (!is_float) {
+                        is_float = 1;
                     } else {
-                        yylval.number = atol(yytext);
-                        return L_NUMBER;
+                        is_float = 0;
+                        outp--;
+                        break;
                     }
-                    default:
-                    if (isalpha((unsigned char)c) || c == '_') {
-                        int r;
+                } else if (!isdigit((unsigned char)c))
+                    break;
+                SAVEC;
+            }
+            outp--;
+            *yyp = 0;
+            if (is_float) {
+                sscanf(yytext, "%f", &myreal);
+                yylval.real = (float)myreal;
+                return L_REAL;
+            } else {
+                yylval.number = atol(yytext);
+                return L_NUMBER;
+            }
+        default:
+            if (isalpha((unsigned char)c) || c == '_') {
+                int r;
 
 parse_identifier:
-                        yyp = yytext;
-                        *yyp++ = c;
-                        for (;;) {
-                            c = *outp++;
-                            if (!isalnum((unsigned char)c) && (c != '_'))
-                                break;
-                            SAVEC;
+                yyp = yytext;
+                *yyp++ = c;
+                for (;;) {
+                    c = *outp++;
+                    if (!isalnum((unsigned char)c) && (c != '_'))
+                        break;
+                    SAVEC;
+                }
+                *yyp = 0;
+                if (c == '#') {
+                    if (*outp++ != '#')
+                        lexerror("Single '#' in identifier -- use '##' for token pasting");
+                    outp -= 2;
+                    if (!expand_define()) {
+                        if (partp + (r = strlen(yytext)) + (function_flag ? 3 : 0) - partial > MAXLINE)
+                            lexerror("Pasted token is too long");
+                        if (function_flag) {
+                            strcpy(partp, "(: ");
+                            partp += 3;
                         }
-                        *yyp = 0;
-                        if (c == '#') {
-                            if (*outp++ != '#')
-                                lexerror("Single '#' in identifier -- use '##' for token pasting");
-                            outp -= 2;
-                            if (!expand_define()) {
-                                if (partp + (r = strlen(yytext)) + (function_flag ? 3 : 0) - partial > MAXLINE)
-                                    lexerror("Pasted token is too long");
+                        strcpy(partp, yytext);
+                        partp += r;
+                        outp += 2;
+                    }
+                } else if (partp != partial) {
+                    outp--;
+                    if (!expand_define())
+                        add_input(yytext);
+                    while ((c = *outp++) == ' ');
+                    outp--;
+                    add_input(partial);
+                    partp = partial;
+                    partial[0] = 0;
+                } else {
+                    outp--;
+                    if (!expand_define()) {
+                        ident_hash_elem_t *ihe;
+                        if ((ihe = lookup_ident(yytext))) {
+                            if (ihe->token & IHE_RESWORD) {
                                 if (function_flag) {
-                                    strcpy(partp, "(: ");
-                                            partp += 3;
-                                            }
-                                            strcpy(partp, yytext);
-                                            partp += r;
-                                            outp += 2;
-                                            }
-                                            } else if (partp != partial) {
-                                            outp--;
-                                            if (!expand_define())
-                                            add_input(yytext);
-                                            while ((c = *outp++) == ' ');
-                                            outp--;
-                                            add_input(partial);
-                                            partp = partial;
-                                            partial[0] = 0;
-                                            } else {
-                                            outp--;
-                                            if (!expand_define()) {
-                                            ident_hash_elem_t *ihe;
-                                            if ((ihe = lookup_ident(yytext))) {
-                                                if (ihe->token & IHE_RESWORD) {
-                                                    if (function_flag) {
-                                                        function_flag = 0;
-                                                        add_input(yytext);
-                                                        push_function_context();
-                                                        return L_FUNCTION_OPEN;
-                                                    }
-                                                    yylval.number = ihe->sem_value;
-                                                    return ihe->token & TOKEN_MASK;
-                                                }
-                                                if (function_flag) {
-                                                    int val;
+                                    function_flag = 0;
+                                    add_input(yytext);
+                                    push_function_context();
+                                    return L_FUNCTION_OPEN;
+                                }
+                                yylval.number = ihe->sem_value;
+                                return ihe->token & TOKEN_MASK;
+                            }
+                            if (function_flag) {
+                                int val;
 
-                                                    function_flag = 0;
-                                                    while ((c = *outp++) == ' ');
-                                                    outp--;
-                                                    /* Note that this gets code like:
-                                                     * #define x :)
-                                                     * #define y ,
-                                                     * function f = (: foo x;
-                                                     * function g = (: bar y 1 :);
-                                                     *
-                                                     * wrong.  But that is almost pathological.
-                                                     */
-                                                    if (c != ':' && c != ',')
-                                                        return old_func();
-                                                    if ((val=ihe->dn.local_num) >= 0) {
-                                                        if (c == ',') return old_func();
-                                                        yylval.number = (val << 8) | FP_L_VAR;
-                                                    } else if ((val=ihe->dn.global_num) >= 0) {
-                                                        if (c == ',') return old_func();
-                                                        yylval.number = (val << 8) | FP_G_VAR;
-                                                    } else if ((val=ihe->dn.function_num) >=0) {
-                                                        yylval.number = (val << 8)|FP_LOCAL;
-                                                    } else if ((val=ihe->dn.simul_num) >=0) {
-                                                        yylval.number = (val << 8)|FP_SIMUL;
-                                                    } else if ((val=ihe->dn.efun_num) >=0) {
-                                                        yylval.number = (val << 8)|FP_EFUN;
-                                                    } else return old_func();
-                                                    return L_NEW_FUNCTION_OPEN;
-                                                }
-                                                yylval.ihe = ihe;
-                                                return L_DEFINED_NAME;
-                                            }
-                                            yylval.string = scratch_copy(yytext);
-                                            return L_IDENTIFIER;
-                                            }
-                                            if (function_flag) {
-                                                function_flag = 0;
-                                                add_input("(:");
-                                                        }
-                                                        }
-                                                        break;
-                                                        }
-                                                        goto badlex;
-                                                        }
-                                                        }
-badlex:
-{
+                                function_flag = 0;
+                                while ((c = *outp++) == ' ');
+                                outp--;
+                                /* Note that this gets code like:
+                                 * #define x :)
+                                 * #define y ,
+                                 * function f = (: foo x;
+                                 * function g = (: bar y 1 :);
+                                 *
+                                 * wrong.  But that is almost pathological.
+                                 */
+                                if (c != ':' && c != ',')
+                                    return old_func();
+                                if ((val=ihe->dn.local_num) >= 0) {
+                                    if (c == ',') return old_func();
+                                    yylval.number = (val << 8) | FP_L_VAR;
+                                } else if ((val=ihe->dn.global_num) >= 0) {
+                                    if (c == ',') return old_func();
+                                    yylval.number = (val << 8) | FP_G_VAR;
+                                } else if ((val=ihe->dn.function_num) >=0) {
+                                    yylval.number = (val << 8)|FP_LOCAL;
+                                } else if ((val=ihe->dn.simul_num) >=0) {
+                                    yylval.number = (val << 8)|FP_SIMUL;
+                                } else if ((val=ihe->dn.efun_num) >=0) {
+                                    yylval.number = (val << 8)|FP_EFUN;
+                                } else return old_func();
+                                return L_NEW_FUNCTION_OPEN;
+                            }
+                            yylval.ihe = ihe;
+                            return L_DEFINED_NAME;
+                        }
+                        yylval.string = scratch_copy(yytext);
+                        return L_IDENTIFIER;
+                    }
+                    if (function_flag) {
+                        function_flag = 0;
+                        add_input("(:");
+                    }
+                }
+                break;
+            }
+            goto badlex;
+        }
+    }
+  badlex:
+    {
 #ifdef DEBUG
-char buff[100];
+        char buff[100];
 
-sprintf(buff, "Illegal character (hex %02x) '%c'", (unsigned) c, (char) c);
-yyerror(buff);
+        sprintf(buff, "Illegal character (hex %02x) '%c'", (unsigned) c, (char) c);
+        yyerror(buff);
 #endif
-return ' ';
-}
+        return ' ';
+    }
 }
 
 extern YYSTYPE yylval;
@@ -2323,29 +2343,29 @@ static void init_instrs()
     add_instr_name("next_foreach", "c_next_foreach();\n", F_NEXT_FOREACH, -1);
     add_instr_name("member_lvalue", "c_member_lvalue(%i);\n", F_MEMBER_LVALUE, T_LVALUE);
     add_instr_name("index_lvalue", "push_indexed_lvalue(0);\n",
-            F_INDEX_LVALUE, T_LVALUE|T_LVALUE_BYTE);
+                   F_INDEX_LVALUE, T_LVALUE|T_LVALUE_BYTE);
     add_instr_name("rindex_lvalue", "push_indexed_lvalue(1);\n",
-            F_RINDEX_LVALUE, T_LVALUE|T_LVALUE_BYTE);
+                   F_RINDEX_LVALUE, T_LVALUE|T_LVALUE_BYTE);
     add_instr_name("nn_range_lvalue", "push_lvalue_range(0x00);\n",
-            F_NN_RANGE_LVALUE, T_LVALUE_RANGE);
+                   F_NN_RANGE_LVALUE, T_LVALUE_RANGE);
     add_instr_name("nr_range_lvalue", "push_lvalue_range(0x01);\n",
-            F_NR_RANGE_LVALUE, T_LVALUE_RANGE);
+                   F_NR_RANGE_LVALUE, T_LVALUE_RANGE);
     add_instr_name("rr_range_lvalue", "push_lvalue_range(0x11);\n",
-            F_RR_RANGE_LVALUE, T_LVALUE_RANGE);
+                   F_RR_RANGE_LVALUE, T_LVALUE_RANGE);
     add_instr_name("rn_range_lvalue", "push_lvalue_range(0x10);\n",
-            F_RN_RANGE_LVALUE, T_LVALUE_RANGE);
+                   F_RN_RANGE_LVALUE, T_LVALUE_RANGE);
     add_instr_name("nn_range", "f_range(0x00);\n",
-            F_NN_RANGE, T_ARRAY|T_STRING OR_BUFFER);
+                   F_NN_RANGE, T_ARRAY|T_STRING OR_BUFFER);
     add_instr_name("rr_range", "f_range(0x11);\n",
-            F_RR_RANGE, T_ARRAY|T_STRING OR_BUFFER);
+                   F_RR_RANGE, T_ARRAY|T_STRING OR_BUFFER);
     add_instr_name("nr_range", "f_range(0x01);\n",
-            F_NR_RANGE, T_ARRAY|T_STRING OR_BUFFER);
+                   F_NR_RANGE, T_ARRAY|T_STRING OR_BUFFER);
     add_instr_name("rn_range", "f_range(0x10);\n",
-            F_RN_RANGE, T_ARRAY|T_STRING OR_BUFFER);
+                   F_RN_RANGE, T_ARRAY|T_STRING OR_BUFFER);
     add_instr_name("re_range", "f_extract_range(1);\n",
-            F_RE_RANGE, T_ARRAY|T_STRING OR_BUFFER);
+                   F_RE_RANGE, T_ARRAY|T_STRING OR_BUFFER);
     add_instr_name("ne_range", "f_extract_range(0);\n",
-            F_NE_RANGE, T_ARRAY|T_STRING OR_BUFFER);
+                   F_NE_RANGE, T_ARRAY|T_STRING OR_BUFFER);
     add_instr_name("global", "C_GLOBAL(%i);\n", F_GLOBAL, T_ANY);
     add_instr_name("local", "C_LOCAL(%i);\n", F_LOCAL, T_ANY);
     add_instr_name("make_ref", "c_make_ref(%i);\n", F_MAKE_REF, T_REF);
@@ -2405,8 +2425,8 @@ static void init_instrs()
     add_instr_name("(::)", 0, F_FUNCTION_CONSTRUCTOR, T_FUNCTION);
     /* sorry about this one */
     add_instr_name("simul_efun",
-            "call_simul_efun(%i, (lpc_int = %i + num_varargs, num_varargs = 0, lpc_int));\n",
-            F_SIMUL_EFUN, T_ANY);
+                   "call_simul_efun(%i, (lpc_int = %i + num_varargs, num_varargs = 0, lpc_int));\n",
+                   F_SIMUL_EFUN, T_ANY);
     add_instr_name("global_lvalue", "C_LVALUE(&current_object->variables[variable_index_offset + %i]);\n", F_GLOBAL_LVALUE, T_LVALUE);
     add_instr_name("|", "f_or();\n", F_OR, T_ARRAY | T_NUMBER);
     add_instr_name("<<", "f_lsh();\n", F_LSH, T_NUMBER);
@@ -2446,14 +2466,14 @@ static void init_instrs()
         while(isalunum((unsigned char)*p)) {\
             *q = *p++;\
             if (q < (m))\
-            q++;\
+                q++;\
             else {\
                 lexerror("Name too long");\
                 return;\
             }\
         }\
     } else lexerror(e);\
-*q++ = 0
+    *q++ = 0
 
 static int cmygetc()
 {
@@ -2507,94 +2527,94 @@ static void handle_define (char * yyt)
     q = namebuf;
     GETALPHA(p, q, namebuf + NSIZE - 1, "Invalid macro name");
     if (*p == '(') {            /* if "function macro" */
-            int squote, dquote;
-            int arg;
-            int inid;
-            char *ids = (char *) NULL;
+        int squote, dquote;
+        int arg;
+        int inid;
+        char *ids = (char *) NULL;
 
-            p++;                    /* skip '(' */
-            SKIPWHITE;
-            if (*p == ')') {
+        p++;                    /* skip '(' */
+        SKIPWHITE;
+        if (*p == ')') {
             arg = 0;
-            } else {
+        } else {
             for (arg = 0; arg < NARGS;) {
-            q = args[arg];
-            GETALPHA(p, q, args[arg] + NSIZE - 1, "Invalid macro argument");
-            arg++;
-            SKIPWHITE;
-            if (*p == ')')
-        break;
-    if (*p++ != ',') {
-        yyerror("Missing ',' in #define parameter list");
-        return;
-    }
-    SKIPWHITE;
+                q = args[arg];
+                GETALPHA(p, q, args[arg] + NSIZE - 1, "Invalid macro argument");
+                arg++;
+                SKIPWHITE;
+                if (*p == ')')
+                    break;
+                if (*p++ != ',') {
+                    yyerror("Missing ',' in #define parameter list");
+                    return;
+                }
+                SKIPWHITE;
             }
             if (arg == NARGS) {
                 lexerror("Too many macro arguments");
                 return;
             }
-            }
-            p++;                    /* skip ')' */
-            q = mtext;
-            *q++ = ' ';
-            squote = dquote = 0;
-            for (inid = 0; *p;) {
-                if (isalunum((unsigned char)*p)) { /* FIXME */
-                    if (!inid) {
-                        inid++;
-                        ids = p;
-                    }
-                } else {
-                    if (!squote && !dquote && inid) {
-                        int idlen = p - ids;
-                        int n, l;
+        }
+        p++;                    /* skip ')' */
+        q = mtext;
+        *q++ = ' ';
+        squote = dquote = 0;
+        for (inid = 0; *p;) {
+            if (isalunum((unsigned char)*p)) { /* FIXME */
+                if (!inid) {
+                    inid++;
+                    ids = p;
+                }
+            } else {
+                if (!squote && !dquote && inid) {
+                    int idlen = p - ids;
+                    int n, l;
 
-                        for (n = 0; n < arg; n++) {
-                            l = strlen(args[n]);
-                            if (l == idlen && strncmp(args[n], ids, l) == 0) {
-                                q -= idlen;
-                                *q++ = MARKS;
-                                *q++ = n + MARKS + 1;
-                                break;
-                            }
+                    for (n = 0; n < arg; n++) {
+                        l = strlen(args[n]);
+                        if (l == idlen && strncmp(args[n], ids, l) == 0) {
+                            q -= idlen;
+                            *q++ = MARKS;
+                            *q++ = n + MARKS + 1;
+                            break;
                         }
-                        inid = 0;
                     }
+                    inid = 0;
                 }
-                *q = *p;
-                if (*q == '\\' && *++p) {
-                    if (q < mtext + MLEN - 2)
-                        q++;
-                    else {
-                        lexerror("Macro text too long");
-                        return;
-                    }
-                    *q = *p;
-                    /* skip the quote checks if we just had a \ */
-                }
-                else if (*q == '"') {
-                    dquote ^= !squote;
-                } else if (*q == '\'') {
-                    squote ^= !dquote;
-                }
-
-                if (*p++ == MARKS)
-                    *++q = MARKS;
+            }
+            *q = *p;
+            if (*q == '\\' && *++p) {
                 if (q < mtext + MLEN - 2)
                     q++;
                 else {
                     lexerror("Macro text too long");
                     return;
                 }
-                if (!*p && p[-2] == '\\') {
-                    q -= 2;
-                    refill();
-                    p = yytext;
-                }
+                *q = *p;
+                /* skip the quote checks if we just had a \ */
             }
-            *--q = 0;
-            add_define(namebuf, arg, mtext);
+            else if (*q == '"') {
+                dquote ^= !squote;
+            } else if (*q == '\'') {
+                squote ^= !dquote;
+            }
+
+            if (*p++ == MARKS)
+                *++q = MARKS;
+            if (q < mtext + MLEN - 2)
+                q++;
+            else {
+                lexerror("Macro text too long");
+                return;
+            }
+            if (!*p && p[-2] == '\\') {
+                q -= 2;
+                refill();
+                p = yytext;
+            }
+        }
+        *--q = 0;
+        add_define(namebuf, arg, mtext);
     } else if (is_wspace(*p) || (*p == '\\')) {
         for (q = mtext; *p;) {
             *q = *p++;
@@ -2740,9 +2760,9 @@ static void free_defines()
 }
 
 #define SKIPW \
-    do {\
-        c = cmygetc();\
-    } while (is_wspace(c));
+        do {\
+            c = cmygetc();\
+        } while (is_wspace(c));
 
 static int extract_args (char ** argv, char * argb)
 {
@@ -2752,82 +2772,82 @@ static int extract_args (char ** argv, char * argb)
 
     SKIPW;
     if (c != '(') {
-            yyerror("Missing '(' in macro call");
-                if (c == '\n' && outp == last_nl + 1) refill_buffer();
-                return -1;
-                }
+        yyerror("Missing '(' in macro call");
+        if (c == '\n' && outp == last_nl + 1) refill_buffer();
+        return -1;
+    }
 
-                SKIPW;
-                if (c == ')')
-            return 0;
+    SKIPW;
+    if (c == ')')
+        return 0;
 
-            argv[0] = out = argb;
-            while (argc < NARGS) {
-            switch (c) {
+    argv[0] = out = argb;
+    while (argc < NARGS) {
+        switch (c) {
             case '\"':
-            if (!squote)
-            dquote ^= 1;
-            break;
+                if (!squote)
+                    dquote ^= 1;
+                break;
             case '\'':
-            if (!dquote)
-            squote ^= 1;
-            break;
+                if (!dquote)
+                    squote ^= 1;
+                break;
             case '\\':
-            if (squote || dquote) {
-                *out++ = c;
-                get_next_char(c);
-            }
-            break;
-            case '(':
-            if (!squote && !dquote)
-                parcnt++;
-            break;
-            case ')':
-            if (!squote && !dquote)
-                parcnt--;
-            break;
-            case '\n':
-            if (outp == last_nl + 1) refill_buffer();
-            if (squote || dquote) {
-                lexerror("Newline in string");
-                return -1;
-            }
-            /* Change this to a space so we don't count it more than once */
-            current_line++;
-            total_lines++;
-            c = ' ';
-            break;
-            case LEX_EOF:
-            lexerror("Unexpected end of file");
-            return -1;
-            }
-
-            /* negative parcnt means we're done collecting args */
-            if (parcnt < 0 || (c == ',' && !parcnt && !dquote && !squote)) {
-
-                /* strip off trailing whitespace char if there was one */
-                if (uisspace(*(out - 1))) *(out - 1) = 0;
-                else *out++ = 0;
-                if (parcnt < 0)
-                    return argc + 1;
-                argv[++argc] = out;
-            } else {
-                /* don't save leading whitespace and don't accumulate trailing whitespace */
-                if (!uisspace(c) || dquote || squote || (out > argv[argc] && !uisspace(*(out - 1)))) {
-                    if (out >= argb + DEFMAX - NARGS) {
-                        lexerror("Macro argument overflow");
-                        return -1;
-                    }
+                if (squote || dquote) {
                     *out++ = c;
+                    get_next_char(c);
                 }
-            }
+                break;
+            case '(':
+                if (!squote && !dquote)
+                    parcnt++;
+                break;
+            case ')':
+                if (!squote && !dquote)
+                    parcnt--;
+                break;
+            case '\n':
+                if (outp == last_nl + 1) refill_buffer();
+                if (squote || dquote) {
+                    lexerror("Newline in string");
+                    return -1;
+                }
+                /* Change this to a space so we don't count it more than once */
+                current_line++;
+                total_lines++;
+                c = ' ';
+                break;
+            case LEX_EOF:
+                lexerror("Unexpected end of file");
+                return -1;
+        }
 
-            if (!squote && !dquote) c = cmygetc();
-            else get_next_char(c);
-            }
+        /* negative parcnt means we're done collecting args */
+        if (parcnt < 0 || (c == ',' && !parcnt && !dquote && !squote)) {
 
-            lexerror("Maximum macro argument count exceeded");
-            return -1;
+            /* strip off trailing whitespace char if there was one */
+            if (uisspace(*(out - 1))) *(out - 1) = 0;
+            else *out++ = 0;
+            if (parcnt < 0)
+                return argc + 1;
+            argv[++argc] = out;
+        } else {
+            /* don't save leading whitespace and don't accumulate trailing whitespace */
+            if (!uisspace(c) || dquote || squote || (out > argv[argc] && !uisspace(*(out - 1)))) {
+                if (out >= argb + DEFMAX - NARGS) {
+                    lexerror("Macro argument overflow");
+                    return -1;
+                }
+                *out++ = c;
+            }
+        }
+
+        if (!squote && !dquote) c = cmygetc();
+        else get_next_char(c);
+    }
+
+    lexerror("Maximum macro argument count exceeded");
+    return -1;
 }
 
 /* Check if yytext is a macro and expand if it is. */
@@ -2839,9 +2859,9 @@ static char *expand_define2 (char * text)
 
     /* special handling for __LINE__ macro */
     if (!strcmp(text, "__LINE__")) {
-        expand_buffer = (char *)DXALLOC(20, TAG_COMPILER, "expand_define2");
-        sprintf(expand_buffer, "%i", current_line);
-        return expand_buffer;
+      expand_buffer = (char *)DXALLOC(20, TAG_COMPILER, "expand_define2");
+      sprintf(expand_buffer, "%i", current_line);
+      return expand_buffer;
     }
 
     /* have we already expanded this macro? */
@@ -2887,31 +2907,31 @@ static char *expand_define2 (char * text)
     out = expand_buffer = (char *)DXALLOC(DEFMAX, TAG_COMPILER, "expand_define2");
 
 #define SAVECHAR(x) SAFE(\
-        if (out + 1 < expand_buffer + DEFMAX) {\
-        *out++ = (x);\
-        } else {\
-        if (freeme) FREE(freeme);\
-        FREE(expand_buffer);\
-        lexerror("Macro expansion overflow");\
-        expand_depth--;\
-        return 0;\
-        })
+                    if (out + 1 < expand_buffer + DEFMAX) {\
+                        *out++ = (x);\
+                    } else {\
+                        if (freeme) FREE(freeme);\
+                        FREE(expand_buffer);\
+                        lexerror("Macro expansion overflow");\
+                        expand_depth--;\
+                        return 0;\
+                    })
 
 #define SAVESTR(x, y)   SAFE(\
-        if (out + (y) < expand_buffer + DEFMAX) {\
-        memcpy(out, (x), (y));\
-        out += (y);\
-        } else {\
-        if (freeme) FREE(freeme);\
-        FREE(expand_buffer);\
-        lexerror("Macro expansion overflow");\
-        expand_depth--;\
-        return 0;\
-        }\
-        if (freeme) {\
-        FREE(freeme);\
-        freeme = 0;\
-        })
+                        if (out + (y) < expand_buffer + DEFMAX) {\
+                            memcpy(out, (x), (y));\
+                            out += (y);\
+                        } else {\
+                            if (freeme) FREE(freeme);\
+                            FREE(expand_buffer);\
+                            lexerror("Macro expansion overflow");\
+                            expand_depth--;\
+                            return 0;\
+                        }\
+                        if (freeme) {\
+                            FREE(freeme);\
+                            freeme = 0;\
+                        })
 
     while (*in) {
         char *skip = in + 1;
@@ -2928,11 +2948,11 @@ static char *expand_define2 (char * text)
                     switch (*exp) {
                         case '\"':
                             SAVECHAR('\\');
-                        break;
+                            break;
                         case '\\':
-                        SAVECHAR(*exp);
-                        exp++;
-                        break;
+                            SAVECHAR(*exp);
+                            exp++;
+                            break;
                     }
                     SAVECHAR(*exp);
                     exp++;
@@ -2993,8 +3013,8 @@ int expand_define (void)
 }
 
 /* Stuff to evaluate expression.  I havn't really checked it. /LA
- ** Written by "J\"orn Rennecke" <amylaar@cs.tu-berlin.de>
- */
+** Written by "J\"orn Rennecke" <amylaar@cs.tu-berlin.de>
+*/
 #define SKPW    do c = *outp++; while(is_wspace(c)); outp--
 
 static int exgetc()
@@ -3012,7 +3032,7 @@ static int exgetc()
         outp--;
         *yyp = '\0';
         if (strcmp(yytext, "defined") == 0 ||
-                strcmp(yytext, "efun_defined") == 0) {
+            strcmp(yytext, "efun_defined") == 0) {
             int efund = (yytext[0] == 'e');
             int flag;
 
@@ -3021,35 +3041,35 @@ static int exgetc()
                 c = *outp++;
             while (is_wspace(c));
             if (c != '(') {
-                    yyerror("Missing ( in defined");
-                        continue;
-                        }
-                        do
-                        c = *outp++;
-                        while (is_wspace(c));
-                        yyp = yytext;
-                        while (isalunum(c)) {
-                        SAVEC;
-                        c = *outp++;
-                        }
-                        *yyp = '\0';
-                        while (is_wspace(c))
-                        c = *outp++;
-                        if (c != ')') {
-                    yyerror("Missing ) in defined");
-                    continue;
-                        }
-                        SKPW;
-                        if (efund) {
-                            ident_hash_elem_t *ihe = lookup_ident(yytext);
-                            flag = (ihe && ihe->dn.efun_num != -1);
-                        } else {
-                            flag = (lookup_define(yytext) != 0);
-                        }
-                        if (flag)
-                            add_input(" 1 ");
-                        else
-                            add_input(" 0 ");
+                yyerror("Missing ( in defined");
+                continue;
+            }
+            do
+                c = *outp++;
+            while (is_wspace(c));
+            yyp = yytext;
+            while (isalunum(c)) {
+                SAVEC;
+                c = *outp++;
+            }
+            *yyp = '\0';
+            while (is_wspace(c))
+                c = *outp++;
+            if (c != ')') {
+                yyerror("Missing ) in defined");
+                continue;
+            }
+            SKPW;
+            if (efund) {
+                ident_hash_elem_t *ihe = lookup_ident(yytext);
+                flag = (ihe && ihe->dn.efun_num != -1);
+            } else {
+                flag = (lookup_define(yytext) != 0);
+            }
+            if (flag)
+                add_input(" 1 ");
+            else
+                add_input(" 0 ");
         } else {
             if (!expand_define())
                 add_input(" 0 ");
@@ -3145,8 +3165,8 @@ char *main_file_name()
  */
 
 #define CHECK_ELEM(x, y, z) if (!strcmp((x)->name, (y))) { \
-    if (((x)->token & IHE_RESWORD) || ((x)->sem_value)) { z } \
-    else return 0; }
+      if (((x)->token & IHE_RESWORD) || ((x)->sem_value)) { z } \
+      else return 0; }
 
 ident_hash_elem_t *lookup_ident (const char * name) {
     int h = IdentHash(name);
@@ -3181,7 +3201,7 @@ ident_hash_elem_t *find_or_add_perm_ident (const char * name) {
             ident_hash_tail[h] = hptr;
     } else {
         hptr = (ident_hash_table[h] = ALLOCATE(ident_hash_elem_t, TAG_PERM_IDENT,
-                    "find_or_add_perm_ident:2"));
+                                               "find_or_add_perm_ident:2"));
         ident_hash_head[h] = hptr;
         ident_hash_tail[h] = hptr;
         hptr->next = hptr;
@@ -3350,7 +3370,7 @@ static ident_hash_elem_t *quick_alloc_ident_entry() {
     } else {
         ident_hash_elem_list_t *ihel;
         ihel = ALLOCATE(ident_hash_elem_list_t, TAG_COMPILER,
-                "quick_alloc_ident_entry");
+                        "quick_alloc_ident_entry");
         ihel->next = ihe_list;
         ihe_list = ihel;
         num_free = 127;
@@ -3366,8 +3386,8 @@ find_or_add_ident (const char * name, int flags) {
     if ((hptr = ident_hash_table[h])) {
         if (!strcmp(hptr->name, name)) {
             if ((hptr->token & IHE_PERMANENT) && (flags & FOA_GLOBAL_SCOPE)
-                    && (hptr->dn.function_num==-1)&&(hptr->dn.global_num==-1)
-                    && (hptr->dn.class_num==-1)) {
+                && (hptr->dn.function_num==-1)&&(hptr->dn.global_num==-1)
+                && (hptr->dn.class_num==-1)) {
                 hptr->next_dirty = ident_dirty_list;
                 ident_dirty_list = hptr;
             }
@@ -3377,8 +3397,8 @@ find_or_add_ident (const char * name, int flags) {
         while (hptr2 != hptr) {
             if (!strcmp(hptr2->name, name)) {
                 if ((hptr2->token & IHE_PERMANENT)&&(flags & FOA_GLOBAL_SCOPE)
-                        && (hptr2->dn.function_num==-1)&&(hptr2->dn.global_num==-1)
-                        && (hptr2->dn.class_num == -1)) {
+                 && (hptr2->dn.function_num==-1)&&(hptr2->dn.global_num==-1)
+                    && (hptr2->dn.class_num == -1)) {
                     hptr2->next_dirty = ident_dirty_list;
                     ident_dirty_list = hptr2;
                 }
@@ -3438,7 +3458,7 @@ void init_identifiers() {
 
     /* allocate all three tables together */
     ident_hash_table = CALLOCATE(IDENT_HASH_SIZE * 3, ident_hash_elem_t *,
-            TAG_IDENT_TABLE, "init_identifiers");
+                                 TAG_IDENT_TABLE, "init_identifiers");
     ident_hash_head = (ident_hash_elem_t **)&ident_hash_table[IDENT_HASH_SIZE];
     ident_hash_tail = (ident_hash_elem_t **)&ident_hash_table[2*IDENT_HASH_SIZE];
 

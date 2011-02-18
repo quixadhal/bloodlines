@@ -1,5 +1,5 @@
 void foo() {
     switch ("hi") {
-        case "foo".."bar":
+    case "foo".."bar":
     }
 }

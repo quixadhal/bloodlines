@@ -19,4 +19,4 @@ void do_tests() {
     ASSERT(!function_exists("bar", this_object()));
     ASSERT(function_exists("do_tests", this_object()) + ".c" == __FILE__);
 }
-
+     

@@ -1,7 +1,7 @@
 void do_tests() {
     string tmp = "this is a test";
     mixed *ret;
-
+    
     ret = explode(tmp, "");
     ASSERT(sizeof(ret) == sizeof(filter(ret, (: strlen($1) == 1 :))));
     ret = explode(tmp, " ");

@@ -5,7 +5,7 @@
    (and we can't control what compare function is used since it is at
    the mudlib level).  Based on algorithm appearing in _Data Structures and
    Algorithm Analysis_ by Cawnthorpe.
- */
+*/
 
 #include "std.h"
 #include "qsort.h"
@@ -17,14 +17,14 @@ INLINE_STATIC void doSwap (char *, char *, int);
 static void qSort (void *, int, int, int, int, int (*) ());
 
 INLINE_STATIC void doSwap (register char * one, register char * two,
-        register int size)
+                             register int size)
 {
     register char t;
 
     while (size--) {
-        t = *one;
-        *(one++) = *two;
-        *(two++) = t;
+	t = *one;
+	*(one++) = *two;
+	*(two++) = t;
     }
 }
 
@@ -35,15 +35,15 @@ static void qSort(void *v, int left, int right, int size, int rightmost, int (*c
     int i, last, szleft;
 
     if ((left >= right) || (left < 0) || (right > rightmost) || (right < 0)) {
-        return;
+	return;
     }
     szleft = size * left;
     doSwap((char *) v + szleft, (char *) v + (size * ((left + right) / 2)), size);
     last = left;
     for (i = left + 1; i <= right; i++) {
-        if ((*compar) ((char *) v + (size * i), (char *) v + szleft) < 0) {
-            doSwap((char *) v + (size * ++last), (char *) v + (size * i), size);
-        }
+	if ((*compar) ((char *) v + (size * i), (char *) v + szleft) < 0) {
+	    doSwap((char *) v + (size * ++last), (char *) v + (size * i), size);
+	}
     }
     doSwap((char *) v + szleft, (char *) v + (size * last), size);
     qSort(v, left, last - 1, size, rightmost, compar);
@@ -53,7 +53,7 @@ static void qSort(void *v, int left, int right, int size, int rightmost, int (*c
 void quickSort(void *a, int nmemb, int size, int (*compar) (void *, void *))
 {
     if (nmemb < 2) {
-        return;
+	return;
     }
     qSort(a, 0, nmemb - 1, size, nmemb - 1, compar);
 }

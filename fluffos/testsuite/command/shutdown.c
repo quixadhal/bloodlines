@@ -1,8 +1,8 @@
 #include <command.h>
 
-    int
+int
 main(string arg)
 {
-    shutdown(0);
-    return 1;
+	shutdown(0);
+	return 1;
 }

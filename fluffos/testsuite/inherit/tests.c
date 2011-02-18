@@ -1,13 +1,13 @@
 string test_desc;
 
-    void
+void
 describe_test(string desc)
 {
-    test_desc = desc;
+	test_desc = desc;
 }
 
-    string
+string
 query_test_info()
 {
-    return test_desc;
+	return test_desc;
 }

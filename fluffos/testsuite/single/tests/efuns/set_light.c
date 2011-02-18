@@ -10,7 +10,7 @@ void move_or_destruct(object ob) {
 
 void do_tests() {
     object ob;
-
+    
 #ifndef __NO_LIGHT__
     CHK;
     set_light(2);
@@ -26,12 +26,12 @@ void do_tests() {
     destruct(ob);
     light -= 3;
     CHK;
-
+    
     ob = new(__DIR__ "light");
     move_object(ob);
     light += 3;
     CHK;
-
+    
     destruct(ob);
     light -= 3;
     CHK;

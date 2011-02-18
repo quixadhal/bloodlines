@@ -3,7 +3,7 @@ inherit "/inherit/tests";
 void do_tests() {
     int i = 5;
     float f = 6.7;
-
+    
     f = to_float(i);
     ASSERT(f == 5.0);
 

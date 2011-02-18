@@ -55,7 +55,7 @@ void lfun3(mixed a1, mixed a2, mixed a3) {
 #define LOOP(n, x) for (i = 0; i < (n); i++) { x; }
 
 #define DIFF(z, n, x, y) START; LOOP(n, x); END; save = time; \
-    START; LOOP(n, y); END; REPORT(z, time - save)
+                         START; LOOP(n, y); END; REPORT(z, time - save)
 #define SINGLE(z, x) START; x; END; REPORT(z, time)
 
 /* Evidentally, 3.2 doesn't have token pasting */
@@ -200,7 +200,7 @@ int main() {
     TIME("if (x && y && z) TF",1000000, if (ss && sm && sm) { sm = 0; });
     TIME("if (x && y && z) TTF",1000000, if (ss && ss && sm) { sm = 0; });
     TIMEDIFF("if (x && y && z) TTT",1000000,  if (ss && ss && ss) { sm = 0; }, 
-            save);
+	 save);
 #endif
     return 1;
 }

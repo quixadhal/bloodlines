@@ -55,7 +55,7 @@ unsigned uvalarm (unsigned int usecs, unsigned int reload) {
     newv.it_value.tv_sec = usecs / USPS;
 
     if (setitimer(ITIMER_VIRTUAL, &newv, &old) == 0)
-        return old.it_value.tv_sec * USPS + old.it_value.tv_usec;
+	return old.it_value.tv_sec * USPS + old.it_value.tv_usec;
     /* else */
     return -1;
 }

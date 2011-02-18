@@ -1,7 +1,7 @@
 void do_tests() {
     int i = 5;
     float f = 6.7;
-
+    
     i = to_int(f);
     ASSERT(i == 6);
 

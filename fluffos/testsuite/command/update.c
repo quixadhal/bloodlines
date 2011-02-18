@@ -1,6 +1,6 @@
 #include <globals.h>
 
-    int
+int
 main(string file)
 {
     object obj;
@@ -8,14 +8,14 @@ main(string file)
     // need to call resolve_path() and query_cwd()
     if (!file) {
 #ifndef __NO_ADD_ACTION__
-        return notify_fail("update what?\n");
+	return notify_fail("update what?\n");
 #else
-        write("update what?\n");
-        return 1;
+	write("update what?\n");
+	return 1;
 #endif
     }
     if (obj = find_object(file)) {
-        destruct(obj);
+	destruct(obj);
     }
     load_object(file);
     return 1;
