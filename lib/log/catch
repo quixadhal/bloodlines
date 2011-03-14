@@ -1,0 +1,72 @@
+
+--- Bloodlines
+2011.03.14-11.11,25
+*restore_object(): Illegal file format - 1 (",])).
+Object: /secure/daemon/function (/<driver>) at line 0
+
+'preload' at /secure/daemon/master at line 252
+'CATCH' at /secure/daemon/master at line 252
+'create' at /secure/daemon/function at line 125
+'RestoreObject' at /secure/daemon/function (/lib/props/save.c) at line 72
+'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+'apply_unguarded' at /secure/daemon/master at line 606
+'CATCH' at /secure/daemon/master at line 606
+'<fake>' at /secure/daemon/function (/<driver>) at line 0
+
+--- Bloodlines
+2011.03.14-11.11,25
+**restore_object(): Illegal file format - 1 (",])).
+Object: /secure/daemon/master at line 608
+
+'preload' at /secure/daemon/master at line 252
+'CATCH' at /secure/daemon/master at line 252
+'create' at /secure/daemon/function at line 125
+'RestoreObject' at /secure/daemon/function (/lib/props/save.c) at line 72
+'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+'apply_unguarded' at /secure/daemon/master at line 608
+
+--- Bloodlines
+2011.03.14-11.11,25
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+'preload' at /secure/daemon/master at line 252
+'CATCH' at /secure/daemon/master at line 252
+'create' at /domains/default/room/wiz_hall at line 38
+'SetInventory' at /domains/default/room/wiz_hall (/lib/props/inventory.c) at line 101
+'eventLoadInventory' at /domains/default/room/wiz_hall (/lib/props/inventory.c) at line 58
+'eventLoadItem' at /domains/default/room/wiz_hall (/lib/props/inventory.c) at line 36
+'eventMove' at /domains/default/npc/tree#38 (/lib/npc.c) at line 308
+'eventCompleteMove' at /domains/default/npc/tree#38 (/lib/npc.c) at line 213
+'eventMove' at /domains/default/npc/tree#38 (/lib/props/move.c) at line 120
+'init' at /lib/bboard#37 at line 51
+'RegisterLocation' at /lib/bboard#37 at line 41
+'RegisterLocation' at /secure/daemon/bboard at line 89
+'restore_board' at /secure/daemon/bboard at line 57
+'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+'apply_unguarded' at /secure/daemon/master at line 606
+'CATCH' at /secure/daemon/master at line 606
+'<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+--- Bloodlines
+2011.03.14-11.11,25
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+'preload' at /secure/daemon/master at line 252
+'CATCH' at /secure/daemon/master at line 252
+'create' at /domains/default/room/wiz_hall at line 38
+'SetInventory' at /domains/default/room/wiz_hall (/lib/props/inventory.c) at line 101
+'eventLoadInventory' at /domains/default/room/wiz_hall (/lib/props/inventory.c) at line 58
+'eventLoadItem' at /domains/default/room/wiz_hall (/lib/props/inventory.c) at line 36
+'eventMove' at /domains/default/npc/tree#38 (/lib/npc.c) at line 308
+'eventCompleteMove' at /domains/default/npc/tree#38 (/lib/npc.c) at line 213
+'eventMove' at /domains/default/npc/tree#38 (/lib/props/move.c) at line 120
+'init' at /lib/bboard#37 at line 51
+'RegisterLocation' at /lib/bboard#37 at line 41
+'RegisterLocation' at /secure/daemon/bboard at line 89
+'restore_board' at /secure/daemon/bboard at line 57
+'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+'apply_unguarded' at /secure/daemon/master at line 608

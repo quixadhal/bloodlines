@@ -3,8 +3,8 @@
 #define DEFAULT_PROMPT           "> "
 #define HOST_IP                  "127.0.0.1"
 #define MUD_STATUS               "mudlib development"
-#define ADMIN_EMAIL              "admin@here"
-#define DEBUGGER                 "DEBUG_NAME"
+#define ADMIN_EMAIL              "quixadhal@shadowlord.org"
+#define DEBUGGER                 "quixadhal"
 #define LOCAL_NEWS_PREFIX        "nm"
 #define MUD_IS_LOCKED            0
 #define AUTO_WIZ                 0
@@ -14,8 +14,8 @@
 #define MINUTES_REBOOT_WARNING   20
 #define TIME_TO_RESET            3600
 #define RESET_ALL                0
-#define GMT_OFFSET               -32000
-#define LOCAL_TIME               0
+#define GMT_OFFSET               -18000
+#define LOCAL_TIME               1
 #define EXTRA_TIME_OFFSET        0
 #define MAX_LOG_SIZE             150000
 #define MAX_NET_DEAD_TIME        1800
@@ -48,7 +48,7 @@
 #define GLOBAL_MONITOR           0
 #define PLAYER_KILL              0
 #define NPC_CATCH_TELL_DEBUG     0
-#define SAME_IP_MAX              4
+#define SAME_IP_MAX              0
 #define COMPAT_MODE              1
 #define RETAIN_ON_QUIT           1
 #define FAST_COMBAT              1
@@ -56,7 +56,7 @@
 #define DEFAULT_PARSING          0
 #define CALL_OUT_LOGGING         0
 #define EVENTS_LOGGING           0
-#define DISABLE_REBOOTS          0
+#define DISABLE_REBOOTS          1
 #define BARE_EXITS               1
 #define COMMAND_MATCHING         1
 #define OBJECT_MATCHING          1
@@ -74,11 +74,11 @@
 #define IRN_PASSWORD3            "Delta"
 #define ROUTER_TESTING           1
 #define SEFUN_PLURALIZE          0
-#define LOG_REMOTE_CHANS         0
+#define LOG_REMOTE_CHANS         1
 #define LOG_LOCAL_CHANS          1
-#define ENABLE_CGI               0
-#define WWW_DIR_LIST             0
-#define ENABLE_CREWEB            0
+#define ENABLE_CGI               1
+#define WWW_DIR_LIST             1
+#define ENABLE_CREWEB            1
 #define F_TERMINAL_COLOR         1
 #define MAX_CALL_OUTS            750
 #define REQUIRE_QUESTING         1
@@ -94,5 +94,6 @@
 #define GRID                     1
 #define ENABLE_INSTANCES         0
 #define CED_DISABLED             1
+#define CHANNEL_PIPES            1
 
 #endif /* s_config_h */

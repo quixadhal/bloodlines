@@ -11,6 +11,11 @@
 #include <daemons.h>
 #include <message_class.h>
 
+inherit LIB_DAEMON;
+
+#define IMC2_C
+#include <pinkfish.h>
+
 //Which IMC version you wish to support.
 #define IMC_VERSION 2
 
@@ -135,8 +140,6 @@
 #define MODE_HUB_DOWN 4
 // Not used yet either.
 #define MODE_BANNED 5
-
-inherit LIB_DAEMON;
 
 string tmpstr, host, who_str;
 static string SaveFile, serverpass, clientpass;
@@ -978,156 +981,14 @@ void start_logon(){
     } 
 
     string pinkfish_to_imc2(string str){
-        // Foreground
-        str=replace_string(str,"%^BLACK%^","~x"); // Black
-        str=replace_string(str,"%^RED%^","~R"); // Red
-        str=replace_string(str,"%^GREEN%^","~G"); // Green
-        str=replace_string(str,"%^BLUE%^","~B"); // Blue
-        str=replace_string(str,"%^WHITE%^","~W"); // White
-        str=replace_string(str,"%^ORANGE%^","~y"); // Orange
-        str=replace_string(str,"%^CYAN%^","~c"); // Cyan
-        str=replace_string(str,"%^YELLOW%^","~Y"); // Yellow
-        str=replace_string(str,"%^MAGENTA%^","~p"); // Magenta -> purple sounds closest
-        str=replace_string(str,"%^GRAY%^","~w"); // Gray doesn't display on my MUD, bah :(
-        // Background
-        str=replace_string(str,"%^B_BLACK%^","^x");
-        str=replace_string(str,"%^B_RED%^","^R"); // Red
-        str=replace_string(str,"%^B_GREEN%^","^G"); // Green
-        str=replace_string(str,"%^B_BLUE%^","^b"); // Blue
-        str=replace_string(str,"%^B_WHITE%^","^W"); // White
-        str=replace_string(str,"%^B_ORANGE%^","^O"); // Orange
-        str=replace_string(str,"%^B_CYAN%^","^c"); // Cyan
-        str=replace_string(str,"%^B_YELLOW%^","^Y"); // Yellow
-        str=replace_string(str,"%^B_MAGENTA%^","^p"); // Magenta -> purple sounds closest
-        // Misc.
-        str=replace_string(str,"%^FLASH%^","~$"); // Flash -> Blink
-        str=replace_string(str,"%^BOLD%^","~L"); // Bold
-        str=replace_string(str,"%^RESET%^","~!");
-        //Replace anything that was done in %^BOLD%^RED%^ format and wasn't already caught
-        str=replace_string(str,"%^FLASH","~$"); // Flash -> Blink
-        str=replace_string(str,"%^BOLD","~L"); // Bold
-        str=replace_string(str,"%^RESET","~!");
-        str=replace_string(str,"FLASH%^","~$"); // Flash -> Blink
-        str=replace_string(str,"BOLD%^","~L"); // Bold
-        str=replace_string(str,"RESET%^","~!");
+        str = replace_strings( str, pinkfish_imc );
+        str = replace_strings( str, pinkfish_imc_cleanup );
         return str;
     }
 
     string imc2_to_pinkfish(string str){
-        string output="";
-        int sz;
-        str = replace_string(str+"", "/~", "/~~");
-        /*
-           For colors explanation, refer to IMC Packet Documentation by Xorith.
-           Thanks very much for putting that out, by the way. :)
-           Found at http://hub00.muddomain.com/imc2_protocol_doc.txt
-         */
-        sz=sizeof(str)-1;
-        while(sizeof(str)>1){
-            switch(str[0]){
-            case '~': // Foreground
-                switch(str[1]){
-                case 'Z': break; // Random
-                case 'x': output += "%^BLACK%^"; break; // Black
-                case 'r': output += "%^RED%^"; break; // Dark Red
-                case 'g': output += "%^GREEN%^"; break; // Dark Green
-                case 'y': output += "%^ORANGE%^"; break; // Orange
-                case 'b': output += "%^BLUE%^"; break; // Dark Blue
-                case 'p': output += "%^MAGENTA%^"; break; // Purple
-                case 'c': output += "%^CYAN%^"; break; // Cyan
-                case 'w': output += "%^WHITE%^"; break; // Grey
-                case 'D': output += "%^BLACK%^"; break; // Dark Grey
-                case 'z': output += "%^BLACK%^"; break; // Same as ~D
-                case 'R': output += "%^RED%^"; break; // Red
-                case 'G': output += "%^GREEN%^"; break; // Green
-                case 'Y': output += "%^YELLOW%^"; break; // Yellow
-                case 'B': output += "%^BLUE%^"; break; // Blue
-                case 'P': output += "%^MAGENTA%^"; break; // Pink
-                case 'C': output += "%^BLUE%^"; break; // Light Blue
-                case 'W': output += "%^WHITE%^"; break; // White
-
-                case 'm': output += "%^MAGENTA%^"; break; // same as p
-                case 'd': output += "%^WHITE%^"; break; // same as w
-                case 'M': output += "%^MAGENTA%^"; break; // same as P
-                    // Misc.
-                case '!': output += "%^RESET%^"; break; // Reset
-                case 'L': output += "%^BOLD%^"; break; // Bold
-                case 'u': break; // Underline
-                case '$': output += "%^FLASH%^"; break; // Blink
-                case 'i': break; // Italic
-                case 'v': break; // Reverse
-                case 's': break; // Strike-thru
-
-                case '~': output += "~"; break; // ~~ prints as ~
-                default : output += "~"; // Don't skip over this
-                    // (cheap hack is to add a character in front so the [2..] thing still works)
-                    str = " "+str;
-                    break;
-                }
-                str=str[2..];
-                break;
-            case '^':  // Background
-                switch(str[1]){
-                case 'Z': break; // Random
-                case 'x': output += "%^B_BLACK%^"; break; // Black
-                case 'r': output += "%^B_RED%^"; break; // Dark Red
-                case 'g': output += "%^B_GREEN%^"; break; // Dark Green
-                case 'O': output += "%^B_ORANGE%^"; break; // Orange
-                case 'B': output += "%^B_BLUE%^"; break; // Dark Blue
-                case 'p': output += "%^B_MAGENTA%^"; break; // Purple
-                case 'c': output += "%^B_CYAN%^"; break; // Cyan
-                case 'w': output += "%^B_WHITE%^"; break; // Grey
-                case 'z': output += "%^B_BLACK%^"; break; // Dark Grey
-                case 'R': output += "%^B_RED%^"; break; // Red
-                case 'G': output += "%^B_GREEN%^"; break; // Green
-                case 'Y': output += "%^B_YELLOW%^"; break; // Yellow
-                case 'b': output += "%^B_BLUE%^"; break; // Blue
-                case 'P': output += "%^B_MAGENTA%^"; break; // Pink
-                case 'C': output += "%^B_BLUE%^"; break; // Light Blue
-                case 'W': output += "%^B_WHITE%^"; break; // White
-                case '^': output += "^"; break; // ^^ prints as ^
-                default : output += "^"; // Don't skip over this
-                    // (cheap hack is to add a character in front so the [2..] thing still works)
-                    str = " "+str;
-                    break;
-                }
-                str=str[2..];
-                break;
-            case '`': // Blinking Foreground
-                switch(str[1]){
-                case 'Z': output += "%^FLASH%^"; break; // Random
-                case 'x': output += "%^FLASH%^%^BLACK%^"; break; // Black
-                case 'r': output += "%^FLASH%^%^RED%^"; break; // Dark Red
-                case 'g': output += "%^FLASH%^%^GREEN%^"; break; // Dark Green
-                case 'O': output += "%^FLASH%^%^ORANGE%^"; break; // Orange
-                case 'b': output += "%^FLASH%^%^BLUE%^"; break; // Dark Blue
-                case 'p': output += "%^FLASH%^%^MAGENTA%^"; break; // Purple
-                case 'c': output += "%^FLASH%^%^CYAN%^"; break; // Cyan
-                case 'w': output += "%^FLASH%^%^WHITE%^"; break; // Grey
-                case 'z': output += "%^FLASH%^%^BLACK%^"; break; // Dark Grey
-                case 'R': output += "%^FLASH%^%^RED%^"; break; // Red
-                case 'G': output += "%^FLASH%^%^GREEN%^"; break; // Green
-                case 'Y': output += "%^FLASH%^%^YELLOW%^"; break; // Yellow
-                case 'B': output += "%^FLASH%^%^BLUE%^"; break; // Blue
-                case 'P': output += "%^FLASH%^%^MAGENTA%^"; break; // Pink
-                case 'C': output += "%^FLASH%^%^BLUE%^"; break; // Light Blue
-                case 'W': output += "%^FLASH%^%^WHITE%^"; break; // White
-                case '`': output += "`"; break; // `` prints as `
-                default : output += "`"; // Don't skip over this
-                    // (cheap hack is to add a character in front so the [2..] thing still works)
-                    str = " "+str;
-                    break;
-                }
-                str=str[2..];
-                break;
-            default:
-                output += str[0..0];
-                str=str[1..];
-                break;
-            }
-        }
-        output += str;
-        return output;
+        str = replace_strings( str, imc_pinkfish );
+        return str;
     }
 
     private void who_reply_in(string origin, string target, mapping data){
