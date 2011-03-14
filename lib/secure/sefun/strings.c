@@ -830,3 +830,57 @@ string cleaned_end(string str){
     return str;
 }
 
+/*
+Works like explode with REVERSIBLE_EXPLODE_STRING, that is:
+   implode(explode(str, del), del)==str
+*/
+string* rexplode(string str, string del)
+{
+#ifdef __REVERSIBLE_EXPLODE_STRING__
+   return explode(str, del);
+#elif defined(__SANE_EXPLODE_STRING__)
+   if(!strlen(str))
+      return ({""});
+   return explode(del+str+del, del);
+#else
+   error("Define REVERSIBLE_EXPLODE_STRING or SANE_EXPLODE_STRING");
+#endif
+}
+
+/*
+Works like explode with SANE_EXPLODE_STRING, that is like 
+reversible_explode_string but a single delimiter is removed 
+from the both start and end of the output array if present.
+*/
+string* sexplode(string str, string del)
+{
+#ifdef __REVERSIBLE_EXPLODE_STRING__
+   mixed m;
+   if(!strlen(str))
+      return ({});
+   m=explode(str, del);
+   if(m[<1]=="")
+      m=m[0..<2];
+   if(!strlen(str))
+      return ({});
+   if(m[0]=="")
+      m=m[1..<1];
+   return m;
+#elif defined(__SANE_EXPLODE_STRING__)
+   return explode(str, del);
+#else
+   error("Define REVERSIBLE_EXPLODE_STRING or SANE_EXPLODE_STRING");
+#endif
+}
+
+string replace_strings(string str, mapping m) {
+    int i;
+    string *k = keys(m);
+    string *v = values(m);
+
+    for(i = 0; i < sizeof(k); i++) {
+        str = replace_string(str, k[i], v[i]);
+    }
+    return str;
+}
+

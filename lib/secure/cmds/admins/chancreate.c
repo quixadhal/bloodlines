@@ -10,12 +10,12 @@ mixed cmd(string args) {
     int mode = 0;
 
     if(!archp(previous_object())) return 0;
-    write("This command is for creating Intermud-3 channels. "+
-            "You almost certainly do not need to use it. If you are "+
-            "100% sure you know what you are doing and in fact do need "+
-            "to create an Intermud-3 channel, then please edit this "+
-            "command to remove this warning and the return that follows it.");
-    return 1;
+//    write("This command is for creating Intermud-3 channels. "+
+//            "You almost certainly do not need to use it. If you are "+
+//            "100% sure you know what you are doing and in fact do need "+
+//            "to create an Intermud-3 channel, then please edit this "+
+//            "command to remove this warning and the return that follows it.");
+//    return 1;
     if( !args || args == "") return "Huh?";
     if(sscanf(args,"%s %d",chan,mode) != 2) chan = args;
     if(mode > 2 || mode < 0) return "Invalid mode.";

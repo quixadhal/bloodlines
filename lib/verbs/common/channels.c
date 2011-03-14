@@ -32,6 +32,8 @@ mixed do_channels_str(string str) {
 
 int cmd(string str) {
     string *channels;
+    mapping allchannels;
+    string *allimc2channels;
     string *remote = ({});
     string *local = ({});
     string *i3 = ({});
@@ -40,6 +42,22 @@ int cmd(string str) {
     int i;
 
     channels = distinct_array(this_player()->GetChannels());
+    allchannels = INTERMUD_D->GetChannelList();
+    allimc2channels = IMC2_D->GetChanList();
+    foreach(string k in keys(allchannels)){
+        remote += ({ k });
+        allchannels[k] += ({ " I3 " });
+        //i3 += ({ k });
+    }
+    foreach(string k in allimc2channels){
+        array d = explode(k, ":");
+        string name = d[1];
+        string server = d[0];
+
+        allchannels[name] = ({ server, 0, "IMC2" });
+        remote += ({ name });
+        //imc2 += ({ name });
+    }
 
     if(!str) str = "";
 
@@ -68,6 +86,36 @@ int cmd(string str) {
         }
         else local += ({ chan });
     }
+
+    remote = distinct_array(remote);
+    i3 = distinct_array(i3);
+    imc2 = distinct_array(imc2);
+
+    if(str=="list"){
+        ret += "ALL CHANNELS:\n";
+        foreach(string k in sort_array(keys(allchannels), 1)){
+            if(member_array(k, imc2) != -1) {
+                ret += "%^GREEN%^";
+                ret += "  IMC2  ";
+            } else if(member_array(k, i3) != -1) {
+                ret += "%^GREEN%^";
+                ret += "   I3   ";
+            } else if(member_array(k, local) != -1) {
+                ret += "%^GREEN%^";
+                ret += "  LOCAL ";
+            } else {
+                ret += "%^RED%^";
+                ret += "- " + allchannels[k][2] + " ";
+            }
+            ret += k + " @ " + allchannels[k][0] + "\n";
+            ret += "%^RESET%^";
+        }
+        ret += "\n";
+        this_player()->eventPage( explode(ret, "\n") );
+        //write(ret);
+        return 1;
+    }
+
     if(sizeof(remote)){
         ret += "REMOTE CHANNELS\n---------------\n";
         if(sizeof(imc2)){

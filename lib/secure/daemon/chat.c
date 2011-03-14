@@ -9,7 +9,7 @@
  */
 
 #ifndef LOG_REMOTE_CHANS
-#define LOG_REMOTE_CHANS 0
+#define LOG_REMOTE_CHANS 1
 #endif
 
 #ifndef LOG_LOCAL_CHANS
@@ -17,10 +17,12 @@
 #endif
 
 #ifndef CHANNEL_PIPES
-#define  CHANNEL_PIPES 0
+#define  CHANNEL_PIPES 1
 #endif
 
+#include <privs.h>
 #include <lib.h>
+#include <save.h>
 #include <pov.h>
 #include <daemons.h>
 #include <origin.h>
@@ -29,7 +31,79 @@
 
 inherit LIB_DAEMON;
 
-string suspect,site,chan;
+mapping chatters = ([]);
+int chat_counter = 0;
+static private mapping hour_colors = ([
+        "00" : "%^DARKGREY%^",
+        "01" : "%^DARKGREY%^",
+        "02" : "%^DARKGREY%^",
+        "03" : "%^DARKGREY%^",
+        "04" : "%^RED%^",
+        "05" : "%^RED%^",
+        "06" : "%^ORANGE%^",
+        "07" : "%^ORANGE%^",
+        "08" : "%^YELLOW%^",
+        "09" : "%^YELLOW%^",
+        "10" : "%^GREEN%^",
+        "11" : "%^GREEN%^",
+        "12" : "%^LIGHTGREEN%^",
+        "13" : "%^LIGHTGREEN%^",
+        "14" : "%^WHITE%^",
+        "15" : "%^WHITE%^",
+        "16" : "%^LIGHTCYAN%^",
+        "17" : "%^LIGHTCYAN%^",
+        "18" : "%^CYAN%^",
+        "19" : "%^CYAN%^",
+        "20" : "%^LIGHTBLUE%^",
+        "21" : "%^LIGHTBLUE%^",
+        "22" : "%^BLUE%^",
+        "23" : "%^BLUE%^",
+        ]);
+
+static private array chat_colors = ({
+            "%^RED%^",
+            "%^GREEN%^",
+            "%^ORANGE%^",
+            "%^BLUE%^",
+            "%^MAGENTA%^",
+            "%^CYAN%^",
+            "%^DARKGREY%^",
+            "%^LIGHTRED%^",
+            "%^LIGHTGREEN%^",
+            "%^YELLOW%^",
+            "%^LIGHTBLUE%^",
+            "%^PINK%^",
+            "%^LIGHTCYAN%^",
+            "%^WHITE%^",
+
+            "%^B_RED%^%^WHITE%^",
+            "%^B_GREEN%^%^WHITE%^",
+            "%^B_BLUE%^%^WHITE%^",
+            "%^B_MAGENTA%^%^WHITE%^",
+
+            "%^B_RED%^%^YELLOW%^",
+            "%^B_GREEN%^%^YELLOW%^",
+            "%^B_BLUE%^%^YELLOW%^",
+            "%^B_MAGENTA%^%^YELLOW%^",
+
+            "%^B_RED%^%^BLACK%^",
+            "%^B_GREEN%^%^BLACK%^",
+            "%^B_MAGENTA%^%^BLACK%^",
+            "%^B_CYAN%^%^BLACK%^",
+            "%^B_YELLOW%^%^BLACK%^",
+            "%^B_WHITE%^%^BLACK%^",
+
+            "%^B_CYAN%^%^BLUE%^",
+            "%^B_YELLOW%^%^BLUE%^",
+            "%^B_WHITE%^%^BLUE%^",
+
+            "%^B_YELLOW%^%^GREEN%^",
+            "%^B_WHITE%^%^GREEN%^",
+        });
+
+static string SaveFile;
+
+static string chan;
 static private mapping Channels;
 static private mapping chanlast;
 
@@ -49,7 +123,7 @@ static private mapping localchans = ([
         "Server02:igame": "i2game2",
         "Server02:inews": "i2news2",
         "Server01:ibuild": "ibuild2",
-        "Server01:ichat": "ichat2",
+        "Server01:ichat": "mbchat",
         "Server01:pchat": "pchat2",
         "Server01:i2game": "i2game2",
         "Server01:i2chat": "i2chat2",
@@ -75,7 +149,7 @@ static private mapping localchans = ([
                 "i2game2": "Server02:igame",
                 "i2news2": "Server02:inews",
                 "ibuild2": "Server01:ibuild",
-                "ichat2": "Server01:ichat",
+                "mbchat": "Server01:ichat",
                 "pchat2": "Server01:pchat",
                 "i2game2": "Server01:i2game",
                 "i2chat2": "Server01:i2chat",
@@ -98,12 +172,12 @@ static private mapping tags = ([
         "gossip"      : "%^BOLD%^B_BLUE%^",
 
         "ds"          : "%^YELLOW%^",
-        "dchat"	 :"%^CYAN%^",
+        "dchat"	      : "%^CYAN%^",
         "intergossip" : "%^GREEN%^",
         "intercre"    : "%^ORANGE%^",
 
         "ibuild2"      : "%^B_RED%^%^YELLOW%^",
-        "ichat2"       : "%^B_RED%^%^GREEN%^",
+        "mbchat"       : "%^B_RED%^%^GREEN%^",
         "pchat2"       : "%^B_RED%^%^BOLD%^GREEN%^",
         "i2game2"      : "%^B_BLUE%^",
         "i2chat2"      : "%^B_GREEN%^",
@@ -180,6 +254,12 @@ static void create() {
     daemon::create();
     SetNoClean(1);
     Channels = ([]);
+
+    SaveFile = save_file(SAVE_CHAT);
+    if(unguarded((: file_exists(SaveFile) :))){
+        RestoreObject(SaveFile);
+    }
+    SaveObject(SaveFile);
 
     call_out("Setup", 10);
 
@@ -422,6 +502,78 @@ int cmdChannel(string verb, string str){
                 }
                 verb = replace_string(verb,"|file","");
             }
+            if(grepp(verb,"|eval")){
+                string file, filename, evaldefs;
+                mixed ret;
+
+                if(!member_group(previous_object(), PRIV_SECURE)) {
+                    log_file("adm/eval", query_privs(previous_object())
+                            +" ("+ctime(time())+"): eval "+str+"\n");
+                }
+                if( !str ) { notify_fail( "Syntax: \"chan|eval <lpc commands>\".\n" ); return 0; }
+            
+                evaldefs = "";
+            
+                filename = user_path(previous_object()->GetKeyName());
+                if( file_size( filename ) != -2 && !securep(previous_object()) ) {
+                    notify_fail( "You must have a valid home directory!\n" );
+                    return 0;
+                }
+            
+                if(file_exists(filename + "evaldefs.h"))
+                    evaldefs = "#include \"" + filename + "evaldefs.h\"\n";
+            
+                // The includes in the file aren't necessary (and can be removed if the
+                // include files on your mud are called something different). They're
+                // just to make things like "eval return children( USER )" possible.
+                file =
+                    ""+
+                    "#include <lib.h>\n"+
+                    "#include <cgi.h>\n"+
+                    "#include <dirs.h>\n"+
+                    "#include <privs.h>\n"+
+                    "#include <logs.h>\n"+
+                    "#include <virtual.h>\n"+
+                    "#include <cfg.h>\n"+
+                    "#include <clock.h>\n"+
+                    "#include <save.h>\n"+
+                    "#include ROOMS_H\n"+
+                    "#include <localtime.h>\n"+
+                    "#include <daemons.h>\n"+
+                    "#include <network.h>\n"+
+                    "#include <news.h>\n"+
+                    "#include <objects.h>\n"+
+                    "#include <commands.h>\n"+
+                    "#include <armor_types.h>\n"+
+                    "#include <damage_types.h>\n"+
+                    "#include <position.h>\n"+
+                    "#include <runtime_config.h>\n"+
+                    "#include <terrain_types.h>\n"+
+                    "#include <medium.h>\n"+
+                    "#include <body_types.h>\n"+
+                    "#include <size_types.h>\n"+
+                    "#include <respiration_types.h>\n"+
+                    "#include <message_class.h>\n"+
+                    "inherit LIB_ITEM;\n"+
+                    evaldefs+
+                    "mixed eval() { " + str + "; }\n"+
+                    "";
+                filename += "CMD_EVAL_TMP_FILE.c";
+                if(securep(previous_object())){
+                    filename = "/secure/tmp/" + previous_object()->GetKeyName() +
+                        "_CMD_EVAL_TMP_FILE.c";
+                }
+                rm( filename );
+                if( ret = find_object( filename ) ) destruct( ret );
+                write_file( filename, file,1 );
+                ret = call_other(filename, "eval");
+                //str = wrap( "Result = " + identify( ret ) );
+                //str = identify(ret);
+                str = ret;
+                if( ret = find_object( filename ) ) destruct( ret );
+
+                verb = replace_string(verb,"|eval","");
+            }
         }
 
         if(sscanf(verb, "%s|%s", foo, bar) == 2) verb = foo;
@@ -504,6 +656,29 @@ int cmdChannel(string verb, string str){
     }
     //******END LIST******
 
+    if( verb == "listall" ) {
+        mapping i3_list;
+        mapping imc2_list;
+        mapping results = ([]);
+        array i3k;
+        array i2k;
+        int n;
+
+        i3_list = INTERMUD_D->GetMudList();
+        i3k = keys(i3_list);
+        imc2_list = IMC2_D->getmudinfo();
+        i2k = keys(imc2_list);
+
+        for( n = 0; n < sizeof(i3k); n++ ) {
+            results[i3k[n]] = ({});
+            // SERVICES_D->eventSendChannelWhoRequest(ch, i3k[i]);
+        }
+        for( n = 0; n < sizeof(i2k); n++ ) {
+            results[i2k[n]] = ({});
+            // IMC2_D->chanwho_out(
+        }
+        return 1;
+    }
 
     //All emotes will fall into this IF structure and get tagged
     //as emote = 1 or forcedemote = 1
@@ -766,16 +941,280 @@ int cmdChannel(string verb, string str){
     return 1;
 }
 
+// Get an hour::minute timestamp
+string getDayTime() {
+    string the_time;
+
+    the_time = timestamp()[11..15];
+    the_time[2] = ':';
+
+    return the_time;
+}
+
+// Get an hour:minute timestamp with daytime color.
+varargs string getColorDayTime(string prefix, string suffix) {
+    string the_time;
+
+    the_time = getDayTime();
+
+    if(undefinedp(prefix)) prefix = "";
+    if(undefinedp(suffix)) suffix = "";
+    return hour_colors[the_time[0..1]] + prefix + the_time + suffix + "%^RESET%^";
+}
+
+// Sets a particular user to be a particular color.
+int setWhoColor(string who, string color) {
+    string shortwho;
+
+    shortwho = lower_case(explode(who, "@")[0]);
+    if (member_array(shortwho,keys(chatters)) >= 0) {
+        chatters[shortwho] = color;
+        SaveObject(SaveFile);
+        return 1;
+    }
+    return 0;
+}
+
+// Figure out what color to make this guy.
+string getSpeakerColor(string who) {
+    string color, shortwho;
+
+    shortwho = lower_case(explode(who, "@")[0]);
+    if (member_array(shortwho,keys(chatters)) >= 0) {
+        color = chatters[shortwho];
+    } else {
+        color = chat_colors[chat_counter % sizeof(chat_colors)];
+        chatters[shortwho] = color;
+        chat_counter++;
+        SaveObject(SaveFile);
+    }
+    return color;
+}
+
+// Show who is mapped to a particular color.
+mapping mapSpeakerColors() {
+    int i;
+    array k, v;
+    mapping m;
+    k = keys(chatters);
+    v = values(chatters);
+    m = ([]);
+
+    for(i = 0; i < sizeof(k); i++) {
+        m[v[i]] = undefinedp(m[v[i]]) ? ({ k[i] }) : m[v[i]] + ({ k[i] });
+    }
+
+    return m;
+}
+
+varargs string showSpeakerColors(string who) {
+    int i;
+    mapping m;
+    string s = "";
+    array k;
+    int t = 0;
+    int w;
+    string color;
+
+    if(!undefinedp(who)) {
+        string shortwho = lower_case(explode(who, "@")[0]);
+        if (member_array(shortwho,keys(chatters)) >= 0) {
+            color = chatters[shortwho];
+        }
+    }
+    w= this_player()->GetScreen()[0] || 80;
+    m= mapSpeakerColors();
+    k = sort_array(keys(m), 1);
+    for(i = 0; i < sizeof(k); i++) {
+        string nk;
+        int c;
+        string * lines;
+        int j;
+
+        if(!undefinedp(color)) {
+            if(k[i] != color) {
+                continue;
+            }
+        }
+        nk = replace_string(k[i], "%^", "");
+        c = sizeof(m[k[i]]);
+        if(undefinedp(color)) {
+            lines = explode(wrap(implode(sort_array(m[k[i]], 1), ", "), w - 30), "\n");
+            for(j = 1; j < sizeof(lines); j++) {
+                lines[j] = sprintf("%%^RESET%%^%29s%s%s", "", k[i], lines[j]);
+            }
+            s += sprintf("(%4d) %-20s: %s%s%s\n", c, nk, k[i], implode(lines, "\n"), "%^RESET%^");
+        } else {
+            s += sprintf("(%d) %s: %s%s%s\n", c, nk, k[i], implode(sort_array(m[k[i]], 1), ", "), "%^RESET%^");
+        }
+
+        t += c;
+    }
+    if(undefinedp(color)) {
+        s += sprintf("(%4d) Total\n", t);
+    }
+
+    return s;
+}
+
+varargs string getColorSpeakerName(string speaker, string prefix, string suffix) {
+    string speakercolor;
+
+    if(undefinedp(prefix)) prefix = "";
+    if(undefinedp(suffix)) suffix = "";
+    speakercolor = getSpeakerColor(speaker);
+
+    return speakercolor + prefix + speaker + suffix + "%^RESET%^";
+}
+
+string getChannelColor(string ch) {
+    string chancolor;
+    string prev = base_name(previous_object());
+
+    if (member_array(lower_case(ch),keys(tags)) >= 0) { //If there's an entry for the channel
+        chancolor = tags[lower_case(ch)]; //Use it
+    } else { //Otherwise
+        if(member_array(ch, local_chans) < 0 && (prev == IMC2_D ||
+                        member_array(ch, (keys(INTERMUD_D->GetChannelList()) 
+                                || ({}))) < 0)){
+            chancolor = tags["default-IMC2"]; //Use the default IMC2 entry
+        }
+        else {
+            chancolor = tags["default"]; //Use the default entry
+        }
+    }
+
+    return chancolor;
+}
+
+varargs string getColorChannelName(string ch, string prefix, string suffix) {
+    string chancolor;
+
+    if(undefinedp(prefix)) prefix = "";
+    if(undefinedp(suffix)) suffix = "";
+    chancolor = getChannelColor(ch);
+
+    return chancolor + prefix + ch + suffix + "%^RESET%^";
+}
+
+string formChatString(string channel, string speaker, string msg) {
+    string the_time;
+    string the_chan;
+    string the_fool;
+
+    //string chatlayout = "%s %s<%s>%s %s";
+    //string chatlayout = "%s says, %s(%s)%s '%s'";
+    
+    the_time = getColorDayTime();
+    the_chan = getColorChannelName(channel, "<", ">");
+    the_fool = getColorSpeakerName(speaker, "", ":");
+
+    // HH:MM <ichat> foo@bar: blah blah blah
+    return implode( ({ the_time, the_chan, the_fool, "" }), " ") + msg;
+}
+
+varargs string * formEmoteString(string channel, string speaker, string msg, string target, string target_msg) {
+    string the_time;
+    string the_chan;
+    string the_fool;
+    string the_victim;
+    string main_msg;
+    string tar_msg;
+    string msg_body;
+
+    //string emotelayout = "%s<%s>%s %s";
+    //string emotelayout = "%s(%s)%s %s";
+    
+    //tn("CHAT_D->formEmoteString: "+identify(channel)+", "+identify(speaker)+", "+identify(msg)+
+    //        ", "+identify(target)+", "+identify(target_msg), "green");
+    main_msg = msg;
+    the_time = getColorDayTime();
+    the_chan = getColorChannelName(channel, "<", ">");
+    the_fool = getColorSpeakerName(speaker);
+
+    msg_body = replace_string(main_msg, "$N", speaker);
+    main_msg = replace_string(main_msg, "$N", the_fool);
+    if(!undefinedp(target) && !undefinedp(target_msg) && stringp(target) && stringp(target_msg)) {
+        msg_body = replace_string(msg_body, "$O", target);
+        main_msg = replace_string(main_msg, "$O", target);
+        // Don't do this, as it can pollute the table with fake entries
+        // or if you DO validate them, it'll be a lot of lag for a tiny
+        // bit of bling...
+        //the_victim = getColorSpeakerName(target);
+        //main_msg = replace_string(main_msg, "$O", the_victim);
+        
+        tar_msg = target_msg;
+        tar_msg = replace_string(tar_msg, "$N", the_fool);
+        tar_msg = replace_string(tar_msg, "$O", "you");
+    }
+
+    // HH:MM <ichat> foo@bar blah blah blah
+    main_msg = implode( ({ the_time, the_chan, "" }), " ") + main_msg;
+    return ({ main_msg, tar_msg, msg_body });
+}
+
+int shouldIgnore(object listener, string who) {
+    int ignore = 0;
+    string suspect, site;
+
+    if(sscanf(who, "%s@%s", suspect, site) < 2) {
+        suspect = who;
+        site = "@"+mud_name();
+    }
+    else site = "@"+site;
+    if(sizeof(listener->GetMuffed())) {
+        foreach(string jerk in listener->GetMuffed()) {
+            if(jerk && lower_case(suspect) == lower_case(jerk)) ignore = 1;
+            if(jerk && lower_case(site) == lower_case(jerk)) ignore = 1;
+            if(jerk && (lower_case(suspect) + lower_case(site)) == lower_case(jerk)) ignore = 1;
+        }
+    }
+
+    return ignore;
+}
+
+varargs void eventChannelMsgToListeners(string who, string ch, string msg,
+        int emote, string target, string targmsg) {
+    object *obs;
+    object ob;
+    string tmp;
+
+    if( target && (ob = find_player(convert_name(target))) ) {
+        target = ob->GetName();
+    }
+
+    if(Channels[ch]){
+        obs = filter(Channels[ch], (: $1 && !($1->GetBlocked($(ch))) :));
+        foreach(object listener in obs) {
+            if( emote == 1 && listener == ob) continue;
+            if( shouldIgnore(listener, who) ) continue;
+            tmp = msg;
+            if(listener->GetNoChanColors()) tmp = decolor(tmp);
+            if(CanListen(listener,ch) && !(listener->GetMuted(ch)))
+                listener->eventPrint(tmp, MSG_CHAN);
+        }
+        if( emote == 1 && ob && member_array(ob, obs) != -1 ) {
+            if( !(ob->GetBlocked(ch)) ) {
+                if( !shouldIgnore(ob, who) ) {
+                    tmp = targmsg;
+                    if(ob->GetNoChanColors()) tmp = decolor(tmp);
+                    if(CanListen(ob,ch)&& !(ob->GetMuted(ch)))
+                        ob->eventPrint(tmp, MSG_CHAN);
+                }
+            }
+        }
+    }
+}
+
 varargs void eventSendChannel(string who, string ch, string msg, int emote,
         string target, string targmsg) {
     object channeler = find_player(lower_case(who));
     int terminal;
     string prev = base_name(previous_object());
     string pchan,pmsg;
-    string chatlayout = "%s %s<%s>%s %s";
-    string emotelayout = "%s<%s>%s %s";
-    //string chatlayout = "%s says, %s(%s)%s '%s'";
-    //string emotelayout = "%s(%s)%s %s";
+    string *whobits;
+
+    //tn("CHAT_D->eventSendChannel: "+identify(who)+", "+identify(ch)+", "+identify(msg), "green");
 
     if(prev == INSTANCES_D){
         terminal = 1;
@@ -785,6 +1224,7 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
     if(!terminal){
         string rch = GetRemoteChannel(ch);
         if(member_array(rch, remote_chans) == -1){
+            //tn("CHAT_D->eventSendChannel: handing off to INSTANCES_D.", "green");
             INSTANCES_D->eventSendChannel(who,ch,msg,emote,target,targmsg);
         }
     }
@@ -803,159 +1243,89 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
     }
 
     if(member_array(ch, syschans) != -1) {
+        //tn("CHAT_D->eventSendChannel: emote = 0 due to syschans.", "green");
         emote = 0;
     }
     if(channeler){
         if(!CanTalk(channeler, ch) && member_array(ch, syschans) == -1){
+            //tn("CHAT_D->eventSendChannel: !CanTalk(ch)", "green");
             return;
         }
     }
     if( file_name(previous_object()) == SERVICES_D || 
             file_name(previous_object()) == IMC2_D) {
         ch = GetLocalChannel(ch);
-        if( emote && sizeof(who)) msg = replace_string(msg, "$N", who);
+        if( emote && sizeof(who)) {
+            //msg = replace_string(msg, "$N", who);
+            //tn("CHAT_D->eventSendChannel: emote + who + SERVICES: "+identify(ch), "green");
+            //DEBUG
+            //msg = replace_string(msg, "$N", getColorSpeakerName(who, "<SERV_IMC2:", ":SERV_IMC2>"));
+            msg = replace_string(msg, "$N", getColorSpeakerName(who));
+        }
     }
-    else if( origin() != ORIGIN_LOCAL && previous_object() != master() &&
+    else
+    {
+        if( origin() != ORIGIN_LOCAL &&
+            previous_object() != master() &&
             file_name(previous_object()) != PARTY_D && 
             file_name(previous_object()) != UPDATE_D && 
             file_name(previous_object()) != INSTANCES_D && 
-            member_array(ch, syschans) == -1){
-        return;
+            member_array(ch, syschans) == -1)
+        {
+            //tn("CHAT_D->eventSendChannel: ORIGIN_LOCAL/master/etc check.", "green");
+            return;
+        }
     }
+    //tn("CHAT_D->eventSendChannel: after SERVICES check.", "green");
     prev = file_name(previous_object());
     if(!Channels[ch] && prev != SERVICES_D && prev != INSTANCES_D){
+        //tn("CHAT_D->eventSendChannel: Channels[ch] check.", "green");
         return;
     }
     if( emote ) {
-        object *obs;
         object ob;
-        string this_msg, tmp;
+        string *results;
 
+        //tn("CHAT_D->eventSendChannel: in emote.", "green");
         if( target && (ob = find_player(convert_name(target))) ) {
+            //tn("CHAT_D->eventSendChannel: target && find_player.", "green");
             target = ob->GetName();
         }
 
-        //Colorize emote channels
-        if (member_array(lower_case(ch),keys(tags)) >= 0){
-            this_msg = tags[lower_case(ch)];
-        } else { 
-            if(member_array(ch, local_chans) < 0 && (prev == IMC2_D ||
-                        member_array(ch, (keys(INTERMUD_D->GetChannelList()) 
-                                || ({}))) < 0)){
-                this_msg = tags["default-IMC2"]; //Use the default IMC2 entry
-            }
-            else {
-                this_msg = tags["default"]; //Use the default entry
-            }
-        }
+        //tn("CHAT_D->eventSendChannel: just before formEmoteString.", "green");
+        results = formEmoteString(ch, who, msg, target, targmsg);
+        //tn("CHAT_D->eventSendChannel: just after formEmoteString.", "green");
+        msg = results[0];
+        targmsg = results[1];
+        pmsg = results[2];
 
-        msg = replace_string(msg, "$N", who);
-        if( target ) {
-            msg = replace_string(msg, "$O", target);
-            targmsg = replace_string(targmsg, "$N", who);
-            targmsg = capitalize(replace_string(targmsg, "$O", "you"));
-        }
+        //tn("CHAT_D->eventSendChannel: emote code: "+identify(results)+", "+identify(who)+", "+identify(ch)
+        //        +", "+identify(msg)+", "+identify(emote)+", "+identify(target)+", "
+        //        +identify(targmsg), "green");
 
-        //Put together the channel emote message
-        tmp = sprintf(emotelayout, this_msg, ch, "%^RESET%^", msg);
-
-        //Store message in the history list
-        eventAddLast(ch, tmp, pchan, msg);
-
-        if(Channels[ch]){
-            obs = filter(Channels[ch], (: $1 && !($1->GetBlocked($(ch))) :));
-            foreach(object listener in obs) {
-                int ignore;
-                if(sscanf(who,"%s@%s",suspect,site) < 2) {
-                    suspect = who;
-                    site = "@"+mud_name();
-                }
-                else site = "@"+site;
-                if( listener == ob ) continue;
-                if(sizeof(listener->GetMuffed()))
-                    foreach(string jerk in listener->GetMuffed()){
-                        if(jerk && lower_case(suspect) == lower_case(jerk)){ 
-                            ignore = 1;
-                        }
-                        if(jerk && lower_case(site) == lower_case(jerk)){
-                            ignore = 1;
-                        }
-                    }
-                if(listener->GetNoChanColors()) tmp = decolor(tmp);
-                if(!ignore && CanListen(listener,ch) && 
-                        !(listener->GetMuted(ch))){
-                    listener->eventPrint(tmp, MSG_CHAN);
-                }
-                ignore = 0;
-            }
-            if( member_array(ob, obs) != -1 ) {
-                if( ob && !(ob->GetBlocked(ch)) ) {
-                    int ignore;
-                    tmp = sprintf(emotelayout, this_msg, ch, "%^RESET%^", targmsg);
-                    if(sizeof(ob->GetMuffed()))
-                        foreach(string jerk in ob->GetMuffed()){
-                            if(jerk && lower_case(suspect) == lower_case(jerk)) ignore = 1;
-                            if(jerk && lower_case(site) == lower_case(jerk)) ignore = 1;
-                        }
-                    if(ob->GetNoChanColors()) tmp = decolor(tmp);
-                    if(!ignore && CanListen(ob,ch)&& !(ob->GetMuted(ch)))
-                        ob->eventPrint(tmp, MSG_CHAN);
-                    ignore = 0;
-                }
-            }
-        }
-        suspect = "";
-        site = "";
+        eventAddLast(ch, msg, pchan, pmsg);
+        eventChannelMsgToListeners(who, ch, msg, emote, target, targmsg);
     }
-    else {
-        object *obs;
-        string chancolor;
-
-        //Colorize flag
-        if (member_array(lower_case(ch),keys(tags)) >= 0) { //If there's an entry for the channel
-            chancolor = tags[lower_case(ch)]; //Use it
-        } else { //Otherwise
-            if(member_array(ch, local_chans) < 0 && (prev == IMC2_D ||
-                        member_array(ch, (keys(INTERMUD_D->GetChannelList()) 
-                                || ({}))) < 0)){
-                chancolor = tags["default-IMC2"]; //Use the default IMC2 entry
-            }
-            else {
-                chancolor = tags["default"]; //Use the default entry
-            }
-        }
-
+    else
+    {
         pmsg = msg;
 
-        //Put together the channel emote message
-        msg = sprintf(chatlayout, who, chancolor, ch, "%^RESET%^", pmsg);
+        msg = formChatString(ch, who, msg);
+        //tn("CHAT_D->eventSendChannel: not emote?", "green");
+
         eventAddLast(ch, msg, pchan, pmsg, who);
-
-        if(Channels[ch]) {
-            obs = filter(Channels[ch], (: $1 && !($1->GetBlocked($(ch))) :));
-            foreach(object ob in obs){
-                int ignore;
-                if(sscanf(who,"%s@%s",suspect,site) < 2) {
-                    suspect = who;
-                    site = "@"+mud_name();
-                }
-                else site = "@"+site;
-
-                if(sizeof(ob->GetMuffed()))
-                    foreach(string jerk in ob->GetMuffed()){
-                        if(jerk && lower_case(suspect) == lower_case(jerk)) ignore = 1;
-                        if(jerk && lower_case(site) == lower_case(jerk)) ignore = 1;
-                    }
-                if(ob->GetNoChanColors()) msg = decolor(msg);
-                if(!ignore && CanListen(ob,ch)&& !(ob->GetMuted(ch)))
-                    ob->eventPrint(msg, MSG_CHAN);
-
-                ignore = 0;
-                suspect ="";
-                site = "";
-            }
-        }
+        eventChannelMsgToListeners(who, ch, msg, emote, target, targmsg);
     }
+    whobits = explode(who, "@");
+    if(sizeof(whobits) < 2) {
+        if(sizeof(whobits) < 1) {
+            whobits += ({ "Someone" });
+        }
+        whobits += ({ mud_name() });
+    }
+    who = implode(whobits, "@");
+    LogIt(timestamp()+"\t"+ch+"\t"+who+"\t"+pmsg+"\n", "/secure/log/allchan.log", ch);
+    //tn("CHAT_D->eventSendChannel: return?", "green");
 }
 
 string *GetChannelList(string ch) {

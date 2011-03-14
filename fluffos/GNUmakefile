@@ -1,3 +1,20 @@
+MAKE=make
+SHELL=/bin/sh
+OBJDIR=obj
+DRIVER_BIN=driver
+PROOF=
+STRFUNCS=
+INSTALL=install -c
+INSTALL_DIR=../bin
+OPTIMIZE=-O2
+CPP=gcc -E
+CFLAGS=-D__USE_FIXED_PROTOTYPES__
+CC=gcc
+YACC=bison -d -y
+RANLIB=ranlib
+A=a
+O=o
+A_OUT=a.out
 # YOU DO NOT NEED TO CONFIGURE ANYTHING IN THIS FILE.
 #
 # RUN THE SHELL SCRIPT ./build.MudOS to generate the Makefiles, and follow

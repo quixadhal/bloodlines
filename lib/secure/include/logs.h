@@ -18,6 +18,7 @@
 #define LOG_INET          DIR_NETWORK_LOGS "/inet" UNIQ_EXT
 #define LOG_ROUTER        DIR_INTERMUD_LOGS "/router" UNIQ_EXT
 #define LOG_RSS           DIR_NETWORK_LOGS "/rss" UNIQ_EXT
+#define LOG_I3IRC         DIR_INTERMUD_LOGS "/i3irc" UNIQ_EXT
 
 /* Other stuff */
 #define LOG_BANISH        DIR_LOGS "/banish" UNIQ_EXT

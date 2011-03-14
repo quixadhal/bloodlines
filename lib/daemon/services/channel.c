@@ -12,6 +12,9 @@
 #include ROOMS_H
 #include <message_class.h>
 
+#define CHANNEL_C
+#include <pinkfish.h>
+
 static private string *local_chans = ({"newbie","cre","gossip","admin","error",
         "priest", "mage", "explorer", "thief", "fighter", "death" });
 
@@ -123,8 +126,37 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
 
     tn("eventSendChannel raw: "+identify( packet_thing ),"green");
 
+#ifdef EXTENDED_PINKFISH
+    msg = replace_strings(msg, extended_to_pinkfish);
+#endif
+    // Because others only have crufty 1980's 8 colour ANSI.
+    msg = replace_string(msg, "%^DARKGREY%^",   "%^BOLD%^%^BLACK%^");
+    msg = replace_string(msg, "%^LIGHTRED%^",   "%^BOLD%^%^RED%^");
+    msg = replace_string(msg, "%^LIGHTGREEN%^", "%^BOLD%^%^GREEN%^");
+    msg = replace_string(msg, "%^LIGHTBLUE%^",  "%^BOLD%^%^BLUE%^");
+    msg = replace_string(msg, "%^PINK%^",       "%^BOLD%^%^MAGENTA%^");
+    msg = replace_string(msg, "%^LIGHTCYAN%^",  "%^BOLD%^%^CYAN%^");
+    // Order matters for these two!
+    msg = replace_string(msg, "%^WHITE%^",      "%^BOLD%^%^WHITE%^");
+    msg = replace_string(msg, "%^GREY%^",       "%^WHITE%^");
+
     if( emote ) {
         if( target && targmsg ) {
+
+#ifdef EXTENDED_PINKFISH
+            targmsg = replace_strings(targmsg, extended_to_pinkfish);
+#endif
+            // Because others only have crufty 1980's 8 colour ANSI.
+            targmsg = replace_string(targmsg, "%^DARKGREY%^",   "%^BOLD%^%^BLACK%^");
+            targmsg = replace_string(targmsg, "%^LIGHTRED%^",   "%^BOLD%^%^RED%^");
+            targmsg = replace_string(targmsg, "%^LIGHTGREEN%^", "%^BOLD%^%^GREEN%^");
+            targmsg = replace_string(targmsg, "%^LIGHTBLUE%^",  "%^BOLD%^%^BLUE%^");
+            targmsg = replace_string(targmsg, "%^PINK%^",       "%^BOLD%^%^MAGENTA%^");
+            targmsg = replace_string(targmsg, "%^LIGHTCYAN%^",  "%^BOLD%^%^CYAN%^");
+            // Order matters for these two!
+            targmsg = replace_string(targmsg, "%^WHITE%^",      "%^BOLD%^%^WHITE%^");
+            targmsg = replace_string(targmsg, "%^GREY%^",       "%^WHITE%^");
+
             if( sscanf(target, "%s@%s", targpl, where) != 2 ) {
                 targpl = convert_name(target);
                 where = mud_name();

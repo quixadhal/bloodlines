@@ -26,6 +26,7 @@ mapping GetServices();
 #include "/daemon/services/tell.c"
 #include "/daemon/services/who.c"
 #include "/daemon/services/auth.c"
+#include "/daemon/services/filter.c"
 
 static void create() {
     SetSaveFile(SAVE_SERVICES);
@@ -77,6 +78,9 @@ mapping GetServices() {
 #endif
 #ifdef SERVICE_WHO
             "who" : 1,
+#endif
+#ifdef SERVICE_FILTER
+            "filter" : 1,
 #endif
             ]);
 

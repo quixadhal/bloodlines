@@ -18,7 +18,7 @@ echo "driver: "$DRIVER
 echo "cfg: "$CFG
 
 # Specify your mud dir here.
-MUDHOME=""
+MUDHOME="/home/bloodlines"
 
 # It has been reported that non-US users have problems
 # with some .o files because their systems default to

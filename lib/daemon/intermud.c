@@ -56,6 +56,8 @@ static void create(){
         }
     ConvertLists();
     Nameservers = ({ ({ "*dalet", "97.107.133.86 8787" }) });
+    // ({ "*i4", "204.209.44.3 8080" })
+    // ({ "*wpr", "195.242.99.94 8080" })
         SetNoClean(1);
         tn("INTERMUD_D reloaded.");
         tn("Loading object stack: "+get_stack(),"red");
@@ -224,6 +226,13 @@ static void eventRead(mixed *packet){
             SaveObject(SaveFile);
             SERVICES_D->eventRegisterChannels(packet[7]);
             return;
+        case "chan-filter-req":
+            tn("chan-filter-req: "+identify(packet),"green");
+            SERVICES_D->eventReceiveFilterRequest(packet);
+            break;
+        case "chan-filter-reply":
+            tn("chan-filter-reply: "+identify(packet), "red");
+            break;
             case "ping-req":
             mudpacket = 1;
             SERVICES_D->eventReceiveAuthRequest(packet);

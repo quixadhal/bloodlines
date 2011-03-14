@@ -387,13 +387,24 @@ string SetTerminal(string terminal){
             case "vt300": case "dec-vt100":
             terminal = "ansi";
         break;
+        case "xterm-grey": case "xterm-gray": case "grey" : case "gray":
+            terminal = "xterm-grey";
+        break;
+        case "xterm-256color": case "xterm256color": case "xterm256":
+            terminal = "xterm-256color";
+        break;
+        case "raw":
+            terminal = "raw";
+        break;
         case "unknown": case "ansi": case "freedom": case "ansi-status":
             case "xterm": 
             break;
         case "console": case "ibm-3278-2":
             terminal = "unknown";
         break;
-        case "html" : terminal = "html"; break;
+//        case "html":
+//            terminal = "html";
+//        break;
         default:
         log_file("terminals", "Unknown terminal type: " + terminal + "\n");
         terminal = Terminal;

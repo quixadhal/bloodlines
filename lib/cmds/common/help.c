@@ -50,7 +50,8 @@ mixed cmd(string arg) {
         }
     }
     help = center(mud_name()+" System Help", screen[0]) + tmp;
-    if(sizeof(help) < 2000)    help = wrap(help, screen[0]);
+    if(sizeof(help) < screen[0] * (screen[1] - 2))
+        help = wrap(help, screen[0]);
     who->eventPage(explode(help, "\n"), MSG_HELP);
     return 1;
 }

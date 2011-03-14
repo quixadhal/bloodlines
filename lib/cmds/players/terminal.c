@@ -9,7 +9,11 @@
 inherit LIB_DAEMON;
 
 mixed cmd(string args) {
-    if( !args || args == "" ) return "Set it to what?";
+    if( !args || args == "" ) return "Currently set to \"" +
+        this_player()->GetTerminal() +
+        "\"\nAvailable: [" +
+        implode(sort_array(TERMINAL_D->query_terms(), 1), ", ") +
+        "]\nSet it to what?";
     message("system", "Terminal set to " + 
             this_player()->SetTerminal(args) + ".", this_player());
     return 1;

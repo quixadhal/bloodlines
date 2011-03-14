@@ -1,0 +1,24 @@
+EVENTPAGE
+
+NAME
+        eventPage()
+
+SYNOPSIS
+        varargs mixed eventPage(mixed val, mixed msg_class, function f,mixed args...)
+
+DESCRIPTION
+        This routine takes an array of lines and emits them to the player, pausing at a prompt after a number of lines based on their terminal pager settings.  This is obtained via GetScreen()[1].  If the argument passed is a string, it is assumed to be a filename, and the contents of that file are read in and sent.
+        Additional details about message classes, and what functions are likely to be useful should be added here.
+
+EXAMPLES
+        this_player()->eventPage( explode( "Wall of Text!", "\n" ) );
+
+LOCATION
+        /lib/pager.c
+
+SEE ALSO
+        more, man, terminal
+
+Author
+        Descartes of Borg
+
