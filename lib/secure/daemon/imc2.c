@@ -32,6 +32,11 @@ inherit LIB_DAEMON;
 //#define HOSTPORT 9000
 //#define HOSTIP "74.207.247.83"
 
+// Connection data for Kayle and Samson's server
+// HostIP overrides HOSTNAME, in case the mud doesn't want to resolve addresses
+//#define HOSTPORT 9000
+//#define HOSTIP "66.218.49.113"
+
 //This is the LPMuds.net experimental IMC2 server. If you are
 //already connected to LPMuds.net intermud using Intermud-3, do
 //not use the LPMuds.net IMC2 server.

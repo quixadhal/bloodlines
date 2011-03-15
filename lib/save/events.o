@@ -1,3 +1,3 @@
 #/secure/daemon/events.c
 RebootInterval 99999
-Events ([1194591003:(["object":"/secure/daemon/file","regular":90000,"args":({}),"interval":90000,"function":"ReadDir","creator":"/secure/daemon/file",]),1194631003:(["object":"/secure/daemon/function","regular":100000,"args":({}),"interval":100000,"function":"ReadFuns","creator":"/secure/daemon/function",]),1194552776:(["object":"/secure/daemon/log","regular":3600,"args":({}),"interval":3600,"function":"RotateLogs","creator":"/secure/daemon/log",]),])
+Events ([1300217231:(["object":"/secure/daemon/log","regular":3600,"args":({}),"interval":3600,"function":"RotateLogs","creator":"/secure/daemon/log",]),1300224419:(["object":"/secure/daemon/file","regular":90000,"args":({}),"interval":90000,"function":"ReadDir","creator":"/secure/daemon/file",]),1300234419:(["object":"/secure/daemon/function","regular":100000,"args":({}),"interval":100000,"function":"ReadFuns","creator":"/secure/daemon/function",]),])

@@ -9,13 +9,13 @@
 
 #include <lib.h>
 
+inherit LIB_DAEMON;
+
 #define ANSI(p) sprintf("%c["+(p)+"m", 27)
 #define ESC(p) sprintf("%c"+(p), 27)
 
 #define TERMINAL_C
 #include <pinkfish.h>
-
-inherit LIB_DAEMON;
 
 void create() {
     daemon::create();

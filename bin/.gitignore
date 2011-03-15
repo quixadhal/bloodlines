@@ -2,3 +2,4 @@ addr_server
 driver
 mudos.bak
 portbind
+driver.log

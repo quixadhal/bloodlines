@@ -2,8 +2,8 @@
 PersistentInventory 0
 PersistentInventoryEnabled 0
 tmpstr 0
-host "dead-souls.net"
-who_str "Bloodlines*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=**=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*                   There are zero members of our reality.                  http://dead-souls.nettelnet://dead-souls.net:8000___________________________________________________________________________"
+host "97.83.21.66"
+who_str "Bloodlines*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=**=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*                   There are zero members of our reality.                  http://dead-souls.nettelnet://97.83.21.66:5000___________________________________________________________________________"
 mode 2
 autodisabled 0
 ping_requests ([])

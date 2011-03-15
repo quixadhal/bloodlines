@@ -135,7 +135,7 @@ static private string long_list(string dir, mixed *files) {
     for(i=0, maxi=sizeof(files); i<maxi; i++) {
         if(files[i][1] == -2) loaded = "";
         else loaded = (find_object(dir+files[i][0]) ? "*" : "");
-        ret += sprintf("%:-3s%:-5s%:-30s %d\t%s", 
+        ret += sprintf("%:-3s%:-5s%:-25s %8d %s", 
                 loaded, acc, ctime(files[i][2]),
                 files[i][1], files[i][0]);
         if(files[i][1] == -2) ret += "/\n";
@@ -184,9 +184,9 @@ static string map_files(mixed *file, int *flags) {
     else tmp = "";
     if(!flags[2]) {
         if(file[1] == -2) tmp = tmp + "    ";
-        else if(!file[1]) tmp = tmp + "0   ";
-        else if(file[1] < 1024) tmp = " 1   ";
-        else tmp = sprintf("%s%:-3d ", tmp, (file[1]/1024));
+        else if(!file[1]) tmp = tmp + "  0 ";
+        else if(file[1] < 1000) tmp = tmp + "  1 ";
+        else tmp = sprintf("%s%3d ", tmp, (file[1]/1000));
     }
     return tmp + file[0] + ((file[1] == -2) ? "/" : "");
 }

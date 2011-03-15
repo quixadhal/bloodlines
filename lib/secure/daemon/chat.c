@@ -963,7 +963,7 @@ varargs string getColorDayTime(string prefix, string suffix) {
 }
 
 // Sets a particular user to be a particular color.
-int setWhoColor(string who, string color) {
+int setSpeakerColor(string who, string color) {
     string shortwho;
 
     shortwho = lower_case(explode(who, "@")[0]);
@@ -1261,6 +1261,7 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
             //DEBUG
             //msg = replace_string(msg, "$N", getColorSpeakerName(who, "<SERV_IMC2:", ":SERV_IMC2>"));
             msg = replace_string(msg, "$N", getColorSpeakerName(who));
+            pmsg = replace_string(msg, "$N", who);
         }
     }
     else
@@ -1303,6 +1304,7 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
         //        +", "+identify(msg)+", "+identify(emote)+", "+identify(target)+", "
         //        +identify(targmsg), "green");
 
+        pmsg = strip_colours(pmsg);
         eventAddLast(ch, msg, pchan, pmsg);
         eventChannelMsgToListeners(who, ch, msg, emote, target, targmsg);
     }
@@ -1313,6 +1315,7 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
         msg = formChatString(ch, who, msg);
         //tn("CHAT_D->eventSendChannel: not emote?", "green");
 
+        pmsg = strip_colours(pmsg);
         eventAddLast(ch, msg, pchan, pmsg, who);
         eventChannelMsgToListeners(who, ch, msg, emote, target, targmsg);
     }

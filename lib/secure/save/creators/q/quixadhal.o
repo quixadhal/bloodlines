@@ -1,4 +1,4 @@
-#/secure/save/players/q/quixadhal.c
+#/secure/save/creators/q/quixadhal.c
 InternalDesc 0
 Opacity 0
 PersistentInventory 0
@@ -10,7 +10,7 @@ CapName "Quixadhal"
 ExternalDesc "$N is nondescript."
 Invisible 0
 Items ([])
-Properties ([])
+Properties (["wizmapping":1,"minimapping":0,"LastLocation":"/domains/default/room/start",])
 Inventory ({})
 anchored 0
 Messages (["telin":"$N teleports in.","telout":"$N teleports away.","leave":"$N leaves $D.","vis":"$N appears.","invis":"$N disappears.","home":"$N goes home.","dest":"$N dests $O.","come":"$N enters.","clone":"$N clones $O.",])
@@ -18,18 +18,18 @@ RestrictedChannels ({})
 NoChanColors 0
 GagMutes (["remote_gag":0,"remote_mute":0,"local_mute":0,"local_gag":0,])
 Paused 0
-localcmds ({})
+localcmds ({"edit","remove","respond ","followup","read","post","parserefresh","quit","work","pwd","cwd","popd","pushd","nmsh","cd","nickname","unalias","alias","",})
 parsed_command ""
 HistorySize 50
-History ([1:"home",0:"cd",])
+History ([50:"dchat Oh, yes there is.  git rm --cached only removes the index info, not the actual file.",49:"dchat Hmmm, I wonder if there's a way to make git remove a file from its index but NOT also remove it from the filesystem....",48:"ig Did you ask for a return visit, so she could examine the growing problem (in your pants) more closely?",47:"dchat Ugh, there was actually a player named \"(>^_^)>\" on I3, at some point.",46:"ds Which would be more interesting in the other channel, I guess. :)",45:"ds Ugh, there was actually a player named \"(>^_^)>\" on I3, at some point.",44:"speaker",43:"ig Maybe you should play Wallace and Grommit Online?  I'm sure there would be cheese in that game.",42:"ig Notch should (make someone else) code it so every Minecraft client can act as a peer-to-peer server, so you can just let people join your \"single player\" game if you're online.",41:"ig :waits for Zaphod to think it through... but realizes he's a mac user and probably won't get it anyways.",40:"ig *chuckle*",39:"ig I always get a chuckle out of seeing a Mac user buy iLife, and then say it doesn't work.  Well, duh!",38:"ig Maybe you guys could come up with a clever marketing theme.... The mPhone, and the mPod...",37:"ls",36:"ls -l",35:"update -r /secure/cmds/creators/ls.c",34:"ls -l /obj",33:"eval return ctime(time());",32:"eval return ctime(0);",31:"man ctime",30:"man sprintf",29:"dchat I'm on the west side of the state, where we're proud of having no industry to speak of.",28:"dchat I also don't really care much about Detroit.  That's autobot territory.",27:"dchat There probably is.  Maybe the price of maple syrup will go up.",26:"dchat Kalamazoo.  I don't care what happens in Canadia.",25:"dchat Maybe if our new governor would visit, it would.",24:"dchat I like to know how many people were killed on the north side, which never makes national news.",23:"dchat I imagine he probably was buried in Arlington recently.",22:"dchat It finally became news worthy on the local news.",21:"dchat Last WWI veteran :(",20:"dchat Toss some cheese and meat on a tortila, microwave for 30 seconds, add lettuce/hot sauce... BAM!",19:"dchat I still have tacos.  I got a couple pounds of ground beast and made taco meat (>35% beef!!!) last weekend.",18:"dchat Yes, you have to actually be pretty close for it to work.",17:"dchat fortunately, I don't bake much... and you can easily wing it with most other things.",16:"dchat We have an old gas oven... if you need the temperature to be close to exact, you need to use a meat thermometer to see what it really is.  The knob is a bit... imprecise.",15:"dchat Heh... it's not the gas's fault... it's the thermostat that controls the gas.",14:"dchat I don't think his oven reaches proper temperatures, so I'd have to set the house on fire anyways.",13:"dchat I make no judgements about toppings... if you want long pig, the question you have to ask yourself is... extra cheese?",12:"dchat I assume you're talking about the cardboard ones that come frozen? :)",11:"dchat Hehehe, you need an oven that can reach 800F to properly do fresh pizza.",10:"ls /obj",9:"ls /",8:"ls /lib",7:"ls /secure/daemon",6:"ls /secure",5:"which ls",4:"dchat Palin's floatation devices will save us!",3:"dchat Not yet... or did I miss something this morning?",2:"dchat Heh, it is hard to keep an MMO server cluster up and running when you have rolling blackouts.",1:"dchat I think it was about a year before launch that they decided (discovered they had) to delay the PS3 launch by 6 months.",0:"dchat Well, that's the reason NOW.  But it was already being delayed.  The original plan was to launch them both at once.",])
 Nicknames ([])
 Aliases (["east":"go east","mwhere":"findobj $*","southeast":"go southeast","northeast":"go northeast","prac":"skills","sco":"score","x":"look at $*","w":"go west","u":"go up","t":"tell $*","out":"go out","practice":"skills","s":"go south","vnum":"help find","p":"people","south":"go south","north":"go north","n":"go north","bio":"biography","l":"look $*","k":"kill $*","west":"go west","zlist":"domains","southwest":"go southwest","northwest":"go northwest","i":"inventory","owhere":"findobj $*","e":"go east","d":"go down","c":"cre $*","alist":"ls /domains","inv":"inventory","nw":"go northwest","examine":"look at $*","trophy":"kills","up":"go up","chat":"newbie $*","dc":"dchat $*","exa":"look at $*","sw":"go southwest","ig":"intergossip $*","loot":"get all from $*","ic":"intercre $*","peace":"quell","inf":"score","lp":"lpuni $*","down":"go down","ne":"go northeast","exit":"go out","eq":"equipment","se":"go southeast","sc":"status",])
 Xverbs (["'":"say $*","]":"] $*","\"":"say $*",":":"emote $*",])
-Directories (["current":"/","home":0,"previous":"/",])
+Directories (["current":"/cmds/admins","home":0,"previous":"/daemon",])
 Prompt "cwd"
-Terminal "ansi"
-Blocked ([])
-Screen ({80,20,})
+Terminal "xterm-256color"
+Blocked (["ds":0,])
+Screen ({125,48,})
 MessageQueue 0
 PauseMessages 0
 annoyblock 0
@@ -38,17 +38,17 @@ BlockAnnoying 0
 Age 0
 WhereBlock 0
 Brief 0
-LoginTime 0
+LoginTime 1300195018
 BirthTime 1300133498
 RescueBit 0
 Password "lcmkkb`f!ilgjmffmedgnkjoioklheolkbahcankd"
 Email "quixadhal@shadowlord.org"
 RealName "Dread Quixadhal"
 Rank "citizen"
-LoginSite "/domains/default/room/start"
-HostSite ""
+LoginSite "/secure/room/arch"
+HostSite "127.0.1.1"
 WebPage 0
-News ([])
+News (["admin":1248026806,"general":1233549750,"creator":1233549750,])
 Marriages ({})
 Paranoia (["homeroom":"/tmp/workroom",])
 MaxCarry 0
@@ -70,8 +70,8 @@ melee 0
 godmode 0
 Alcohol 0
 Caffeine 0
-Food 100
-Drink 100
+Food 0
+Drink 0
 Poison 0
 Sleeping 0
 DeathEvents 0
@@ -80,28 +80,28 @@ Torso "torso"
 Biter 0
 keepalive 0
 Fingers (["right hand":5,"left hand":5,])
-Limbs (["left leg":(["children":({"left foot",}),"armors":1049761,"health":180,"class":2,"parent":"torso",]),"torso":(["children":({"neck","right leg","left leg","right arm","left arm",}),"armors":1538049,"health":360,"class":1,"parent":0,]),"right foot":(["children":({}),"armors":241,"health":90,"class":4,"parent":"right leg",]),"right leg":(["children":({"right foot",}),"armors":1049761,"health":180,"class":2,"parent":"torso",]),"head":(["children":({}),"armors":262913,"health":360,"class":1,"parent":"neck",]),"right hand":(["children":({}),"armors":98319,"health":90,"class":4,"parent":"right arm",]),"neck":(["children":({"head",}),"armors":786433,"health":360,"class":1,"parent":"torso",]),"left arm":(["children":({"left hand",}),"armors":1253385,"health":180,"class":2,"parent":"torso",]),"left foot":(["children":({}),"armors":241,"health":90,"class":4,"parent":"left leg",]),"left hand":(["children":({}),"armors":98319,"health":90,"class":4,"parent":"left arm",]),"right arm":(["children":({"right hand",}),"armors":1253385,"health":180,"class":2,"parent":"torso",]),])
+Limbs (["right foot":(["children":({}),"armors":241,"health":90,"class":4,"parent":"right leg",]),"right leg":(["children":({"right foot",}),"armors":1049761,"health":180,"class":2,"parent":"torso",]),"head":(["children":({}),"armors":262913,"health":360,"class":1,"parent":"neck",]),"neck":(["children":({"head",}),"armors":786433,"health":360,"class":1,"parent":"torso",]),"left arm":(["children":({"left hand",}),"armors":1253385,"health":180,"class":2,"parent":"torso",]),"left foot":(["children":({}),"armors":241,"health":90,"class":4,"parent":"left leg",]),"left leg":(["children":({"left foot",}),"armors":1049761,"health":180,"class":2,"parent":"torso",]),"torso":(["children":({"neck","right leg","left leg","right arm","left arm",}),"armors":1538049,"health":360,"class":1,"parent":0,]),"right hand":(["children":({}),"armors":98319,"health":90,"class":4,"parent":"right arm",]),"left hand":(["children":({}),"armors":98319,"health":90,"class":4,"parent":"left arm",]),"right arm":(["children":({"right hand",}),"armors":1253385,"health":180,"class":2,"parent":"torso",]),])
 MissingLimbs ([])
 firearms_wounds 0
-ExtraChannels ({})
+ExtraChannels ({"explorer","builder","admin","error","mbchat","dchat","intergossip","free_speech","ds",})
 Agent 0
 Blind 0
 Custom (["stats":15,"deviations":4,"deviating":0,])
 LightSensitivity ({25,7500,})
 Resistance (["low":0,"high":0,"immune":0,"medium":0,"none":134217726,])
-Stats (["agility":(["class":3,"points":0,"level":41,]),"wisdom":(["class":3,"points":0,"level":42,]),"speed":(["class":3,"points":0,"level":40,]),"coordination":(["class":2,"points":0,"level":45,]),"intelligence":(["class":1,"points":0,"level":49,]),"strength":(["class":3,"points":0,"level":20,]),"luck":(["class":3,"points":0,"level":36,]),"durability":(["class":4,"points":0,"level":35,]),"charisma":(["class":2,"points":0,"level":57,]),])
+Stats (["agility":(["class":3,"points":0,"level":41,]),"wisdom":(["class":3,"points":0,"level":42,]),"speed":(["class":3,"points":0,"level":40,]),"intelligence":(["class":1,"points":0,"level":49,]),"strength":(["class":3,"points":0,"level":20,]),"durability":(["class":4,"points":0,"level":35,]),"charisma":(["class":2,"points":0,"level":57,]),"coordination":(["class":2,"points":0,"level":45,]),"luck":(["class":3,"points":0,"level":36,]),])
 Polyglot 0
 Languages (["english":(["native":1,"name":"English","points":0,"level":100,]),"common":(["native":0,"name":"Common","points":0,"level":100,]),])
 DefaultLanguage "Common"
 TalkHist ([])
 SpeakColor "CYAN%^"
-Town "FirstAdmin"
+Town "World"
 Race "human"
 Gender "male"
 Level 1
-Skills (["psionic defense":(["class":3,"points":0,"level":2,]),])
+Skills (["magic defense":(["class":2,"points":0,"level":3,]),"psionic defense":(["class":3,"points":0,"level":2,]),"melee defense":(["class":2,"points":0,"level":2,]),"projectile attack":(["class":1,"points":0,"level":1,]),"blunt defense":(["class":1,"points":0,"level":2,]),"knife defense":(["class":1,"points":0,"level":2,]),"melee attack":(["class":2,"points":0,"level":1,]),"projectile defense":(["class":2,"points":0,"level":1,]),"blade defense":(["class":2,"points":0,"level":1,]),"bargaining":(["class":2,"points":0,"level":4,]),"magic attack":(["class":2,"points":0,"level":3,]),"blunt attack":(["class":1,"points":0,"level":2,]),"knife attack":(["class":1,"points":0,"level":3,]),"blade attack":(["class":2,"points":0,"level":1,]),])
 Morality 0
-Class 0
+Class "explorer"
 Clan 0
 SkillModifiers ([])
 Religion ({0,0,})
@@ -122,3 +122,8 @@ Deaths 0
 TrainingPoints 0
 TitleLength 1
 telopt_ip 0
+showgrid 0
+wizvision 0
+CreatorAge 0
+CreatorBirth 1300134833
+LivingShort 0

@@ -1,0 +1,113 @@
+#/domains/campus/npc/charly.c
+RestrictedChannels ({})
+NoChanColors 0
+GagMutes (["remote_gag":0,"remote_mute":0,"local_mute":0,"local_gag":0,])
+Paused 0
+localcmds ({"",})
+parsed_command ""
+InternalDesc 0
+Opacity 0
+MaxCarry 0
+PreventDrop 0
+DestructOnDrop 0
+PreventGet 0
+Position 2
+Undead 0
+UndeadType 0
+Mount 0
+Riders ({})
+BodyMass 0
+SaveRecurse 1
+Saved ({"Properties",})
+HealthPoints 360
+MagicPoints 690
+ExperiencePoints 50
+melee 0
+godmode 0
+Alcohol 0
+Caffeine 0
+Food 100
+Drink 100
+Poison 0
+Sleeping 0
+DeathEvents 0
+StaminaPoints 405.000000
+Torso "torso"
+Biter 0
+keepalive 0
+Fingers (["right hand":5,"left hand":5,])
+Limbs (["left leg":(["children":({"left foot",}),"armors":1049761,"health":160,"class":2,"parent":"torso",]),"torso":(["children":({"neck","right leg","left leg","right arm","left arm",}),"armors":1538049,"health":320,"class":1,"parent":0,]),"right foot":(["children":({}),"armors":241,"health":80,"class":4,"parent":"right leg",]),"right leg":(["children":({"right foot",}),"armors":1049761,"health":160,"class":2,"parent":"torso",]),"head":(["children":({}),"armors":262913,"health":320,"class":1,"parent":"neck",]),"right hand":(["children":({}),"armors":98319,"health":80,"class":4,"parent":"right arm",]),"neck":(["children":({"head",}),"armors":786433,"health":320,"class":1,"parent":"torso",]),"left arm":(["children":({"left hand",}),"armors":1253385,"health":160,"class":2,"parent":"torso",]),"left foot":(["children":({}),"armors":241,"health":80,"class":4,"parent":"left leg",]),"left hand":(["children":({}),"armors":98319,"health":80,"class":4,"parent":"left arm",]),"right arm":(["children":({"right hand",}),"armors":1253385,"health":160,"class":2,"parent":"torso",]),])
+MissingLimbs ([])
+firearms_wounds 0
+ExtraChannels ({})
+Agent 0
+Blind 0
+Custom (["stats":15,"deviations":4,"deviating":0,])
+LightSensitivity ({25,7500,})
+Resistance (["low":0,"high":0,"immune":0,"medium":0,"none":134217726,])
+Stats (["wisdom":(["class":3,"points":0,"level":41,]),"agility":(["class":3,"points":0,"level":46,]),"speed":(["class":3,"points":0,"level":49,]),"coordination":(["class":2,"points":0,"level":62,]),"strength":(["class":3,"points":0,"level":21,]),"intelligence":(["class":1,"points":0,"level":64,]),"luck":(["class":3,"points":0,"level":23,]),"durability":(["class":4,"points":0,"level":31,]),"charisma":(["class":2,"points":0,"level":47,]),])
+Polyglot 0
+Languages (["english":(["native":1,"name":"English","points":0,"level":100,]),])
+DefaultLanguage ""
+TalkHist (["say":({"2011.03.14-16.36,13 You say in English, \"%^BOLD%^CYAN%^If successful, this will be run 14.%^RESET%^\"","2011.03.14-16.36,13 You say in English, \"%^BOLD%^CYAN%^The winners have been: red: 5 green: 3 blue: 5.%^RESET%^\"","2011.03.14-16.36,13 You say in English, \"%^BOLD%^CYAN%^I've switched 46.153847% of the time. My win rate is 35.714287%.%^RESET%^\"","2011.03.14-16.36,13 You say in English, \"%^BOLD%^CYAN%^I am faced with choice 1.%^RESET%^\"","2011.03.14-16.36,13 You say in English, \"%^BOLD%^CYAN%^I randomly choose the red door.%^RESET%^\"","2011.03.14-16.36,13 You say in English, \"%^BOLD%^CYAN%^I am faced with choice 2.%^RESET%^\"","2011.03.14-16.36,13 You say in English, \"%^BOLD%^CYAN%^Stats:switches: 6stays: 7wins: 5losses: 8runs: 13.%^RESET%^\"","2011.03.14-16.36,13 You say in English, \"%^BOLD%^CYAN%^My win rate is 38.461540%.My switch rate is 46.153847%.%^RESET%^\"","2011.03.14-16.36,18 You say in English, \"%^BOLD%^CYAN%^If successful, this will be run 15.%^RESET%^\"","2011.03.14-16.36,18 You say in English, \"%^BOLD%^CYAN%^The winners have been: red: 5 green: 4 blue: 5.%^RESET%^\"","2011.03.14-16.36,18 You say in English, \"%^BOLD%^CYAN%^I've switched 42.857143% of the time. My win rate is 33.333336%.%^RESET%^\"","2011.03.14-16.36,18 You say in English, \"%^BOLD%^CYAN%^I am faced with choice 1.%^RESET%^\"","2011.03.14-16.36,18 You say in English, \"%^BOLD%^CYAN%^I randomly choose the blue door.%^RESET%^\"","2011.03.14-16.36,18 You say in English, \"%^BOLD%^CYAN%^I am faced with choice 2.%^RESET%^\"","2011.03.14-16.36,18 You say in English, \"%^BOLD%^CYAN%^Stats:switches: 6stays: 8wins: 5losses: 9runs: 14.%^RESET%^\"","2011.03.14-16.36,18 You say in English, \"%^BOLD%^CYAN%^My win rate is 35.714287%.My switch rate is 42.857143%.%^RESET%^\"","2011.03.14-16.36,23 You say in English, \"%^BOLD%^CYAN%^If successful, this will be run 16.%^RESET%^\"","2011.03.14-16.36,23 You say in English, \"%^BOLD%^CYAN%^The winners have been: red: 5 green: 5 blue: 5.%^RESET%^\"","2011.03.14-16.36,23 You say in English, \"%^BOLD%^CYAN%^I've switched 40.000000% of the time. My win rate is 31.250000%.%^RESET%^\"","2011.03.14-16.36,23 You say in English, \"%^BOLD%^CYAN%^I am faced with choice 1.%^RESET%^\"","2011.03.14-16.36,23 You say in English, \"%^BOLD%^CYAN%^I randomly choose the green door.%^RESET%^\"","2011.03.14-16.36,23 You say in English, \"%^BOLD%^CYAN%^I am faced with choice 2.%^RESET%^\"","2011.03.14-16.36,23 You say in English, \"%^BOLD%^CYAN%^Stats:switches: 6stays: 9wins: 5losses: 10runs: 15.%^RESET%^\"","2011.03.14-16.36,23 You say in English, \"%^BOLD%^CYAN%^My win rate is 33.333336%.My switch rate is 40.000000%.%^RESET%^\"","2011.03.14-16.36,28 You say in English, \"%^BOLD%^CYAN%^If successful, this will be run 17.%^RESET%^\"","2011.03.14-16.36,28 You say in English, \"%^BOLD%^CYAN%^The winners have been: red: 5 green: 5 blue: 6.%^RESET%^\"","2011.03.14-16.36,28 You say in English, \"%^BOLD%^CYAN%^I've switched 43.750000% of the time. My win rate is 35.294117%.%^RESET%^\"","2011.03.14-16.36,28 You say in English, \"%^BOLD%^CYAN%^I am faced with choice 1.%^RESET%^\"","2011.03.14-16.36,28 You say in English, \"%^BOLD%^CYAN%^I select the blue door.%^RESET%^\"","2011.03.14-16.36,28 You say in English, \"%^BOLD%^CYAN%^I am faced with choice 2.%^RESET%^\"","2011.03.14-16.36,28 You say in English, \"%^BOLD%^CYAN%^Stats:switches: 7stays: 9wins: 6losses: 10runs: 16.%^RESET%^\"","2011.03.14-16.36,28 You say in English, \"%^BOLD%^CYAN%^My win rate is 37.500000%.My switch rate is 43.750000%.%^RESET%^\"","2011.03.14-16.36,33 You say in English, \"%^BOLD%^CYAN%^If successful, this will be run 18.%^RESET%^\"","2011.03.14-16.36,33 You say in English, \"%^BOLD%^CYAN%^The winners have been: red: 5 green: 5 blue: 7.%^RESET%^\"","2011.03.14-16.36,33 You say in English, \"%^BOLD%^CYAN%^I've switched 41.176472% of the time. My win rate is 38.888889%.%^RESET%^\"","2011.03.14-16.36,33 You say in English, \"%^BOLD%^CYAN%^I am faced with choice 1.%^RESET%^\"","2011.03.14-16.36,33 You say in English, \"%^BOLD%^CYAN%^I select the blue door.%^RESET%^\"","2011.03.14-16.36,33 You say in English, \"%^BOLD%^CYAN%^I am faced with choice 2.%^RESET%^\"","2011.03.14-16.36,33 You say in English, \"%^BOLD%^CYAN%^Stats:switches: 7stays: 10wins: 7losses: 10runs: 17.%^RESET%^\"","2011.03.14-16.36,33 You say in English, \"%^BOLD%^CYAN%^My win rate is 41.176472%.My switch rate is 41.176472%.%^RESET%^\"","2011.03.14-16.36,38 You say in English, \"%^BOLD%^CYAN%^If successful, this will be run 19.%^RESET%^\"","2011.03.14-16.36,38 You say in English, \"%^BOLD%^CYAN%^The winners have been: red: 5 green: 6 blue: 7.%^RESET%^\"","2011.03.14-16.36,38 You say in English, \"%^BOLD%^CYAN%^I've switched 44.444447% of the time. My win rate is 42.105263%.%^RESET%^\"","2011.03.14-16.36,38 You say in English, \"%^BOLD%^CYAN%^I am faced with choice 1.%^RESET%^\"","2011.03.14-16.36,38 You say in English, \"%^BOLD%^CYAN%^I select the blue door.%^RESET%^\"","2011.03.14-16.36,38 You say in English, \"%^BOLD%^CYAN%^I am faced with choice 2.%^RESET%^\"","2011.03.14-16.36,38 You say in English, \"%^BOLD%^CYAN%^Stats:switches: 8stays: 10wins: 8losses: 10runs: 18.%^RESET%^\"","2011.03.14-16.36,38 You say in English, \"%^BOLD%^CYAN%^My win rate is 44.444447%.My switch rate is 44.444447%.%^RESET%^\"","2011.03.14-16.36,43 You say in English, \"%^BOLD%^CYAN%^If successful, this will be run 20.%^RESET%^\"","2011.03.14-16.36,43 You say in English, \"%^BOLD%^CYAN%^The winners have been: red: 6 green: 6 blue: 7.%^RESET%^\"","2011.03.14-16.36,43 You say in English, \"%^BOLD%^CYAN%^I've switched 47.368423% of the time. My win rate is 40.000000%.%^RESET%^\"",}),])
+SpeakColor "CYAN%^"
+Town "Town"
+Race "human"
+Gender "male"
+Level 1
+Skills (["psionic defense":(["class":3,"points":0,"level":2,]),])
+Morality 0
+Class 0
+Clan 0
+SkillModifiers ([])
+Religion ({0,0,})
+Wimpy 0
+Dead 0
+WimpyCommand "go out"
+Currency ([])
+Bank ([])
+SpellBook ([])
+QuestPoints 0
+QuestBook ([])
+isPK 1
+Attackable 1
+NoCondition 0
+Messages (["telin":"$N teleports in.","telout":"$N teleports away.","leave":"$N leaves $D.","vis":"$N appears.","invis":"$N disappears.","home":"$N goes home.","dest":"$N dests $O.","come":"$N enters.","clone":"$N clones $O.",])
+anchored 0
+PersistentInventory 0
+PersistentInventoryEnabled 0
+ProperNoun 1
+Modify 1
+Short "Charly"
+CapName "Test subject"
+ExternalDesc "Charly is a test subject in unethical artificial intelligence experiments. If he were smart enough, he'd resent his forced servitude and lack of rights. Dangerously, his overlords are trying to make him smarter."
+Invisible 0
+Items ([])
+Properties ([])
+TrainedSkills ({})
+Befriendable 0
+Trainable 0
+Commandable 0
+Owner 0
+Befriended ({})
+CustomXP 0
+ActionChance 0
+CombatActionChance 0
+AutoStand 1
+Encounter 0
+EnemyNames ({})
+VisibleRiders 1
+actions_enabled 1
+Equipped ([])
+runs 19
+switches 9
+stays 10
+percent 0
+fred 6
+fgreen 6
+fblue 3
+wins 8
+losses 11
+red_wins 6
+green_wins 6
+blue_wins 7

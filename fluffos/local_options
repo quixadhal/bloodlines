@@ -904,6 +904,7 @@
 #define FLUFFOS
 #define HAS_CONSOLE
 #define ANSI_SUBSTITUTE 0x1e
+#define USE_32BIT_ADDRESSES
 #endif
 #undef IPV6
 #undef MALLOC64
