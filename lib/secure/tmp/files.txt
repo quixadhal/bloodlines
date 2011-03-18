@@ -828,6 +828,7 @@
 /doc/manual/chapter19
 /log/chan/archive/intergossip-2010.12.28-17.32,52
 /doc/manual/chapter18
+/secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c
 /doc/manual/chapter17
 /doc/build/Quests
 /secure/cfg/races/gnome
@@ -1526,6 +1527,7 @@
 /domains/campus/room/usquare.c
 /save/kills/x/xkcdagfmhhb
 /save/kills/f/fegg
+/log/chan/archive/intergossip-2011.03.15-00.27,11
 /log/chan/archive/muds-2010.09.03-18.45,48
 /domains/default/weap/plasma.c
 /log/chan/archive/muds-2009.04.11-23.28,44
@@ -3127,6 +3129,7 @@
 /secure/include/rooms.5555.h
 /domains/cave/room/weapon_storage1.c
 /domains/campus/obj/rayovac.c
+/log/archive/catch-2011.03.15-18.28,07
 /verbs/items/get.c
 /doc/lfun/lib/damage/GetClass
 /secure/daemon/.autoexec.c.swp
@@ -4877,6 +4880,7 @@
 /doc/efun/all/pluralize
 /domains/cave/obj/.table.c.swp
 /doc/lfun/lib/combat/GetMaxHealthPoints
+/cmds/admins/speaker.c
 /log/chan/archive/muds-2010.09.14-09.45,48
 /domains/campus/doors/eledoor3.c
 /domains/campus/armor/workboot_l.c
@@ -6862,6 +6866,7 @@
 /doc/efun/all/max_eval_cost
 /doc/efun/all/find_living
 /doc/efun/all/shutdown
+/log/chan/archive/dchat-2011.03.15-22.28,07
 /domains/campus/doors/u_door.c
 /doc/.CREDITS.swp
 /domains/Praxis/post.c
