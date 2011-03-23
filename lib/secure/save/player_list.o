@@ -5,7 +5,7 @@ PendingEncres ({})
 PendingDecres ({})
 PendingPauses ({})
 PendingUnpauses ({})
-players ({"guest","quixadhal",})
+players ({"guest",})
 creators ({"quixadhal",})
 user_list ({"quixadhal","guest",})
 player_save_file "/secure/save/creators/q/quixadhal.o"

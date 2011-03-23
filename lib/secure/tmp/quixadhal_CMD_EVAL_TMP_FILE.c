@@ -26,4 +26,4 @@
 #include <message_class.h>
 inherit LIB_ITEM;
 #include "/realms/quixadhal/evaldefs.h"
-mixed eval() { return ctime(time());; }
+mixed eval() { return min(({3,4}));; }

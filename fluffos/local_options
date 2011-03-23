@@ -914,3 +914,4 @@
 #undef DTRACE
 
 #define ULIMIT 1024
+#undef PACKAGE_PCRE

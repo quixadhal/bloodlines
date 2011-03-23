@@ -1,6 +1,72 @@
 <?php
 $time_start = microtime(true);
+
+//require_once "PHPTelnet.php";
+
+//$telnet = new PHPTelnet();
 //$now = date('g:ia \o\n l, \t\h\e jS \o\f F, Y');
+
+$stuff = array (
+    "Suffer! I will make you all suffer!!!!!",
+    "Suffer!!!!!! ALL will Suffer Quixadhal's WRATH!!!",
+    "Any good weapons for sale?",
+    "I wish there were more victims, err... I mean players!",
+    "Anyone want a red ring??",
+    "SAVE, and Ye Shall Be SAVED!",
+    "Zar!  Where are you Zar?",
+    "Muidnar!  Stop teasing the mortals!",
+    "Dirk is idle again!",
+    "Sedna, stop trying to code me to steal from players!",
+    "Damnit Quixadhal!  Stop snooping me!",
+    "He's dead Jim.",
+    "What?  Nobody's DIED recently???",
+    "Is it me, or does everyone hear an echo.. echo...  echo....",
+    "EEK!  Someone's been animating the chicken fajitas again!",
+    "I shall HEAL you.... No, on second thought I won't.",
+    "You there!  Stop loitering!",
+    "Move along scum!  Bloody peasants!",
+    "Must KILL for Dread Quixadhal...",
+    "What's all this then?"
+);
+
+function mud_time_passed($current, $previous) {
+    $SPMH = 75;
+    $SPMD = $SPMH * 24;
+    $SPMM = $SPMD * 35;
+    $SPMY = $SPMM * 17;
+
+    $difference = $current - $previous;
+    $hours = ($difference / $SPMH) % 24;
+    $difference -= $hours * $SPMH;
+    $days = ($difference / $SPMD) % 35;
+    $difference -= $days * $SPMD;
+    $months = ($difference / $SPMM) % 17;
+    $difference -= $months * $SPMM;
+    $years = round($difference / $SPMY);
+    return array( $years, $months, $days, $hours );
+}
+
+$cyric_time = mud_time_passed(time(), 744566400);
+$cyric_years = $cyric_time[0];
+$quix_time = mud_time_passed(845054400, 801590402);
+$quix_years = $quix_time[0];
+
+/*
+$result = $telnet->Connect('wiley.shadowlord.org',3000,'blarghy','tardis');
+if ($result == 0) {
+    $telnet->DoCommand('', $result);
+    echo $result;
+    $telnet->DoCommand('1', $result);
+    echo $result;
+    $telnet->DoCommand('who', $result);
+    echo $result;
+    $telnet->DoCommand('quit', $result);
+    echo $result;
+    $telnet->DoCommand('0', $result);
+    $telnet->Disconnect();
+}
+*/
+
 ?>
 <html>
     <head>
@@ -93,10 +159,10 @@ $time_start = microtime(true);
                                 <h2>
                                     The story so far...
                                 </h2>
-                                It's been 371 years since Cyric the Destroyer tried to
+                                It's been <?php echo $cyric_years; ?> years since Cyric the Destroyer tried to
                                 send the world into the void.  Mad Quixadhal saved us
                                 from utter annihilation, only to plunge us into a
-                                darkness that lasted for decades.
+                                darkness that lasted for a terrible <?php echo $quix_years; ?> years.
                                 <p>
                                 Finally, there is a new dawn.
                                 <p>
@@ -139,6 +205,13 @@ $time_start = microtime(true);
             </tr>
         </table>
         <table border=0 cellspacing=0 cellpadding=0 width=100% align="center">
+            <tr>
+                <td align="center">
+                    <span style="color: #00FF00">
+                        <?php echo "An astral traveller shouts, '" . $stuff[rand(0,sizeof($stuff)-1)] . "'"; ?>
+                    </span>
+                </td>
+            </tr>
             <tr>
                 <!-- <td align="left" width="50%"><span style="color: #333333">Last refreshed at <? echo $now; ?>.&nbsp;</span></td> -->
                 <?php

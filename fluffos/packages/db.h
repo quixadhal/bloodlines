@@ -3,6 +3,10 @@
 
 #ifdef PACKAGE_DB
 
+#ifdef USE_POSTGRES
+#include "/usr/include/postgresql/libpq-fe.h"
+#endif
+
 #ifdef USE_MSQL
 /* MSQL v2 requires this so that it knows the right prototypes */
 #define _OS_UNIX
@@ -64,7 +68,14 @@
 #include "/usr/include/sqlite3.h"
 #endif
 
+
 typedef union dbconn_u {
+#ifdef USE_POSTGRES
+	struct tmp_postgres {
+		PGconn      *conn;
+		PGresult    *res;
+	} postgres;
+#endif
 #ifdef USE_MSQL
     struct tmp_msql {
         int handle;
