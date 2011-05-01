@@ -30,30 +30,30 @@ my $FORMAT_LAST = 3;
 #my @term_name = ( "unknown", "ansi", "xterm-256color", "xterm-grey", "html" );
 my @term_name = ( "unknown", "ansi", "xterm-256color", "xterm-grey" );
 
-my $RESET = "\x1b[0m";
-my $BOLD = "\x1b[1m";
-my $ITALIC = "\x1b[3m";
-my $UNDERLINE = "\x1b[4m";
-my $FLASH = "\x1b[5m";
-my $REVERSE = "\x1b[7m";
-my $STRIKETHRU = "\x1b[9m";
+my $RESET = "\033[0m";
+my $BOLD = "\033[1m";
+my $ITALIC = "\033[3m";
+my $UNDERLINE = "\033[4m";
+my $FLASH = "\033[5m";
+my $REVERSE = "\033[7m";
+my $STRIKETHRU = "\033[9m";
 
-my $CURS_UP = "\x1b[A";
-my $CURS_DOWN = "\x1b[B";
-my $CURS_RIGHT = "\x1b[C";
-my $CURS_LEFT = "\x1b[D";
+my $CURS_UP = "\033[A";
+my $CURS_DOWN = "\033[B";
+my $CURS_RIGHT = "\033[C";
+my $CURS_LEFT = "\033[D";
 
-my $HOME = "\x1b[H";
-my $SAVE = "\x1b[s";
-my $RESTORE = "\x1b[u";
-#my $STATUS = "\x1b[23;24r\x1b8";
-#my $WINDOW = "\x1b7\x1b[0;22r";
-#my $INITTERM = "\x1b[H\x1b[J\x1b[23;24r\x1b23H";
-#my $ENDTERM = "\x1b[0r\x1b[H\x1b[J";
+my $HOME = "\033[H";
+my $SAVE = "\033[s";
+my $RESTORE = "\033[u";
+#my $STATUS = "\033[23;24r\0338";
+#my $WINDOW = "\0337\033[0;22r";
+#my $INITTERM = "\033[H\033[J\033[23;24r\03323H";
+#my $ENDTERM = "\033[0r\033[H\033[J";
 #my $CLEARLINE = "\r";
-my $INITTERM = "\x1b[H\x1b[2J";
+my $INITTERM = "\033[H\033[2J";
 my $ENDTERM = "";
-my $CLEARLINE = "\x1b[L\x1b[G";
+my $CLEARLINE = "\033[L\033[G";
 my $STATUS = "";
 my $WINDOW = "";
 
@@ -630,16 +630,16 @@ sub ansi2code {
             $colour -= 8;
         }
         if( $background ) {
-            $result .= "\x1b[" . (40 + $colour) . "m";
+            $result .= "\033[" . (40 + $colour) . "m";
         } else {
-            $result .= "\x1b[" . ($bold ? "1;" : "") . (30 + $colour) . "m";
+            $result .= "\033[" . ($bold ? "1;" : "") . (30 + $colour) . "m";
         }
     } elsif( $format == $FORMAT_XTERM ) {
-        $result = "\x1b[" . ( $background == 1 ? 48 : 38 ) . ";5;" . $colour . "m";
+        $result = "\033[" . ( $background == 1 ? 48 : 38 ) . ";5;" . $colour . "m";
     } elsif( $format == $FORMAT_GREY ) {
         $rgb = ansi2rgb( $colour );
         $code = rgb2grey( $rgb->[0], $rgb->[1], $rgb->[2] );
-        $result = "\x1b[" . ( $background == 1 ? 48 : 38 ) . ";5;" . $code . "m";
+        $result = "\033[" . ( $background == 1 ? 48 : 38 ) . ";5;" . $code . "m";
 #    } elsif( $format == $FORMAT_HTML ) {
 #        $rgb = ansi2rgb( $colour );
 #        $result = "<SPAN style=\"";
@@ -674,16 +674,16 @@ sub xterm2code {
             $code -= 8;
         }
         if( $background ) {
-            $result .= "\x1b[" . (40 + $code) . "m";
+            $result .= "\033[" . (40 + $code) . "m";
         } else {
-            $result .= "\x1b[" . ($bold ? "1;" : "") . (30 + $code) . "m";
+            $result .= "\033[" . ($bold ? "1;" : "") . (30 + $code) . "m";
         }
     } elsif( $format == $FORMAT_XTERM ) {
-        $result = "\x1b[" . ( $background == 1 ? 48 : 38 ) . ";5;" . $colour . "m";
+        $result = "\033[" . ( $background == 1 ? 48 : 38 ) . ";5;" . $colour . "m";
     } elsif( $format == $FORMAT_GREY ) {
         $rgb = xterm2rgb( $colour );
         $code = rgb2grey( $rgb->[0], $rgb->[1], $rgb->[2] );
-        $result = "\x1b[" . ( $background == 1 ? 48 : 38 ) . ";5;" . $code . "m";
+        $result = "\033[" . ( $background == 1 ? 48 : 38 ) . ";5;" . $code . "m";
 #    } elsif( $format == $FORMAT_HTML ) {
 #        $rgb = xterm2rgb( $colour );
 #        $result = "<SPAN style=\"";
@@ -719,16 +719,16 @@ sub rgb2code {
             $code -= 8;
         }
         if( $background ) {
-            $result .= "\x1b[" . (40 + $code) . "m";
+            $result .= "\033[" . (40 + $code) . "m";
         } else {
-            $result .= "\x1b[" . ($bold ? "1;" : "") . (30 + $code) . "m";
+            $result .= "\033[" . ($bold ? "1;" : "") . (30 + $code) . "m";
         }
     } elsif( $format == $FORMAT_XTERM ) {
         $code = rgb2xterm($r, $g, $b);
-        $result = "\x1b[" . ( $background == 1 ? 48 : 38 ) . ";5;" . $code . "m";
+        $result = "\033[" . ( $background == 1 ? 48 : 38 ) . ";5;" . $code . "m";
     } elsif( $format == $FORMAT_GREY ) {
         $code = rgb2grey( $r, $g, $b );
-        $result = "\x1b[" . ( $background == 1 ? 48 : 38 ) . ";5;" . $code . "m";
+        $result = "\033[" . ( $background == 1 ? 48 : 38 ) . ";5;" . $code . "m";
 #    } elsif( $format == $FORMAT_HTML ) {
 #        $result = "<SPAN style=\"";
 #        $result .= $background ? "background-" : "";
@@ -817,37 +817,15 @@ sub output_perl {
         foreach my $name (sort keys %{$attr_trans{$format}}) {
             my $code = $attr_trans{$format}{$name};
             $code =~ s/\"/\\\"/g;
-            my $foo = "";
-            my $bar = "";
-        
-            while( $code =~ /\G\x1b(\[\d*\w)/cmgsx ) {
-                $foo .= "\%c$1";
-                $bar .= ", 27";
-            }
-            if($foo eq "") {
-                $out .= sprintf "            %-24s => %s,\n", "\"$name\"", "\"$code\"";
-            } else {
-                my $foobar = "sprintf( \"$foo\"$bar )";
-                $out .= sprintf "            %-24s => %s,\n", "\"$name\"", $foobar;
-            }
+            $code =~ s/\033/\\033/g;
+            $out .= sprintf "            %-24s => %s,\n", "\"$name\"", "\"$code\"";
         }
         $out .= sprintf "\n";
         foreach my $name (sort keys %{$terminal_trans{$format}}) {
             my $code = $terminal_trans{$format}{$name};
             $code =~ s/\"/\\\"/g;
-            my $foo = "";
-            my $bar = "";
-        
-            while( $code =~ /\G\x1b(\[\d*\w)/cmgsx ) {
-                $foo .= "\%c$1";
-                $bar .= ", 27";
-            }
-            if($foo eq "") {
-                $out .= sprintf "            %-24s => %s,\n", "\"$name\"", "\"$code\"";
-            } else {
-                my $foobar = "sprintf( \"$foo\"$bar )";
-                $out .= sprintf "            %-24s => %s,\n", "\"$name\"", $foobar;
-            }
+            $code =~ s/\033/\\033/g;
+            $out .= sprintf "            %-24s => %s,\n", "\"$name\"", "\"$code\"";
         }
         $out .= "\n";
 #        foreach my $name (sort keys %{$html_trans{$format}}) {
@@ -859,19 +837,8 @@ sub output_perl {
                 my $name = $background ? "B_$thing" : $thing;
                 my $code = $ansi_trans{$format}{$name};
                 $code =~ s/\"/\\\"/g;
-                my $foo = "";
-                my $bar = "";
-        
-                while( $code =~ /\G\x1b(\[[^m]+m)/cmgsx ) {
-                    $foo .= "\%c$1";
-                    $bar .= ", 27";
-                }
-                if($foo eq "") {
-                    $out .= sprintf "            %-24s => %s,\n", "\"$name\"", "\"$code\"";
-                } else {
-                    my $foobar = "sprintf( \"$foo\"$bar )";
-                    $out .= sprintf "            %-24s => %s,\n", "\"$name\"", $foobar;
-                }
+                $code =~ s/\033/\\033/g;
+                $out .= sprintf "            %-24s => %s,\n", "\"$name\"", "\"$code\"";
             }
         }
         foreach my $background (0, 1) {
@@ -880,19 +847,8 @@ sub output_perl {
                 my $name = $background ? "B_$thing" : $thing;
                 my $code = $xterm_trans{$format}{$name};
                 $code =~ s/\"/\\\"/g;
-                my $foo = "";
-                my $bar = "";
-        
-                while( $code =~ /\G\x1b(\[[^m]+m)/cmgsx ) {
-                    $foo .= "\%c$1";
-                    $bar .= ", 27";
-                }
-                if($foo eq "") {
-                    $out .= sprintf "            %-24s => %s,\n", "\"$name\"", "\"$code\"";
-                } else {
-                    my $foobar = "sprintf( \"$foo\"$bar )";
-                    $out .= sprintf "            %-24s => %s,\n", "\"$name\"", $foobar;
-                }
+                $code =~ s/\033/\\033/g;
+                $out .= sprintf "            %-24s => %s,\n", "\"$name\"", "\"$code\"";
             }
         }
         foreach my $background (0, 1) {
@@ -902,20 +858,8 @@ sub output_perl {
                 my $name = $background ? "B_$thing" : $thing;
                 my $code = $x11_trans{$format}{$name};
                 $code =~ s/\"/\\\"/g;
-                my $foo = "";
-                my $bar = "";
-        
-                while( $code =~ /\G\x1b(\[[^m]+m)/cmgsx ) {
-                    $foo .= "\%c$1";
-                    $bar .= ", 27";
-                }
-                if($foo eq "") {
-                    $out .= sprintf "            %-24s => %s,\n", "\"$name\"", "\"$code\"";
-                } else {
-                    my $foobar = "sprintf( \"$foo\"$bar )";
-                    $out .= sprintf "            %-24s => %s,\n", "\"$name\"", $foobar;
-                    #printf "$code            %-24s : %s,\x1b[0m\n", "\"$name\"", $foobar;
-                }
+                $code =~ s/\033/\\033/g;
+                $out .= sprintf "            %-24s => %s,\n", "\"$name\"", "\"$code\"";
             }
         }
         $out .= "        };\n";
@@ -1001,37 +945,15 @@ EOM
         foreach my $name (sort keys %{$attr_trans{$format}}) {
             my $code = $attr_trans{$format}{$name};
             $code =~ s/\"/\\\"/g;
-            my $foo = "";
-            my $bar = "";
-        
-            while( $code =~ /\G\x1b(\[\d*\w)/cmgsx ) {
-                $foo .= "\%c$1";
-                $bar .= ", 27";
-            }
-            if($foo eq "") {
-                $out .= sprintf "            %-24s : %s,\n", "\"$name\"", "\"$code\"";
-            } else {
-                my $foobar = "sprintf( \"$foo\"$bar )";
-                $out .= sprintf "            %-24s : %s,\n", "\"$name\"", $foobar;
-            }
+            $code =~ s/\033/\\033/g;
+            $out .= sprintf "            %-24s : %s,\n", "\"$name\"", "\"$code\"";
         }
         $out .= sprintf "\n";
         foreach my $name (sort keys %{$terminal_trans{$format}}) {
             my $code = $terminal_trans{$format}{$name};
             $code =~ s/\"/\\\"/g;
-            my $foo = "";
-            my $bar = "";
-        
-            while( $code =~ /\G\x1b(\[\d*\w)/cmgsx ) {
-                $foo .= "\%c$1";
-                $bar .= ", 27";
-            }
-            if($foo eq "") {
-                $out .= sprintf "            %-24s : %s,\n", "\"$name\"", "\"$code\"";
-            } else {
-                my $foobar = "sprintf( \"$foo\"$bar )";
-                $out .= sprintf "            %-24s : %s,\n", "\"$name\"", $foobar;
-            }
+            $code =~ s/\033/\\033/g;
+            $out .= sprintf "            %-24s : %s,\n", "\"$name\"", "\"$code\"";
         }
         $out .= "\n";
 #        foreach my $name (sort keys %{$html_trans{$format}}) {
@@ -1043,19 +965,8 @@ EOM
                 my $name = $background ? "B_$thing" : $thing;
                 my $code = $ansi_trans{$format}{$name};
                 $code =~ s/\"/\\\"/g;
-                my $foo = "";
-                my $bar = "";
-        
-                while( $code =~ /\G\x1b(\[[^m]+m)/cmgsx ) {
-                    $foo .= "\%c$1";
-                    $bar .= ", 27";
-                }
-                if($foo eq "") {
-                    $out .= sprintf "            %-24s : %s,\n", "\"$name\"", "\"$code\"";
-                } else {
-                    my $foobar = "sprintf( \"$foo\"$bar )";
-                    $out .= sprintf "            %-24s : %s,\n", "\"$name\"", $foobar;
-                }
+                $code =~ s/\033/\\033/g;
+                $out .= sprintf "            %-24s : %s,\n", "\"$name\"", "\"$code\"";
             }
         }
         $out .= "#ifdef EXTENDED_PINKFISH\n";
@@ -1065,42 +976,18 @@ EOM
                 my $name = $background ? "B_$thing" : $thing;
                 my $code = $xterm_trans{$format}{$name};
                 $code =~ s/\"/\\\"/g;
-                my $foo = "";
-                my $bar = "";
-        
-                while( $code =~ /\G\x1b(\[[^m]+m)/cmgsx ) {
-                    $foo .= "\%c$1";
-                    $bar .= ", 27";
-                }
-                if($foo eq "") {
-                    $out .= sprintf "            %-24s : %s,\n", "\"$name\"", "\"$code\"";
-                } else {
-                    my $foobar = "sprintf( \"$foo\"$bar )";
-                    $out .= sprintf "            %-24s : %s,\n", "\"$name\"", $foobar;
-                }
+                $code =~ s/\033/\\033/g;
+                $out .= sprintf "            %-24s : %s,\n", "\"$name\"", "\"$code\"";
             }
         }
         foreach my $background (0, 1) {
             $out .= "\n";
-            #foreach my $thing (sort keys %{$x11_trans{$format}}) {
             foreach my $thing (@x11_name) {
                 my $name = $background ? "B_$thing" : $thing;
                 my $code = $x11_trans{$format}{$name};
                 $code =~ s/\"/\\\"/g;
-                my $foo = "";
-                my $bar = "";
-        
-                while( $code =~ /\G\x1b(\[[^m]+m)/cmgsx ) {
-                    $foo .= "\%c$1";
-                    $bar .= ", 27";
-                }
-                if($foo eq "") {
-                    $out .= sprintf "            %-24s : %s,\n", "\"$name\"", "\"$code\"";
-                } else {
-                    my $foobar = "sprintf( \"$foo\"$bar )";
-                    $out .= sprintf "            %-24s : %s,\n", "\"$name\"", $foobar;
-                    #printf "$code            %-24s : %s,\x1b[0m\n", "\"$name\"", $foobar;
-                }
+                $code =~ s/\033/\\033/g;
+                $out .= sprintf "            %-24s : %s,\n", "\"$name\"", "\"$code\"";
             }
         }
         $out .= "#endif // EXTENDED_PINKFISH\n";
