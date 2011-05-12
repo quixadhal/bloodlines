@@ -18,17 +18,23 @@
 #   "NAME" : ANSI(x), ESC(x), etc...
 # ]);
 
+use Data::Dumper;
+
 my $FORMAT_FIRST = 0;
 my $FORMAT_NONE = 0;
 my $FORMAT_ANSI = 1;
 my $FORMAT_XTERM = 2;
 my $FORMAT_GREY = 3;
-my $FORMAT_LAST = 3;
-#my $FORMAT_HTML = 4;
-#my $FORMAT_LAST = 4;
+#my $FORMAT_LAST = 3;
+my $FORMAT_IMC2 = 4;
+my $FORMAT_I3 = 5;
+my $FORMAT_MXP = 6;
+my $FORMAT_LAST = 6;
+#my $FORMAT_HTML = 6;
+#my $FORMAT_LAST = 6;
 
-#my @term_name = ( "unknown", "ansi", "xterm-256color", "xterm-grey", "html" );
-my @term_name = ( "unknown", "ansi", "xterm-256color", "xterm-grey" );
+#my @term_name = ( "unknown", "ansi", "xterm-256color", "xterm-grey", "imc2", "i3", "mxp", "html" );
+my @term_name = ( "unknown", "ansi", "xterm-256color", "xterm-grey", "imc2", "i3", "mxp" );
 
 my $RESET = "\033[0m";
 my $BOLD = "\033[1m";
@@ -67,9 +73,14 @@ my %x11_trans;
 my @hexes;
 my @greys;
 my @ansi;
+my @old_pinkfish;
+my @old_b_pinkfish;
 my @ansi_name;
+my @ansi_b_name;
 my @xterm_name;
+my @xterm_b_name;
 my @x11_name;
+my @x11_b_name;
 my %x11_values;
 my %imc_pinkfish;
 my %pinkfish_imc;
@@ -87,6 +98,21 @@ sub hex2int { return hex(shift); }
 sub int2hex { return sprintf("%02x", shift); }
 sub strpad { my ($s,$w) = (shift,shift); return sprintf("%*s", $w, $s); }
 sub zeropad { my ($s,$w) = (shift,shift); return sprintf("%0*s", $w, $s); }
+sub int2base6 { 
+    my $color = shift;
+    $color -= 16;
+    return "000" if $color < 0;
+    return "555" if $color > 255;
+    return sprintf("%d%d%d", ($color/36)%6, ($color/6)%6, $color%6);
+}
+sub base62int {
+    my $str = shift;
+    return 0 if ! $str =~ /\d\d\d/;
+    $str[0] = '5' if $str[0] > '5';
+    $str[1] = '5' if $str[1] > '5';
+    $str[2] = '5' if $str[2] > '5';
+    return ((0+$str[0])*36) + ((0+$str[1])*6) + (0+$str[2]) + 16;
+}
 
 sub setup_hex_arrays {
     my $i;
@@ -118,11 +144,37 @@ sub setup_hex_arrays {
             [ 0x55, 0xFF, 0xFF ], # 14 bright cyan
             [ 0xFF, 0xFF, 0xFF ]  # 15 white
             );
+    @old_pinkfish = (
+                 '%^BLACK%^', '%^RED%^', '%^GREEN%^', '%^ORANGE%^',
+                 '%^BLUE%^', '%^MAGENTA%^', '%^CYAN%^', '%^WHITE%^',
+                 '%^BOLD%^%^BLACK%^', '%^BOLD%^%^RED%^', '%^BOLD%^%^GREEN%^', '%^YELLOW%^',
+                 '%^BOLD%^%^BLUE%^', '%^BOLD%^%^MAGENTA%^', '%^BOLD%^%^CYAN%^', '%^BOLD%^%^WHITE%^'
+                 );
+    @old_b_pinkfish = (
+                 '%^B_BLACK%^', '%^B_RED%^', '%^B_GREEN%^', '%^B_ORANGE%^',
+                 '%^B_BLUE%^', '%^B_MAGENTA%^', '%^B_CYAN%^', '%^B_WHITE%^',
+                 '%^B_BLACK%^', '%^B_RED%^', '%^B_GREEN%^', '%^B_YELLOW%^',
+                 '%^B_BLUE%^', '%^B_MAGENTA%^', '%^B_CYAN%^', '%^B_WHITE%^'
+                 );
     @ansi_name = (
-                 "BLACK", "RED", "GREEN", "ORANGE",
-                 "BLUE", "MAGENTA", "CYAN", "GREY",
-                 "DARKGREY", "LIGHTRED", "LIGHTGREEN", "YELLOW",
-                 "LIGHTBLUE", "PINK", "LIGHTCYAN", "WHITE"
+                 'BLACK', 'RED', 'GREEN', 'ORANGE',
+                 'BLUE', 'MAGENTA', 'CYAN', 'GREY',
+                 'DARKGREY', 'LIGHTRED', 'LIGHTGREEN', 'YELLOW',
+                 'LIGHTBLUE', 'PINK', 'LIGHTCYAN', 'WHITE'
+                 );
+    push @ansi_b_name, "B_$_" foreach (@ansi_name);
+
+    @imc_tokens = (
+                 '~x', '~r', '~g', '~y',
+                 '~b', '~p', '~c', '~w',
+                 '~z', '~R', '~G', '~Y',
+                 '~B', '~P', '~C', '~W'
+                 );
+    @imc_back_tokens = (
+                 '^x', '^r', '^g', '^O',
+                 '^b', '^p', '^c', '^w',
+                 '^z', '^R', '^G', '^Y',
+                 '^B', '^P', '^C', '^W'
                  );
 
     for( my $i = 0; $i < 16; $i++ ) {
@@ -153,110 +205,155 @@ sub setup_hex_arrays {
 sub setup_colour_maps
 {
   $attr_trans{$FORMAT_NONE} = {
-                   "RESET"      => "",
-                   "BOLD"       => "",
-                   "ITALIC"     => "",
-                   "UNDERLINE"  => "",
-                   "FLASH"      => "",
-                   "REVERSE"    => "",
-                   "STRIKETHRU" => "",
+                   'RESET'      => '',
+                   'BOLD'       => '',
+                   'ITALIC'     => '',
+                   'UNDERLINE'  => '',
+                   'FLASH'      => '',
+                   'REVERSE'    => '',
+                   'STRIKETHRU' => '',
                   };
   $attr_trans{$FORMAT_ANSI} = {
-                   "RESET"      => $RESET,
-                   "BOLD"       => $BOLD,
-                   "ITALIC"     => $ITALIC,
-                   "UNDERLINE"  => $UNDERLINE,
-                   "FLASH"      => $FLASH,
-                   "REVERSE"    => $REVERSE,
-                   "STRIKETHRU" => $STRIKETHRU,
+                   'RESET'      => $RESET,
+                   'BOLD'       => $BOLD,
+                   'ITALIC'     => $ITALIC,
+                   'UNDERLINE'  => $UNDERLINE,
+                   'FLASH'      => $FLASH,
+                   'REVERSE'    => $REVERSE,
+                   'STRIKETHRU' => $STRIKETHRU,
                };
   $attr_trans{$FORMAT_XTERM} = $attr_trans{$FORMAT_ANSI};
   $attr_trans{$FORMAT_GREY} = $attr_trans{$FORMAT_ANSI};
+  $attr_trans{$FORMAT_IMC2} = {
+                   'RESET'      => '~!',
+                   'BOLD'       => '~L',
+                   'ITALIC'     => '~i',
+                   'UNDERLINE'  => '~u',
+                   'FLASH'      => '~$',
+                   'REVERSE'    => '~v',
+                   'STRIKETHRU' => '~s',
+  };
+  $attr_trans{$FORMAT_I3} = {
+                   'RESET'      => '%^RESET%^',
+                   'BOLD'       => '%^BOLD%^',
+                   'ITALIC'     => '%^ITALIC%^',
+                   'UNDERLINE'  => '%^UNDERLINE%^',
+                   'FLASH'      => '%^FLASH%^',
+                   'REVERSE'    => '%^REVERSE%^',
+                   'STRIKETHRU' => '%^STRIKETHRU%^',
+  };
+  $attr_trans{$FORMAT_MXP} = {
+                   'RESET'      => '<RESET>',
+                   'BOLD'       => '<BOLD>',
+                   'ITALIC'     => '<ITALIC>',
+                   'UNDERLINE'  => '<UNDERLINE>',
+                   'FLASH'      => '<FONT COLOR=BLINK>',
+                   'REVERSE'    => '<FONT COLOR=INVERSE>',
+                   'STRIKETHRU' => '<STRIKEOUT>',
+  };
+
 #  $attr_trans{$FORMAT_HTML} = {
-#                   "RESET"      => "</SPAN>",
-#                   "BOLD"       => "<SPAN style=\"text-decoration: bold;\">",
-#                   "ITALIC"     => "<SPAN style=\"text-decoration: italic;\">",
-#                   "UNDERLINE"  => "<SPAN style=\"text-decoration: underline;\">",
-#                   "FLASH"      => "<SPAN style=\"text-decoration: blink;\">",
-#                   "REVERSE"    => "",
-#                   "STRIKETHRU" => "<SPAN style=\"text-decoration: line-through;\">",
+#                   'RESET'      => '</SPAN>',
+#                   'BOLD'       => '<SPAN style=\'text-decoration: bold;\'>',
+#                   'ITALIC'     => '<SPAN style=\'text-decoration: italic;\'>',
+#                   'UNDERLINE'  => '<SPAN style=\'text-decoration: underline;\'>',
+#                   'FLASH'      => '<SPAN style=\'text-decoration: blink;\'>',
+#                   'REVERSE'    => '',
+#                   'STRIKETHRU' => '<SPAN style=\'text-decoration: line-through;\'>',
 #               };
 
 
   $terminal_trans{$FORMAT_NONE} = {
-                   "CURS_UP"     => "",
-                   "CURS_DOWN"   => "",
-                   "CURS_RIGHT"  => "",
-                   "CURS_LEFT"   => "",
+                   'CURS_UP'     => '',
+                   'CURS_DOWN'   => '',
+                   'CURS_RIGHT'  => '',
+                   'CURS_LEFT'   => '',
 
-                   "CLEARLINE"   => "",
-                   "INITTERM"    => "",
-                   "ENDTERM"     => "",
-                   "SAVE"        => "",
-                   "RESTORE"     => "",
-                   "HOME"        => "",
+                   'CLEARLINE'   => '',
+                   'INITTERM'    => '',
+                   'ENDTERM'     => '',
+                   'SAVE'        => '',
+                   'RESTORE'     => '',
+                   'HOME'        => '',
                };
   $terminal_trans{$FORMAT_ANSI} = {
-                   "CURS_UP"     => $CURS_UP,
-                   "CURS_DOWN"   => $CURS_DOWN,
-                   "CURS_RIGHT"  => $CURS_RIGHT,
-                   "CURS_LEFT"   => $CURS_LEFT,
+                   'CURS_UP'     => $CURS_UP,
+                   'CURS_DOWN'   => $CURS_DOWN,
+                   'CURS_RIGHT'  => $CURS_RIGHT,
+                   'CURS_LEFT'   => $CURS_LEFT,
 
-                   "CLEARLINE"   => $CLEARLINE,
-                   "INITTERM"    => $INITTERM,
-                   "ENDTERM"     => $ENDTERM,
-                   "SAVE"        => $SAVE,
-                   "RESTORE"     => $RESTORE,
-                   "HOME"        => $HOME,
+                   'CLEARLINE'   => $CLEARLINE,
+                   'INITTERM'    => $INITTERM,
+                   'ENDTERM'     => $ENDTERM,
+                   'SAVE'        => $SAVE,
+                   'RESTORE'     => $RESTORE,
+                   'HOME'        => $HOME,
                };
   $terminal_trans{$FORMAT_XTERM} = $terminal_trans{$FORMAT_ANSI};
   $terminal_trans{$FORMAT_GREY} = $terminal_trans{$FORMAT_XTERM};
+  $terminal_trans{$FORMAT_IMC2} = $terminal_trans{$FORMAT_NONE};
+  $terminal_trans{$FORMAT_I3} = {
+                   'CURS_UP'     => '%^CURS_UP%^',
+                   'CURS_DOWN'   => '%^CURS_DOWN%^',
+                   'CURS_RIGHT'  => '%^CURS_RIGHT%^',
+                   'CURS_LEFT'   => '%^CURS_LEFT%^',
+
+                   'CLEARLINE'   => '%^CLEARLINE%^',
+                   'INITTERM'    => '%^INITTERM%^',
+                   'ENDTERM'     => '%^ENDTERM%^',
+                   'SAVE'        => '%^SAVE%^',
+                   'RESTORE'     => '%^RESTORE%^',
+                   'HOME'        => '%^HOME%^',
+               };
+  $terminal_trans{$FORMAT_MXP} = $terminal_trans{$FORMAT_NONE};
 #  $terminal_trans{$FORMAT_HTML} = $terminal_trans{$FORMAT_NONE};
 
 #  $html_trans{$FORMAT_NONE} = {
-#                "BR"        => "",
-#                "P"         => "",
-#                "/P"        => "",
-#                ">"         => "",
-#                "HREF"      => "",
-#                "NAME"      => "",
-#                "/A"        => "",
-#                "I"         => "",
-#                "/I"        => "",
-#                "PRE"       => "",
-#                "/PRE"      => "",
-#                "STRONG"    => "",
-#                "/STRONG"   => "",
-#                "TABLE"     => "",
-#                "/TABLE"    => "",
-#                "TR"        => "",
-#                "/TR"       => "",
-#                "TD"        => "",
-#                "/TD"       => "",
+#                'BR'        => '',
+#                'P'         => '',
+#                '/P'        => '',
+#                '>'         => '',
+#                'HREF'      => '',
+#                'NAME'      => '',
+#                '/A'        => '',
+#                'I'         => '',
+#                '/I'        => '',
+#                'PRE'       => '',
+#                '/PRE'      => '',
+#                'STRONG'    => '',
+#                '/STRONG'   => '',
+#                'TABLE'     => '',
+#                '/TABLE'    => '',
+#                'TR'        => '',
+#                '/TR'       => '',
+#                'TD'        => '',
+#                '/TD'       => '',
 #  };
 #  $html_trans{$FORMAT_ANSI} = $html_trans{$FORMAT_NONE};
 #  $html_trans{$FORMAT_XTERM} = $html_trans{$FORMAT_NONE};
 #  $html_trans{$FORMAT_GREY} = $html_trans{$FORMAT_NONE};
+#  $html_trans{$FORMAT_IMC2} = $html_trans{$FORMAT_NONE};
+#  $html_trans{$FORMAT_I3} = $html_trans{$FORMAT_NONE};
 #  $html_trans{$FORMAT_HTML} = {
-#                "BR"        => "<BR>",
-#                "P"         => "<P>",
-#                "/P"        => "</P>",
-#                ">"         => ">",
-#                "HREF"      => "<A HREF=",
-#                "NAME"      => "<A NAME=",
-#                "/A"        => "</A>",
-#                "I"         => "<I>",
-#                "/I"        => "</I>",
-#                "PRE"       => "</PRE>",
-#                "/PRE"      => "</PRE>",
-#                "STRONG"    => "<STRONG>",
-#                "/STRONG"   => "</STRONG>",
-#                "TABLE"     => "<TABLE>",
-#                "/TABLE"    => "</TABLE>",
-#                "TR"        => "<TR>",
-#                "/TR"       => "</TR>",
-#                "TD"        => "<TD>",
-#                "/TD"       => "</TD>",
+#                'BR'        => '<BR>',
+#                'P'         => '<P>',
+#                '/P'        => '</P>',
+#                '>'         => '>',
+#                'HREF'      => '<A HREF=',
+#                'NAME'      => '<A NAME=',
+#                '/A'        => '</A>',
+#                'I'         => '<I>',
+#                '/I'        => '</I>',
+#                'PRE'       => '</PRE>',
+#                '/PRE'      => '</PRE>',
+#                'STRONG'    => '<STRONG>',
+#                '/STRONG'   => '</STRONG>',
+#                'TABLE'     => '<TABLE>',
+#                '/TABLE'    => '</TABLE>',
+#                'TR'        => '<TR>',
+#                '/TR'       => '</TR>',
+#                'TD'        => '<TD>',
+#                '/TD'       => '</TD>',
 #  };
 
 }
@@ -266,15 +363,31 @@ sub setup_xterm {
         $xterm_trans{$format} = {};
         $ansi_trans{$format} = {};
         @xterm_name = ();
+        @xterm_b_name = ();
         for( my $i = 0; $i < 16; $i++ ) {
             $ansi_trans{$format}{$ansi_name[$i]} = ansi2code($format,$i,0);
             $ansi_trans{$format}{"B_".$ansi_name[$i]} = ansi2code($format,$i,1);
         }
-        for( my $i = 0; $i < 256; $i++ ) {
-            push @xterm_name, ("XTERM:".int2hex($i));
-            $xterm_trans{$format}{"XTERM:".int2hex($i)} = xterm2code($format,$i,0);
-            $xterm_trans{$format}{"B_XTERM:".int2hex($i)} = xterm2code($format,$i,1);
+        for( my $i = 16; $i < 232; $i++ ) {
+            push @xterm_name, ("F".int2base6($i));
+            push @xterm_b_name, ("B".int2base6($i));
+            $xterm_trans{$format}{"F".int2base6($i)} = xterm2code($format,$i,0);
+            $xterm_trans{$format}{"B".int2base6($i)} = xterm2code($format,$i,1);
         }
+            push @xterm_name, sprintf("G%02d", 0);
+            push @xterm_b_name, sprintf("BG%02d", 0);
+            $xterm_trans{$format}{sprintf("G%02d", 0)} = xterm2code($format,0,0);
+            $xterm_trans{$format}{sprintf("BG%02d", 0)} = xterm2code($format,0,1);
+        for( my $i = 232; $i < 256; $i++ ) {
+            push @xterm_name, sprintf("G%02d", $i - 232 + 1);
+            push @xterm_b_name, sprintf("BG%02d", $i - 232 + 1);
+            $xterm_trans{$format}{sprintf("G%02d", $i - 232 + 1)} = xterm2code($format,$i,0);
+            $xterm_trans{$format}{sprintf("BG%02d", $i - 232 + 1)} = xterm2code($format,$i,1);
+        }
+            push @xterm_name, sprintf("G%02d", 25);
+            push @xterm_b_name, sprintf("BG%02d", 25);
+            $xterm_trans{$format}{sprintf("G%02d", 25)} = xterm2code($format,15,0);
+            $xterm_trans{$format}{sprintf("BG%02d", 25)} = xterm2code($format,15,1);
     }
 }
 
@@ -292,6 +405,7 @@ sub setup_x11 {
         next if $name =~ /\s/;
         $name = ucfirst($name);
         push @x11_name, $name;
+        push @x11_b_name, "B_$name";
         for( my $format = $FORMAT_FIRST; $format <= $FORMAT_LAST; $format++ ) {
             $x11_trans{$format}{$name} = rgb2code($format, $r, $g, $b, 0);
             $x11_trans{$format}{"B_".$name} = rgb2code($format, $r, $g, $b, 1);
@@ -303,19 +417,6 @@ sub setup_x11 {
 
 sub setup_imc {
   # Same ordering as the @ansi_names array
-
-    @imc_tokens = (
-                 "~x", "~r", "~g", "~y",
-                 "~b", "~p", "~c", "~w",
-                 "~z", "~R", "~G", "~Y",
-                 "~B", "~P", "~C", "~W"
-                 );
-    @imc_back_tokens = (
-                 "^x", "^r", "^g", "^O",
-                 "^b", "^p", "^c", "^w",
-                 "^z", "^R", "^G", "^Y",
-                 "^B", "^P", "^C", "^W"
-                 );
 
     %imc_pinkfish = (
         '~~'    => '~',
@@ -466,11 +567,17 @@ sub setup_imc {
 
     %pinkfish_imc_ext = ();
 
-    for( my $i = 0; $i < 256; $i++ ) {
-        my $token = int2hex($i);
+    for( my $i = 16; $i < 232; $i++ ) {
+        my $token = int2base6($i);
         my $ansi = xterm2ansi($i);
-        $pinkfish_imc_ext{"%^XTERM:$token%^"} = $imc_tokens[$ansi];
-        $pinkfish_imc_ext{"%^B_XTERM:$token%^"} = $imc_back_tokens[$ansi];
+        $pinkfish_imc_ext{"%^F$token%^"} = $imc_tokens[$ansi];
+        $pinkfish_imc_ext{"%^B$token%^"} = $imc_back_tokens[$ansi];
+    }
+    for( my $i = 232; $i < 256; $i++ ) {
+        my $token = sprintf("%02d", $i - 232 + 1);
+        my $ansi = xterm2ansi($i);
+        $pinkfish_imc_ext{"%^G$token%^"} = $imc_tokens[$ansi];
+        $pinkfish_imc_ext{"%^BG$token%^"} = $imc_back_tokens[$ansi];
     }
 
     foreach my $k (sort keys %x11_values) {
@@ -603,13 +710,6 @@ sub xterm2ansi {
     return rgb2ansi( $rgb->[0], $rgb->[1], $rgb->[2] );
 }
 
-
-
-
-
-
-
-
 # This takes an extended ANSI colour and returns the
 # escape code string.  Valid colours are 0-15, with the
 # colours 8-15 being BOLD versions of 0-7.
@@ -640,6 +740,25 @@ sub ansi2code {
         $rgb = ansi2rgb( $colour );
         $code = rgb2grey( $rgb->[0], $rgb->[1], $rgb->[2] );
         $result = "\033[" . ( $background == 1 ? 48 : 38 ) . ";5;" . $code . "m";
+    } elsif( $format == $FORMAT_IMC2 ) {
+        if( $background ) {
+            $result = $imc_back_tokens[$colour];
+        } else {
+            $result = $imc_tokens[$colour];
+        }
+    } elsif( $format == $FORMAT_I3 ) {
+        if( $background ) {
+            $result = $old_b_pinkfish[$colour];
+        } else {
+            $result = $old_pinkfish[$colour];
+        }
+    } elsif( $format == $FORMAT_MXP ) {
+        $rgb = ansi2rgb( $colour );
+        if( $background ) {
+            $result = sprintf("<COLOR BACK=\"#%02x%02x%02x\">", $rgb->[0], $rgb->[1], $rgb->[2]);
+        } else {
+            $result = sprintf("<COLOR FORE=\"#%02x%02x%02x\">", $rgb->[0], $rgb->[1], $rgb->[2]);
+        }
 #    } elsif( $format == $FORMAT_HTML ) {
 #        $rgb = ansi2rgb( $colour );
 #        $result = "<SPAN style=\"";
@@ -684,6 +803,27 @@ sub xterm2code {
         $rgb = xterm2rgb( $colour );
         $code = rgb2grey( $rgb->[0], $rgb->[1], $rgb->[2] );
         $result = "\033[" . ( $background == 1 ? 48 : 38 ) . ";5;" . $code . "m";
+    } elsif( $format == $FORMAT_IMC2 ) {
+        $code = xterm2ansi($colour);
+        if( $background ) {
+            $result = $imc_back_tokens[$code];
+        } else {
+            $result = $imc_tokens[$code];
+        }
+    } elsif( $format == $FORMAT_I3 ) {
+        $code = xterm2ansi($colour);
+        if( $background ) {
+            $result = $old_b_pinkfish[$code];
+        } else {
+            $result = $old_pinkfish[$code];
+        }
+    } elsif( $format == $FORMAT_MXP ) {
+        $rgb = xterm2rgb( $colour );
+        if( $background ) {
+            $result = sprintf("<COLOR BACK=\"#%02x%02x%02x\">", $rgb->[0], $rgb->[1], $rgb->[2]);
+        } else {
+            $result = sprintf("<COLOR FORE=\"#%02x%02x%02x\">", $rgb->[0], $rgb->[1], $rgb->[2]);
+        }
 #    } elsif( $format == $FORMAT_HTML ) {
 #        $rgb = xterm2rgb( $colour );
 #        $result = "<SPAN style=\"";
@@ -729,6 +869,26 @@ sub rgb2code {
     } elsif( $format == $FORMAT_GREY ) {
         $code = rgb2grey( $r, $g, $b );
         $result = "\033[" . ( $background == 1 ? 48 : 38 ) . ";5;" . $code . "m";
+    } elsif( $format == $FORMAT_IMC2 ) {
+        $code = rgb2ansi($r, $g, $b);
+        if( $background ) {
+            $result = $imc_back_tokens[$code];
+        } else {
+            $result = $imc_tokens[$code];
+        }
+    } elsif( $format == $FORMAT_I3 ) {
+        $code = rgb2ansi($r, $g, $b);
+        if( $background ) {
+            $result = $old_b_pinkfish[$code];
+        } else {
+            $result = $old_pinkfish[$code];
+        }
+    } elsif( $format == $FORMAT_MXP ) {
+        if( $background ) {
+            $result = sprintf("<COLOR BACK=\"#%02x%02x%02x\">", $r, $g, $b);
+        } else {
+            $result = sprintf("<COLOR FORE=\"#%02x%02x%02x\">", $r, $g, $b);
+        }
 #    } elsif( $format == $FORMAT_HTML ) {
 #        $result = "<SPAN style=\"";
 #        $result .= $background ? "background-" : "";
@@ -755,8 +915,8 @@ sub xterm_colours {
       $output = $output . $xterm_text . "\n";
       $xterm_text = "";
     }
-    $token = int2hex($i);
-    $xterm_text = $xterm_text . "%^XTERM:" . $token . "%^XTERM:" . $token . "%^RESET%^ ";
+    $token = $ansi_name[$i];
+    $xterm_text = $xterm_text . "%^" . $token . "%^" . $token . "%^RESET%^ ";
   }
   $output = $output . $xterm_text . "\n\n";
   $xterm_text = "";
@@ -766,8 +926,8 @@ sub xterm_colours {
       $output = $output . $xterm_text . "\n";
       $xterm_text = "";
     }
-    $token = int2hex($i);
-    $xterm_text = $xterm_text . "%^XTERM:" . $token . "%^XTERM:" . $token . "%^RESET%^ ";
+    $token = int2base6($i);
+    $xterm_text = $xterm_text . "%^F" . $token . "%^F" . $token . "%^RESET%^ ";
   }
   $output = $output . $xterm_text . "\n\n";
   $xterm_text = "";
@@ -777,8 +937,8 @@ sub xterm_colours {
       $output = $output . $xterm_text . "\n";
       $xterm_text = "";
     }
-    $token = int2hex($i);
-    $xterm_text = $xterm_text . "%^XTERM:" . $token . "%^XTERM:" . $token . "%^RESET%^ ";
+    $token = sprintf("%02d", $i - 232 + 1);
+    $xterm_text = $xterm_text . "%^G" . $token . "%^G" . $token . "%^RESET%^ ";
   }
   $output = $output . $xterm_text . "\n\n";
   $xterm_text = "";
@@ -803,6 +963,29 @@ sub x11_colours {
 
 
 
+
+sub output_dump {
+    my $file = shift;
+    my $out = "";
+
+    $out .= "ANSI names: " . Dumper(\@ansi_name) . "\n";
+    $out .= "ANSI BACK names: " . Dumper(\@ansi_b_name) . "\n";
+    $out .= "XTERM names: " . Dumper(\@xterm_name) . "\n";
+    $out .= "XTERM BACK names: " . Dumper(\@xterm_b_name) . "\n";
+    $out .= "X11 names: " . Dumper(\@x11_name) . "\n";
+    $out .= "X11 BACK names: " . Dumper(\@x11_b_name) . "\n";
+    $out .= "ANSI trans: " . Dumper(\%ansi_trans) . "\n";
+    $out .= "XTERM trans: " . Dumper(\%xterm_trans) . "\n";
+    $out .= "X11 trans: " . Dumper(\%x11_trans) . "\n";
+
+    if(defined $file) {
+        open FOO, ">$file" or die "Cannot open output $file";
+        print FOO "$out\n";
+        close FOO;
+    } else {
+        print "$out\n";
+    }
+}
 
 sub output_perl {
     my $file = shift;
@@ -833,8 +1016,8 @@ sub output_perl {
 #        }
         foreach my $background (0, 1) {
             $out .= "\n";
-            foreach my $thing (@ansi_name) {
-                my $name = $background ? "B_$thing" : $thing;
+            for(my $i = 0; $i < scalar(@ansi_name); $i++) {
+                my $name = $background ? $ansi_b_name[$i]: $ansi_name[$i];
                 my $code = $ansi_trans{$format}{$name};
                 $code =~ s/\"/\\\"/g;
                 $code =~ s/\033/\\033/g;
@@ -843,8 +1026,8 @@ sub output_perl {
         }
         foreach my $background (0, 1) {
             $out .= "\n";
-            foreach my $thing (@xterm_name) {
-                my $name = $background ? "B_$thing" : $thing;
+            for(my $i = 0; $i < scalar(@xterm_name); $i++) {
+                my $name = $background ? $xterm_b_name[$i]: $xterm_name[$i];
                 my $code = $xterm_trans{$format}{$name};
                 $code =~ s/\"/\\\"/g;
                 $code =~ s/\033/\\033/g;
@@ -853,9 +1036,8 @@ sub output_perl {
         }
         foreach my $background (0, 1) {
             $out .= "\n";
-#            foreach my $thing (sort keys %{$x11_trans{$format}}) {
-            foreach my $thing (@x11_name) {
-                my $name = $background ? "B_$thing" : $thing;
+            for(my $i = 0; $i < scalar(@x11_name); $i++) {
+                my $name = $background ? $x11_b_name[$i]: $x11_name[$i];
                 my $code = $x11_trans{$format}{$name};
                 $code =~ s/\"/\\\"/g;
                 $code =~ s/\033/\\033/g;
@@ -961,8 +1143,8 @@ EOM
 #        }
         foreach my $background (0, 1) {
             $out .= "\n";
-            foreach my $thing (@ansi_name) {
-                my $name = $background ? "B_$thing" : $thing;
+            for(my $i = 0; $i < scalar(@ansi_name); $i++) {
+                my $name = $background ? $ansi_b_name[$i]: $ansi_name[$i];
                 my $code = $ansi_trans{$format}{$name};
                 $code =~ s/\"/\\\"/g;
                 $code =~ s/\033/\\033/g;
@@ -972,8 +1154,8 @@ EOM
         $out .= "#ifdef EXTENDED_PINKFISH\n";
         foreach my $background (0, 1) {
             $out .= "\n";
-            foreach my $thing (@xterm_name) {
-                my $name = $background ? "B_$thing" : $thing;
+            for(my $i = 0; $i < scalar(@xterm_name); $i++) {
+                my $name = $background ? $xterm_b_name[$i]: $xterm_name[$i];
                 my $code = $xterm_trans{$format}{$name};
                 $code =~ s/\"/\\\"/g;
                 $code =~ s/\033/\\033/g;
@@ -982,8 +1164,8 @@ EOM
         }
         foreach my $background (0, 1) {
             $out .= "\n";
-            foreach my $thing (@x11_name) {
-                my $name = $background ? "B_$thing" : $thing;
+            for(my $i = 0; $i < scalar(@x11_name); $i++) {
+                my $name = $background ? $x11_b_name[$i]: $x11_name[$i];
                 my $code = $x11_trans{$format}{$name};
                 $code =~ s/\"/\\\"/g;
                 $code =~ s/\033/\\033/g;
@@ -1046,11 +1228,37 @@ static private mapping extended_to_pinkfish = ([
 EOM
     ;
 
-    for( my $i = 0; $i < 256; $i++ ) {
-        my $token = int2hex($i);
-        my $ansi = $ansi_name[xterm2ansi($i)];
-        $out .= sprintf "            %-24s : %s,\n", "\"%^XTERM:$token%^\"", "\"%^$ansi%^\"";
-        $out .= sprintf "            %-24s : %s,\n", "\"%^B_XTERM:$token%^\"", "\"%^B_$ansi%^\"";
+    for( my $i = 16; $i < 232; $i++ ) {
+        my $token = int2base6($i);
+        my $x = xterm2ansi($i);
+        my $ansi = $ansi_name[$x];
+        my $bansi = $ansi_b_name[$x];
+        $out .= sprintf "            %-24s : %s,\n", "\"%^F$token%^\"", "\"%^$ansi%^\"";
+        $out .= sprintf "            %-24s : %s,\n", "\"%^B$token%^\"", "\"%^$bansi%^\"";
+    }
+    {
+        my $token = sprintf("%02d", 0);
+        my $x = xterm2ansi(0);
+        my $ansi = $ansi_name[$x];
+        my $bansi = $ansi_b_name[$x];
+        $out .= sprintf "            %-24s : %s,\n", "\"%^G$token%^\"", "\"%^$ansi%^\"";
+        $out .= sprintf "            %-24s : %s,\n", "\"%^BG$token%^\"", "\"%^$bansi%^\"";
+    }
+    for( my $i = 232; $i < 256; $i++ ) {
+        my $token = sprintf("%02d", $i - 232 + 1);
+        my $x = xterm2ansi($i);
+        my $ansi = $ansi_name[$x];
+        my $bansi = $ansi_b_name[$x];
+        $out .= sprintf "            %-24s : %s,\n", "\"%^G$token%^\"", "\"%^$ansi%^\"";
+        $out .= sprintf "            %-24s : %s,\n", "\"%^BG$token%^\"", "\"%^$bansi%^\"";
+    }
+    {
+        my $token = sprintf("%02d", 25);
+        my $x = xterm2ansi(15);
+        my $ansi = $ansi_name[$x];
+        my $bansi = $ansi_b_name[$x];
+        $out .= sprintf "            %-24s : %s,\n", "\"%^G$token%^\"", "\"%^$ansi%^\"";
+        $out .= sprintf "            %-24s : %s,\n", "\"%^BG$token%^\"", "\"%^$bansi%^\"";
     }
 
     foreach my $k (sort keys %x11_values) {
@@ -1076,6 +1284,1057 @@ EOM
     }
 }
 
+sub output_cpp {
+    my $file = shift;
+    my $out = "";
+    my $format_count = $FORMAT_LAST - $FORMAT_FIRST + 1;
+
+    $out .= <<EOM
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <ctype.h>
+#include <string.h>
+#include <string>
+#include <map>
+
+//typedef std::map<const char *, const char *> stringMap;
+//typedef std::map<const char *, stringMap> stringMapMap;
+typedef std::map<std::string, std::string> stringMap;
+typedef std::map<std::string, stringMap> stringMapMap;
+
+class transMap {
+    public:
+        transMap();
+        const char * color_translate( const char *terminal, const char *symbol );
+    private:
+        stringMapMap trans_map;
+        stringMap imc_pinkfish;
+        stringMap pinkfish_imc;
+        stringMap pinkfish_imc_cleanup;
+        stringMap extended_to_pinkfish;
+        void setupTransMap( void );
+        void setupImcPinkfishMap( void );
+        void setupPinkfishImcMap( void );
+        void setupPinkfishImcCleanupMap( void );
+        void setupExtendedToPinkfishMap( void );
+        int * xterm2rgb( int color );
+        float rgb_distance(int r1, int g1, int b1, int r2, int g2, int b2);
+        int rgb2match( int r1, int g1, int b1, int low, int high );
+        int rgb2ansi( int r1, int g1, int b1 );
+        int rgb2xterm( int r1, int g1, int b1 );
+        int rgb2grey( int r1, int g1, int b1 );
+        char * slot2xterm( int xterm, int bg );
+        char * rgb2xterm256(const char * rgb, int bg);
+};
+
+EOM
+    ;
+
+    {
+        my %meta_trans = ();
+        for( my $format = $FORMAT_FIRST; $format <= $FORMAT_LAST; $format++ ) {
+            $meta_trans{$format} = ();
+            $meta_trans{$format}{$_} = $attr_trans{$format}{$_} foreach (keys %{ $attr_trans{$format} });
+            $meta_trans{$format}{$_} = $terminal_trans{$format}{$_} foreach (keys %{ $terminal_trans{$format} });
+            $meta_trans{$format}{$_} = $ansi_trans{$format}{$_} foreach (keys %{ $ansi_trans{$format} });
+            $meta_trans{$format}{$_} = $xterm_trans{$format}{$_} foreach (keys %{ $xterm_trans{$format} });
+            $meta_trans{$format}{$_} = $x11_trans{$format}{$_} foreach (keys %{ $x11_trans{$format} });
+        }
+
+        $out .= "void transMap::setupTransMap( void ) {\n";
+        for( my $format = $FORMAT_FIRST; $format <= $FORMAT_LAST; $format++ ) {
+            foreach my $k (sort keys %{ $meta_trans{$format} }) {
+                my $v = $meta_trans{$format}{$k};
+                $v =~ s/\"/\\\"/g;
+                $v =~ s/\033/\\033/g;
+                $out .= sprintf "    trans_map[\"%s\"][\"%s\"] = \"%s\";\n", $term_name[$format], $k, $v;
+            }
+        }
+        $out .= "}\n\n";
+    }
+
+    {
+        $out .= "void transMap::setupImcPinkfishMap( void ) {\n";
+        {
+            foreach my $k (sort keys %imc_pinkfish) {
+                my $v = $imc_pinkfish{$k};
+                $v =~ s/\"/\\\"/g;
+                $v =~ s/\033/\\033/g;
+                $out .= sprintf "    imc_pinkfish[\"%s\"] = \"%s\";\n", $k, $v;
+            }
+        }
+        $out .= "}\n\n";
+    }
+
+    {
+        my %meta = ();
+        $meta{$_} = $pinkfish_imc{$_} foreach (keys %pinkfish_imc);
+        $meta{$_} = $pinkfish_imc_ext{$_} foreach (keys %pinkfish_imc_ext);
+
+        $out .= "void transMap::setupPinkfishImcMap( void ) {\n";
+        {
+            foreach my $k (sort keys %meta) {
+                my $v = $meta{$k};
+                $v =~ s/\"/\\\"/g;
+                $v =~ s/\033/\\033/g;
+                $out .= sprintf "    pinkfish_imc[\"%s\"] = \"%s\";\n", $k, $v;
+            }
+        }
+        $out .= "}\n\n";
+    }
+
+    {
+        $out .= "void transMap::setupPinkfishImcCleanupMap( void ) {\n";
+        {
+            foreach my $k (sort keys %pinkfish_imc_cleanup) {
+                my $v = $pinkfish_imc_cleanup{$k};
+                $v =~ s/\"/\\\"/g;
+                $v =~ s/\033/\\033/g;
+                $out .= sprintf "    pinkfish_imc_cleanup[\"%s\"] = \"%s\";\n", $k, $v;
+            }
+        }
+        $out .= "}\n\n";
+    }
+
+    {
+        my %meta = ();
+        for( my $i = 16; $i < 232; $i++ ) {
+            my $token = int2base6($i);
+            my $x = xterm2ansi($i);
+            my $ansi = $ansi_name[$x];
+            my $bansi = $ansi_b_name[$x];
+            $meta{"%^F$token%^"} = "%^$ansi%^";
+            $meta{"%^B$token%^"} = "%^$bansi%^";
+        }
+        {
+            my $token = sprintf("%02d", 0);
+            my $x = xterm2ansi(0);
+            my $ansi = $ansi_name[$x];
+            my $bansi = $ansi_b_name[$x];
+            $meta{"%^G$token%^"} = "%^$ansi%^";
+            $meta{"%^BG$token%^"} = "%^$bansi%^";
+        }
+        for( my $i = 232; $i < 256; $i++ ) {
+            my $token = sprintf("%02d", $i - 232 + 1);
+            my $x = xterm2ansi($i);
+            my $ansi = $ansi_name[$x];
+            my $bansi = $ansi_b_name[$x];
+            $meta{"%^G$token%^"} = "%^$ansi%^";
+            $meta{"%^BG$token%^"} = "%^$bansi%^";
+        }
+        {
+            my $token = sprintf("%02d", 25);
+            my $x = xterm2ansi(15);
+            my $ansi = $ansi_name[$x];
+            my $bansi = $ansi_b_name[$x];
+            $meta{"%^G$token%^"} = "%^$ansi%^";
+            $meta{"%^BG$token%^"} = "%^$bansi%^";
+        }
+
+        foreach my $k (sort keys %x11_values) {
+            my ($r,$g,$b) = @{ $x11_values{$k} };
+            my $ansi = $ansi_name[rgb2ansi($r, $g, $b)];
+            $meta{"%^$k%^"} = "%^$ansi%^";
+        }
+        my $meta_count = scalar keys %meta;
+
+        $out .= "void transMap::setupExtendedToPinkfishMap( void ) {\n";
+        foreach my $k (sort keys %meta) {
+            my $v = $meta{$k};
+            $out .= sprintf "    extended_to_pinkfish[\"%s\"] = \"%s\";\n", $k, $v;
+        }
+        $out .= "}\n\n";
+    }
+
+    $out .= <<EOM
+transMap::transMap() {
+    setupTransMap();
+    setupImcPinkfishMap();
+    setupPinkfishImcMap();
+    setupPinkfishImcCleanupMap();
+    setupExtendedToPinkfishMap();
+}
+
+static const int hex_rgb[6] = { 0x00, 0x55, 0x88, 0xBB, 0xDD, 0xFF };
+
+static const int ansi_rgb[16][3] = {
+    { 0x00, 0x00, 0x00 }, /*  0  black */
+    { 0xBB, 0x00, 0x00 }, /*  1  red */
+    { 0x00, 0xBB, 0x00 }, /*  2  green */
+    { 0xBB, 0xBB, 0x00 }, /*  3  yellow/orange */
+    { 0x00, 0x00, 0xBB }, /*  4  blue */
+    { 0xBB, 0x00, 0xBB }, /*  5  magenta */
+    { 0x00, 0xBB, 0xBB }, /*  6  cyan */
+    { 0xBB, 0xBB, 0xBB }, /*  7  light grey */
+
+    { 0x55, 0x55, 0x55 }, /*  8  dark grey */
+    { 0xFF, 0x55, 0x55 }, /*  9  bright red */
+    { 0x55, 0xFF, 0x55 }, /* 10  bright green */
+    { 0xFF, 0xFF, 0x55 }, /* 11  yellow */
+    { 0x55, 0x55, 0xFF }, /* 12  bright blue */
+    { 0xFF, 0x55, 0xFF }, /* 13  bright magenta */
+    { 0x55, 0xFF, 0xFF }, /* 14  bright cyan */
+    { 0xFF, 0xFF, 0xFF }  /* 15  white */
+};
+
+static const char * ansi_name[16] = {
+    "BLACK", "RED", "GREEN", "ORANGE",
+    "BLUE", "MAGENTA", "CYAN", "GREY",
+    "DARKGREY", "LIGHTRED", "LIGHTGREEN", "YELLOW",
+    "LIGHTBLUE", "PINK", "LIGHTCYAN", "WHITE"
+};
+
+static const int grey_rgb[24] = {
+    0x08, 0x12, 0x1C, 0x26, 0x30, 0x3A, 
+    0x44, 0x4E, 0x58, 0x62, 0x6C, 0x76, 
+    0x80, 0x8A, 0x94, 0x9E, 0xA8, 0xB2, 
+    0xBC, 0xC6, 0xD0, 0xDA, 0xE4, 0xEE
+};
+
+/*
+ * This accepts an XTERM-256 slot number from 0 to 255,
+ * and returns an array of RGB values.
+ */
+int * transMap::xterm2rgb( int color )
+{
+  int red, green, blue;
+  static int retval[3];
+
+  if( color < 16 ) {
+        red = ansi_rgb[color][0];
+        green = ansi_rgb[color][1];
+        blue = ansi_rgb[color][2];
+  } else if ( color < 232 ) {
+        color -= 16;
+        red = hex_rgb[(color/36)%6];
+        green = hex_rgb[(color/6)%6];
+        blue = hex_rgb[(color)%6];
+  } else {
+        color -= 232;
+        red = green = blue = grey_rgb[color%24];
+  }
+
+  retval[0] = red;
+  retval[1] = green;
+  retval[2] = blue;
+  return retval;
+}
+
+/*
+ * This is a generic euclidean distance formula, used to determine
+ * how "close" one set of RGB values is to another.  The weight
+ * factors default to 1.0, but have suggested values based on the
+ * human eye sensitivity, should you want to skew things for a
+ * more artistic purpose.
+ */
+float transMap::rgb_distance(int r1, int g1, int b1, int r2, int g2, int b2)
+{
+  float rf, gf, bf;
+  float dr, dg, db, dist;
+
+  rf = 1.0; /* 0.241 */
+  gf = 1.0; /* 0.691 */
+  bf = 1.0; /* 0.068 */
+
+  dr = abs(r2 - r1);
+  dg = abs(g2 - g1);
+  db = abs(b2 - b1);
+  dist = sqrt((dr * dr * rf) + (dg * dg * gf) + (db * db * bf));
+
+  return dist;
+}
+
+/*
+ * This function finds the closest matching "xterm" colour
+ * for the given 8-bit RGB values.  This is the workhorse
+ * function which accepts ranges to allow specifying what
+ * portion of the xterm colour pallete to use for matches.
+ *
+ * There are three API functions to find best match,
+ * best ANSI match, and best greyscale match.
+ *
+ * Returns -1 on failure.
+ */
+int transMap::rgb2match( int r1, int g1, int b1, int low, int high )
+{
+  int i;
+  int r2, g2, b2;
+  int match;
+  float max_distance, dist;
+  int * tmp;
+
+  match = -1;
+  max_distance = 10000000000.0;
+
+  for(i=low; i<=high; i++) {
+    tmp = xterm2rgb(i);
+    r2 = tmp[0];
+    g2 = tmp[1];
+    b2 = tmp[2];
+    dist = rgb_distance(r1,g1,b1,r2,g2,b2);
+
+    if(dist < max_distance) {
+      max_distance = dist;
+      match = i;
+    }
+  }
+
+  return match;
+}
+
+/*
+ * The following are just helper functions that
+ * call rgb2match() with the correct parameters.
+ */
+int transMap::rgb2ansi( int r1, int g1, int b1 )
+{
+  return rgb2match( r1, g1, b1, 0, 15 );
+}
+
+int transMap::rgb2xterm( int r1, int g1, int b1 )
+{
+  return rgb2match( r1, g1, b1, 0, 255 );
+}
+
+int transMap::rgb2grey( int r1, int g1, int b1 )
+{
+  return rgb2match( r1, g1, b1, 232, 255 );
+}
+
+char * transMap::slot2xterm( int xterm, int bg )
+{
+    static char retval[16];
+
+    if(xterm < 16) {
+        sprintf(retval, "%s%s", bg ? "B_" : "", ansi_name[xterm]);
+    } else if(xterm > 231) {
+        if(xterm > 255) xterm = 255;
+        sprintf(retval, "%s%02d", bg ? "BG" : "G", xterm-231);
+    } else {
+        xterm -= 16;
+        sprintf(retval, "%s%d%d%d", bg ? "B" : "F", (xterm/36)%6, (xterm/6)%6, xterm%6);
+    }
+
+    return retval;
+}
+
+
+char * transMap::rgb2xterm256(const char * rgb, int bg)
+{
+    int red, green, blue;
+    int slot;
+
+    sscanf(rgb, "%02x%02x%02x", &red, &green, &blue);
+    slot = rgb2xterm( red, green, blue );
+    return slot2xterm(slot, bg);
+}
+
+const char * transMap::color_translate(const char *terminal, const char *symbol)
+{
+#ifdef TESTME
+    printf("color_translate(%s, %s)\\n", terminal, symbol);
+#endif
+    if(trans_map.find(terminal) != trans_map.end())
+    {
+#ifdef TESTME
+        printf("Found %s\\n", terminal);
+#endif
+        if(trans_map[terminal].find(symbol) != trans_map[terminal].end())
+        {
+#ifdef TESTME
+            printf("Found %s\\n", symbol);
+#endif
+            return trans_map[terminal][symbol].c_str();
+        }
+    }
+
+    if(strlen(symbol) == 7)
+        if(symbol[0] == 'F' || symbol[0] == 'B')
+            if( isxdigit(symbol[1]) &&
+                isxdigit(symbol[2]) &&
+                isxdigit(symbol[3]) &&
+                isxdigit(symbol[4]) &&
+                isxdigit(symbol[5]) &&
+                isxdigit(symbol[6]) )
+            {
+                char *tmp = NULL;
+
+                tmp = rgb2xterm256(symbol+1, (symbol[0] == 'B') ? 1 : 0);
+#ifdef TESTME
+                printf("Rendered %s\\n", tmp);
+#endif
+                if(trans_map[terminal].find(tmp) != trans_map[terminal].end())
+                {
+#ifdef TESTME
+                    printf("Found %s\\n", tmp);
+#endif
+                    return trans_map[terminal][tmp].c_str();
+                }
+            }
+
+#ifdef TESTME
+    printf("NOT Found %s\\n", symbol);
+#endif
+    return symbol;
+}
+
+#ifdef TESTME
+int main(int argc, char **argv)
+{
+    transMap mappy;
+    size_t pos = 0;
+    size_t epos = 0;
+
+    std::string source = "Testing [G05]Grey [F034567]Stuff [OliveDrab]Forever [RESET]\\n";
+    std::string result = "";
+    printf("Source:  %s\\n", source.c_str());
+
+    while( (pos = source.find("[", pos)) != std::string::npos )
+    {
+        printf("found [\\n");
+        if( (epos = source.find("]", pos+1)) != std::string::npos )
+        {
+            std::string match;
+            std::string repl;
+            std::string reset;
+
+            reset = mappy.color_translate("xterm-256color", "G05");
+            reset = mappy.color_translate("xterm-256color", "RESET");
+            printf("found ]\\n");
+            match = source.substr(pos+1, epos-pos-1);
+            printf("MATCH: \\"%s\\" - %d %d\\n", match.c_str(), match.length(), strlen(match.c_str()));
+            printf("   at: %zd, %zd\\n", pos, epos);
+            repl = mappy.color_translate("xterm-256color", match.c_str());
+            printf("REPLACEMENT: \\"%s\\" - %d%s\\n", repl.c_str(), repl.length(), reset.c_str());
+
+            source.replace(pos, epos-pos+1, repl);
+            pos = epos = epos - (epos - pos) + repl.length();
+            printf("Result:  %s\\n", source.c_str());
+        }
+    }
+    printf("Result:  %s\\n", source.c_str());
+
+    return 1;
+}
+#endif
+
+EOM
+    ;
+
+    if(defined $file) {
+        open FOO, ">$file" or die "Cannot open output $file";
+        print FOO "$out\n";
+        close FOO;
+    } else {
+        print "$out\n";
+    }
+}
+
+sub output_c {
+    my $file = shift;
+    my $out = "";
+    my $format_count = $FORMAT_LAST - $FORMAT_FIRST + 1;
+
+    $out .= <<EOM
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <ctype.h>
+#include <string.h>
+
+#define BUCKETS 100
+
+struct s_stringMap;
+
+typedef struct s_stringMap {
+    const char *key;
+    const char *value;
+    struct s_stringMap *next;
+} stringMap;
+
+static stringMap trans_map[$format_count][BUCKETS];
+static stringMap imc_pinkfish[BUCKETS];
+static stringMap pinkfish_imc[BUCKETS];
+static stringMap pinkfish_imc_cleanup[BUCKETS];
+static stringMap extended_to_pinkfish[BUCKETS];
+
+unsigned int term_name_lookup( const char *s );
+unsigned int hashmap( const char *s );
+void hash_init( stringMap *map );
+void hash_add( stringMap *map, const char *k, const char *v );
+const char * hash_find(stringMap *map, const char *k);
+
+void transMap(void);
+const char * color_translate( const char *terminal, const char *symbol );
+
+void setupTransMap( void );
+void setupImcPinkfishMap( void );
+void setupPinkfishImcMap( void );
+void setupPinkfishImcCleanupMap( void );
+void setupExtendedToPinkfishMap( void );
+int * xterm2rgb( int color );
+float rgb_distance(int r1, int g1, int b1, int r2, int g2, int b2);
+int rgb2match( int r1, int g1, int b1, int low, int high );
+int rgb2ansi( int r1, int g1, int b1 );
+int rgb2xterm( int r1, int g1, int b1 );
+int rgb2grey( int r1, int g1, int b1 );
+char * slot2xterm( int xterm, int bg );
+char * rgb2xterm256(const char * rgb, int bg);
+
+unsigned int term_name_lookup( const char *s )
+{
+EOM
+    ;
+    for( my $format = $FORMAT_FIRST; $format <= $FORMAT_LAST; $format++ ) {
+        $out .= sprintf("    if(!strcmp(s, \"%s\")) return %d;\n", $term_name[$format], $format);
+    }
+    $out .= <<EOM
+    return 0;
+}
+
+unsigned int hashmap( const char *s )
+{
+    unsigned int hash = 0;
+
+    if(!s || !*s) return 0;
+    do {
+        hash += *s;
+        hash *= 13;
+        s++;
+    } while (*s);
+
+    return hash % BUCKETS;
+}
+
+void hash_init( stringMap *map )
+{
+    int i;
+
+    for(i = 0; i < BUCKETS; i++)
+    {
+        map[i].key = NULL;
+        map[i].value = NULL;
+        map[i].next = NULL;
+    }
+}
+
+void hash_add( stringMap *map, const char *k, const char *v )
+{
+    unsigned int hashcode;
+    stringMap *p;
+
+    hashcode = hashmap(k);
+    p = &map[hashcode];
+    while(p->key && strcmp(p->key, k) && p->next)
+        p = p->next;
+
+    if(!p->key) {
+        /* First node? */
+        p->key = (const char *)strdup(k);
+        p->value = (const char *)strdup(v);
+        p->next = NULL;
+    } else if(!strcmp(p->key, k)) {
+        /* Found our match! */
+        if(p->value)
+            free((void *)p->value);
+        p->value = (const char *)strdup(v);
+    } else {
+        /* New key */
+        p->next = (stringMap *)calloc(1, sizeof(stringMap));
+        p = p->next;
+        p->key = (const char *)strdup(k);
+        p->value = (const char *)strdup(v);
+        p->next = NULL;
+    }
+}
+
+const char * hash_find(stringMap *map, const char *k)
+{
+    unsigned int hashcode;
+    stringMap *p;
+
+    hashcode = hashmap(k);
+    p = &map[hashcode];
+    while(p->key && strcmp(p->key, k) && p->next)
+        p = p->next;
+
+    if(!p->key)
+        return NULL;
+
+    if(!strcmp(p->key, k))
+        return p->value;
+
+    return NULL;
+}
+
+EOM
+    ;
+
+    {
+        my %meta_trans = ();
+        for( my $format = $FORMAT_FIRST; $format <= $FORMAT_LAST; $format++ ) {
+            $meta_trans{$format} = ();
+            $meta_trans{$format}{$_} = $attr_trans{$format}{$_} foreach (keys %{ $attr_trans{$format} });
+            $meta_trans{$format}{$_} = $terminal_trans{$format}{$_} foreach (keys %{ $terminal_trans{$format} });
+            $meta_trans{$format}{$_} = $ansi_trans{$format}{$_} foreach (keys %{ $ansi_trans{$format} });
+            $meta_trans{$format}{$_} = $xterm_trans{$format}{$_} foreach (keys %{ $xterm_trans{$format} });
+            $meta_trans{$format}{$_} = $x11_trans{$format}{$_} foreach (keys %{ $x11_trans{$format} });
+        }
+
+        my $format_count = $FORMAT_LAST - $FORMAT_FIRST + 1;
+        $out .= "void setupTransMap( void ) {\n";
+        $out .= "    unsigned int term_name;\n";
+
+        for( my $format = $FORMAT_FIRST; $format <= $FORMAT_LAST; $format++ ) {
+            $out .= "\n    term_name = term_name_lookup(\"$term_name[$format]\");\n";
+            $out .= "    hash_init(trans_map[term_name]);\n";
+            foreach my $k (sort keys %{ $meta_trans{$format} }) {
+                my $v = $meta_trans{$format}{$k};
+                $v =~ s/\"/\\\"/g;
+                $v =~ s/\033/\\033/g;
+                $out .= "    hash_add(trans_map[term_name], \"$k\", \"$v\");\n";
+            }
+        }
+        $out .= "}\n\n";
+    }
+
+    {
+        $out .= "void setupImcPinkfishMap( void ) {\n";
+        {
+            $out .= "    hash_init(imc_pinkfish);\n";
+            foreach my $k (sort keys %imc_pinkfish) {
+                my $v = $imc_pinkfish{$k};
+                $v =~ s/\"/\\\"/g;
+                $v =~ s/\033/\\033/g;
+                $out .= "    hash_add(imc_pinkfish, \"$k\", \"$v\");\n";
+            }
+        }
+        $out .= "}\n\n";
+    }
+
+    {
+        my %meta = ();
+        $meta{$_} = $pinkfish_imc{$_} foreach (keys %pinkfish_imc);
+        $meta{$_} = $pinkfish_imc_ext{$_} foreach (keys %pinkfish_imc_ext);
+
+        $out .= "void setupPinkfishImcMap( void ) {\n";
+        {
+            $out .= "    hash_init(pinkfish_imc);\n";
+            foreach my $k (sort keys %meta) {
+                my $v = $meta{$k};
+                $v =~ s/\"/\\\"/g;
+                $v =~ s/\033/\\033/g;
+                $out .= "    hash_add(pinkfish_imc, \"$k\", \"$v\");\n";
+            }
+        }
+        $out .= "}\n\n";
+    }
+
+    {
+        $out .= "void setupPinkfishImcCleanupMap( void ) {\n";
+        {
+            $out .= "    hash_init(pinkfish_imc_cleanup);\n";
+            foreach my $k (sort keys %pinkfish_imc_cleanup) {
+                my $v = $pinkfish_imc_cleanup{$k};
+                $v =~ s/\"/\\\"/g;
+                $v =~ s/\033/\\033/g;
+                $out .= "    hash_add(pinkfish_imc_cleanup, \"$k\", \"$v\");\n";
+            }
+        }
+        $out .= "}\n\n";
+    }
+
+    {
+        my %meta = ();
+        for( my $i = 16; $i < 232; $i++ ) {
+            my $token = int2base6($i);
+            my $x = xterm2ansi($i);
+            my $ansi = $ansi_name[$x];
+            my $bansi = $ansi_b_name[$x];
+            $meta{"%^F$token%^"} = "%^$ansi%^";
+            $meta{"%^B$token%^"} = "%^$bansi%^";
+        }
+        {
+            my $token = sprintf("%02d", 0);
+            my $x = xterm2ansi(0);
+            my $ansi = $ansi_name[$x];
+            my $bansi = $ansi_b_name[$x];
+            $meta{"%^G$token%^"} = "%^$ansi%^";
+            $meta{"%^BG$token%^"} = "%^$bansi%^";
+        }
+        for( my $i = 232; $i < 256; $i++ ) {
+            my $token = sprintf("%02d", $i - 232 + 1);
+            my $x = xterm2ansi($i);
+            my $ansi = $ansi_name[$x];
+            my $bansi = $ansi_b_name[$x];
+            $meta{"%^G$token%^"} = "%^$ansi%^";
+            $meta{"%^BG$token%^"} = "%^$bansi%^";
+        }
+        {
+            my $token = sprintf("%02d", 25);
+            my $x = xterm2ansi(15);
+            my $ansi = $ansi_name[$x];
+            my $bansi = $ansi_b_name[$x];
+            $meta{"%^G$token%^"} = "%^$ansi%^";
+            $meta{"%^BG$token%^"} = "%^$bansi%^";
+        }
+
+        foreach my $k (sort keys %x11_values) {
+            my ($r,$g,$b) = @{ $x11_values{$k} };
+            my $ansi = $ansi_name[rgb2ansi($r, $g, $b)];
+            $meta{"%^$k%^"} = "%^$ansi%^";
+        }
+        my $meta_count = scalar keys %meta;
+
+        $out .= "void setupExtendedToPinkfishMap( void ) {\n";
+        $out .= "    hash_init(extended_to_pinkfish);\n";
+        foreach my $k (sort keys %meta) {
+            my $v = $meta{$k};
+            $out .= "    hash_add(extended_to_pinkfish, \"$k\", \"$v\");\n";
+        }
+        $out .= "}\n\n";
+    }
+
+    $out .= <<EOM
+void transMap( void ) {
+    setupTransMap();
+    setupImcPinkfishMap();
+    setupPinkfishImcMap();
+    setupPinkfishImcCleanupMap();
+    setupExtendedToPinkfishMap();
+}
+
+static const int hex_rgb[6] = { 0x00, 0x55, 0x88, 0xBB, 0xDD, 0xFF };
+
+static const int ansi_rgb[16][3] = {
+    { 0x00, 0x00, 0x00 }, /*  0  black */
+    { 0xBB, 0x00, 0x00 }, /*  1  red */
+    { 0x00, 0xBB, 0x00 }, /*  2  green */
+    { 0xBB, 0xBB, 0x00 }, /*  3  yellow/orange */
+    { 0x00, 0x00, 0xBB }, /*  4  blue */
+    { 0xBB, 0x00, 0xBB }, /*  5  magenta */
+    { 0x00, 0xBB, 0xBB }, /*  6  cyan */
+    { 0xBB, 0xBB, 0xBB }, /*  7  light grey */
+
+    { 0x55, 0x55, 0x55 }, /*  8  dark grey */
+    { 0xFF, 0x55, 0x55 }, /*  9  bright red */
+    { 0x55, 0xFF, 0x55 }, /* 10  bright green */
+    { 0xFF, 0xFF, 0x55 }, /* 11  yellow */
+    { 0x55, 0x55, 0xFF }, /* 12  bright blue */
+    { 0xFF, 0x55, 0xFF }, /* 13  bright magenta */
+    { 0x55, 0xFF, 0xFF }, /* 14  bright cyan */
+    { 0xFF, 0xFF, 0xFF }  /* 15  white */
+};
+
+static const char * ansi_name[16] = {
+    "BLACK", "RED", "GREEN", "ORANGE",
+    "BLUE", "MAGENTA", "CYAN", "GREY",
+    "DARKGREY", "LIGHTRED", "LIGHTGREEN", "YELLOW",
+    "LIGHTBLUE", "PINK", "LIGHTCYAN", "WHITE"
+};
+
+static const int grey_rgb[24] = {
+    0x08, 0x12, 0x1C, 0x26, 0x30, 0x3A, 
+    0x44, 0x4E, 0x58, 0x62, 0x6C, 0x76, 
+    0x80, 0x8A, 0x94, 0x9E, 0xA8, 0xB2, 
+    0xBC, 0xC6, 0xD0, 0xDA, 0xE4, 0xEE
+};
+
+/*
+ * This accepts an XTERM-256 slot number from 0 to 255,
+ * and returns an array of RGB values.
+ */
+int * xterm2rgb( int color )
+{
+  int red, green, blue;
+  static int retval[3];
+
+  if( color < 16 ) {
+        red = ansi_rgb[color][0];
+        green = ansi_rgb[color][1];
+        blue = ansi_rgb[color][2];
+  } else if ( color < 232 ) {
+        color -= 16;
+        red = hex_rgb[(color/36)%6];
+        green = hex_rgb[(color/6)%6];
+        blue = hex_rgb[(color)%6];
+  } else {
+        color -= 232;
+        red = green = blue = grey_rgb[color%24];
+  }
+
+  retval[0] = red;
+  retval[1] = green;
+  retval[2] = blue;
+  return retval;
+}
+
+/*
+ * This is a generic euclidean distance formula, used to determine
+ * how "close" one set of RGB values is to another.  The weight
+ * factors default to 1.0, but have suggested values based on the
+ * human eye sensitivity, should you want to skew things for a
+ * more artistic purpose.
+ */
+float rgb_distance(int r1, int g1, int b1, int r2, int g2, int b2)
+{
+  float rf, gf, bf;
+  float dr, dg, db, dist;
+
+  rf = 1.0; /* 0.241 */
+  gf = 1.0; /* 0.691 */
+  bf = 1.0; /* 0.068 */
+
+  dr = abs(r2 - r1);
+  dg = abs(g2 - g1);
+  db = abs(b2 - b1);
+  dist = sqrt((dr * dr * rf) + (dg * dg * gf) + (db * db * bf));
+
+  return dist;
+}
+
+/*
+ * This function finds the closest matching "xterm" colour
+ * for the given 8-bit RGB values.  This is the workhorse
+ * function which accepts ranges to allow specifying what
+ * portion of the xterm colour pallete to use for matches.
+ *
+ * There are three API functions to find best match,
+ * best ANSI match, and best greyscale match.
+ *
+ * Returns -1 on failure.
+ */
+int rgb2match( int r1, int g1, int b1, int low, int high )
+{
+  int i;
+  int r2, g2, b2;
+  int match;
+  float max_distance, dist;
+  int * tmp;
+
+  match = -1;
+  max_distance = 10000000000.0;
+
+  for(i=low; i<=high; i++) {
+    tmp = xterm2rgb(i);
+    r2 = tmp[0];
+    g2 = tmp[1];
+    b2 = tmp[2];
+    dist = rgb_distance(r1,g1,b1,r2,g2,b2);
+
+    if(dist < max_distance) {
+      max_distance = dist;
+      match = i;
+    }
+  }
+
+  return match;
+}
+
+/*
+ * The following are just helper functions that
+ * call rgb2match() with the correct parameters.
+ */
+int rgb2ansi( int r1, int g1, int b1 )
+{
+  return rgb2match( r1, g1, b1, 0, 15 );
+}
+
+int rgb2xterm( int r1, int g1, int b1 )
+{
+  return rgb2match( r1, g1, b1, 0, 255 );
+}
+
+int rgb2grey( int r1, int g1, int b1 )
+{
+  return rgb2match( r1, g1, b1, 232, 255 );
+}
+
+char * slot2xterm( int xterm, int bg )
+{
+    static char retval[16];
+
+    if(xterm < 16) {
+        sprintf(retval, "%s%s", bg ? "B_" : "", ansi_name[xterm]);
+    } else if(xterm > 231) {
+        if(xterm > 255) xterm = 255;
+        sprintf(retval, "%s%02d", bg ? "BG" : "G", xterm-231);
+    } else {
+        xterm -= 16;
+        sprintf(retval, "%s%d%d%d", bg ? "B" : "F", (xterm/36)%6, (xterm/6)%6, xterm%6);
+    }
+
+    return retval;
+}
+
+
+char * rgb2xterm256(const char * rgb, int bg)
+{
+    int red, green, blue;
+    int slot;
+
+    sscanf(rgb, "%02x%02x%02x", &red, &green, &blue);
+    slot = rgb2xterm( red, green, blue );
+    return slot2xterm(slot, bg);
+}
+
+const char * color_translate(const char *terminal, const char *symbol)
+{
+    unsigned int term = 0;
+    const char *sym = NULL;
+
+#ifdef TESTME
+    printf("color_translate(%s, %s)\\n", terminal, symbol);
+#endif
+    term = term_name_lookup(terminal);
+
+#ifdef TESTME
+    printf("Found %s as %d\\n", terminal, term);
+#endif
+    if((sym = hash_find(trans_map[term], symbol)))
+    {
+#ifdef TESTME
+        printf("Found %s\\n", symbol);
+#endif
+        return sym;
+    }
+
+    if(strlen(symbol) == 7)
+        if(symbol[0] == 'F' || symbol[0] == 'B')
+            if( isxdigit(symbol[1]) &&
+                isxdigit(symbol[2]) &&
+                isxdigit(symbol[3]) &&
+                isxdigit(symbol[4]) &&
+                isxdigit(symbol[5]) &&
+                isxdigit(symbol[6]) )
+            {
+                char *tmp = NULL;
+
+                tmp = rgb2xterm256(symbol+1, (symbol[0] == 'B') ? 1 : 0);
+#ifdef TESTME
+                printf("Rendered %s\\n", tmp);
+#endif
+                if((sym = hash_find(trans_map[term], tmp)))
+                {
+#ifdef TESTME
+                    printf("Found %s\\n", tmp);
+#endif
+                    return sym;
+                }
+            }
+
+#ifdef TESTME
+    printf("NOT Found %s\\n", symbol);
+#endif
+    return symbol;
+}
+
+#ifdef TESTME
+int main(int argc, char **argv)
+{
+    char result[8192] = "\\0";
+    size_t opos = 0;
+    size_t pos = 0;
+    size_t epos = 0;
+    char *sfind = NULL;
+    char *efind = NULL;
+    const char *reset = NULL;
+    char *match = NULL;
+    const char *repl = NULL;
+    const char *source = "Testing [G05]Grey [F034567]Stuff [OliveDrab]Forever [RESET]\\n"; 
+
+    transMap();
+
+    printf("Source:  %s\\n", source);
+
+    while( sfind = strstr(source+pos, "[") )
+    {
+        pos = sfind - source;
+        strncat(result, source+opos, pos - opos);
+        printf("found [\\n");
+        if( efind = strstr(source+pos+1, "]") )
+        {
+            epos = efind - source;
+            printf("found ]\\n");
+            reset = color_translate("xterm-256color", "G05");
+            reset = color_translate("xterm-256color", "RESET");
+            match = calloc(epos-pos, sizeof(char));
+            strncpy(match, source+pos+1, epos-pos-1);
+            printf("MATCH: \\"%s\\" - %d\\n", match, strlen(match));
+            printf("   at: %zd, %zd\\n", pos, epos);
+            repl = color_translate("xterm-256color", match);
+            printf("REPLACEMENT: \\"%s\\" - %d%s\\n", repl, strlen(repl), reset);
+            strcat(result, repl);
+            opos = pos = epos = epos+1;
+            printf("Result:  %s\\n", result);
+        }
+    }
+    strcat(result, source + opos);
+    printf("Result:  %s\\n", result);
+
+    return 1;
+}
+#endif
+
+EOM
+    ;
+
+    if(defined $file) {
+        open FOO, ">$file" or die "Cannot open output $file";
+        print FOO "$out\n";
+        close FOO;
+    } else {
+        print "$out\n";
+    }
+}
+
+sub output_data {
+    my $file = shift;
+    my $out = "";
+    my $format_count = $FORMAT_LAST - $FORMAT_FIRST + 1;
+
+    $out .= "#TERMINALS\n";
+    $out .= "$format_count";
+    for( my $format = $FORMAT_FIRST; $format <= $FORMAT_LAST; $format++ ) {
+        $out .= " $term_name[$format]";
+    }
+    $out .= "\n#END\n\n";
+
+    {
+        my %meta_trans = ();
+        for( my $format = $FORMAT_FIRST; $format <= $FORMAT_LAST; $format++ ) {
+            $meta_trans{$format} = ();
+            $meta_trans{$format}{$_} = $attr_trans{$format}{$_} foreach (keys %{ $attr_trans{$format} });
+            $meta_trans{$format}{$_} = $terminal_trans{$format}{$_} foreach (keys %{ $terminal_trans{$format} });
+            $meta_trans{$format}{$_} = $ansi_trans{$format}{$_} foreach (keys %{ $ansi_trans{$format} });
+            $meta_trans{$format}{$_} = $xterm_trans{$format}{$_} foreach (keys %{ $xterm_trans{$format} });
+            $meta_trans{$format}{$_} = $x11_trans{$format}{$_} foreach (keys %{ $x11_trans{$format} });
+        }
+        my @meta_keys = ( sort keys %{ $meta_trans{ $FORMAT_FIRST } } );
+
+        foreach my $k (@meta_keys) {
+            $out .= "#TRANS\n";
+            $out .= sprintf("%20s %s\n", "Name", $k);
+            for( my $format = $FORMAT_FIRST; $format <= $FORMAT_LAST; $format++ ) {
+                my $v = $meta_trans{$format}{$k};
+                #$v =~ s/\"/\\\"/g;
+                #$v =~ s/\033/\\033/g;
+                $out .= sprintf("%20s %s\n", $term_name[$format], $v);
+            }
+            $out .= "#END\n\n";
+        }
+    }
+
+    if(defined $file) {
+        open FOO, ">$file" or die "Cannot open output $file";
+        print FOO "$out\n";
+        close FOO;
+    } else {
+        print "$out\n";
+    }
+}
+
 setup_hex_arrays();
 setup_colour_maps();
 setup_xterm();
@@ -1084,7 +2343,11 @@ setup_imc();
 
 #print xterm_colours();
 #print x11_colours();
+output_dump('dump.txt');
 output_lpc('pinkfish.h');
+output_c('colormap.c');
+output_data('colormap.dat');
+output_cpp('mappings.cpp');
 output_perl('terminal.pl');
 chmod 0755, 'terminal.pl';
 exit 1;
