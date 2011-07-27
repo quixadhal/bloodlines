@@ -986,6 +986,8 @@ void start_logon(){
     } 
 
     string pinkfish_to_imc2(string str){
+        // Convert RGB to xterm256 so the other mapping can handle it.
+        str = "/lib/interface"->rgb_downto_xterm256( str );
         str = replace_strings( str, pinkfish_imc );
         str = replace_strings( str, pinkfish_imc_cleanup );
         return str;

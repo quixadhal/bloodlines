@@ -63,6 +63,7 @@
 /domains/Ylsrim/etc/dug_hole.c
 /domains/campus/obj/key1.c
 /doc/lfun/lib/body/GetBodyComposition
+/log/chan/archive/dchat-2011.03.30-21.26,09
 /log/chan/archive/i2news-2009.05.08-21.58,26
 /doc/efun/interactive/receive
 /doc/efun/objects/master
@@ -130,8 +131,10 @@
 /log/chan/archive/muds-2011.01.09-00.46,13
 /log/chan/archive/muds-2009.03.25-03.11,20
 /log/chan/archive/muds-2010.11.08-04.45,48
+/log/chan/archive/intergossip-2011.04.21-22.27,44
 /log/chan/archive/intergossip-2010.04.13-21.08,02
 /verbs/rooms/include/fish.h
+/log/chan/archive/bsg-2011.04.04-11.26,27
 /secure/daemon/icp.c
 /cmds/players/rwho.c
 /domains/town/virtual/sky/23,8,1.c
@@ -149,6 +152,7 @@
 /domains/cave/weap/longsword.c
 /log/chan/archive/intergossip-2011.02.14-22.33,27
 /domains/Praxis/hall2.c
+/log/chan/archive/dchat-2011.05.26-18.29,10
 /doc/lfun/all/GetRace
 /secure/include/origin.h
 /doc/lfun/lib/firearm/CanRelease
@@ -160,6 +164,7 @@
 /log/chan/archive/intergossip-2010.11.21-23.32,52
 /cmds/creators/html.c
 /log/chan/archive/imudnews-2010.09.26-04.45,48
+/log/chan/archive/dchat-2011.06.25-00.29,10
 /domains/Praxis/pub.c
 /secure/sefun/security.c
 /save/races.6666.o
@@ -220,6 +225,8 @@
 /domains/Ylsrim/broken/cold.c
 /doc/sefun/replace_line
 /log/chan/archive/discworld-chat-2010.01.30-10.54,55
+/log/chan/archive/intergossip-2011.06.10-19.29,10
+/log/chan/archive/dchat-2011.06.04-06.29,10
 /log/chan/archive/muds-2009.04.10-22.28,44
 /domains/default/npc/kwyjibo.c
 /doc/lfun/lib/body/RemoveMagicProtection
@@ -229,6 +236,7 @@
 /log/chan/archive/muds-2010.10.15-21.45,48
 /domains/campus/npc/monty.c
 /log/imc2_server/server_log
+/log/chan/archive/dchat-2011.04.23-22.27,44
 /log/chan/archive/inews-2010.01.28-20.54,55
 /log/chan/archive/dchat-2010.06.10-15.59,25
 /secure/lib/include/bboard.h
@@ -291,12 +299,15 @@
 /log/chan/archive/dchat-2011.03.02-10.33,27
 /secure/obj/glasses.c
 /save/portal.3333.o
+/log/chan/archive/intergossip-2011.06.29-00.29,10
+/log/archive/catch-2011.04.10-20.27,22
 /doc/lpc/etc/.gitignore
 /save/kills/c/cmkgkhdbhmd
 /doc/efun/all/master
 /doc/efun/interactive/users
 /secure/cmds/creators/.update.c.swp
 /verbs/items/include/unwield.h
+/log/archive/catch-2011.03.29-20.26,09
 /domains/cave/.gitignore
 /domains/Praxis/obj/mon/horace.c
 /doc/efun/interactive/userp
@@ -330,6 +341,7 @@
 /cmds/creators/last.c
 /save/kills/g/gjildmcndgc
 /secure/sefun/dummy.c
+/log/chan/archive/dchat-2011.03.31-13.26,09
 /cmds/creators/lightme.c
 /verbs/players/include/news.h
 /save/rooms.5555.o
@@ -341,6 +353,7 @@
 /log/chan/archive/muds-2009.04.11-01.28,44
 /domains/campus/txt/jenny/9.txt
 /log/chan/archive/intergossip-2010.01.24-11.54,55
+/log/chan/archive/intergossip-2011.03.28-07.26,09
 /doc/efun/internals/set_malloc_mask
 /domains/Praxis/hall.c
 /log/chan/archive/intergossip-2010.02.24-00.54,55
@@ -356,6 +369,7 @@
 /domains/town/obj/lamp.c
 /domains/Praxis/obj/mon/lars.c
 /verbs/items/deactivate.c
+/log/chan/archive/dchat-2011.03.28-21.26,09
 /domains/Praxis/cemetery/mon/.gitignore
 /doc/efun/objects/reload_object
 /save/kills/x/xkcdhmhncme
@@ -368,6 +382,7 @@
 /cmds/creators/shadows.c
 /log/chan/archive/ds-2010.07.21-12.16,17
 /save/kills/a/agamn
+/log/archive/reset-2011.06.01-16.29,10
 /secure/scripts/walkabout.src
 /domains/Ylsrim/room/weaponry_storage.c
 /log/chan/archive/intergossip-2010.12.22-18.32,52
@@ -422,6 +437,7 @@
 /verbs/common/include/help.h
 /doc/efun/all/next_bit
 /doc/lfun/all/eventUnload
+/log/chan/archive/dchat-2011.05.26-03.29,10
 /doc/lfun/lib/chat/GetRestrictedChannels
 /domains/town/obj/sofa.c
 /domains/cave/meals/herring.c
@@ -438,6 +454,7 @@
 /log/chan/archive/muds-2009.04.09-16.28,26
 /domains/campus/obj/bbucket.c
 /doc/sefun/query_snoop
+/log/chan/archive/ds-2011.05.22-17.29,10
 /save/kills/k/knhcjj
 /log/chan/archive/muds-2009.05.20-07.06,41
 /log/archive/runtime-2009.03.16-01.30,39
@@ -475,6 +492,8 @@
 /doc/efun/mudlib/domain_stats
 /save/kills/o/obclmgnoag
 /log/chan/archive/muds-2010.08.24-00.45,48
+/log/chan/archive/intergossip-2011.05.15-23.29,10
+/log/chan/archive/intergossip-2011.04.13-21.27,22
 /domains/default/armor/bearskin.c
 /verbs/players/wake.c
 /save/kills/x/xkcdgcfdhl
@@ -484,6 +503,7 @@
 /doc/guide/.gitignore
 /save/kills/k/knklb
 /log/chan/archive/muds-2010.11.10-01.45,48
+/log/chan/archive/dchat-2011.04.29-22.27,44
 /doc/efun/all/variables
 /log/chan/archive/dchat-2010.06.16-15.59,25
 /save/kills/o/oafll
@@ -503,6 +523,7 @@
 /log/archive/catch-2009.05.19-11.00,43
 /log/chan/archive/muds-2010.11.17-09.45,48
 /log/chan/archive/muds-2009.03.25-15.11,20
+/log/chan/archive/intergossip-2011.06.01-11.29,10
 /save/kills/m/minebf
 /log/chan/archive/muds-2010.11.08-16.45,48
 /domains/town/txt/pot.txt
@@ -518,7 +539,9 @@
 /domains/campus/obj/.apple.c.swp
 /domains/town/obj/waterwheel.c
 /domains/Praxis/attic/class_change.c
+/log/chan/archive/intergossip-2011.05.25-09.29,10
 /lib/events/sell.c
+/log/chan/imud_imud_sgz
 /lib/include/clan.h
 /doc/lfun/lib/race/GetMaxMagicPoints
 /log/chan/archive/muds-2010.12.25-04.46,44
@@ -562,6 +585,7 @@
 /domains/Ylsrim/README
 /domains/town/virtual/sky/21,8,1.c
 /log/chan/archive/ichat-2010.04.23-03.08,02
+/log/chan/archive/intergossip-2011.04.15-07.27,22
 /doc/efun/strings/strsrch
 /doc/efun/all/unique_mapping
 /save/portal.4444.o
@@ -575,6 +599,7 @@
 /domains/town/weap/.dagger.c.swp
 /domains/campus/room/access5.c
 /domains/campus/meals/ale.c
+/log/chan/imud_sgz
 /doc/lfun/lib/messages/.gitignore
 /doc/CREDITS
 /log/chan/archive/muds-2009.04.26-19.06,12
@@ -603,9 +628,11 @@
 /secure/sefun/mud_info.c
 /domains/town/obj/pool_ball.c
 /cmds/creators/boards.c
+/log/chan/archive/intergossip-2011.05.02-08.28,39
 /domains/cave/room/food_storage1.c
 /verbs/rooms/include/jump.h
 /save/kills/x/xkcdmejbgh
+/log/chan/archive/dchat-2011.04.01-14.26,09
 /domains/Praxis/obj/misc/donation.c
 /log/chan/archive/dchat-2010.03.18-16.54,55
 /doc/lfun/all/GetDrainable
@@ -622,6 +649,8 @@
 /log/chan/archive/ichat-2010.05.14-19.07,55
 /lib/manycoins.c
 /save/kills/k/kam
+/log/chan/archive/intergossip-2011.06.24-18.29,10
+/log/chan/archive/fluffos-2011.06.17-18.29,10
 /secure/cfg/preload.cfg
 /domains/town/room/road2.c
 /log/chan/archive/muds-2010.09.07-23.45,48
@@ -709,6 +738,7 @@
 /save/unique.8888.o
 /doc/efun/all/tail
 /secure/cmds/creators/addemote.c
+/log/chan/archive/dchat-2011.05.03-01.28,39
 /secure/cmds/admins/domainadmin.c
 /log/chan/archive/dchat-2010.12.10-16.32,52
 /domains/town/armor/tshirt.c
@@ -723,6 +753,7 @@
 /log/chan/archive/ichat-2010.03.17-06.54,55
 /log/chan/archive/intergossip-2011.01.01-02.32,52
 /doc/efun/all/memory_info
+/log/chan/archive/intergossip-2011.06.08-18.29,10
 /obj/magic_scroll.c
 /doc/efun/all/query_snoop
 /secure/cmds/admins/vaarsuvius.c
@@ -753,6 +784,7 @@
 /doc/lfun/all/eventWelcome
 /doc/faq/.gitignore
 /log/chan/archive/muds-2010.10.08-12.45,48
+/include/pinkfish.h.working
 /log/chan/archive/muds-2010.11.09-08.45,48
 /log/chan/archive/muds-2009.04.30-11.48,12
 /lib/props/addstuff.c
@@ -760,6 +792,7 @@
 /log/chan/archive/muds-2009.05.24-14.22,17
 /log/chan/archive/intergossip-2011.02.28-20.33,27
 /log/archive/reset-2009.05.24-18.22,24
+/include/pinkfish.h.orig
 /daemon/tmp/A_AMULET.c
 /doc/efun/internals/dump_socket_status
 /www/lpmuds/parch.jpg
@@ -770,6 +803,7 @@
 /doc/lfun/all/GetMissingLimbParent
 /doc/help/players/nickname
 /domains/campus/meals/.apple.c.swp
+/log/chan/archive/dchat-2011.05.10-21.28,39
 /lib/std/wound.c
 /verbs/rooms/include/buy.h
 /secure/scripts/grid.src
@@ -868,6 +902,7 @@
 /domains/campus/weap/staff.c
 /domains/town/armor/ring.c
 /secure/cfg/races/half-elf
+/log/chan/archive/intergossip-2011.05.07-01.28,39
 /cfg/moons.cfg
 /secure/tmp/.gitignore
 /save/kills/x/xkcdmibddj
@@ -993,7 +1028,9 @@
 /doc/applies/master/get_root_uid
 /obj/armor.c
 /log/chan/archive/muds-2010.10.02-10.45,48
+/daemon/tmp/this_player();.c
 /save/kills/x/xkcdhelbndgcaj
+/log/chan/archive/intergossip-2011.06.07-10.29,10
 /save/kills/c/cgjoii
 /domains/town/room/mansion_room8.c
 /domains/town/armor/.chainmail.c.swp
@@ -1047,6 +1084,7 @@
 /doc/sefun/write
 /log/chan/archive/intergossip-2010.08.25-18.45,48
 /doc/efun/mixed/undefinedp
+/log/chan/archive/intergossip-2011.05.31-20.29,10
 /log/chan/archive/intergossip-2010.11.30-12.32,52
 /domains/town/npc/bubb.c
 /domains/town/obj/fleas.c
@@ -1088,9 +1126,11 @@
 /doc/efun/all/author_stats
 /lib/include/follow.h
 /log/chan/archive/muds-2010.08.25-18.45,48
+/log/chan/archive/dchat-2011.05.27-07.29,10
 /log/chan/archive/free_speech-2011.03.01-17.33,27
 /lib/money.c
 /doc/lfun/lib/body/eventHealDamage
+/log/chan/archive/dchat-2011.04.16-12.27,22
 /log/chan/archive/dchat-2010.07.02-14.59,34
 /domains/Ylsrim/etc/hole.c
 /doc/sefun/mud_currencies
@@ -1105,6 +1145,7 @@
 /doc/lfun/lib/race/GetMaxStaminaPoints
 /lib/virtual/virt_land.c
 /cmds/common/.gitignore
+/log/chan/archive/dchat-2011.05.08-21.28,39
 /log/chan/archive/discworld-chat-2010.11.19-19.32,52
 /doc/efun/floats/pow
 /domains/cave/obj/cup.c
@@ -1133,6 +1174,7 @@
 /log/chan/archive/dchat-2011.03.02-20.33,27
 /save/kills/x/xkcdeikdkg
 /domains/campus/armor/bluedress.c
+/log/chan/archive/intergossip-2011.04.05-12.26,27
 /domains/town/doors/house_door.c
 /domains/campus/obj/dcell_crappy.c
 /doc/efun/buffers/crc32
@@ -1194,6 +1236,7 @@
 /log/chan/archive/muds-2009.05.20-22.13,36
 /doc/efun/all/ed
 /verbs/items/move.c
+/log/chan/archive/dchat-2011.06.20-15.29,10
 /domains/town/obj/donation_box.c
 /doc/lfun/lib/firearm/SetAmmoType
 /daemon/tmp/LIB_NMSH.c
@@ -1295,6 +1338,7 @@
 /log/reports/.gitignore
 /save/kills/h/hkck
 /log/chan/archive/ichat-2010.06.01-01.59,25
+/log/archive/catch-2011.05.13-04.28,39
 /domains/Ylsrim/armor/helm.c
 /doc/lfun/lib/bonus/.gitignore
 /log/chan/archive/muds-2010.12.07-22.45,48
@@ -1373,6 +1417,7 @@
 /log/chan/archive/muds-2010.11.11-04.45,48
 /log/chan/archive/inews-2010.02.16-17.54,55
 /domains/cave/doors/.gitignore
+/log/chan/archive/intergossip-2011.06.07-22.29,10
 /save/kills/x/xkcdgnlnobm
 /doc/lfun/lib/bonus/GetBonusDuration
 /save/kills/m/mgl
@@ -1380,11 +1425,13 @@
 /verbs/items/judge1.c
 /doc/efun/interactive/get_char
 /doc/efun/buffers/allocate_buffer
+/log/chan/archive/dchat-2011.05.09-13.28,39
 /save/kills/x/xkcdfdbibjif
 /log/chan/archive/dchat-2010.05.23-22.58,38
 /doc/help/creators/shadows
 /doc/help/creators/admin
 /doc/lfun/lib/chapel/AddSacrificeType
+/log/chan/archive/intergossip-2011.03.26-10.53,44
 /doc/build/Sentients
 /log/chan/archive/muds-2010.09.03-05.45,48
 /log/chan/archive/muds-2010.10.17-16.45,48
@@ -1509,6 +1556,7 @@
 /doc/lfun/lib/potion/GetStats
 /log/chan/archive/muds-2010.10.10-21.45,48
 /log/chan/archive/muds-2010.11.11-17.45,48
+/log/chan/archive/ds-2011.04.03-11.26,27
 /doc/efun/all/floatp
 /log/chan/archive/i2game-2009.05.16-11.59,29
 /log/chan/archive/muds-2010.11.10-10.45,48
@@ -1630,6 +1678,7 @@
 /log/chan/archive/muds-2010.10.17-01.45,48
 /domains/cave/armor/armored_glove_r.c
 /log/chan/archive/muds-2010.11.09-04.45,48
+/log/chan/archive/intergossip-2011.04.22-22.27,44
 /save/kills/a/aegdfaobcno
 /save/kills/c/cbnikddk
 /domains/Praxis/e_boc_la2.c
@@ -1639,6 +1688,7 @@
 /save/kills/x/xkcdondmkcica
 /doc/applies/parsing/parse_command
 /save/types.4444.o
+/log/chan/archive/dchat-2011.03.29-22.26,09
 /lib/lamp.c
 /secure/cfg/races/viper
 /domains/town/weap/axe.c
@@ -1728,8 +1778,10 @@
 /doc/efun/mappings/match_path
 /domains/town/room/shop.c
 /www/errors/.gitignore
+/log/chan/archive/dchat-2011.06.18-00.29,10
 /domains/Ylsrim/weapon/orc_slayer.c
 /daemon/tmp/DEFINES_D.c
+/log/chan/archive/intergossip-2011.06.15-20.29,10
 /log/chan/archive/muds-2010.12.11-05.45,48
 /doc/efun/all/this_player
 /log/chan/archive/dchat-2011.03.18-13.28,07
@@ -1770,6 +1822,7 @@
 /secure/daemon/.instances.c.swp
 /secure/include/config.8888.h
 /save/kills/n/nbfdkmceoae
+/log/chan/archive/intergossip-2011.04.14-22.27,22
 /cmds/creators/pwhere.c
 /log/chan/archive/muds-2010.10.11-13.45,48
 /log/chan/archive/muds-2010.09.09-18.45,48
@@ -1874,6 +1927,7 @@
 /doc/applies/catch_tell
 /doc/lfun/all/GetLimbs
 /doc/efun/all/socket_error
+/log/chan/archive/dchat-2011.04.08-16.26,27
 /lib/include/firearm.h
 /domains/campus/armor/jeans.c
 /log/chan/archive/intergossip-2010.10.24-20.45,48
@@ -1944,6 +1998,7 @@
 /save/types.5555.o
 /log/chan/archive/muds-2009.10.05-07.41,35
 /log/chan/archive/intergossip-2011.01.10-17.32,52
+/log/chan/archive/intergossip-2011.06.25-19.29,10
 /domains/Ylsrim/etc/fighter_door.c
 /save/classes.4444.o
 /log/chan/archive/ichat-2010.05.14-13.07,55
@@ -1985,6 +2040,7 @@
 /log/chan/archive/dchat-2009.03.16-13.30,39
 /lib/bank.c
 /secure/scripts/general_check.txt
+/log/chan/archive/dchat-2011.04.17-01.27,22
 /domains/default/npc/centaur.c
 /doc/hbook/.gitignore
 /log/chan/archive/muds-2010.10.20-05.45,48
@@ -2179,6 +2235,7 @@
 /log/chan/archive/intergossip-2010.07.20-19.11,24
 /log/chan/archive/intergossip-2010.05.28-12.58,38
 /log/chan/archive/muds-2010.11.08-22.45,48
+/log/chan/archive/intergossip-2011.04.06-14.26,27
 /daemon/tmp/MOUTH_TONGUED.c
 /domains/campus/txt/skulls.txt
 /secure/cmds/admins/whoregistered.c
@@ -2323,6 +2380,7 @@
 /www/lpmuds/links_files/smflogo.gif
 /log/chan/archive/intergossip-2010.11.17-14.45,48
 /doc/lfun/all/AddQuestPoints
+/log/chan/archive/dchat-2011.05.03-21.28,39
 /domains/town/meals/shark.c
 /doc/lfun/lib/potion/GetPoints
 /save/kills/e/ebhhnnld
@@ -2427,6 +2485,7 @@
 /domains/campus/txt/ai/charly/percent
 /domains/Praxis/hospital.c
 /save/deviation.1111.o
+/log/chan/archive/dchat-2011.04.10-12.26,27
 /doc/lfun/lib/body/GetEncumbrance
 /log/chan/archive/imudnews-2010.10.01-09.45,48
 /domains/town/room/mansion_room7.c
@@ -2446,8 +2505,10 @@
 /log/chan/archive/muds-2010.11.09-14.45,48
 /log/adm/foo.txt
 /log/chan/archive/muds-2009.07.23-14.15,28
+/log/chan/archive/dchat-2011.05.20-20.29,10
 /save/kills/x/xkcdcjbakgbdmc
 /domains/town/weap/sword.c
+/log/chan/archive/intergossip-2011.05.01-20.28,39
 /domains/campus/npc/dummy.c
 /doc/help/creators/creweb
 /doc/lfun/all/AddFood
@@ -2499,6 +2560,7 @@
 /log/chan/archive/muds-2010.11.09-00.45,48
 /log/chan/archive/muds-2009.04.14-05.29,16
 /log/chan/archive/muds-2010.08.17-12.45,20
+/log/chan/archive/dchat-2011.06.13-16.29,10
 /domains/campus/txt/ai/charly/bak/switches
 /log/law/email/foo.txt
 /secure/obj/portal_orange.c
@@ -2523,6 +2585,7 @@
 /log/chan/archive/intergossip-2010.10.20-16.45,48
 /log/chan/archive/intergossip-2011.01.29-23.32,52
 /lib/.chario.c.swp
+/log/chan/archive/intergossip-2011.03.30-23.26,09
 /log/chan/trivia_games
 /domains/campus/armor/badge2.c
 /log/chan/archive/inews-2009.03.25-13.11,20
@@ -2532,6 +2595,7 @@
 /doc/sefun/get_cmds
 /log/chan/archive/intergossip-2010.02.09-11.54,55
 /log/chan/archive/muds-2009.05.20-11.06,41
+/log/chan/archive/dchat-2011.06.05-16.29,10
 /doc/sefun/levenshtein_distance
 /doc/lfun/lib/battery/SetCellType
 /verbs/common/include/shout.h
@@ -2543,6 +2607,7 @@
 /doc/lfun/all/SetDeathEvents
 /www/index.html
 /log/chan/archive/intergossip-2010.09.03-13.45,48
+/log/chan/archive/dchat-2011.04.02-12.26,09
 /doc/lfun/lib/classes/AddSkillPoints
 /save/kills/x/xkcdibjj
 /domains/town/obj/safe.c
@@ -2660,6 +2725,7 @@
 /log/chan/archive/dchat-2010.12.30-00.46,48
 /doc/help/players/communication
 /save/kills/b/bbmdcgdmhnj
+/log/chan/archive/intergossip-2011.05.10-12.28,39
 /doc/lfun/lib/burn/CanExtinguish
 /log/chan/archive/ichat-2010.02.18-15.54,55
 /log/chan/bsg
@@ -2694,6 +2760,7 @@
 /log/instances
 /save/deviation.2222.o
 /save/kills/m/mknlecmdhh
+/log/chan/archive/intergossip-2011.05.03-19.28,39
 /log/chan/archive/muds-2010.09.20-19.45,48
 /doc/lfun/lib/body/GetRandomLimb
 /doc/efun/internals/cache_stats
@@ -2722,6 +2789,7 @@
 /doc/phints/chapter04
 /doc/phints/chapter03
 /doc/lfun/all/CanRelease
+/log/chan/archive/dchat-2011.05.18-20.29,10
 /doc/phints/chapter02
 /doc/phints/chapter01
 /log/archive/i3error-2009.05.10-20.58,26
@@ -2770,6 +2838,7 @@
 /log/archive/runtime-2009.09.09-07.31,11
 /lib/events/turn.c
 /doc/efun/all/tell_room
+/log/chan/archive/intergossip-2011.04.29-11.27,44
 /save/map.4444.o
 /log/chan/archive/muds-2010.10.20-15.45,48
 /www/cgi/login.c
@@ -2805,8 +2874,10 @@
 /log/chan/archive/muds-2009.03.12-21.45,36
 /log/chan/archive/imudnews-2010.12.20-20.45,48
 /log/chan/archive/i2news-2009.03.26-05.11,20
+/log/chan/archive/intergossip-2011.06.02-21.29,10
 /doc/build/Weapons
 /log/chan/archive/muds-2009.05.15-13.59,29
+/log/chan/archive/mbchat-2011.04.03-01.26,09
 /log/chan/archive/muds-2010.12.09-15.45,48
 /log/chan/archive/intergossip-2009.04.14-17.29,16
 /domains/campus/txt/ai/charly/bak/red_wins
@@ -2827,6 +2898,7 @@
 /domains/Praxis/adm/access.c
 /domains/campus/room/blue_room.c
 /secure/daemon/localpost.h
+/log/chan/archive/intergossip-2011.06.08-22.29,10
 /verbs/players/include/evade.h
 /doc/lfun/lib/body/AddLimb
 /doc/efun/arrays/member_array
@@ -2864,6 +2936,7 @@
 /domains/Praxis/inn104.c
 /doc/lfun/lib/bot/GetLong
 /doc/efun/floats/to_int
+/log/chan/archive/dchat-2011.06.21-14.29,10
 /log/archive/reset-2009.05.24-22.22,24
 /domains/campus/txt/finger.txt
 /secure/sefun/english.c
@@ -2886,6 +2959,7 @@
 /secure/cmds/creators/showfuns.c
 /obj/trainer.c
 /domains/Ylsrim/virtual/desert_map.c
+/log/chan/archive/dchat-2011.04.03-17.26,27
 /log/chan/archive/dchat-2010.10.14-15.45,48
 /doc/lfun/all/RemoveMagicProtection
 /log/chan/archive/dchat-2010.08.19-10.45,48
@@ -2909,6 +2983,7 @@
 /log/chan/archive/intergossip-2010.02.18-16.54,55
 /log/errors/verbs
 /log/chan/archive/muds-2010.08.18-17.45,20
+/log/chan/archive/intergossip-2011.04.01-03.26,09
 /lib/events/show.c
 /doc/lfun/lib/body/RestoreLimb
 /doc/efun/all/mapp
@@ -2934,6 +3009,7 @@
 /domains/town/virtual/sky/19,6,1.c
 /www/cgi/logout.c
 /cmds/players/pk.c
+/log/chan/archive/dchat-2011.05.28-19.29,10
 /log/chan/archive/intergossip-2010.05.01-10.08,02
 /lib/include/container.h
 /doc/sefun/flat_map
@@ -3072,6 +3148,7 @@
 /log/chan/archive/intergossip-2010.01.21-19.54,06
 /doc/misc/.gitignore
 /doc/efun/all/get_dir
+/log/chan/archive/intergossip-2011.03.29-15.26,09
 /log/chan/archive/muds-2010.11.09-11.45,48
 /log/chan/archive/intergossip-2010.10.18-01.45,48
 /doc/lfun/lib/body/GetMissingLimbs
@@ -3127,6 +3204,7 @@
 /domains/default/weap/orcslayer.c
 /obj/worn_storage.c
 /domains/default/npc/gargoyle.c
+/log/chan/archive/free_speech-2011.06.08-11.29,10
 /lib/events/fly.c
 /doc/lfun/lib/burn/GetBurning
 /daemon/defines.c
@@ -3156,6 +3234,7 @@
 /doc/applies/parsing/.gitignore
 /log/chan/archive/intergossip-2010.11.23-23.32,52
 /secure/cmds/builders/.gitignore
+/log/chan/archive/dgd-2011.06.20-18.29,10
 /save/kills/x/xkcdefie
 /log/chan/archive/muds-2010.11.11-23.45,48
 /doc/applies/master/valid_override
@@ -3193,6 +3272,7 @@
 /secure/include/logs.h
 /log/chan/archive/dchat-2010.08.30-14.45,48
 /secure/obj/meditate_mojo.c
+/log/chan/archive/dchat-2011.05.12-10.28,39
 /log/errors/Ylsrim
 /save/kills/i/iockei
 /log/chan/archive/intergossip-2010.11.16-17.32,14
@@ -3221,6 +3301,7 @@
 /log/chan/archive/ichat-2010.06.08-00.59,25
 /doc/lpc/types/mappings
 /log/chan/archive/intergossip-2010.06.03-08.59,25
+/log/chan/archive/bsg-2011.04.23-23.27,44
 /doc/efun/floats/acos
 /log/chan/archive/dchat-2010.09.27-11.45,48
 /save/banish.2222.o
@@ -3248,6 +3329,7 @@
 /log/chan/archive/muds-2009.03.14-12.46,19
 /doc/efun/interactive/query_ip_name
 /log/chan/archive/ichat-2010.03.26-01.54,55
+/log/archive/reset-2011.04.23-12.27,44
 /domains/town/npc/mayor.c
 /domains/campus/room/death.c
 /doc/lfun/lib/chapel/eventMarry
@@ -3331,6 +3413,7 @@
 /daemon/guard.c
 /www/cgi/showlog.c
 /domains/default/armor/jade_ring.c
+/log/chan/archive/dchat-2011.04.09-16.26,27
 /lib/std/germ.c
 /domains/campus/room/store.c
 /domains/campus/room/shaft2.c
@@ -3346,6 +3429,7 @@
 /save/kills/c/cmddfg
 /std/quest_ob.c
 /log/archive/runtime-2009.05.22-17.21,24
+/log/chan/archive/dchat-2011.06.28-06.29,10
 /save/kills/x/xkcdeleakbk
 /log/chan/archive/ichat-2009.03.26-20.11,20
 /secure/cfg/races/vehicle
@@ -3367,8 +3451,10 @@
 /domains/town/room/church.c
 /secure/cfg/ip_unrestrict.cfg
 /log/chan/archive/intergossip-2010.12.03-11.45,48
+/log/chan/archive/dchat-2011.05.23-09.29,10
 /domains/town/virtual/bottom.c
 /doc/efun/all/random
+/log/chan/archive/intergossip-2011.05.04-09.28,39
 /log/chan/archive/muds-2009.03.28-15.12,22
 /domains/town/obj/clocktower.c
 /domains/campus/txt/ai/charles/bak2/red_wins
@@ -3396,6 +3482,7 @@
 /save/soul.5555.o
 /domains/Praxis/obj/misc/handcuffs.c
 /doc/efun/all/set_bit
+/log/chan/archive/intergossip-2011.05.25-23.29,10
 /log/chan/archive/muds-2009.10.05-00.41,35
 /log/chan/archive/intergossip-2010.07.30-15.18,42
 /lib/match.c
@@ -3443,6 +3530,7 @@
 /secure/npc/drone.c
 /doc/lfun/lib/body/SetFingers
 /log/chan/archive/muds-2009.03.14-11.46,19
+/log/chan/archive/intergossip-2011.04.15-21.27,22
 /lib/std/item.c
 /doc/help/players/languages
 /log/chan/archive/muds-2010.11.13-08.45,48
@@ -3618,6 +3706,7 @@
 /doc/lfun/lib/bonus/SetStats
 /save/kills/b/bdin
 /log/chan/archive/intergossip-2010.04.08-12.08,02
+/log/chan/archive/ds-2011.06.24-05.29,10
 /doc/hbook/chapter09
 /verbs/items/rock.c
 /secure/obj/floodmapper.c
@@ -3655,6 +3744,7 @@
 /log/router/foo.txt
 /log/chan/archive/muds-2010.08.27-06.45,48
 /log/chan/archive/sport-2010.03.26-21.54,55
+/log/chan/archive/intergossip-2011.06.18-18.29,10
 /log/chan/archive/intergossip-2010.06.29-21.59,34
 /domains/default/obj/.gitignore
 /cmds/creators/ascii.c
@@ -3686,6 +3776,7 @@
 /doc/lfun/all/SetBonusDuration
 /log/chan/archive/muds-2010.10.18-12.45,48
 /save/kills/x/xkcdnkfmkekl
+/log/chan/archive/intergossip-2011.06.03-10.29,10
 /verbs/players/include/vote.h
 /doc/lfun/all/GetCanBite
 /doc/efun/all/atan
@@ -3700,6 +3791,7 @@
 /domains/Praxis/east_road3.c
 /doc/efun/objects/destruct
 /www/lpmuds/sitefaq.html
+/log/chan/archive/intergossip-2011.05.11-14.28,39
 /secure/cmds/creators/include/.gitignore
 /log/chan/archive/inews-2010.09.26-09.45,48
 /doc/help/players/alias
@@ -3719,6 +3811,7 @@
 /lib/poison.c
 /domains/default/npc/quarantine/edmund.c
 /log/chan/archive/muds-2010.09.25-22.45,48
+/log/chan/archive/dchat-2011.06.27-11.29,10
 /doc/lfun/lib/body/AddFingers
 /log/chan/archive/dchat-2010.12.17-10.32,52
 /secure/cmds/admins/statconvert.c
@@ -3749,6 +3842,7 @@
 /log/chan/archive/ichat-2010.06.03-17.59,25
 /doc/lfun/all/AddSacrificeType
 /save/banish.4444.o
+/log/chan/archive/intergossip-2011.05.18-01.29,10
 /domains/default/weap/357pistol.c
 /doc/lfun/all/AddHealthPoints
 /doc/efun/mappings/keys
@@ -3765,6 +3859,7 @@
 /doc/lfun/lib/bonus/GetSkills
 /log/chan/archive/muds-2009.05.10-08.58,26
 /log/chan/archive/intergossip-2011.03.18-03.28,07
+/log/chan/archive/dchat-2011.03.24-11.25,32
 /doc/help/creators/force
 /save/kills/f/fbdnb
 /domains/Praxis/data/booth_votes.o.gz
@@ -3790,6 +3885,7 @@
 /domains/town/virtual/surface.c
 /log/archive/currency-2011.01.11-08.46,55
 /domains/town/meals/.gitignore
+/log/chan/archive/dchat-2011.04.12-12.27,22
 /doc/lfun/all/GetReligion
 /log/chan/archive/dgd-2011.02.17-11.33,27
 /log/chan/archive/dchat-2010.11.30-13.45,48
@@ -3802,6 +3898,7 @@
 /log/chan/archive/muds-2010.12.18-17.45,48
 /daemon/intermud.c
 /domains/Praxis/highway1.c
+/log/chan/archive/discworld-chat-2011.05.24-13.29,10
 /cfg/days.cfg
 /secure/cmds/admins/router.c
 /log/chan/archive/mudnews-2010.04.14-10.08,02
@@ -3897,6 +3994,7 @@
 /domains/Praxis/farm.c
 /doc/lfun/lib/vendor/eventBuy
 /save/kills/a/ajfo
+/log/chan/archive/dchat-2011.06.22-16.29,10
 /log/chan/archive/muds-2009.04.29-22.42,32
 /doc/manual/.gitignore
 /log/chan/archive/intergossip-2010.09.20-13.45,48
@@ -3939,12 +4037,14 @@
 /lib/vi.c
 /lib/events/poison.c
 /secure/cfg/races/poleepkwa
+/log/chan/archive/dchat-2011.06.14-16.29,10
 /doc/lfun/lib/body/GetProtect
 /domains/default/npc/gecko.c
 /log/archive/runtime-2009.05.25-22.47,21
 /log/chan/mudnews
 /log/chan/archive/muds-2010.09.11-20.45,48
 /secure/cmds/common/.gitignore
+/log/chan/archive/intergossip-2011.05.19-07.29,10
 /log/chan/archive/intergossip-2010.09.03-20.45,48
 /secure/cmds/admins/watch.c
 /save/kills/f/fbdfogff
@@ -3987,6 +4087,7 @@
 /verbs/common/include/yell.h
 /secure/daemon/.icp.c.swp
 /verbs/items/include/bait.h
+/log/chan/archive/discworld-chat-2011.04.05-11.26,27
 /doc/lfun/lib/body/RemoveExtraChannels
 /log/chan/archive/i2news-2009.03.26-13.11,20
 /log/archive/runtime-2009.11.08-23.08,14
@@ -3994,6 +4095,7 @@
 /lib/bonus.c
 /secure/cmds/creators/gauge.c
 /lib/events/describe.c
+/log/chan/archive/dchat-2011.05.13-13.28,39
 /log/chan/archive/muds-2010.12.09-23.45,48
 /domains/default/room/death.c
 /secure/cfg/races/chimera
@@ -4004,6 +4106,7 @@
 /lib/cylinder.c
 /www/lpmuds/script.js
 /save/kills/x/xkcdhdg
+/log/chan/archive/ds-2011.06.10-16.29,10
 /log/chan/archive/muds-2010.08.27-18.45,48
 /doc/lfun/lib/chapel/CanSacrifice
 /daemon/tmp/HEAT.c
@@ -4147,10 +4250,12 @@
 /save/kills/e/eeekmgh
 /obj/meal.c
 /doc/efun/all/bufferp
+/log/chan/archive/dchat-2011.04.20-10.27,22
 /doc/lfun/all/SetCanBite
 /secure/daemon/oob.c
 /doc/lfun/all/eventDestruct
 /save/kills/a/ani
+/log/chan/archive/intercre-2011.06.23-15.29,10
 /domains/campus/weap/sharpsword.c
 /log/decline
 /log/chan/archive/intergossip-2010.09.13-19.45,48
@@ -4362,6 +4467,7 @@
 /log/chan/archive/muds-2010.08.18-10.45,20
 /doc/efun/all/crypt
 /log/chan/archive/ichat-2010.03.20-22.54,55
+/log/chan/archive/intergossip-2011.05.03-11.28,39
 /domains/cave/obj/omni.c
 /secure/cmds/admins/warmboot.c
 /save/kills/c/cjbfkiog
@@ -4382,12 +4488,15 @@
 /secure/modules/armor.c
 /domains/default/npc/elemental.c
 /log/chan/archive/ichat2-2010.08.13-14.18,42
+/log/chan/archive/dgd-2011.06.21-19.29,10
 /daemon/meetings.c
 /secure/cfg/races/cow
 /domains/campus/etc/.gitignore
+/log/chan/archive/intergossip-2011.06.25-21.29,10
 /save/kills/d/ddenc
 /log/chan/archive/muds-2010.12.12-13.45,48
 /doc/applies/process_input
+/log/chan/archive/intergossip-2011.04.25-16.27,44
 /log/chan/archive/bsg-2011.01.17-01.32,52
 /save/kills/g/gicoh
 /doc/help/players/chat
@@ -4426,6 +4535,7 @@
 /doc/sefun/shutdown
 /secure/include/lvs.h
 /domains/campus/txt/ai/.gitignore
+/log/chan/ravenloft
 /domains/cave/meals/jerky.c
 /cmds/creators/codeblock.c
 /save/kills/x/xkcdboicljda
@@ -4502,6 +4612,7 @@
 /domains/town/armor/orc_boot_r.c
 /lib/std/lockpick.c
 /doc/efun/floats/tan
+/log/chan/archive/intergossip-2011.06.09-21.29,10
 /domains/cave/doors/food_storage1.c
 /doc/lfun/all/GetCellType
 /log/chan/archive/muds-2010.12.05-06.45,48
@@ -4562,6 +4673,7 @@
 /log/chan/igossip
 /log/chan/archive/muds-2010.12.20-12.45,48
 /obj/stargate.example
+/log/chan/archive/dchat-2011.04.21-15.27,27
 /log/chan/archive/dchat-2011.02.14-01.33,27
 /domains/campus/obj/diamond.c
 /log/chan/archive/intergossip-2010.07.08-12.59,34
@@ -4587,6 +4699,7 @@
 /domains/default/npc/avidryl.c
 /log/chan/archive/intergossip-2010.07.03-04.59,34
 /domains/campus/txt/ai/charles/bak2/fblue
+/log/archive/catch-2011.03.26-00.53,44
 /domains/campus/room/plab2.c
 /doc/efun/all/this_object
 /doc/.gitignore
@@ -4614,6 +4727,7 @@
 /domains/cave/weap/axe.c
 /save/bugs.3333.o
 /log/chan/archive/intergossip-2010.04.25-00.08,02
+/log/chan/archive/dchat-2011.04.13-15.27,22
 /domains/cave/etc/cave_orc.c
 /doc/efun/all/mkdir
 /domains/default/npc/quarantine/nigel.c
@@ -4675,6 +4789,7 @@
 /secure/include/domains.h
 /log/chan/archive/intergossip-2010.02.26-21.54,55
 /log/chan/archive/intergossip-2010.07.21-14.11,24
+/log/chan/archive/dchat-2011.05.06-17.28,39
 /daemon/include/http.h
 /domains/campus/obj/apple.c
 /www/lpmuds/links_files/style.css
@@ -4691,6 +4806,7 @@
 /powers/spells/buffer.c
 /powers/psionics/.gitignore
 /log/chan/archive/muds-2010.08.19-15.45,48
+/log/chan/archive/intergossip-2011.05.27-17.29,10
 /daemon/tmp/LIB_BODY.c
 /log/chan/archive/muds-2010.10.13-13.45,48
 /domains/town/doors/.gitignore
@@ -4729,8 +4845,10 @@
 /domains/town/npc/lars.c
 /secure/cfg/.gitignore
 /domains/town/npc/gecko.c
+/log/chan/archive/dchat-2011.06.23-19.29,10
 /doc/lfun/lib/npc/GetName
 /secure/cfg/races/sheep
+/log/chan/archive/dchat-2011.05.06-03.28,39
 /doc/lfun/lib/round/SetFirearmType
 /doc/efun/interactive/query_host_name
 /domains/cave/room/cavepass11.c
@@ -4775,6 +4893,7 @@
 /log/chan/archive/i2news-2009.05.19-07.00,12
 /log/chan/archive/dchat-2011.02.06-14.33,27
 /domains/campus/obj/backpack_civilian.c
+/log/chan/archive/dchat-2011.04.28-08.27,44
 /log/chan/archive/dchat-2010.11.05-16.32,14
 /log/chan/archive/intergossip-2010.07.27-17.50,43
 /doc/efun/numbers/query_num
@@ -4796,6 +4915,7 @@
 /domains/town/doors/grate.c
 /log/chan/archive/intergossip-2009.03.16-13.30,39
 /domains/cave/obj/cot.c
+/log/chan/archive/intergossip-2011.04.17-01.27,22
 /secure/lib/std/.gitignore
 /domains/Praxis/orc_valley/shaman.c
 /doc/efun/objects/clonep
@@ -4805,6 +4925,7 @@
 /lib/include/press.h
 /doc/efun/objects/tell_room
 /log/chan/archive/muds-2010.08.26-21.45,48
+/log/chan/archive/dchat-2011.06.29-06.29,10
 /doc/lpc/concepts/lfun
 /doc/applies/valid_bind
 /log/chan/archive/intergossip-2010.10.22-19.45,48
@@ -4815,6 +4936,7 @@
 /save/kills/x/xkcdgjigff
 /save/kills/c/ceglbkbnnkc
 /log/chan/archive/intergossip-2010.08.18-21.45,48
+/log/chan/archive/intergossip-2011.04.10-14.26,27
 /domains/town/obj/stargate2.c
 /domains/town/armor/badge.c
 /secure/cmds/creators/ed.c
@@ -4834,6 +4956,7 @@
 /www/ds-inst-faq.html
 /doc/efun/all/function_owner
 /www/cgi/new.c
+/log/chan/archive/intergossip-2011.05.20-22.29,10
 /domains/campus/adm/README
 /doc/lfun/lib/leader/.gitignore
 /verbs/common/whisper.c
@@ -4849,6 +4972,7 @@
 /domains/campus/npc/tim.c
 /domains/default/npc/horse.c
 /log/archive/catch-2009.10.27-18.31,00
+/log/chan/archive/intergossip-2011.04.07-22.26,27
 /domains/town/obj/bbucket.c
 /doc/lfun/lib/shell/SetCaliber
 /doc/lfun/all/SetCellType
@@ -4860,6 +4984,7 @@
 /daemon/tmp/B_WINGED_MAN.c
 /save/kills/x/xkcddkfcnbigh
 /log/chan/archive/muds-2010.10.30-05.45,48
+/log/chan/archive/intergossip-2011.05.26-23.29,10
 /log/chan/archive/intergossip-2010.05.25-19.58,38
 /domains/campus/armor/workboot_r.c
 /secure/daemon/inet.c
@@ -4889,6 +5014,7 @@
 /cmds/admins/speaker.c
 /log/chan/archive/muds-2010.09.14-09.45,48
 /domains/campus/doors/eledoor3.c
+/log/chan/archive/intergossip-2011.06.13-18.29,10
 /domains/campus/armor/workboot_l.c
 /save/kills/b/bdieidaa
 /log/chan/archive/dchat-2011.02.22-13.33,27
@@ -4902,6 +5028,8 @@
 /save/bugs.4444.o
 /cmds/players/mem.c
 /www/lpmuds/router_debate.html
+/log/archive/catch-2011.05.01-07.27,57
+/log/archive/catch-2011.05.23-21.29,10
 /log/chan/archive/muds-2009.04.14-21.29,16
 /log/chan/archive/dchat-2010.11.20-21.32,52
 /lib/include/barkeep.h
@@ -4943,6 +5071,7 @@
 /secure/include/sockets.h
 /doc/lfun/.gitignore
 /save/kills/k/kdodkbcabg
+/log/chan/archive/intergossip-2011.06.05-18.29,10
 /domains/town/weap/staff.c
 /doc/lfun/lib/leader/eventJoin
 /doc/applies/__INIT
@@ -4954,6 +5083,7 @@
 /doc/efun/objects/query_heart_beat
 /doc/efun/internals/debug_info
 /secure/cfg/races/cat
+/log/chan/archive/intergossip-2011.04.02-14.26,09
 /save/kills/x/xkcdkacnc
 /secure/cmds/admins/decre.c
 /log/chan/archive/intergossip-2010.06.10-20.59,25
@@ -5029,6 +5159,7 @@
 /save/kills/k/kjmmjh
 /doc/efun/all/getuid
 /log/chan/archive/intergossip-2010.09.28-09.45,48
+/log/chan/archive/dchat-2011.03.23-16.28,51
 /verbs/common/ask.c
 /log/chan/archive/ichat-2010.02.06-03.54,55
 /domains/default/armor/long_boot_l.c
@@ -5563,6 +5694,7 @@
 /verbs/builders/dest.c
 /lib/events/bait.c
 /save/kills/e/ecddncofija
+/log/chan/archive/dchat-2011.04.27-11.27,44
 /www/lpmuds/index.php
 /secure/include/post.h
 /log/archive/catch-2009.04.23-23.15,49
@@ -5597,6 +5729,7 @@
 /doc/help/creators/messaging
 /lib/cedit.c
 /secure/daemon/i3router/clean_fd.h
+/log/chan/archive/intergossip-2011.03.23-23.25,05
 /log/chan/archive/free_speech-2010.06.10-21.59,25
 /log/chan/intergossip
 /doc/help/players/.wordwrap.swp
@@ -5660,11 +5793,14 @@
 /domains/campus/obj/labkey.c
 /domains/town/room/secret.c
 /daemon/tmp/R_AIR+R_WATER.c
+/log/chan/archive/intergossip-2011.05.30-18.29,10
 /domains/town/armor/silverring.c
 /secure/obj/medtric.c
+/log/chan/archive/dchat-2011.04.13-10.27,22
 /save/kills/x/xkcdoeaggka
 /save/kills/j/jdlojmef
 /lib/events/activate.c
+/log/chan/archive/intergossip-2011.05.05-05.28,39
 /domains/town/obj/357round.c
 /doc/lfun/lib/body/AddAlcohol
 /cmds/players/converse.c
@@ -5706,6 +5842,7 @@
 /doc/lfun/all/GetAffectLong
 /save/kills/x/xkcdfidibil
 /doc/lfun/lib/corpse/GetHealthShort
+/log/chan/archive/intergossip-2011.05.30-04.29,10
 /save/parties.1111.o
 /log/chan/archive/muds-2010.09.06-19.45,48
 /domains/campus/weap/357pistol.c
@@ -5752,12 +5889,14 @@
 /doc/efun/mixed/stringp
 /save/kills/d/dhk
 /cmds/admins/cache.c
+/log/chan/archive/intergossip-2011.04.20-02.27,22
 /doc/lfun/lib/client/.gitignore
 /domains/town/room/tavern.c
 /domains/campus/obj/backpack.c
 /domains/town/obj/wall.c
 /log/chan/archive/muds-2010.12.20-20.45,48
 /log/chan/archive/dchat-2011.02.06-23.33,27
+/log/chan/archive/intergossip-2011.06.05-14.29,10
 /lib/used_meal.c
 /save/kills/g/ghca
 /log/chan/archive/intergossip-2010.01.27-20.54,55
@@ -5794,6 +5933,7 @@
 /log/chan/archive/intergossip-2010.08.07-14.18,42
 /domains/cave/armor/orc_tallboot_l.c
 /log/chan/archive/mudnews-2010.03.26-04.54,55
+/log/archive/reset-2011.06.21-04.29,10
 /log/chan/archive/muds-2010.11.30-17.45,48
 /log/chan/archive/discworld-chat-2011.02.11-14.33,27
 /log/chan/archive/muds-2010.10.01-07.45,48
@@ -5856,6 +5996,7 @@
 /log/archive/runtime-2010.07.09-08.16,00
 /secure/cmds/players/include/passwd.h
 /news/welcome.2222
+/log/chan/archive/intercre-2011.05.01-04.27,44
 /cmds/creators/whomuffed.c
 /log/chan/archive/intergossip-2010.07.28-12.17,46
 /secure/cmds/hm/.gitignore
@@ -5865,6 +6006,7 @@
 /cmds/players/consider.c
 /save/kills/i/ilnlkgdm
 /domains/examples/room/exroom7.c
+/log/chan/archive/dchat-2011.06.07-14.29,10
 /log/chan/archive/dchat-2010.02.10-14.54,55
 /log/chan/archive/muds-2010.10.27-22.45,48
 /domains/campus/room/science1.c
@@ -5879,6 +6021,7 @@
 /domains/Praxis/hall4.c
 /daemon/tmp/secret.c
 /verbs/items/press.c
+/log/chan/archive/dchat-2011.03.26-02.53,44
 /www/images/.gitignore
 /domains/Praxis/mountains/chamber1.c
 /www/lpmuds/lpmud_faq.html
@@ -6068,6 +6211,7 @@
 /doc/lfun/lib/body/GetMissingLimbParent
 /log/chan/dchat
 /save/kills/j/jmjeboi
+/log/chan/archive/dchat-2011.06.01-12.29,10
 /domains/town/obj/watch.c
 /save/kills/k/kmdhjgncjm
 /lib/include/stargate.h
@@ -6096,6 +6240,7 @@
 /doc/lfun/all/GetMoJo
 /log/chan/archive/muds-2009.05.09-19.58,26
 /save/kills/x/xkcdmecfjabla
+/log/chan/archive/intergossip-2011.06.21-12.29,10
 /log/chan/archive/muds-2010.11.28-17.45,48
 /log/chan/archive/muds-2009.05.08-12.58,26
 /doc/lfun/lib/combat/eventReceiveDamage
@@ -6128,11 +6273,13 @@
 /log/chan/archive/dchat-2010.02.07-21.54,55
 /save/books.1111.o
 /domains/Praxis/adv_inner.c
+/log/chan/archive/dchat-2011.05.01-16.28,39
 /save/economy.o
 /log/chan/archive/muds-2010.12.14-05.45,48
 /domains/town/obj/toilet.c
 /secure/lib/net/server.c
 /doc/lfun/all/GetPoison
+/log/chan/archive/intergossip-2011.04.26-01.27,44
 /doc/lfun/all/SetClass
 /doc/efun/strings/index
 /secure/include/mssp.h
@@ -6172,6 +6319,7 @@
 /save/kills/d/dalklnia
 /doc/BASICS
 /daemon/tmp/B_QUADRUPED.c
+/log/chan/archive/intergossip-2011.04.12-14.27,22
 /domains/town/npc/ingrid.c
 /doc/efun/numbers/.gitignore
 /domains/campus/room/shaft0.c
@@ -6180,6 +6328,7 @@
 /log/chan/archive/intergossip-2010.12.22-18.45,48
 /doc/lfun/lib/abilities/GetSkills
 /domains/cave/npc/orc_guard2.c
+/log/chan/archive/intergossip-2011.06.05-12.29,10
 /doc/lfun/lib/body/GetMaxMagicPoints
 /log/chan/archive/intergossip-2011.02.20-20.33,27
 /doc/efun/all/dump_prog
@@ -6190,6 +6339,7 @@
 /shadows/pscout.c
 /domains/town/room/magic_guild.c
 /log/chan/archive/intergossip-2011.03.22-04.28,07
+/log/archive/reset-2011.04.03-19.26,27
 /doc/lfun/all/eventCheckHealing
 /verbs/builders/.gitignore
 /doc/sefun/ambassadorp
@@ -6229,9 +6379,11 @@
 /log/archive/runtime-2010.07.08-13.16,00
 /log/chan/archive/intergossip-2010.12.20-17.32,52
 /log/chan/archive/intergossip-2010.08.22-13.45,48
+/log/chan/archive/dchat-2011.06.15-12.29,10
 /domains/town/meals/fire.c
 /domains/town/armor/.boot.c.swp
 /log/chan/ievennia
+/log/chan/archive/ds-2011.04.24-15.27,44
 /domains/Praxis/monastery.c
 /doc/efun/all/set_living_name
 /daemon/tmp/testyguy.c
@@ -6314,11 +6466,13 @@
 /save/kills/h/hlgdgdik
 /domains/town/room/thall.c
 /secure/include/lib.h
+/log/chan/archive/intergossip-2011.04.20-13.27,22
 /secure/daemon/filter.c
 /log/chan/archive/muds-2010.09.15-09.45,48
 /log/chan/archive/dchat-2010.02.03-19.54,55
 /domains/cave/virtual/.gitignore
 /powers/spells/fireball.c
+/log/chan/archive/intergossip-2011.05.30-01.29,10
 /domains/campus/doors/.gitignore
 /doc/lfun/lib/burn/eventLight
 /domains/Praxis/README
@@ -6386,9 +6540,11 @@
 /log/chan/archive/muds-2009.04.10-06.28,44
 /log/chan/archive/muds-2010.10.07-19.45,48
 /secure/cmds/admins/addadverb.c
+/log/chan/archive/intergossip-2011.04.18-14.27,22
 /save/kills/o/oboabiecbd
 /log/chan/archive/discworld-chat-2010.08.03-10.50,43
 /domains/Praxis/alley2.c
+/log/chan/archive/ds-2011.05.12-09.28,39
 /secure/cmds/admins/addraces.c
 /domains/campus/obj/squirtbag.c
 /log/archive/runtime-2009.09.22-14.04,12
@@ -6462,6 +6618,7 @@
 /domains/campus/save/charly.o
 /log/chan/archive/muds-2010.10.30-11.45,48
 /log/chan/archive/inews-2009.05.08-05.13,35
+/log/chan/archive/free_speech-2011.05.05-19.28,39
 /log/chan/archive/intergossip-2010.10.23-18.45,48
 /log/chan/archive/sport-2010.04.21-10.08,02
 /log/chan/archive/intergossip-2010.12.26-17.32,52
@@ -6490,6 +6647,7 @@
 /doc/efun/parsing/.gitignore
 /secure/cmds/creators/include/more.h
 /save/kills/n/nnndkcojd
+/log/chan/archive/intergossip-2011.04.08-21.26,27
 /log/chan/archive/intergossip-2011.03.21-23.28,07
 /secure/cmds/admins/groupmod.c
 /lib/std/corpse.c
@@ -6692,6 +6850,7 @@
 /daemon/tmp/A_SHIELD.c
 /secure/include/secrets.h
 /log/chan/archive/sport-2009.10.03-17.41,27
+/log/chan/archive/intergossip-2011.05.21-20.29,10
 /lib/include/key.h
 /doc/lfun/lib/firearm/GetCaliber
 /www/articles/mudmagic.html
@@ -6860,6 +7019,7 @@
 /save/kills/x/xkcdhdfnad
 /doc/lpc/concepts/sefun
 /log/chan/archive/intergossip-2010.08.23-17.45,48
+/log/chan/archive/dchat-2011.06.16-16.29,10
 /save/kills/a/aa
 /domains/Ylsrim/etc/match.c
 /domains/Praxis/attic/tmp_hos
@@ -6898,6 +7058,7 @@
 /log/chan/archive/ichat-2010.01.20-20.52,12
 /domains/town/npc/herkimer.c
 /doc/efun/sockets/.gitignore
+/log/chan/archive/intergossip-2011.04.27-18.27,44
 /log/chan/archive/intergossip-2010.04.19-17.08,02
 /cmds/players/enemies.c
 /log/archive/runtime-2010.07.09-03.16,00
@@ -6938,6 +7099,7 @@
 /log/chan/archive/ichat-2010.04.05-00.08,02
 /domains/town/room/shop2.c
 /save/kills/j/jgamd
+/log/archive/reset-2011.05.13-03.28,39
 /doc/help/players/password
 /daemon/tmp/monty.c
 /domains/default/room/menagerie_south.c
@@ -7198,6 +7360,7 @@
 /doc/help/players/player_general
 /doc/efun/objects/set_heart_beat
 /log/chan/archive/intergossip-2010.06.21-16.59,34
+/log/chan/3dspace
 /domains/cave/obj/lever.c
 /cmds/creators/findobj.c
 /daemon/phys.c
@@ -7221,6 +7384,7 @@
 /verbs/items/give.c
 /secure/daemon/letters.h
 /secure/cfg/races/rodent
+/log/chan/archive/intergossip-2011.05.14-11.29,10
 /log/chan/archive/dchat-2010.11.16-11.45,48
 /secure/daemon/letters.c
 /save/kills/l/lbiacg
@@ -7263,6 +7427,7 @@
 /domains/campus/weap/board.c
 /log/chan/archive/intergossip-2010.07.23-18.50,43
 /log/chan/archive/inews-2009.10.02-09.41,27
+/log/chan/archive/intergossip-2011.03.25-01.25,32
 /log/chan/archive/discworld-chat-2010.07.21-18.16,17
 /save/kills/c/chaijaalkd
 /tmp/thingy.txt
@@ -7284,6 +7449,7 @@
 /www/lpmuds/mudfarm.html
 /save/kills/m/mmjloojfa
 /doc/sefun/date
+/log/chan/archive/dchat-2011.04.05-10.26,27
 /log/chan/archive/intergossip-2010.11.23-17.45,48
 /log/catch
 /daemon/services/channel.c
@@ -7321,6 +7487,7 @@
 /domains/examples/room/exroom6.c
 /log/chan/archive/muds-2010.12.19-21.45,48
 /log/chan/archive/intergossip-2010.11.28-11.45,48
+/log/chan/archive/inews-2011.04.26-03.27,44
 /log/archive/i3error-2009.05.16-05.59,29
 /daemon/tmp/B_SEMI_BIPEDAL.c
 /doc/efun/all/save_variable
@@ -7499,6 +7666,7 @@
 /lib/leader.c
 /save/books.6666.o
 /doc/lfun/lib/damage/.gitignore
+/log/chan/archive/dchat-2011.06.10-12.29,10
 /domains/default/weap/m16rifle.c
 /log/chan/archive/ichat-2010.02.08-19.54,55
 /domains/Praxis/quests/.gitignore
@@ -7509,6 +7677,7 @@
 /save/kills/x/xkcdgjjnm
 /doc/help/hm/.gitignore
 /verbs/players/evade.c
+/log/chan/archive/bsg-2011.05.23-18.29,10
 /verbs/players/bump.c
 /domains/Praxis/obj/weapon/.gitignore
 /domains/Praxis/obj/mon/christmas_bunny.c
@@ -7557,6 +7726,7 @@
 /save/kills/x/xkcdcelacnda
 /log/chan/archive/muds-2010.10.22-20.45,48
 /save/kills/x/xkcdijjlce
+/log/chan/archive/dchat-2011.04.30-21.27,44
 /doc/lfun/lib/file/eventDestruct
 /log/chan/archive/muds-2010.11.14-23.45,48
 /lib/include/player.h
@@ -7569,7 +7739,9 @@
 /doc/lfun/all/GetLeader
 /log/archive/runtime-2010.07.09-00.16,00
 /secure/cfg/races/halfling
+/log/chan/monk
 /save/kills/e/ekchjccicje
+/log/chan/archive/dchat-2011.05.16-10.29,10
 /secure/lib/net/client.c
 /log/chan/archive/intergossip-2010.12.13-18.32,52
 /log/chan/mychannel6
@@ -7682,6 +7854,7 @@
 /log/chan/archive/inews-2010.05.24-20.58,38
 /log/chan/archive/dchat-2010.03.10-22.54,55
 /daemon/weather.c
+/log/chan/archive/intergossip-2011.04.19-15.27,22
 /log/chan/archive/muds-2009.04.10-00.28,44
 /log/chan/archive/inews-2010.03.21-23.54,55
 /save/races.2222.o
@@ -7754,6 +7927,7 @@
 /log/chan/archive/ichat-2010.02.08-04.54,55
 /domains/campus/room/basement2.c
 /secure/daemon/snoop.c
+/log/chan/archive/intergossip-2011.04.03-21.26,27
 /daemon/include/chat.h
 /domains/default/npc/deer.c
 /doc/efun/interactive/add_action
@@ -7782,6 +7956,7 @@
 /log/archive/runtime-2009.03.16-07.30,39
 /domains/Praxis/rain_forest.c
 /secure/obj/replacer.c
+/log/chan/archive/dchat-2011.03.27-00.53,44
 /domains/Ylsrim/room/weaponry.c
 /domains/campus/room/npath.c
 /www/articles/old/tms.html
@@ -7847,6 +8022,7 @@
 /verbs/builders/initfix.c
 /log/chan/archive/i2news-2009.04.29-18.11,41
 /domains/Praxis/alley1.c
+/log/chan/archive/dchat-2011.04.05-21.26,27
 /secure/daemon/folders.h
 /log/chan/archive/muds-2010.09.08-09.45,48
 /secure/sefun/sefun.h
@@ -7889,6 +8065,7 @@
 /domains/campus/obj/.backpack_civilian.c.swp
 /domains/Praxis/obj/mon/unity.c
 /domains/campus/obj/.backpack.c.swp
+/log/chan/archive/intergossip-2011.03.23-02.28,51
 /domains/town/save/0^0domains0^0town0^0obj0^0charity.3333.o
 /log/chan/archive/dchat-2010.07.14-23.59,34
 /verbs/items/shake.c
@@ -7984,9 +8161,11 @@
 /domains/town/npc/human_champion_f.c
 /secure/include/.config.h.swp
 /doc/efun/mixed/intp
+/log/chan/archive/dchat-2011.04.15-13.27,22
 /verbs/items/include/strike.h
 /doc/efun/all/query_idle
 /doc/lfun/lib/player/GetCapName
+/log/chan/archive/intergossip-2011.05.22-21.29,10
 /log/chan/archive/muds-2010.09.15-15.45,48
 /doc/lfun/lib/firearm/SetFirearmType
 /domains/campus/txt/jenny/.gitignore
@@ -8149,6 +8328,7 @@
 /save/kills/b/bjomgf
 /domains/town/room/mansion_room3.c
 /log/chan/archive/muds-2010.09.14-21.45,48
+/log/chan/archive/intergossip-2011.06.22-23.29,10
 /doc/lfun/README
 /domains/town/save/0^0domains0^0town0^0room0^0secret.o.gz
 /domains/campus/room/corridor2.c
@@ -8167,6 +8347,7 @@
 /log/chan/archive/intergossip-2010.07.14-22.16,17
 /log/chan/archive/dchat-2010.07.06-22.59,34
 /domains/cave/room/cavepass5.c
+/log/chan/archive/dchat-2011.03.29-18.26,09
 /domains/campus/npc/seth.c
 /domains/default/obj/builder_chest.c
 /domains/town/armor/long_sock.c
@@ -8199,6 +8380,7 @@
 /secure/lib/net/include/h_ftpd.h
 /lib/events/lock.c
 /secure/verbs/creators/.gitignore
+/log/chan/archive/intergossip-2011.05.06-00.28,39
 /daemon/tmp/A_VISOR.c
 /secure/daemon/rooms.c
 /log/chan/archive/muds-2010.09.23-00.45,48
@@ -8289,6 +8471,7 @@
 /save/kills/m/mifoeideh
 /secure/scripts/crat.src
 /log/chan/archive/muds-2010.09.02-06.45,48
+/log/chan/archive/dgd-2011.04.14-17.27,22
 /cmds/players/emote.c
 /log/chan/archive/muds-2011.01.09-16.46,13
 /verbs/players/kneel.c
@@ -8350,6 +8533,7 @@
 /secure/cmds/players/reply.c
 /secure/cfg/mudos.2222.win32
 /doc/lfun/all/GetTorso
+/log/chan/archive/intergossip-2011.05.29-00.29,10
 /domains/campus/txt/ai/charly/bak/percent
 /log/chan/archive/muds-2010.10.07-10.45,48
 /domains/default/weap/prifle.c
@@ -8594,6 +8778,7 @@
 /daemon/tmp/science.c
 /log/chan/archive/intergossip-2010.03.02-04.54,55
 /domains/Praxis/inn106.c
+/daemon/tmp/home.c
 /secure/include/modules.h
 /doc/lfun/lib/interactive/eventDestruct
 /doc/lfun/all/GetDeathEvents

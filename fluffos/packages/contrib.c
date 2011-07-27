@@ -2930,3 +2930,19 @@ void f_classes() {
 }
 
 #endif
+
+/* Quixadhal@WileyMUD */
+#ifdef F_MAP_STRING_REPLACE
+/* string map_string_replace(string, mapping, int | void, int | void, string | void, string | void); */
+void f_map_string_replace() {
+    switch(st_num_arg) {
+        case 0:
+            break;
+        case 1:
+            pop_stack(); /* return the original */
+            return;
+            break;
+    }
+}
+#endif
+

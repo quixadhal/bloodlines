@@ -235,6 +235,7 @@ function load_logs($filename) {
     global $page_size;
     global $page_number;
     global $max_page;
+    global $links_only;
 
     if(! isset($skip_lines)) {
         $skip_lines = 0;
@@ -243,6 +244,10 @@ function load_logs($filename) {
     $text = file_get_contents( $filename );
     $lines = explode("\n", $text);
     $lines = preg_grep("/\t.*?\t.*?\t/", $lines);
+    if(isset($links_only)) {
+        $lines = preg_grep('/((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)+/', $lines);
+        //$lines = preg_grep('/http/', $lines);
+    }
     if(isset($chan_filter)) {
         $lines = preg_grep("/\t$chan_filter\t/", $lines);
     }
@@ -260,6 +265,10 @@ function load_logs($filename) {
             $newtext = file_get_contents( $filename );
             $newlines = explode("\n", $newtext);
             $newlines = preg_grep("/\t.*?\t.*?\t/", $newlines);
+            if(isset($links_only)) {
+                $newlines = preg_grep('/((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)+/', $newlines);
+                //$newlines = preg_grep('/http/', $newlines);
+            }
             if(isset($chan_filter)) {
                 $newlines = preg_grep("/\t$chan_filter\t/", $newlines);
             }
@@ -359,7 +368,7 @@ get_chatter_colors();
 if( isset($_REQUEST) && isset($_REQUEST["ps"]) ) {
     $page_size = $_REQUEST["ps"];
 } else {
-    $page_size = 25;
+    $page_size = 20;
 }
 if( $page_size < 1 ) {
     $page_size = 1;
@@ -390,9 +399,13 @@ if( isset($_REQUEST) && isset($_REQUEST["fm"]) ) {
         $format = 'text';
     }
 }
+
+if( isset($_REQUEST) && isset($_REQUEST["lo"]) ) {
+    $links_only = 1;
+}
  
 $file_size = round(filesize(TEXT_FILE)/1024/1024,2);
-$lines = load_logs(TEXT_FILE, $page_size, $page_number);
+$lines = load_logs(TEXT_FILE, $page_size, $page_number, $links_only);
 //arsort($lines);
 
 $output = array();
@@ -467,6 +480,7 @@ foreach ($lines as $line) {
 
     $message_raw = $parts[3];
     $message = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '_', $parts[3]);
+    $message = htmlentities($message);
     $message = preg_replace( '/((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)/', '<a href="$1" target="I3-link">$1</a>', $message);
 
     $rss_title = "$datestamp $timestamp_raw ($channel_raw) $speaker_raw: " . substr($message_raw, 0, 120);
@@ -500,12 +514,27 @@ $prev_url = $_SERVER['PHP_SELF'] .
         "?pn=" . urlencode($page_number - 1) .
         ((isset($page_size) && $page_size != 25 ) ? "&ps=" . urlencode($page_size) : "") .
         ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
+        (isset($links_only) ? "&lo" : "") .
+        (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
+        (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "");
+$nolinks_url = $_SERVER['PHP_SELF'] .
+        "?pn=" . urlencode($page_number) .
+        ((isset($page_size) && $page_size != 25 ) ? "&ps=" . urlencode($page_size) : "") .
+        ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
+        (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
+        (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "");
+$links_url = $_SERVER['PHP_SELF'] .
+        "?pn=" . urlencode($page_number) .
+        ((isset($page_size) && $page_size != 25 ) ? "&ps=" . urlencode($page_size) : "") .
+        ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
+        ("&lo") .
         (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
         (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "");
 $next_url = $_SERVER['PHP_SELF'] .
         "?pn=" . urlencode($page_number + 1) .
         ((isset($page_size) && $page_size != 25 ) ? "&ps=" . urlencode($page_size) : "") .
         ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
+        (isset($links_only) ? "&lo" : "") .
         (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
         (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "");
 
@@ -540,7 +569,27 @@ if($format == 'rss') {
         <title> Intermud-3 network traffic, as seen by <? echo MUD_NAME; ?>. </title>
         <meta http-equiv="refresh" content="60">
     </head>
-    <body bgcolor="black" text="#bbbbbb">
+    <!-- <body bgcolor="black" text="#bbbbbb"> -->
+    <!-- <body background="gfx/dark_wood.jpg" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040"> -->
+    <body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
+        <table border=0 cellspacing=0 cellpadding=0 width=80% align="center">
+            <tr>
+                <td align="right" valign="top">
+                    <!-- <a href="/anyterm/anyterm.shtml?rows=40&cols=100"> -->
+                    <a href="/~bloodlines">
+                        <!-- <img src="gfx/bloodlines.png" border=0 width=469 height=160 alt="(Bloodlines:)"> -->
+                        <img src="gfx/bloodlines.png" border=0 width=234 height=80 alt="(Bloodlines:)">
+                    </a>
+                </td>
+                <td align="left" valign="bottom">
+                    <!-- <a href="/anyterm/anyterm.shtml?rows=40&cols=100"> -->
+                    <a href="/~bloodlines">
+                        <!-- <img src="gfx/wileymud4.png" border=0 width=354 height=81 alt="(WileyMUD IV)"> -->
+                        <img src="gfx/wileymud4.png" border=0 width=177 height=40 alt="(WileyMUD IV)">
+                    </a>
+                </td>
+            </tr>
+        </table>
         <table width="100%">
             <tr>
                 <? if( $max_page == 0 ) { ?>
@@ -550,9 +599,25 @@ if($format == 'rss') {
                 <? } else { ?>
                 <td align="left" width="45%"><span style="color: #555555">&nbsp;</span></td>
                 <? } ?>
+                <? if( $page_number > 0 || isset($chan_filter) || isset($speaker_filter)) { ?>
                 <td align="center" width="10%"><span style="color: #555555">
                     <a href="<? echo $_SERVER['PHP_SELF']; ?>">Home</a>
+                    &nbsp;
+                    <? if( ! isset($links_only) ) { ?>
+                        <a href="<? echo $links_url; ?>">Links</a>
+                    <? } else { ?>
+                        <a href="<? echo $nolinks_url; ?>">No Links</a>
+                    <? } ?>
                 </span></td>
+                <? } else { ?>
+                <td align="center" width="10%"><span style="color: #555555">
+                    <? if( ! isset($links_only) ) { ?>
+                        <a href="<? echo $links_url; ?>">Links</a>
+                    <? } else { ?>
+                        <a href="<? echo $nolinks_url; ?>">No Links</a>
+                    <? } ?>
+                </span></td>
+                <? } ?>
                 <? if( $page_number > 0 ) { ?>
                 <td align="right" width="45%"><span style="color: #555555">
                     <a href="<? echo $prev_url; ?>">(<? echo $page_number - 1; ?>)&nbsp;Next&nbsp;Page&nbsp;</a>
@@ -589,8 +654,9 @@ if($format == 'rss') {
         ?>
         <table width="100%">
             <tr>
-                <td align="left" width="50%"><span style="color: #222222">Last refreshed at <? echo $now; ?>.&nbsp;</span></td>
-                <td align="right" width="50%"><span style="color: #222222">&nbsp;Page generated in <? printf( "%7.3f", $time_spent); ?> seconds.</span></td>
+                <td align="left" width="45%"><span style="color: #333333">Last refreshed at <? echo $now; ?>.&nbsp;</span></td>
+                <td align="center" width="10%"><span style="color: #333333"><a href="i3log.php?fm=rss"><img src="gfx/valid-rss-rogers.png" border=0 width=88 height=31 alt="(RSS)" /></a></span></td>
+                <td align="right" width="45%"><span style="color: #333333">&nbsp;Page generated in <? printf( "%7.3f", $time_spent); ?> seconds.</span></td>
             </tr>
         </table>
     </body>

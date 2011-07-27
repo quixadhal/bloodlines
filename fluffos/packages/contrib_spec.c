@@ -60,3 +60,4 @@ int remove_get_char(object);
 int send_nullbyte(object);
 void restore_from_string(string, int default:0);
 mixed *classes( object, int default : 0 );
+string map_string_replace(string, mapping, int | void, int | void, string | void, string | void);

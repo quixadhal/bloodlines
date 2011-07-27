@@ -253,6 +253,163 @@ static varargs int PassengerPrint(string msg, mixed arg2,
     return 1;
 }
 
+static int *hexes = ({ 0x00, 0x55, 0x88, 0xBB, 0xDD, 0xFF });
+static int *greys = ({ 0x08, 0x12, 0x1c, 0x26, 0x30, 0x3a,
+                       0x44, 0x4e, 0x58, 0x62, 0x6c, 0x76,
+                       0x80, 0x8a, 0x94, 0x9e, 0xa8, 0xb2,
+                       0xbc, 0xc6, 0xd0, 0xda, 0xe4, 0xee });
+static mixed *ansi = ({
+           ({ 0x00, 0x00, 0x00 }), /* 0  black */
+           ({ 0xBB, 0x00, 0x00 }), /* 1  red */
+           ({ 0x00, 0xBB, 0x00 }), /* 2  green */
+           ({ 0xBB, 0xBB, 0x00 }), /* 3  orange */
+           ({ 0x00, 0x00, 0xBB }), /* 4  blue */
+           ({ 0xBB, 0x00, 0xBB }), /* 5  magenta */
+           ({ 0x00, 0xBB, 0xBB }), /* 6  cyan */
+           ({ 0xBB, 0xBB, 0xBB }), /* 7  light grey */
+
+           ({ 0x55, 0x55, 0x55 }), /* 8  dark grey */
+           ({ 0xFF, 0x55, 0x55 }), /* 9  bright red */
+           ({ 0x55, 0xFF, 0x55 }), /* 10 bright green */
+           ({ 0xFF, 0xFF, 0x55 }), /* 11 yellow */
+           ({ 0x55, 0x55, 0xFF }), /* 12 bright blue */
+           ({ 0xFF, 0x55, 0xFF }), /* 13 bright magenta */
+           ({ 0x55, 0xFF, 0xFF }), /* 14 bright cyan */
+           ({ 0xFF, 0xFF, 0xFF })  /* 15 white */
+         });
+
+/*
+ * This accepts an XTERM-256 slot number from 0 to 255,
+ * and returns an array of RGB values.
+ */
+int * xterm2rgb( int color )
+{
+  int red, green, blue;
+
+  if( color < 16 ) {
+        red = (int)ansi[color][0];
+        green = (int)ansi[color][1];
+        blue = (int)ansi[color][2];
+  } else if ( color < 232 ) {
+        color -= 16;
+        red = hexes[(color/36)%6];
+        green = hexes[(color/6)%6];
+        blue = hexes[(color)%6];
+  } else {
+        color -= 232;
+        red = green = blue = greys[color%24];
+  }
+
+  return ({ red, green, blue });
+}
+
+/*
+ * This is a generic euclidean distance formula, used to determine
+ * how "close" one set of RGB values is to another.  The weight
+ * factors default to 1.0, but have suggested values based on the
+ * human eye sensitivity, should you want to skew things for a
+ * more artistic purpose.
+ */
+float rgb_distance(int r1, int g1, int b1, int r2, int g2, int b2) {
+  float rf, gf, bf;
+  float dr, dg, db, dist;
+
+  rf = 1.0; /* 0.241 */
+  gf = 1.0; /* 0.691 */
+  bf = 1.0; /* 0.068 */
+
+  dr = abs(r2 - r1);
+  dg = abs(g2 - g1);
+  db = abs(b2 - b1);
+  dist = sqrt((dr * dr * rf) + (dg * dg * gf) + (db * db * bf));
+
+  return dist;
+}
+
+/*
+ * This function finds the closest matching "xterm" colour
+ * for the given 8-bit RGB values.  This is the workhorse
+ * function which accepts ranges to allow specifying what
+ * portion of the xterm colour pallete to use for matches.
+ *
+ * There are three API functions to find best match,
+ * best ANSI match, and best greyscale match.
+ *
+ * Returns -1 on failure.
+ */
+int rgb2match( int r1, int g1, int b1, int low, int high )
+{
+  int i;
+  int r2, g2, b2;
+  int match;
+  float max_distance, dist;
+  int * tmp;
+
+  match = -1;
+  max_distance = 10000000000.0;
+
+  for(i=low; i<=high; i++) {
+    tmp = xterm2rgb(i);
+    r2 = tmp[0];
+    g2 = tmp[1];
+    b2 = tmp[2];
+    dist = rgb_distance(r1,g1,b1,r2,g2,b2);
+
+    if(dist < max_distance) {
+      max_distance = dist;
+      match = i;
+    }
+  }
+
+  return match;
+}
+
+/*
+ * The following are just helper functions that
+ * call rgb2match() with the correct parameters.
+ */
+int rgb2ansi( int r1, int g1, int b1 )
+{
+  return rgb2match( r1, g1, b1, 0, 15 );
+}
+
+int rgb2xterm( int r1, int g1, int b1 )
+{
+  return rgb2match( r1, g1, b1, 0, 255 );
+}
+
+int rgb2grey( int r1, int g1, int b1 )
+{
+  return rgb2match( r1, g1, b1, 232, 255 );
+}
+
+string rgb2xterm256(string rgb) {
+    int red, green, blue;
+    int slot;
+    string tmp;
+
+    tmp = rgb[0 .. 1] + " " + rgb[2 .. 3] + " " + rgb[4 .. 5];
+    sscanf(tmp, "%x %x %x", red, green, blue);
+    slot = rgb2xterm( red, green, blue );
+    return sprintf("XTERM:%02x", slot);
+}
+
+string rgb_downto_xterm256(string msg) {
+    string *parts;
+
+    if( !msg || msg == "" ) return msg;
+    parts = explode(msg, "%^");
+    for(int i = 0; i < sizeof(parts); i++) {
+        string chunk = parts[i];
+        if(strlen(chunk) == 7 && chunk[0] == '#') {
+            parts[i] = rgb2xterm256(chunk[1 ..]);
+        }
+    }
+    msg = implode(parts, "%^");
+
+    return msg;
+}
+
 varargs int eventPrint(string msg, mixed arg2, mixed arg3){
     int msg_class;
     string prompt = "";
@@ -292,6 +449,15 @@ varargs int eventPrint(string msg, mixed arg2, mixed arg3){
     }
     if( !(msg_class & MSG_NOCOLOUR) ){
         int indent;
+
+        // This enabled rgb-style color codes, which are
+        // downconverted to xterm256 Pinkfish codes.  Those
+        // are then handled by terminal_colour().
+        //
+        // Eventually, this should know about MXP and just
+        // transform them to native MXP symbols.
+        msg = rgb_downto_xterm256(msg);
+
         //Uncomment below to enable indentation of "conversation"
         //if( msg_class & MSG_CONV ) indent = 4;
         //else indent = 0;

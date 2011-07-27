@@ -12,6 +12,17 @@ int last_time = time();
 
 string *muds = PINGING_MUDS + ({ mud_name() });
 
+// Yes, I know... naughty.
+
+static int LogIt(string what, string where, string canale){
+//    if( (member_array(canale,local_chans) != -1 && LOG_LOCAL_CHANS) ||
+//            ( member_array(GetRemoteChannel(canale),remote_chans) != -1 && LOG_REMOTE_CHANS) ){
+        unguarded( (: write_file($(where), $(what)) :) );
+        return 1;
+//    }
+//    else return 0;
+}
+
 int CheckOK(){
     string list = load_object("/cmds/players/mudlist")->cmd("");
     Pinging = 0;
@@ -24,6 +35,7 @@ int CheckOK(){
         if(Retries > 0 && INTERMUD_D->GetConnectedStatus()){
             tell_room(ROOM_ARCH,"The Arch Room loudspeaker announces: \"%^BOLD%^CYAN%^"
                     "Intermud connection is %^BOLD%^GREEN%^ONLINE%^BOLD%^CYAN%^.%^RESET%^\"");
+            LogIt(timestamp()+"\t"+"intermud"+"\t"+"SYSTEM@"+mud_name()+"\t"+"Intermud connection is ONLINE."+"\n", "/secure/log/allchan.log", "intermud");
             load_object(ROOM_ARCH)->SetImud(1);
         }
 
@@ -32,6 +44,7 @@ int CheckOK(){
     if(Retries == 2 && !(INTERMUD_D->GetConnectedStatus())){
         tell_room(ROOM_ARCH,"The Arch Room loudspeaker announces: \"%^BOLD%^CYAN%^"
                 "Intermud connection is %^BOLD%^RED%^OFFLINE%^BOLD%^CYAN%^.%^RESET%^\"");
+        LogIt(timestamp()+"\t"+"intermud"+"\t"+"SYSTEM@"+mud_name()+"\t"+"Intermud connection is OFFLINE."+"\n", "/secure/log/allchan.log", "intermud");
         rm("/tmp/muds.txt");
         load_object(ROOM_ARCH)->SetImud(0);
     }

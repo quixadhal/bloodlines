@@ -125,13 +125,13 @@ if ($result == 0) {
     <body background="gfx/dark_wood.jpg" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" onload="startClock()">
         <table border=0 cellspacing=0 cellpadding=0 width=80% align="center">
             <tr>
-                <td align="left" valign="top">
-                    <a href="telnet://wiley.shadowlord.org:3000/">
+                <td align="right" valign="top">
+                    <a href="anyterm/anyterm.shtml?rows=40&cols=100">
                         <img src="gfx/bloodlines.png" border=0 width=469 height=160 alt="(Bloodlines:)">
                     </a>
                 </td>
-                <td align="right" valign="bottom">
-                    <a href="telnet://wiley.shadowlord.org:3000/">
+                <td align="left" valign="bottom">
+                    <a href="anyterm/anyterm.shtml?rows=40&cols=100">
                         <img src="gfx/wileymud4.png" border=0 width=354 height=81 alt="(WileyMUD IV)">
                     </a>
                 </td>
@@ -140,6 +140,11 @@ if ($result == 0) {
         <table border=0 cellspacing=0 cellpadding=0 width=100% align="center">
             <tr>
                 <td align="center" width="20%" valign="bottom">
+                    <a href="http://www.oldtimersguild.com/vb/forum.php">
+                        <img src="gfx/otg_logo_glow.png" border=0 align="center" width=155 height=200 alt="(OTG)">
+                    </a>
+                    <br />
+                    <br />
                     <a href="gitweb.cgi?p=.git;a=summary">
                         <img src="/gitweb/git-logo.png" border=0 align="center" width=72 height=27 alt="(Git)">
                     </a>
@@ -148,9 +153,15 @@ if ($result == 0) {
                     <div id="clock" align="center" style="color: #d0d000;"><?php echo date('g:i:s a'); ?></div>
                     <div id="date" align="center" style="color: #d0d000;"><?php echo date('F j, Y'); ?></div>
                     <br />
-                    <a href="http://www.wunderground.com/US/MI/Kalamazoo.html?bannertypeclick=wu_blueglass">
-                        <img src="http://weathersticker.wunderground.com/cgi-bin/banner/ban/wxBanner?bannertype=wu_blueglass&airportcode=KAZO&ForcedCity=Kalamazoo&ForcedState=MI" alt="Click for Kalamazoo, Michigan Forecast" height="68" width="120" border=0 />
+                    <a href="http://www.wunderground.com/cgi-bin/findweather/getForecast?query=zmw:49004.2.99999&bannertypeclick=wu_blueglass">
+                        <img src="http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_blueglass&pwscode=KMIKALAM1&ForcedCity=Kalamazoo&ForcedState=MI&zipcode=49048&language=EN" alt="Click for Kalamazoo, Michigan Forecast" height="68" width="120" border="0" />
                     </a>
+<!--
+                    <br />
+                    <a href="/~quixadhal/rift/riftstatus.php">
+                        <img src="gfx/rift.png" border=0 align="center" width=100 height=67 alt="(Rift)">
+                    </a>
+-->
                 </td>
                 <td align="center" width="60%">
                     <table border=0 cellspacing=5 cellpadding=5 width=100% align="center">
@@ -197,9 +208,29 @@ if ($result == 0) {
                         </tr>
                     </table>
                 </td>
-                <td align="right" width="20%" valign="bottom">
+                <td align="center" width="20%" valign="bottom">
+<!--
+                    <a href="http://www.mudbytes.net/index.php?a=recent">
+                        <img src="gfx/koolaid.png" border=0 align="center" width=95 height=100 alt="(DramaBytes)">
+                    </a>
+                    <br />
+                    <br />
+-->
+                    <a href="http://www.smaugmuds.org/">
+                        <img src="gfx/smaugmuds_button.png" border=0 align="center" width=119 height=26 alt="(SmaugMUDs)">
+                    </a>
+                    <br />
+                    <a href="http://lpmuds.net/forum/index.php">
+                        <img src="gfx/lpmuds.net_button.png" border=0 align="center" width=119 height=26 alt="(LpMUDs.net)">
+                    </a>
+                    <br />
+                    <a href="http://www.mudbytes.net/index.php?a=recent">
+                        <img src="gfx/mudbytes_button.png" border=0 align="center" width=119 height=26 alt="(DramaBytes)">
+                    </a>
+                    <br />
+                    <br />
                     <a href="i3log.php">
-                        <img src="gfx/intermud_logs.png" border=0 align="right" width=154 height=200 alt="(Intermud)">
+                        <img src="gfx/intermud_logs.png" border=0 align="center" width=154 height=200 alt="(Intermud)">
                     </a>
                 </td>
             </tr>
@@ -213,7 +244,6 @@ if ($result == 0) {
                 </td>
             </tr>
             <tr>
-                <!-- <td align="left" width="50%"><span style="color: #333333">Last refreshed at <? echo $now; ?>.&nbsp;</span></td> -->
                 <?php
                 $time_end = microtime(true);
                 $time_spent = $time_end - $time_start;

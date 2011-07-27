@@ -24,7 +24,9 @@ mixed *socket_names(){
     int i, quant;
     i = catch( quant = sizeof(socket_status()) );
     for(i = 0; i < quant; i++){
-        mixed *tmp = socket_status(i);
+        mixed *tmp;
+        if( catch( tmp = socket_status(i)) == 0)
+            continue;
         tmp[0] = i;
         sock_array += ({ tmp });
     }

@@ -127,6 +127,7 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
     tn("eventSendChannel raw: "+identify( packet_thing ),"green");
 
 #ifdef EXTENDED_PINKFISH
+    msg = "/lib/interface"->rgb_downto_xterm256(msg);
     msg = replace_strings(msg, extended_to_pinkfish);
 #endif
     // Because others only have crufty 1980's 8 colour ANSI.
@@ -144,6 +145,7 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
         if( target && targmsg ) {
 
 #ifdef EXTENDED_PINKFISH
+            targmsg = "/lib/interface"->rgb_downto_xterm256(targmsg);
             targmsg = replace_strings(targmsg, extended_to_pinkfish);
 #endif
             // Because others only have crufty 1980's 8 colour ANSI.

@@ -3,8 +3,9 @@
 
 inherit LIB_DAEMON;
 
-int cmd() {
-    write(
+int cmd(string args) {
+    if( !args || args == "" ) {
+        write(
             "%^RED%^RED\t%%^^RED%%^^\t\t%^BOLD%^%%^^BOLD%%^^%%^^RED%%^^%^RESET%^\n"
             "%^GREEN%^GREEN\t%%^^GREEN%%^^\t%^BOLD%^%%^^BOLD%%^^%%^^GREEN%%^^%^RESET%^\n"
             "%^ORANGE%^ORANGE\t%%^^ORANGE%%^^\t%^BOLD%^%%^^BOLD%%^^%%^^ORANGE%%^^%^RESET%^\n"
@@ -27,7 +28,53 @@ int cmd() {
             "You can mix and match, for example: \n"
             "%%^^B_RED%%^^%%^^CYAN%%^^%%^^BOLD%%^^%%^^FLASH%%^^Foo!%%^^RESET%%^^:"
             "%^B_RED%^%^CYAN%^%^BOLD%^%^FLASH%^Foo!%^RESET%^" 
-            );
+        );
+    } else if( args == "xterm" ) {
+        string output = "";
+        string xterm = "";
+        int cols = 6;
+        int i;
+
+        for(i = 0; i < 16; i++) {
+            if( i > 0 && !(i % cols) ) {
+                output += xterm + "\n";
+                xterm = "";
+            }
+            xterm += sprintf("%%^XTERM:%02x%%^XTERM:%02x %%^RESET%%^", i, i);
+        }
+        output += xterm + "\n\n";
+        xterm = "";
+
+        for(i = 16; i < 232; i++) {
+            if( (i-16) > 0 && !((i-16) % cols) ) {
+                output += xterm + "\n";
+                xterm = "";
+            }
+            xterm += sprintf("%%^XTERM:%02x%%^XTERM:%02x %%^RESET%%^", i, i);
+        }
+        output += xterm + "\n\n";
+        xterm = "";
+
+        for(i = 232; i < 256; i++) {
+            if( (i-232) > 0 && !((i-232) % cols) ) {
+                output += xterm + "\n";
+                xterm = "";
+            }
+            xterm += sprintf("%%^XTERM:%02x%%^XTERM:%02x %%^RESET%%^", i, i);
+        }
+        output += xterm + "\n\n";
+        xterm = "";
+        write(output);
+    } else {
+        string converted;
+        int i, st, et;
+
+        st = eval_cost();
+        i = time_expression( converted = "/lib/interface"->rgb2xterm256(args));
+        et = eval_cost();
+        write(sprintf("%s converts to %%^%s%%^%s %%^RESET%%^\n", args, converted, converted));
+        write(sprintf("Evaluation took %d microseconds (eval cost %d).\n", i, st - et));
+    }
     return 1;
 }
 

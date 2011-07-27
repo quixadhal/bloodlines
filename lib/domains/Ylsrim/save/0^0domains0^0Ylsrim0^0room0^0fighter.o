@@ -1,0 +1,35 @@
+#/domains/Ylsrim/room/fighter.c
+PersistentInventory ({"([\"Wielded\":0,\"FlaskUses\":100,\"Value\":0,\"Class\":1,\"Worn\":0,\"Deterioration\":0,\"Broken\":0,\"Poison\":0,\"Mass\":2000,\"FlaskContents\":\"wine\",\"#base_name#\":\"/domains/Ylsrim/obj/cask\",\"MealType\":16,\"Cost\":1000,\"Properties\":([]),\"FlaskStrength\":10,])","([\"#base_name#\":\"/domains/Ylsrim/npc/segata\",\"Properties\":([]),\"#inventory#\":({}),])",})
+PersistentInventoryEnabled 1
+InternalDesc "Fighters gather here to drink, boast, and train. They also leave helpful weapons and items here for each other, because they know this is a sanctuary from the loss of objects when the world renews itself."
+Opacity 100
+ProperNoun 1
+Modify 1
+Short "the interior chamber of the Hall of Fighters"
+Items ([])
+Properties ([])
+AmbientLight 40
+Money ([])
+Climate "indoors"
+DayLight -1970
+counter 9765
+DummyItems ({0,})
+Gravity 1.000000
+NightLight -1970
+Town "Ylsrim"
+DefaultExits 1
+Flying 1
+ObviousVisible 1
+ActionChance 10
+ItemsMap ([])
+tick_resolution 5
+TerrainType 4
+RespirationType 1
+Medium 1
+ActionsMap ([])
+SinkRoom ""
+FlyRoom ""
+Elevator ""
+Coords ({999,1002,0,})
+Neighbors ({"/domains/Ylsrim/room/fighter_hall","/domains/Ylsrim/room/fighter","/domains/Ylsrim/room/adv_hall",})
+NeighborCoords ({({998,1001,0,}),({998,1002,0,}),({998,1003,0,}),({999,1001,0,}),({999,1002,0,}),({999,1003,0,}),({1000,1001,0,}),({1000,1002,0,}),({1000,1003,0,}),})

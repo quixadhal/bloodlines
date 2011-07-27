@@ -1,5 +1,6 @@
+anytermd
 addr_server
-driver
+driver*
 mudos.bak
 portbind
 driver.log

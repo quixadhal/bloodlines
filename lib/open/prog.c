@@ -72,6 +72,8 @@
 #include <motion.h>
 #include <mouth_types.h>
 #include <pinkfish.h>
+#include <pinkfish.h.orig>
+#include <pinkfish.h.working>
 #include <position.h>
 #include <race.h>
 #include <respiration_types.h>

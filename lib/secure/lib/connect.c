@@ -33,7 +33,7 @@ static private mapping LastError, UserVars;
 static private int *Screen;
 static private int rescue, yescre, anyterm;
 static private string *ip_permitted = ({}), instname, telopt_user;
-static private string array anyterms = ({"97.107.133.86", "127.0.0.1"});
+static private string array anyterms = ({"97.83.21.66", "127.0.0.1"});
 
 //Change this to 0 to disable color codes in /news/welcome
 //then update the connect.c file.

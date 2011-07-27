@@ -1,3 +1,4 @@
 #/secure/daemon/bboard.c
-__Owner "CMDS"
+__Owner "SECURE"
+__Posts ({(["time":1300931071,"author":"Quixadhal","post":"This is a test.","read":({"quixadhal",}),"subject":"Foo",]),})
 Location "/secure/room/arch"

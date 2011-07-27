@@ -1304,7 +1304,8 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
         //        +", "+identify(msg)+", "+identify(emote)+", "+identify(target)+", "
         //        +identify(targmsg), "green");
 
-        pmsg = strip_colours(pmsg);
+        //pmsg = strip_colours(pmsg);
+        pmsg = TERMINAL_D->no_colours(pmsg);
         eventAddLast(ch, msg, pchan, pmsg);
         eventChannelMsgToListeners(who, ch, msg, emote, target, targmsg);
     }
@@ -1315,7 +1316,8 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
         msg = formChatString(ch, who, msg);
         //tn("CHAT_D->eventSendChannel: not emote?", "green");
 
-        pmsg = strip_colours(pmsg);
+        //pmsg = strip_colours(pmsg);
+        pmsg = TERMINAL_D->no_colours(pmsg);
         eventAddLast(ch, msg, pchan, pmsg, who);
         eventChannelMsgToListeners(who, ch, msg, emote, target, targmsg);
     }
