@@ -202,8 +202,6 @@ static void Setup(){
 
     local_chans += CLASSES_D->GetClasses();
 
-    //tc("local_chjans: "+identify(local_chans));
-
     if(find_object(INTERMUD_D)){
         if(arrayp(INTERMUD_D->GetChannels()))
             rchan3 += distinct_array(INTERMUD_D->GetChannels());
@@ -225,7 +223,6 @@ static void Setup(){
     foreach(mixed bar in ({ rchan3, rchan2 })){
         foreach(mixed foo in bar){
             string svr, cnl;
-           //tc(foo);
             if(!stringp(foo) || member_array(foo, local_chans) != -1){
                 bar -= ({ foo });
                 continue;
@@ -233,7 +230,6 @@ static void Setup(){
             if(sscanf(foo, "%s:%s", svr, cnl) == 2){
                 if(member_array(cnl, local_chans) == -1 && !localchans[cnl] &&
                   member_array(cnl, rchan3) == -1){
-                    //tc(foo, "blue");
                     localchans[foo] = cnl;
                     remotechans[cnl] = foo;
                 }
@@ -242,10 +238,6 @@ static void Setup(){
     }
     remote_chans = distinct_array((rchan3 + rchan2));
     local_chans = distinct_array(local_chans);
-    //tc("localchans:\n"+identify(sort_array(values(localchans),1)),"red");
-    //tc("remotechans:\n"+identify(sort_array(values(remotechans),1)),"blue");
-    //tc("ichat: "+remotechans["ichat"]);
-    //tc("ichat2: "+remotechans["ichat2"]);
 }
 
 static void create() {
@@ -475,7 +467,6 @@ int cmdChannel(string verb, string str){
     mixed array msg_data;
     object ob = 0;
     int i, emote, forcedemote;
-    //tc("verb: "+verb+", str: "+str);
 
     if(grepp(verb,"|")){
         string foo, bar;
@@ -702,14 +693,12 @@ int cmdChannel(string verb, string str){
     if(member_array(GetRemoteChannel(verb), remote_chans) == -1 &&
             member_array(verb, local_chans) == -1) local_chans += ({ verb });
 
-    //tc("2");
     //******Access Checks
     //No talking if you're not allowed.
     if ( !CanTalk(this_player(),verb) ) {
         write("You lack privileges to that channel.");
         return 1;
     }
-    //tc("3");
     //Toggle channel blocking
     if ( emote == 1 && ( !str || str == "" ) ) {
         this_player()->SetBlocked(verb + "emote");
@@ -718,25 +707,20 @@ int cmdChannel(string verb, string str){
         this_player()->SetBlocked(verb);
         return 1;
     }
-    //tc("4");
     //Syschans aren't for chatting on, only listening
     if ( member_array(verb, syschans) != -1 ) {
         write("This is not a channel for chatting.");
         return 1;
     }
-    //tc("5");
     //If gagged, you can't talk on channels
     if ( this_player()->GetGagged(verb) ) {
         write("You have gag mode enabled. Type: 'gag off' to talk on channels.");
         return 1;
     }
-    //tc("6");
     //Channel doesn't exist, probably an emote typo
     if(!Channels[verb]) return 0;
-    //tc("7");
     //If not part of the channel, no chatting
     if( member_array(this_player(), Channels[verb]) == -1 ) return 0;
-    //tc("8");
     //If blocked, allow no chatting
     if( this_player()->GetBlocked(verb) ) {
         if( this_player()->GetBlocked("all") ) {
@@ -749,13 +733,10 @@ int cmdChannel(string verb, string str){
     }
     //******End Access Checks
 
-    //tc("9");
     //If there's no channel matching now, then it's a typo or wasn't meant for this file to pick up.
     if( !Channels[verb] ) return 0;
-    //tc("10");
     //Find the remote channel's name, based on the local, pretty name
     rc = GetRemoteChannel(verb);
-    //tc("11");
     //Check emotes
     if (emote == 1) {
         exploded = explode(str, " "); //BOOM!!! We have an array of words.
@@ -770,7 +751,6 @@ int cmdChannel(string verb, string str){
         //***********************************
         //Find a target for targetted emotes.
         //***********************************
-        //tc("12");
         if( !remains ) { //If no arguments and just one word
             msg_data = SOUL_D->GetChannelEmote(emote_cmd, ""); //Search for a feeling that matches
         } else { //If there is an argument to the emote,
@@ -796,7 +776,6 @@ int cmdChannel(string verb, string str){
                         break;
                     }
                 }
-                //tc("13");
                 if( !ob ) {
                     msg_data = SOUL_D->GetChannelEmote(emote_cmd, "STR", remains);
                     target = 0;
@@ -814,7 +793,6 @@ int cmdChannel(string verb, string str){
                     target = 0;
                 } else { //Otherwise, call mud and find user
                     string mud,temp;
-                    //tc("14");
                     words = explode(remains[(i+1)..], " ");
                     target = remains[0..i];
                     remains = "";
@@ -897,7 +875,6 @@ int cmdChannel(string verb, string str){
             }
         }
     }
-    //tc("20");
 
     //If admin or cre channels, Capitalize a person's real name, because admins can be physically hidden
     if( verb == "admin" || verb == "cre" ) {
@@ -905,22 +882,17 @@ int cmdChannel(string verb, string str){
             name = capitalize(this_player()->GetKeyName());
     }
     else name = this_player()->GetName();
-    //tc("21");
     //Add the "Name" $N to the string
     if(!grepp(str,"$N") && emote) str = "$N "+str;
-    //tc("22");
     //Send locally
     eventSendChannel(name, verb, str, emote, target, target_msg);
-    //tc("23");
     //If it's a remote channel, send it remotely.
     if(member_array(GetRemoteChannel(verb), remote_chans) != -1
             && member_array(verb, local_chans) == -1){
         if (grepp(GetRemoteChannel(verb),":")) { //It's an IMC2 channel
-            //tc("I");
             if(IMC2_D->getonline() != 1){
                 return 1;
             }
-            //tc("II");
             name = replace_string(name, " ", "");
             if( ob ) {
                 IMC2_D->channel_out(name, rc, replace_string(replace_string(str,"$N ",""),"$O",target), emote);
@@ -937,7 +909,6 @@ int cmdChannel(string verb, string str){
             }
         }
     }
-    //tc("24");
     return 1;
 }
 
@@ -1315,7 +1286,6 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
 
         msg = formChatString(ch, who, msg);
         //tn("CHAT_D->eventSendChannel: not emote?", "green");
-
         //pmsg = strip_colours(pmsg);
         pmsg = TERMINAL_D->no_colours(pmsg);
         eventAddLast(ch, msg, pchan, pmsg, who);

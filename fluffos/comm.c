@@ -1068,7 +1068,7 @@ static void copy_chars (interactive_t * ip, char * from, int num_bytes)
                     		char buf[1024];
                     		char num[20];
 
-                    		sprintf(num, "%dl", boot_time);
+                    		sprintf(num, "%ld", boot_time);
                     		int len = sprintf(buf, (char *)telnet_mssp_value, "UPTIME", num);
                     		add_binary_message(ip->ob, (unsigned char *)buf, len);
                     	}
