@@ -1,0 +1,116 @@
+#/domains/campus/npc/jennybot.c
+RestrictedChannels ({})
+NoChanColors 0
+GagMutes (["remote_gag":0,"remote_mute":0,"local_mute":0,"local_gag":0,])
+Paused 0
+localcmds ({"",})
+parsed_command ""
+InternalDesc 0
+Opacity 0
+MaxCarry 0
+PreventDrop 0
+DestructOnDrop 0
+PreventGet 0
+Position 2
+Undead 0
+UndeadType 0
+Mount 0
+Riders ({})
+BodyMass 0
+SaveRecurse 1
+Saved ({"Properties",})
+HealthPoints 750
+MagicPoints 1050
+ExperiencePoints 50
+melee 1
+godmode 0
+Alcohol 0
+Caffeine 0
+Food 100
+Drink 100
+Poison 0
+Sleeping 0
+DeathEvents 0
+StaminaPoints 801.000000
+Torso "torso"
+Biter 0
+keepalive 0
+Fingers (["right hand":5,"left hand":5,])
+Limbs (["left leg":(["children":({"left foot",}),"armors":1049761,"health":360,"class":2,"parent":"torso",]),"torso":(["children":({"neck","right leg","left leg","right arm","left arm",}),"armors":1538049,"health":710,"class":1,"parent":0,]),"right foot":(["children":({}),"armors":241,"health":180,"class":4,"parent":"right leg",]),"right leg":(["children":({"right foot",}),"armors":1049761,"health":360,"class":2,"parent":"torso",]),"head":(["children":({}),"armors":262913,"health":710,"class":1,"parent":"neck",]),"right hand":(["children":({}),"armors":98319,"health":180,"class":4,"parent":"right arm",]),"neck":(["children":({"head",}),"armors":786433,"health":710,"class":1,"parent":"torso",]),"left arm":(["children":({"left hand",}),"armors":1253385,"health":360,"class":2,"parent":"torso",]),"left foot":(["children":({}),"armors":241,"health":180,"class":4,"parent":"left leg",]),"left hand":(["children":({}),"armors":98319,"health":180,"class":4,"parent":"left arm",]),"right arm":(["children":({"right hand",}),"armors":1253385,"health":360,"class":2,"parent":"torso",]),])
+MissingLimbs ([])
+firearms_wounds 0
+ExtraChannels ({})
+Agent 0
+Blind 0
+Custom (["stats":15,"deviations":4,"deviating":0,])
+LightSensitivity ({25,7500,})
+Resistance (["low":0,"high":0,"immune":0,"medium":0,"none":134217726,])
+Stats (["agility":(["class":3,"points":0,"level":87,]),"wisdom":(["class":3,"points":0,"level":91,]),"speed":(["class":3,"points":0,"level":85,]),"coordination":(["class":2,"points":0,"level":90,]),"intelligence":(["class":1,"points":0,"level":100,]),"strength":(["class":4,"points":0,"level":72,]),"luck":(["class":3,"points":0,"level":51,]),"durability":(["class":4,"points":0,"level":70,]),"charisma":(["class":2,"points":0,"level":93,]),])
+Polyglot 1
+Languages (["english":(["native":1,"name":"English","points":0,"level":100,]),"common":(["native":0,"name":"common","points":0,"level":100,]),])
+DefaultLanguage "Common"
+TalkHist ([])
+SpeakColor "CYAN%^"
+Town "Town"
+Race "android"
+Gender "female"
+Level 1
+Skills ([])
+Morality 0
+Class 0
+Clan 0
+SkillModifiers ([])
+Religion ({0,0,})
+Wimpy 0
+Dead 0
+WimpyCommand "go out"
+Currency ([])
+Bank ([])
+SpellBook ([])
+QuestPoints 0
+QuestBook ([])
+isPK 1
+Attackable 1
+NoCondition 0
+Messages (["telin":"$N teleports in.","telout":"$N teleports away.","leave":"$N leaves $D.","vis":"$N appears.","invis":"$N disappears.","home":"$N goes home.","dest":"$N dests $O.","come":"$N enters.","clone":"$N clones $O.",])
+anchored 0
+PersistentInventory 0
+PersistentInventoryEnabled 0
+ProperNoun 0
+Modify 1
+Short "a polite young woman"
+CapName "Jennybot"
+ExternalDesc 
+Invisible 0
+Items ([])
+Properties ([])
+TrainedSkills ({})
+Befriendable 0
+Trainable 0
+Commandable 0
+Owner 0
+Befriended ({})
+CustomXP 0
+ActionChance 1
+CombatActionChance 0
+AutoStand 1
+Encounter 0
+EnemyNames ({})
+VisibleRiders 1
+actions_enabled 1
+Equipped ([])
+CommandResponses (["shut up":,"go away":,"shut down":,"shutdown":,])
+EmoteResponses ([])
+RequestResponses ([])
+TalkResponses (["sup":,"hey":,"hi":,"hello":,])
+ConsultResponses ([])
+WanderPath ({})
+WanderRecurse 0
+WanderSpeed 0
+permit_load 0
+SpellChance 50
+player 
+bot 0
+ob 
+noobster 0
+watchlist ({"blarghy",})

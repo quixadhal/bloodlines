@@ -351,7 +351,7 @@ string decolor(string str){
         tmp = sscanf(str,"<%s>%s",s2,s3);
     if(tmp != 2) return str;
     else {
-        test = s1+"<"+s2+">%^RESET%^"+strip_colours(s3);
+        test = s1+"<"+s2+">%^RESET%^"+TERMINAL_D->no_colours(s3);
         return test;
     }
 }

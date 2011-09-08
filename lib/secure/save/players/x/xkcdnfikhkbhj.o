@@ -1,0 +1,124 @@
+#/secure/save/players/x/xkcdnfikhkbhj.c
+InternalDesc 0
+Opacity 0
+PersistentInventory 0
+PersistentInventoryEnabled 0
+ProperNoun 1
+Modify 1
+Short "$N the unaccomplished"
+CapName "Xkcdnfikhkbhj"
+ExternalDesc "$N is nondescript."
+Invisible 0
+Items ([])
+Properties (["reprompt":1,"minimapping":1,"brand_spanking_new":0,"LastLocation":"/domains/default/room/death","PK warned":0,])
+Inventory ({})
+anchored 0
+Messages (["telin":"$N teleports in.","telout":"$N teleports away.","leave":"$N leaves $D.","vis":"$N appears.","invis":"$N disappears.","home":"$N goes home.","dest":"$N dests $O.","come":"$N enters.","clone":"$N clones $O.",])
+RestrictedChannels ({})
+NoChanColors 0
+GagMutes (["remote_gag":0,"remote_mute":0,"local_mute":0,"local_gag":0,])
+Paused 0
+localcmds ({"parserefresh","quit","nickname","unalias","alias","",})
+parsed_command "quit"
+HistorySize 50
+History ([50:"quit",49:"stand up",48:"get all",47:"crawl channel | say",46:"wear all",45:"cast meditate",44:"kill all",43:"put all in my chest",42:"uptime",41:"reprompt on",40:"wimpy 30",39:"env",38:"inventory",37:"hist",36:"crawl bot@delete.me",35:"wield a club in right hand",34:"chfn",33:"pk on",32:"customize strength 15",31:"look",30:"money",29:"open door",28:"wield a knife in right hand",27:"click heels",26:"stat",25:"hist gossip",24:"hist newbie",23:"who",22:"push button on omni",21:"put all in my bag",20:"cast buffer",19:"mudlist",18:"pull pin on grenade",17:"score",16:"version",15:"wield a sword in right hand",14:"search",13:"put all in my box",12:"position",11:"crawl down",10:"Chachamaru Karakuri",9:"go channel | say",8:"go bot@delete.me",7:"regenerate",6:"go no exit",5:"go up",4:"go west",3:"go north",2:"go out",1:"enter crawlspace",0:"go south",])
+Nicknames ([])
+Aliases (["east":"go east","mwhere":"findobj $*","southeast":"go southeast","northeast":"go northeast","prac":"skills","sco":"score","x":"look at $*","w":"go west","u":"go up","t":"tell $*","out":"go out","practice":"skills","s":"go south","vnum":"help find","p":"people","south":"go south","north":"go north","n":"go north","bio":"biography","l":"look $*","k":"kill $*","west":"go west","zlist":"domains","southwest":"go southwest","northwest":"go northwest","i":"inventory","owhere":"findobj $*","e":"go east","d":"go down","c":"cre $*","alist":"ls /domains","inv":"inventory","nw":"go northwest","examine":"look at $*","trophy":"kills","up":"go up","chat":"newbie $*","dc":"dchat $*","exa":"look at $*","sw":"go southwest","ig":"intergossip $*","loot":"get all from $*","ic":"intercre $*","peace":"quell","inf":"score","lp":"lpuni $*","down":"go down","ne":"go northeast","exit":"go out","eq":"equipment","se":"go southeast","sc":"status",])
+Xverbs (["'":"say $*","]":"] $*","\"":"say $*",":":"emote $*",])
+Directories (["current":"/","home":0,"previous":"/",])
+Prompt "status"
+Terminal "ansi"
+Blocked ([])
+Screen ({80,20,})
+MessageQueue 0
+PauseMessages 0
+annoyblock 0
+MessageExceptions 0
+BlockAnnoying 0
+Age 350558
+WhereBlock 0
+Brief 0
+LoginTime 1313895925
+BirthTime 1313895925
+RescueBit 0
+Password "aobflcfe!khnfkagiieabhdfdcgnaeknabadgomoo"
+Email "bot@delete.me"
+RealName "Chachamaru Karakuri"
+Rank "citizen"
+LoginSite "/domains/default/room/start"
+HostSite "127.0.0.1"
+WebPage 0
+News (["general":1233549750,])
+Marriages ({})
+Paranoia (["homeroom":"/tmp/workroom",])
+MaxCarry 0
+PreventDrop 0
+DestructOnDrop 0
+PreventGet 0
+Position 8
+Undead 0
+UndeadType 0
+Mount 1
+Riders ({})
+BodyMass 0
+SaveRecurse 0
+Saved ({"Properties",})
+HealthPoints 210
+MagicPoints 325
+ExperiencePoints 112
+melee 0
+godmode 0
+Alcohol 0
+Caffeine 0
+Food 41
+Drink 41
+Poison 0
+Sleeping 0
+DeathEvents 0
+StaminaPoints 1.899994
+Torso "torso"
+Biter 0
+keepalive 0
+Fingers (["right hand":5,"left hand":5,])
+Limbs (["left leg":(["children":({"left foot",}),"armors":1049761,"health":190,"class":2,"parent":"torso",]),"torso":(["children":({"neck","right leg","left leg","right arm","left arm",}),"armors":1538049,"health":380,"class":1,"parent":0,]),"right foot":(["children":({}),"armors":241,"health":100,"class":4,"parent":"right leg",]),"right leg":(["children":({"right foot",}),"armors":1049761,"health":190,"class":2,"parent":"torso",]),"head":(["children":({}),"armors":262913,"health":380,"class":1,"parent":"neck",]),"right hand":(["children":({}),"armors":98319,"health":100,"class":4,"parent":"right arm",]),"neck":(["children":({"head",}),"armors":786433,"health":380,"class":1,"parent":"torso",]),"left arm":(["children":({"left hand",}),"armors":1253385,"health":190,"class":2,"parent":"torso",]),"left foot":(["children":({}),"armors":241,"health":100,"class":4,"parent":"left leg",]),"left hand":(["children":({}),"armors":98319,"health":100,"class":4,"parent":"left arm",]),"right arm":(["children":({"right hand",}),"armors":1253385,"health":190,"class":2,"parent":"torso",]),])
+MissingLimbs ([])
+firearms_wounds 0
+ExtraChannels ({"explorer","newbie","gossip",})
+Agent 0
+Blind 0
+Custom (["stats":0,"deviations":4,"deviating":0,])
+LightSensitivity ({25,7500,})
+Resistance (["low":0,"high":0,"immune":0,"medium":0,"none":134217726,])
+Stats (["agility":(["class":3,"points":0,"level":35,]),"wisdom":(["class":3,"points":0,"level":42,]),"speed":(["class":3,"points":0,"level":32,]),"coordination":(["class":2,"points":0,"level":60,]),"intelligence":(["class":1,"points":0,"level":69,]),"strength":(["class":3,"points":0,"level":53,]),"luck":(["class":3,"points":0,"level":22,]),"durability":(["class":4,"points":0,"level":37,]),"charisma":(["class":2,"points":0,"level":51,]),])
+Polyglot 0
+Languages (["english":(["native":1,"name":"English","points":0,"level":100,]),"common":(["native":0,"name":"Common","points":0,"level":100,]),])
+DefaultLanguage "Common"
+TalkHist (["say":({"2011.08.20-23.15,16 Tim says in English, \"%^BOLD%^CYAN%^Maybe there's a shop in the village up north where you can buy whatever you need.%^RESET%^\"","2011.08.20-23.15,28 Tim says in English, \"%^BOLD%^CYAN%^Maybe there's a shop in the village up north where you can buy whatever you need.%^RESET%^\"",}),])
+SpeakColor "CYAN%^"
+Town "Town"
+Race "human"
+Gender "male"
+Level 1
+Skills (["psionic defense":(["class":3,"points":0,"level":1,]),"magic defense":(["class":2,"points":0,"level":3,]),"melee defense":(["class":2,"points":156,"level":2,]),"projectile attack":(["class":1,"points":0,"level":1,]),"blunt defense":(["class":1,"points":0,"level":1,]),"knife defense":(["class":1,"points":0,"level":1,]),"melee attack":(["class":2,"points":29,"level":3,]),"projectile defense":(["class":2,"points":0,"level":1,]),"blade defense":(["class":2,"points":0,"level":1,]),"bargaining":(["class":2,"points":0,"level":4,]),"magic attack":(["class":2,"points":0,"level":3,]),"blunt attack":(["class":1,"points":0,"level":1,]),"knife attack":(["class":1,"points":0,"level":1,]),"blade attack":(["class":2,"points":0,"level":1,]),])
+Morality 0
+Class "explorer"
+Clan 0
+SkillModifiers ([])
+Religion ({0,0,})
+Wimpy 30
+Dead 0
+WimpyCommand "go out"
+Currency (["silver":0,])
+Bank ([])
+SpellBook ([])
+QuestPoints 0
+QuestBook ([])
+isPK 1
+Attackable 1
+NoCondition 0
+Titles ({})
+Muffed ({})
+Deaths ({(["date":"Sat Aug 20 23:40:33 2011","enemy":"Deceleration sickness",]),(["date":"Sat Aug 20 23:40:33 2011","enemy":"Deceleration sickness",]),})
+TrainingPoints 0
+TitleLength 1
+telopt_ip 0

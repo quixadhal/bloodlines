@@ -216,6 +216,11 @@ if ($result == 0) {
                     <br />
                     <br />
 -->
+                    <a href="mudlist.php">
+                        <img src="gfx/mudlist_button.png" border=0 align="center" width=121 height=92 alt="(Mudlist)">
+                    </a>
+                    <br />
+                    <br />
                     <a href="http://www.smaugmuds.org/">
                         <img src="gfx/smaugmuds_button.png" border=0 align="center" width=119 height=26 alt="(SmaugMUDs)">
                     </a>

@@ -1,0 +1,124 @@
+#/secure/save/players/b/blarghy.c
+InternalDesc 0
+Opacity 0
+PersistentInventory 0
+PersistentInventoryEnabled 0
+ProperNoun 1
+Modify 1
+Short "$N the unaccomplished"
+CapName "Blarghy"
+ExternalDesc "$N is nondescript."
+Invisible 0
+Items ([])
+Properties (["minimapping":1,"brand_spanking_new":0,"LastLocation":"/domains/default/room/start",])
+Inventory ({"([\"BaitStrength\":0,\"Wielded\":0,\"Value\":0,\"Class\":1,\"Worn\":0,\"Deterioration\":0,\"Broken\":0,\"Poison\":0,\"Mass\":5,\"MealStrength\":35,\"#base_name#\":\"/domains/campus/meals/apple\",\"MealType\":2,\"Cost\":100,\"Properties\":([]),])","([\"Wielded\":0,\"Value\":0,\"MaxRecurseDepth\":3,\"CanLock\":0,\"RecurseDepth\":1,\"Worn\":0,\"Class\":1,\"Broken\":0,\"Deterioration\":0,\"Poison\":0,\"Persist\":1,\"Closed\":0,\"Mass\":10,\"#base_name#\":\"/domains/campus/obj/squirtbag\",\"Cost\":100,\"Properties\":([]),\"#inventory#\":({\"([\\\"rounds\\\":0,\\\"Wielded\\\":0,\\\"MaxRecurseDepth\\\":3,\\\"RecurseDepth\\\":1,\\\"Class\\\":10,\\\"Worn\\\":0,\\\"loaded\\\":1,\\\"Deterioration\\\":0,\\\"cloned\\\":0,\\\"Closed\\\":0,\\\"#base_name#\\\":\\\"/domains/campus/weap/waterpistol\\\",\\\"mag\\\":0,\\\"Value\\\":0,\\\"CanLock\\\":0,\\\"Broken\\\":0,\\\"Poison\\\":0,\\\"Persist\\\":1,\\\"Mass\\\":10,\\\"shells\\\":0,\\\"Cost\\\":500,\\\"Properties\\\":([]),\\\"#inventory#\\\":({}),\\\"CanClose\\\":0,])\",}),\"CanClose\":0,])","([\"Value\":0,\"Mass\":50,\"Worn\":0,\"#base_name#\":\"/domains/campus/armor/newbie_cap\",\"Deterioration\":0,\"Broken\":0,\"Cost\":10000,\"Properties\":([]),\"Poison\":0,])","([\"Wielded\":0,\"Value\":0,\"Class\":1,\"Worn\":0,\"Deterioration\":0,\"Broken\":0,\"Poison\":0,\"Mass\":0,\"#base_name#\":\"/domains/campus/obj/map\",\"Cost\":0,\"Properties\":([]),])","([\"Wielded\":0,\"Value\":0,\"Class\":1,\"Worn\":0,\"Deterioration\":0,\"Broken\":0,\"Poison\":0,\"Mass\":0,\"#base_name#\":\"/domains/campus/obj/note\",\"Cost\":0,\"Properties\":([]),])","([\"Wielded\":0,\"Value\":0,\"Class\":1,\"Worn\":0,\"Deterioration\":0,\"Broken\":0,\"Poison\":0,\"Mass\":3,\"#base_name#\":\"/domains/default/obj/handbook\",\"Cost\":1000,\"Properties\":([\"no steal\":1,]),])","([\"Value\":0,\"Mass\":5,\"Worn\":({\"torso\",}),\"#base_name#\":\"/domains/default/armor/shirt\",\"Deterioration\":0,\"Broken\":0,\"Cost\":1,\"Properties\":([]),\"Poison\":0,])","([\"Value\":0,\"Mass\":5,\"Worn\":({\"right leg\",\"left leg\",}),\"#base_name#\":\"/domains/default/armor/jeans\",\"Deterioration\":0,\"Broken\":0,\"Cost\":1,\"Properties\":([]),\"Poison\":0,])",})
+anchored 0
+Messages (["telin":"$N teleports in.","telout":"$N teleports away.","leave":"$N leaves $D.","vis":"$N appears.","invis":"$N disappears.","home":"$N goes home.","dest":"$N dests $O.","come":"$N enters.","clone":"$N clones $O.",])
+RestrictedChannels ({})
+NoChanColors 0
+GagMutes (["remote_gag":0,"remote_mute":0,"local_mute":0,"local_gag":0,])
+Paused 0
+localcmds ({"next","parserefresh","quit","nickname","unalias","alias","",})
+parsed_command ""
+HistorySize 50
+History ([26:"who",25:"look",24:"read map",23:"inventory",22:"i",21:"read note",20:"put rotten apple in bin",19:"chuckle",18:"consider bot",17:"activate bot",16:"look woman",15:"l woman",14:"go down",13:"d",12:"stat",11:"wield",10:"equip",9:"score",8:"read chapter 6 in handbook",7:"read chapter 5 in handbook",6:"read chapter 4 in handbook",5:"equipment",4:"read chapter 3 in handbook",3:"read chapter 2 in handbook",2:"read chapter 1 in handbook",1:"wear shirt",0:"wear jeans",])
+Nicknames ([])
+Aliases (["east":"go east","mwhere":"findobj $*","southeast":"go southeast","northeast":"go northeast","prac":"skills","sco":"score","x":"look at $*","w":"go west","u":"go up","t":"tell $*","out":"go out","practice":"skills","s":"go south","vnum":"help find","p":"people","south":"go south","north":"go north","n":"go north","bio":"biography","l":"look $*","k":"kill $*","west":"go west","zlist":"domains","southwest":"go southwest","northwest":"go northwest","i":"inventory","owhere":"findobj $*","e":"go east","d":"go down","c":"cre $*","alist":"ls /domains","inv":"inventory","nw":"go northwest","examine":"look at $*","trophy":"kills","up":"go up","chat":"newbie $*","dc":"dchat $*","exa":"look at $*","sw":"go southwest","ig":"intergossip $*","loot":"get all from $*","ic":"intercre $*","peace":"quell","inf":"score","lp":"lpuni $*","down":"go down","ne":"go northeast","exit":"go out","eq":"equipment","se":"go southeast","sc":"status",])
+Xverbs (["'":"say $*","]":"] $*","\"":"say $*",":":"emote $*",])
+Directories (["current":"/","home":0,"previous":"/",])
+Prompt "status"
+Terminal "ansi"
+Blocked ([])
+Screen ({172,49,})
+MessageQueue 0
+PauseMessages 0
+annoyblock 0
+MessageExceptions 0
+BlockAnnoying 0
+Age 175485
+WhereBlock 0
+Brief 0
+LoginTime 1313780220
+BirthTime 1313780160
+RescueBit 0
+Password "ifcnooad!igidk`ko`cmimjhhckhlnaimeajhlfbm"
+Email "root@localhost"
+RealName "Unknown"
+Rank "citizen"
+LoginSite "/domains/campus/room/start"
+HostSite "127.0.1.1"
+WebPage 0
+News (["general":1233549750,])
+Marriages ({})
+Paranoia (["homeroom":"/tmp/workroom",])
+MaxCarry 0
+PreventDrop 0
+DestructOnDrop 0
+PreventGet 0
+Position 2
+Undead 0
+UndeadType 0
+Mount 0
+Riders ({})
+BodyMass 0
+SaveRecurse 0
+Saved ({"Properties",})
+HealthPoints 940
+MagicPoints 390
+ExperiencePoints 50
+melee 0
+godmode 0
+Alcohol 0
+Caffeine 0
+Food 0
+Drink 0
+Poison 0
+Sleeping 0
+DeathEvents 0
+StaminaPoints 757.000000
+Torso "torso"
+Biter 0
+keepalive 0
+Fingers (["right hand":4,"left hand":4,])
+Limbs (["left leg":(["children":({"left foot",}),"armors":1049761,"health":450,"class":2,"parent":"torso",]),"torso":(["children":({"neck","right leg","left leg","left arm","right arm",}),"armors":1538049,"health":900,"class":1,"parent":0,]),"right foot":(["children":({}),"armors":241,"health":230,"class":4,"parent":"right leg",]),"right leg":(["children":({"right foot",}),"armors":1049761,"health":450,"class":2,"parent":"torso",]),"head":(["children":({}),"armors":262913,"health":900,"class":1,"parent":"neck",]),"right hand":(["children":({}),"armors":98319,"health":230,"class":4,"parent":"right arm",]),"neck":(["children":({"head",}),"armors":786433,"health":900,"class":1,"parent":"torso",]),"left arm":(["children":({"left hand",}),"armors":1253385,"health":450,"class":2,"parent":"torso",]),"left foot":(["children":({}),"armors":241,"health":230,"class":4,"parent":"left leg",]),"left hand":(["children":({}),"armors":98319,"health":230,"class":4,"parent":"left arm",]),"right arm":(["children":({"right hand",}),"armors":1253385,"health":450,"class":2,"parent":"torso",]),])
+MissingLimbs ([])
+firearms_wounds 0
+ExtraChannels ({"explorer","newbie","gossip",})
+Agent 0
+Blind 0
+Custom (["stats":15,"deviations":4,"deviating":0,])
+LightSensitivity ({5,6500,})
+Resistance (["low":66,"high":0,"immune":0,"medium":0,"none":134217660,])
+Stats (["agility":(["class":2,"points":0,"level":28,]),"wisdom":(["class":3,"points":0,"level":24,]),"speed":(["class":3,"points":0,"level":34,]),"coordination":(["class":2,"points":0,"level":28,]),"intelligence":(["class":3,"points":0,"level":34,]),"strength":(["class":1,"points":0,"level":77,]),"luck":(["class":1,"points":0,"level":69,]),"durability":(["class":1,"points":0,"level":89,]),"charisma":(["class":3,"points":0,"level":13,]),])
+Polyglot 0
+Languages (["common":(["native":0,"name":"Common","points":0,"level":100,]),"malkierien":(["native":1,"name":"Malkierien","points":0,"level":100,]),])
+DefaultLanguage "Common"
+TalkHist (["yell":({"2011.08.19-23.25,05 %^BOLD%^GREEN%^Jennybot yells in Common,%^RESET%^ \"DEDDA SORUZE: GETTO DA ZE!%^RESET%^\"",}),"say":({"2011.08.19-23.19,29 Jennybot says in Common, \"%^BOLD%^CYAN%^Hello, Blarghy! I'm Jenny, the LPC University newbie guide bot. I'm an extremely simple android, so please don't expect a lot of interactivity.%^RESET%^\"","2011.08.19-23.19,29 Jennybot says in Common, \"%^BOLD%^CYAN%^I'm here to give you a few tips. To deactivate me, simply type: %^RED%^deactivate bot%^CYAN%^.%^RESET%^\"","2011.08.19-23.19,29 Jennybot says in Common, \"%^BOLD%^CYAN%^To jump to the next tip, type: next tip.%^RESET%^\"",}),])
+SpeakColor "CYAN%^"
+Town "Town"
+Race "dwarf"
+Gender "male"
+Level 1
+Skills (["magic defense":(["class":2,"points":0,"level":3,]),"melee defense":(["class":2,"points":0,"level":2,]),"projectile attack":(["class":1,"points":0,"level":1,]),"blunt defense":(["class":1,"points":0,"level":2,]),"knife defense":(["class":1,"points":0,"level":2,]),"melee attack":(["class":2,"points":0,"level":1,]),"projectile defense":(["class":2,"points":0,"level":1,]),"blade defense":(["class":2,"points":0,"level":1,]),"bargaining":(["class":2,"points":0,"level":4,]),"magic attack":(["class":2,"points":0,"level":3,]),"blunt attack":(["class":1,"points":0,"level":2,]),"knife attack":(["class":1,"points":0,"level":3,]),"blade attack":(["class":2,"points":0,"level":1,]),])
+Morality 0
+Class "explorer"
+Clan 0
+SkillModifiers ([])
+Religion ({0,0,})
+Wimpy 0
+Dead 0
+WimpyCommand "go out"
+Currency (["silver":60,])
+Bank ([])
+SpellBook ([])
+QuestPoints 0
+QuestBook ([])
+isPK 0
+Attackable 1
+NoCondition 0
+Titles ({})
+Muffed ({})
+Deaths 0
+TrainingPoints 0
+TitleLength 1
+telopt_ip 0

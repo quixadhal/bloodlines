@@ -293,6 +293,14 @@ function load_logs($filename) {
     return $lines;
 }
 
+function get_recent_sql() {
+    $query = "SELECT date_part('epoch', msg_date) AS msg_date FROM chanlogs ORDER BY msg_date DESC LIMIT 1";
+    $result = pg_query($query) or die('Query failed: ' . pg_last_error());
+    $row = pg_fetch_object($result) or die('Fetch failed: ' . pg_last_error());
+    pg_free_result($result);
+    return $row->msg_date;
+}
+
 //  function save_colormap() {
 //      global $speakers;
 //      global $channels;
@@ -363,6 +371,11 @@ function load_logs($filename) {
 //  }
 
 //restore_colormap();
+
+//$dbconn = pg_connect("host=localhost dbname=i3logs user=quixadhal password=tardis69")
+//    or die('Could not connect: ' . pg_last_error());
+//$most_recent_db = get_most_recent_sql();
+
 get_chatter_colors();
 
 if( isset($_REQUEST) && isset($_REQUEST["ps"]) ) {

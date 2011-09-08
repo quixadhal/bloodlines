@@ -1,0 +1,952 @@
+-----
+2011.08.20-23.27,20: Xkcdlfeh
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdlfeh (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdlfeh (/lib/command.c) at line 210
+#2: 'do_go_str' at /verbs/rooms/go at line 45
+#3: 'eventGo' at /domains/town/room/vill_road2 (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdlfeh (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1308 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1308 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.20-23.27,20: Xkcdlfeh
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdlfeh (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdlfeh (/lib/command.c) at line 210
+#2: 'do_go_str' at /verbs/rooms/go at line 45
+#3: 'eventGo' at /domains/town/room/vill_road2 (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdlfeh (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1308 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1308 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.20-23.27,45: Xkcdlfeh
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdlfeh (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdlfeh (/lib/command.c) at line 210
+#2: 'do_go_str' at /verbs/rooms/go at line 45
+#3: 'eventGo' at /domains/town/room/vill_road2 (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdlfeh (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1308 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1308 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.20-23.27,45: Xkcdlfeh
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdlfeh (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdlfeh (/lib/command.c) at line 210
+#2: 'do_go_str' at /verbs/rooms/go at line 45
+#3: 'eventGo' at /domains/town/room/vill_road2 (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdlfeh (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1308 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1308 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.20-23.28,50: Xkcdlfeh
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdlfeh (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdlfeh (/lib/command.c) at line 210
+#2: 'do_go_str' at /verbs/rooms/go at line 45
+#3: 'eventGo' at /domains/town/room/vill_road2 (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdlfeh (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1308 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1308 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.20-23.28,50: Xkcdlfeh
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdlfeh (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdlfeh (/lib/command.c) at line 210
+#2: 'do_go_str' at /verbs/rooms/go at line 45
+#3: 'eventGo' at /domains/town/room/vill_road2 (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdlfeh (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1308 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1308 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.20-23.49,56: Xkcdjkf
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdjkf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdjkf (/lib/command.c) at line 210
+#2: 'do_go_str' at /verbs/rooms/go at line 45
+#3: 'eventGo' at /domains/town/room/vill_road2 (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdjkf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdjkf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdjkf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdjkf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1308 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1308 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.20-23.49,56: Xkcdjkf
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdjkf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdjkf (/lib/command.c) at line 210
+#2: 'do_go_str' at /verbs/rooms/go at line 45
+#3: 'eventGo' at /domains/town/room/vill_road2 (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdjkf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdjkf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdjkf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdjkf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1308 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1308 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.21-01.17,31: Xkcdiff
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdiff (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdiff (/lib/command.c) at line 210
+#2: 'do_go_str' at /verbs/rooms/go at line 45
+#3: 'eventGo' at /domains/town/room/vill_road2 (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdiff (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdiff (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdiff (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdiff (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1308 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1308 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.21-01.17,31: Xkcdiff
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdiff (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdiff (/lib/command.c) at line 210
+#2: 'do_go_str' at /verbs/rooms/go at line 45
+#3: 'eventGo' at /domains/town/room/vill_road2 (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdiff (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdiff (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdiff (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdiff (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1308 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1308 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.21-02.17,35: Xkcdabfddgf
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_go_str' at /verbs/rooms/go at line 45
+#3: 'eventGo' at /domains/town/room/vill_road2 (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1308 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1308 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.21-02.17,35: Xkcdabfddgf
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_go_str' at /verbs/rooms/go at line 45
+#3: 'eventGo' at /domains/town/room/vill_road2 (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1308 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1308 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.22-16.39,18: Xkcdlfeh
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdlfeh (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdlfeh (/lib/command.c) at line 210
+#2: 'do_go_str' at /verbs/rooms/go at line 45
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdlfeh (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.22-16.39,18: Xkcdlfeh
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdlfeh (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdlfeh (/lib/command.c) at line 210
+#2: 'do_go_str' at /verbs/rooms/go at line 45
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdlfeh (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdlfeh (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.25-21.11,58: Xkcdabfddgf
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.25-21.11,58: Xkcdabfddgf
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.26-01.59,36: Xkcdabfddgf
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.26-01.59,36: Xkcdabfddgf
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.26-02.14,36: Xkcdabfddgf
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.26-02.14,36: Xkcdabfddgf
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.26-02.18,47: Xkcdabfddgf
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.26-02.18,47: Xkcdabfddgf
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.26-02.20,32: Xkcdabfddgf
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.26-02.20,32: Xkcdabfddgf
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.26-02.25,02: Xkcdabfddgf
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.26-02.25,02: Xkcdabfddgf
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.26-02.35,03: Xkcdabfddgf
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.26-02.35,03: Xkcdabfddgf
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.26-02.37,03: Xkcdabfddgf
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.26-02.37,03: Xkcdabfddgf
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.26-02.39,03: Xkcdabfddgf
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.26-02.39,03: Xkcdabfddgf
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.26-02.45,03: Xkcdabfddgf
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.26-02.45,03: Xkcdabfddgf
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.26-03.00,04: Xkcdabfddgf
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.26-03.00,04: Xkcdabfddgf
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+-----
+2011.08.26-03.03,04: Xkcdabfddgf
+*restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/bboard (/<driver>) at line 0
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 606
+#15: 'CATCH' at /secure/daemon/master at line 606
+#16: '<fake>' at /secure/daemon/bboard (/<driver>) at line 0
+
+object:OBJECT (/secure/daemon/bboard), error:*restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/<driver>, file:/<driver>
+-----
+-----
+2011.08.26-03.03,04: Xkcdabfddgf
+**restore_object(): Illegal array format while restoring __Posts.
+Object: /secure/daemon/master at line 608
+
+#0: '<fake>' at /secure/save/players/x/xkcdabfddgf (/<driver>) at line 0
+#1: 'cmdAll' at /secure/save/players/x/xkcdabfddgf (/lib/command.c) at line 210
+#2: 'do_crawl_str' at /verbs/players/crawl at line 42
+#3: 'eventGo' at /domains/town/room/adv_guild (/lib/exits.c) at line 107
+#4: 'eventMoveLiving' at /secure/save/players/x/xkcdabfddgf (/lib/living.c) at line 748
+#5: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/player.c) at line 277
+#6: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/interactive.c) at line 254
+#7: 'eventMove' at /secure/save/players/x/xkcdabfddgf (/lib/props/move.c) at line 120
+#8: 'init' at /lib/bboard#1341 at line 51
+#9: 'RegisterLocation' at /lib/bboard#1341 at line 41
+#10: 'RegisterLocation' at /secure/daemon/bboard at line 89
+#11: 'restore_board' at /secure/daemon/bboard at line 57
+#12: 'RestoreObject' at /secure/daemon/bboard (/lib/props/save.c) at line 72
+#13: 'unguarded' at /secure/sefun/sefun at /secure/sefun/security.c:104
+#14: 'apply_unguarded' at /secure/daemon/master at line 608
+
+object:OBJECT (/secure/daemon/master), error:**restore_object(): Illegal array format while restoring __Posts.
+, trace:ARRAY (), program:/secure/daemon/master.c, file:/secure/daemon/master.c, line:608
+-----
+
+END-OF-LOG
