@@ -183,6 +183,11 @@ echo "row_count: $row_count<br>";
 ?>
 <html>
   <head>
+    <script type="text/javascript">
+        function JumpTo(theUrl) {
+            document.location.href = theUrl;
+        }
+    </script>
     <title> <?php echo $mud_count; ?> Living MUD's </title>
   </head>
   <body background="gfx/dark_wood.jpg" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
@@ -231,7 +236,7 @@ echo "row_count: $row_count<br>";
              $bgcolor = ( $i % 2 ) ? $dark_row : $light_row;
         ?>
           <!-- <td colspan="2" align="center" width="<?php echo $pic_width; ?>" bgcolor="<?php echo $bgcolor;?>"> -->
-          <td colspan="2" align="center" width="<?php echo $pic_width; ?>">
+          <td colspan="2" align="center" width="<?php echo $pic_width; ?>" onclick="JumpTo('<?php echo "mud_entry.php?mud_id=$mud_id"; ?>');">
             <a href="<?php echo "mud_entry.php?mud_id=$mud_id"; ?>">
               <img border="0" src="<?php echo "png_login.php?mud_id=$mud_id&width=$pic_width&height=$pic_height&constrain"; ?>">
             </a>

@@ -180,58 +180,10 @@ function get_chatter_colors() {
     //return $colormap;
 }
 
-function read_file($filename, $lines_to_read) {
-    $text = "";
-    $pos = -1;
-    $handle = fopen($filename, "r");
-
-    while ($lines_to_read > 0) {
-        --$pos;
-
-        if(fseek($handle, $pos, SEEK_END) !== 0) {
-            rewind($handle);
-            $lines_to_read = 0;
-        } elseif (fgetc($handle) === "\n") {
-            --$lines_to_read;
-        }
-
-        $block_size = (-$pos) % 8192;
-        if ($block_size === 0 || $lines_to_read === 0) {
-            $text = fread($handle, ($block_size === 0 ? 8192 : $block_size)) . $text;
-        }
-    }
-
-    fclose($handle);
-    return explode("\n", $text);
-}
-
-function load_yesterday($filename) {
-    $today = strftime("%m.%d", int($start_time));
-    $yestertime = strftime("%H.%M", int($start_time - (60 * 60 * 24)));
-
-    $text = file_get_contents( $filename );
-    $lines = explode("\n", $text);
-    $lines = preg_grep("/\t.*?\t.*?\t/", $lines);
-
-    foreach ($lines as $line) {
-        if( $line == "" ) {
-            continue;
-        }
-        $parts = split("\t", $line);
-        if( sizeof($parts) != 4 ) {
-            continue;
-        }
-        $timestamp = substr($parts[0], 11, 5);
-        $timestamp[2] = ':';
-        $datestamp = substr($parts[0], 5, 5);
-        $datestamp[2] = '/';
-
-    }
-}
-
-function load_logs($filename) {
+function load_logs() {
     global $chan_filter;
     global $speaker_filter;
+    global $search_filter;
     global $page_size;
     global $page_number;
     global $max_page;
@@ -240,141 +192,70 @@ function load_logs($filename) {
     if(! isset($skip_lines)) {
         $skip_lines = 0;
     }
-    $lines_needed = $page_size + ( $page_number * $page_size );
-    $text = file_get_contents( $filename );
-    $lines = explode("\n", $text);
-    $lines = preg_grep("/\t.*?\t.*?\t/", $lines);
+    $limit = $page_size;
+    $offset = $page_number * $page_size;
+
+    $query = "SELECT to_char(msg_date, 'MM/DD') AS the_date, to_char(msg_date, 'HH:MI') AS the_time, to_char(msg_date, 'HH') AS the_hour, channel, speaker, mud, message FROM chanlogs";
+
+    $dbconn = pg_connect("host=localhost dbname=i3logs user=quixadhal password=tardis69")
+        or die('Could not connect: ' . pg_last_error());
+
+    $links_term = "";
     if(isset($links_only)) {
-        $lines = preg_grep('/((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)+/', $lines);
-        //$lines = preg_grep('/http/', $lines);
+        $links_term = " AND is_url";
+        //$lines = preg_grep('/((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)+/', $lines);
+        // Need to mark as links in the log insertion thing...
     }
-    if(isset($chan_filter)) {
-        $lines = preg_grep("/\t$chan_filter\t/", $lines);
-    }
-    if(isset($speaker_filter)) {
-        $lines = preg_grep("/\t$speaker_filter\t/", $lines);
-    }
-    //echo "File: $filename<br>";
-    //echo "Lines: " . sizeof($lines) . "<br>";
-    //echo "Needed: $lines_needed<br>";
-    if( sizeof($lines) < $lines_needed ) {
-        // Grab stuff from the archives until done.
-        //echo "Grabbing<br>";
-        foreach (array_reverse(glob(ARCHIVE)) as $filename) {
-            //echo "File: $filename<br>";
-            $newtext = file_get_contents( $filename );
-            $newlines = explode("\n", $newtext);
-            $newlines = preg_grep("/\t.*?\t.*?\t/", $newlines);
-            if(isset($links_only)) {
-                $newlines = preg_grep('/((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)+/', $newlines);
-                //$newlines = preg_grep('/http/', $newlines);
-            }
-            if(isset($chan_filter)) {
-                $newlines = preg_grep("/\t$chan_filter\t/", $newlines);
-            }
+
+    if(isset($search_filter)) {
+        if(isset($chan_filter)) {
             if(isset($speaker_filter)) {
-                $newlines = preg_grep("/\t$speaker_filter\t/", $newlines);
+                $query = $query .  " WHERE message ILIKE $1 AND channel ILIKE $2 AND speaker ILIKE $3 $links_term ORDER BY msg_date DESC OFFSET $4 LIMIT $5";
+                $result = pg_query_params($query, array($search_filter, $chan_filter, $speaker_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
+            } else {
+                $query = $query .  " WHERE message ILIKE $1 AND channel ILIKE $2 $links_term ORDER BY msg_date DESC OFFSET $3 LIMIT $4";
+                $result = pg_query_params($query, array($search_filter, $chan_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
             }
-            $lines = array_merge($newlines, $lines);
-            //echo "Lines: " . sizeof($lines) . "<br>";
-            //echo "Needed: $lines_needed<br>";
-            if( sizeof($lines) >= $lines_needed ) {
-                break;
+        } else {
+            if(isset($speaker_filter)) {
+                $query = $query .  " WHERE message ILIKE $1 AND speaker ILIKE $2 $links_term ORDER BY msg_date DESC OFFSET $3 LIMIT $4";
+                $result = pg_query_params($query, array($search_filter, $speaker_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
+            } else {
+                $query = $query .  " WHERE message ILIKE $1 $links_term ORDER BY msg_date DESC OFFSET $2 LIMIT $3";
+                $result = pg_query_params($query, array($search_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
+            }
+        }
+    } else {
+        if(isset($chan_filter)) {
+            if(isset($speaker_filter)) {
+                $query = $query .  " WHERE channel ILIKE $1 AND speaker ILIKE $2 $links_term ORDER BY msg_date DESC OFFSET $3 LIMIT $4";
+                $result = pg_query_params($query, array($chan_filter, $speaker_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
+            } else {
+                $query = $query .  " WHERE channel ILIKE $1 $links_term ORDER BY msg_date DESC OFFSET $2 LIMIT $3";
+                $result = pg_query_params($query, array($chan_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
+            }
+        } else {
+            if(isset($speaker_filter)) {
+                $query = $query .  " WHERE speaker ILIKE $1 $links_term ORDER BY msg_date DESC OFFSET $2 LIMIT $3";
+                $result = pg_query_params($query, array($speaker_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
+            } else {
+                if(isset($links_only)) {
+                    $query = $query .  " WHERE is_url ORDER BY msg_date DESC OFFSET $1 LIMIT $2";
+                } else {
+                    $query = $query .  " ORDER BY msg_date DESC OFFSET $1 LIMIT $2";
+                }
+                $result = pg_query_params($query, array($offset, $limit)) or die('Query failed: ' . pg_last_error());
             }
         }
     }
-    if( sizeof($lines) < $lines_needed ) {
-        $max_page = 1;
-    } else {
-        $max_page = 0;
+
+    $rows = array();
+    while( $row = pg_fetch_object($result) ) {
+        array_push( $rows, $row ); 
     }
-    $lines = array_slice($lines, -$lines_needed);
-    $lines = array_slice($lines, 0, $page_size);
-    return $lines;
-}
-
-function get_recent_sql() {
-    $query = "SELECT date_part('epoch', msg_date) AS msg_date FROM chanlogs ORDER BY msg_date DESC LIMIT 1";
-    $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-    $row = pg_fetch_object($result) or die('Fetch failed: ' . pg_last_error());
     pg_free_result($result);
-    return $row->msg_date;
+    return $rows;
 }
-
-//  function save_colormap() {
-//      global $speakers;
-//      global $channels;
-//      global $current_speaker;
-//      global $current_channel;
-//      //global $page_size;
-//      //global $page_count;
-//  
-//      //setcookie("page_size", $page_size);
-//      //setcookie("page_count", $page_count);
-//      setcookie("current_speaker", $current_speaker);
-//      foreach ($speakers as $k => $v) {
-//          $bk = urlencode($k);
-//          $bv = $speakers[$k];
-//          setcookie("speakers[$bk]", $bv);
-//          //echo "Saving Speaker: $k - " . $speakers[$k] . "<br>";
-//          //echo "Saving Speaker: $bk - $bv<br>";
-//      }
-//      setcookie("current_channel", $current_speaker);
-//      foreach ($channels as $k => $v) {
-//          $bk = urlencode($k);
-//          $bv = $channels[$k];
-//          setcookie("channels[$bk]", $bv);
-//          //echo "Saving Channel: $k - " . $channels[$k] . "<br>";
-//          //echo "Saving Channel: $bk - $bv<br>";
-//      }
-//  }
-
-//  function restore_colormap() {
-//      global $speakers;
-//      global $channels;
-//      global $current_speaker;
-//      global $current_channel;
-//      //global $page_size;
-//      //global $page_count;
-//  
-//      /*
-//      if(isset($_COOKIE['page_size'])) {
-//          $page_size = $_COOKIE['page_size'];
-//      }
-//      if(isset($_COOKIE['page_count'])) {
-//          $page_count = $_COOKIE['page_count'];
-//      }
-//       */
-//  
-//      if(isset($_COOKIE['current_speaker'])) {
-//          $current_speaker = $_COOKIE['current_speaker'];
-//      }
-//      if(isset($_COOKIE['speakers'])) {
-//          foreach ($_COOKIE['speakers'] as $bk => $bv) {
-//              $k = urldecode($bk);
-//              $v = $bv;
-//              $speakers[$k] = $v;
-//              //echo "Restoring Speaker: $k - " . $speakers[$k] . "<br>";
-//          }
-//      }
-//      if(isset($_COOKIE['current_channel'])) {
-//          $current_channel = $_COOKIE['current_channel'];
-//      }
-//      if(isset($_COOKIE['channels'])) {
-//          foreach ($_COOKIE['channels'] as $bk => $bv) {
-//              $k = urldecode($bk);
-//              $v = $bv;
-//              $channels[$k] = $v;
-//              //echo "Restoring Channel: $k - " . $channels[$k] . "<br>";
-//          }
-//      }
-//  }
-
-//restore_colormap();
-
-//$dbconn = pg_connect("host=localhost dbname=i3logs user=quixadhal password=tardis69")
-//    or die('Could not connect: ' . pg_last_error());
-//$most_recent_db = get_most_recent_sql();
 
 get_chatter_colors();
 
@@ -404,6 +285,19 @@ if( isset($_REQUEST) && isset($_REQUEST["sf"]) ) {
     $speaker_filter = $_REQUEST["sf"];
 }
 
+if( isset($_REQUEST) && isset($_REQUEST["sr"]) && $_REQUEST["sr"] != "" && preg_match('/[^\*]/', $_REQUEST["sr"] ) > 0 ) {
+    $search_filter = $_REQUEST["sr"];
+    $search_filter = preg_replace('/,/', ' ', $search_filter);
+    $search_filter = preg_replace('/ +/', ' ', $search_filter);
+    $search_filter = preg_replace('/[^0-9A-Za-z \*]/', '', $search_filter);
+    $search_filter = preg_replace('/\*/', '%', $search_filter);
+    $search_filter = trim($search_filter);
+    if(substr($search_filter, 0, 1) != '%')
+        $search_filter = "%" . $search_filter;
+    if(substr($search_filter, -1, 1) != '%')
+        $search_filter = $search_filter . "%";
+}
+
 $format = 'html';
 if( isset($_REQUEST) && isset($_REQUEST["fm"]) ) {
     if( $_REQUEST["fm"] == 'rss' ) {
@@ -417,86 +311,58 @@ if( isset($_REQUEST) && isset($_REQUEST["lo"]) ) {
     $links_only = 1;
 }
  
-$file_size = round(filesize(TEXT_FILE)/1024/1024,2);
-$lines = load_logs(TEXT_FILE, $page_size, $page_number, $links_only);
-//arsort($lines);
+$rows = array_reverse(load_logs());
 
 $output = array();
-
 $bg = 0;
 $count = 0;
-foreach ($lines as $line) {
-    if( $line == "" ) {
-        continue;
-    }
-    $parts = split("\t", $line);
-    if( sizeof($parts) != 4 ) {
-        continue;
-    }
+
+foreach ($rows as $row) {
     $bgcolor = ($bg % 2) ? "#000000" : "#1F1F1F";
+    $bold_bgcolor = ($bg % 2) ? "#202040" : "#3F3F6F";
 
-    $timestamp = substr($parts[0], 11, 5);
-    $timestamp[2] = ':';
-    $datestamp = substr($parts[0], 5, 5);
-    $datestamp[2] = '/';
+    $datestamp_raw = $row->the_date;
+    $timestamp_raw = $row->the_time;
+    $hour = $row->the_hour;
+    $channel_raw = $row->channel;
+    $speaker_raw = $row->speaker . "@" . $row->mud;
+    $message_raw = $row->message;
 
-    $timestamp_raw = $timestamp;
-    $hour = substr($timestamp, 0, 2);
+    $datestamp = $datestamp_raw;
     $timestamp = $hour_colors[$hour] . $timestamp_raw . '</SPAN>';
 
-    $channel = $parts[1];
-    //if( ! array_key_exists( $channel, $channels )) {
-    //    $channels[$channel] = $current_channel;
-    //    $current_channel++;
-    //    $current_channel %= sizeof( $colors );
-    //}
-
-    $channel_raw = $parts[1];
-    //echo "Channel = $channel<br>";
-    //$channel_color = $colors[$channels[$channel]];
-    if( array_key_exists( $channel, $channel_colors )) {
-        $channel_color = $channel_colors[$channel];
+    if( array_key_exists( $channel_raw, $channel_colors )) {
+        $channel_color = $channel_colors[$channel_raw];
     } else {
         $channel_color = $channel_colors['default'];
     }
-    $channel = "$channel_color$channel</SPAN>";
-    $channel = "<a href=\"" . $_SERVER['PHP_SELF'] .
-        "?cf=" . urlencode($parts[1]) .
-        (isset($speaker_filter) ? "&sf=" . urlencode($parts[2]) : "") .
+    $channel = "$channel_color$channel_raw</SPAN>";
+    $channel_url = $_SERVER['PHP_SELF'] .
+        "?cf=" . urlencode($channel_raw) .
+        (isset($speaker_filter) ? "&sf=" . urlencode($row->speaker) : "") .
+        (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "") .
         ((isset($page_size) && $page_size != 25 ) ? "&ps=" . urlencode($page_size) : "") .
         ((isset($page_number) && $page_number != 0 ) ? "&pn=" . urlencode($page_number) : "") .
-        ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
-        "\">" . $channel . "</a>";
+        ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "");
+    $channel = "<a href=\"" . $channel_url . "\">" . $channel . "</a>";
 
-    $speaker_raw = $parts[2];
-    $speaker = $parts[2];
-    $bits = explode("@", $speaker);
-    $bitname = strtolower($bits[0]);
-//      if( array_key_exists( $bitname, $colormap ) ) {
-        $speaker_color = $colormap[$bitname];
-//      } else {
-//          if( ! array_key_exists( $speaker, $speakers )) {
-//              $speakers[$speaker] = $current_speaker;
-//              $current_speaker++;
-//              $current_speaker %= sizeof( $colors );
-//          }
-//          $speaker_color = $colors[$speakers[$speaker]];
-//      }
-    $speaker = $speaker_color . $parts[2] . "</SPAN>";
-    $speaker = "<a href=\"" . $_SERVER['PHP_SELF'] .
-        "?sf=" . urlencode($parts[2]) .
-        (isset($chan_filter) ? "&cf=" . urlencode($parts[1]) : "") .
+    $speaker_name = strtolower($row->speaker);
+    $speaker_color = $colormap[$speaker_name];
+    $speaker = $speaker_color . $speaker_raw . "</SPAN>";
+    $speaker_url = $_SERVER['PHP_SELF'] .
+        "?sf=" . urlencode($row->speaker) .
+        (isset($chan_filter) ? "&cf=" . urlencode($channel_raw) : "") .
+        (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "") .
         ((isset($page_size) && $page_size != 25 ) ? "&ps=" . urlencode($page_size) : "") .
         ((isset($page_number) && $page_number != 0 ) ? "&pn=" . urlencode($page_number) : "") .
-        ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
-        "\">" . $speaker . "</a>";
+        ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "");
+    $speaker = "<a href=\"" . $speaker_url . "\">" . $speaker . "</a>";
 
-    $message_raw = $parts[3];
-    $message = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '_', $parts[3]);
+    $message = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '_', $message_raw);
     $message = htmlentities($message);
     $message = preg_replace( '/((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)/', '<a href="$1" target="I3-link">$1</a>', $message);
 
-    $rss_title = "$datestamp $timestamp_raw ($channel_raw) $speaker_raw: " . substr($message_raw, 0, 120);
+    $rss_title = "$datestamp_raw $timestamp_raw ($channel_raw) $speaker_raw: " . substr($message_raw, 0, 120);
     $rss_desc = "$message_raw";
     $md5 = md5( $channel_raw . $speaker_raw . $message_raw );
     $rss_link = RSS_URL;
@@ -504,10 +370,13 @@ foreach ($lines as $line) {
     $rss_guid = $md5;
 
     $output[$count]['bgcolor'] = $bgcolor;
+    $output[$count]['bold_bgcolor'] = $bold_bgcolor;
     $output[$count]['datestamp'] = $datestamp;
     $output[$count]['timestamp'] = $timestamp;
     $output[$count]['channel'] = $channel;
+    $output[$count]['channel_url'] = $channel_url;
     $output[$count]['speaker'] = $speaker;
+    $output[$count]['speaker_url'] = $speaker_url;
     $output[$count]['message'] = $message;
     $output[$count]['rss_title'] = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '_', $rss_title);
     $output[$count]['rss_desc'] = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '_', $rss_desc);
@@ -529,27 +398,31 @@ $prev_url = $_SERVER['PHP_SELF'] .
         ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
         (isset($links_only) ? "&lo" : "") .
         (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
-        (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "");
+        (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "") .
+        (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "");
 $nolinks_url = $_SERVER['PHP_SELF'] .
         "?pn=" . urlencode($page_number) .
         ((isset($page_size) && $page_size != 25 ) ? "&ps=" . urlencode($page_size) : "") .
         ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
         (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
-        (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "");
+        (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "") .
+        (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "");
 $links_url = $_SERVER['PHP_SELF'] .
         "?pn=" . urlencode($page_number) .
         ((isset($page_size) && $page_size != 25 ) ? "&ps=" . urlencode($page_size) : "") .
         ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
         ("&lo") .
         (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
-        (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "");
+        (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "") .
+        (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "");
 $next_url = $_SERVER['PHP_SELF'] .
         "?pn=" . urlencode($page_number + 1) .
         ((isset($page_size) && $page_size != 25 ) ? "&ps=" . urlencode($page_size) : "") .
         ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
         (isset($links_only) ? "&lo" : "") .
         (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
-        (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "");
+        (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "") .
+        (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "");
 
 //save_colormap();
 
@@ -603,6 +476,48 @@ if($format == 'rss') {
                 </td>
             </tr>
         </table>
+        <form action="" method="get">
+            <table border=0 cellspacing=0 cellpadding=0 width=90% align="center">
+                <tr>
+                    <td align="right" valign="top">
+                        <span style="color: #1F1F1F;">
+                            <label id="srlabel" for="sr"
+                                onmouseover="srinput.style.color='#FFFF00'; srinput.style.backgroundColor='#1F1F1F'; srlabel.style.color='#FFFFFF';"
+                                onmouseout="srinput.style.color='#4F4F00'; srinput.style.backgroundColor='#000000'; srlabel.style.color='#1F1F1F';"
+                                onfocus="srinput.focus();"
+                                onclick="srinput.focus();"
+                            > Search:&nbsp; </label>
+                        </span>
+                    </td>
+                    <td bgcolor="#1F1F1F" width="200" align="left" valign="top">
+                            <input id="srinput" type="text" style="background-color: #000000; color: #3F3F00; border: 1px; border-color: #000000; border-style: solid; width: 200px;"
+                                onmouseover="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; srlabel.style.color='#FFFFFF';"
+                                onfocus="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; srlabel.style.color='#FFFFFF'; if(!this._haschanged){this.value=''};this._haschanged=true;"
+                                onblur="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; srlabel.style.color='#1F1F1F';"
+                                onmouseout="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; srlabel.style.color='#1F1F1F';"
+                                maxlength="30" name="sr" value="<?php if(isset($search_filter)) echo preg_replace('/%/', '*', $search_filter); ?>" />
+                            <?php if(isset($page_number)) { ?>
+                                <input type="hidden" name="pn" value="<?php echo $page_number; ?>">
+                            <?php } ?>
+                            <?php if(isset($page_size)) { ?>
+                                <input type="hidden" name="ps" value="<?php echo $page_size; ?>">
+                            <?php } ?>
+                            <?php if(isset($format)) { ?>
+                                <input type="hidden" name="fm" value="<?php echo $format; ?>">
+                            <?php } ?>
+                            <?php if(isset($links_only)) { ?>
+                                <input type="hidden" name="lo" value="<?php echo $links_only; ?>">
+                            <?php } ?>
+                            <?php if(isset($speaker_filter)) { ?>
+                                <input type="hidden" name="sf" value="<?php echo $speaker_filter; ?>">
+                            <?php } ?>
+                            <?php if(isset($chan_filter)) { ?>
+                                <input type="hidden" name="cf" value="<?php echo $chan_filter; ?>">
+                            <?php } ?>
+                    </td>
+                </tr>
+            </table>
+        </form>
         <table width="100%">
             <tr>
                 <? if( $max_page == 0 ) { ?>
@@ -617,17 +532,17 @@ if($format == 'rss') {
                     <a href="<? echo $_SERVER['PHP_SELF']; ?>">Home</a>
                     &nbsp;
                     <? if( ! isset($links_only) ) { ?>
-                        <a href="<? echo $links_url; ?>">Links</a>
+                        <a href="<? echo $links_url; ?>">Links&nbsp;Only</a>
                     <? } else { ?>
-                        <a href="<? echo $nolinks_url; ?>">No Links</a>
+                        <a href="<? echo $nolinks_url; ?>">No&nbsp;Links</a>
                     <? } ?>
                 </span></td>
                 <? } else { ?>
                 <td align="center" width="10%"><span style="color: #555555">
                     <? if( ! isset($links_only) ) { ?>
-                        <a href="<? echo $links_url; ?>">Links</a>
+                        <a href="<? echo $links_url; ?>">Links&nbsp;Only</a>
                     <? } else { ?>
-                        <a href="<? echo $nolinks_url; ?>">No Links</a>
+                        <a href="<? echo $nolinks_url; ?>">No&nbsp;Links</a>
                     <? } ?>
                 </span></td>
                 <? } ?>
@@ -654,8 +569,12 @@ if($format == 'rss') {
                 <tr>
                     <td bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['datestamp']; ?></td>
                     <td bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['timestamp']; ?></td>
-                    <td bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['channel']; ?></td>
-                    <td bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['speaker']; ?></td>
+                    <td onmouseover="this.style.backgroundColor = '<?php echo $output[$k]['bold_bgcolor']; ?>';"
+                        onmouseout="this.style.backgroundColor = '<?php echo $output[$k]['bgcolor']; ?>';"
+                        onclick="document.location.href='<?php echo $output[$k]['channel_url']; ?>';" bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['channel']; ?></td>
+                    <td onmouseover="this.style.backgroundColor = '<?php echo $output[$k]['bold_bgcolor']; ?>';"
+                        onmouseout="this.style.backgroundColor = '<?php echo $output[$k]['bgcolor']; ?>';"
+                        onclick="document.location.href='<?php echo $output[$k]['speaker_url']; ?>';" bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['speaker']; ?></td>
                     <td bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['message']; ?></td>
                 </tr>
             <? } ?>

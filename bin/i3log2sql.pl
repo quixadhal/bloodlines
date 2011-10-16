@@ -8,6 +8,7 @@ use Time::HiRes qw(sleep time alarm);
 use Date::Parse;
 use HTML::Entities;
 use DBI;
+use Net::Twitter;
 
 my $TEXT_FILE = '/home/bloodlines/lib/secure/log/allchan.log';
 my $ARCHIVE = '/home/bloodlines/lib/secure/log/archive/allchan.log-*';
@@ -17,6 +18,7 @@ my $LOGDIR = '/home/bloodlines/lib/log/chan';
 my $LOCAL_MUD = 'Bloodlines';
 my $network = 'i3';
 my $dbc = DBI->connect('DBI:Pg:dbname=i3logs;host=localhost;port=5432;sslmode=prefer', 'quixadhal', 'tardis69', { AutoCommit => 0, PrintError => 0, });
+my $BE_A_TWIT = 0;
 
 =head1 SQL
 
@@ -27,7 +29,9 @@ CREATE TABLE chanlogs (
     speaker     TEXT NOT NULL,
     mud         TEXT NOT NULL,
     is_emote    BOOLEAN DEFAULT false,
-    message     TEXT
+    message     TEXT,
+    is_url      BOOLEAN DEFAULT false,
+    twat        BOOLEAN DEFAULT false
 );
 
 CREATE INDEX ix_msg_date ON chanlogs (msg_date);
@@ -35,12 +39,25 @@ CREATE INDEX ix_channel ON chanlogs (channel);
 CREATE INDEX ix_speaker ON chanlogs (speaker);
 CREATE INDEX ix_mud ON chanlogs (mud);
 CREATE UNIQUE INDEX ix_chanlogs ON chanlogs (msg_date, network, channel, speaker, mud, is_emote, message); 
+CREATE INDEX ix_twat ON chanlogs (twat);
 
 =cut
 
+my $twitter;
+
+if( $BE_A_TWIT ) {
+    $twitter = Net::Twitter->new(
+        traits              => [qw/API::REST OAuth/],
+        consumer_key        => 'dszLvOopdZUclvqUxy8A',
+        consumer_secret     => '5iiKA6XQjzV0b21QjFN0ueY9hHSVLKAwg4J7z9KWIHg',
+        access_token        => '385780619-iVtS1JeQv0l2bGMfKlhkHzMGcrPqvAjINTQ1ld3f',
+        access_token_secret => '5rUcxpkJhw08UDGVFtfvHx1dMaAWY81VrCTQSTG834',
+    );
+}
+
 my $add_entry_sql = $dbc->prepare( qq!
-    INSERT INTO chanlogs (msg_date, network, channel, speaker, mud, message)
-    VALUES (?,trim(?),trim(?),trim(?),trim(?),trim(?))
+    INSERT INTO chanlogs (msg_date, network, channel, speaker, mud, message, is_url)
+    VALUES (?,trim(?),trim(?),trim(?),trim(?),trim(?),?)
     !);
 
 sub most_recent_sql {
@@ -79,7 +96,8 @@ sub parse_log_line {
 
     my $speaker = $parts[2];
     my @bits = split /@/, $speaker;
-    my $name = lcfirst $bits[0];
+    #my $name = lcfirst $bits[0];
+    my $name = $bits[0];
     my $mudname = join('@', @bits[1 .. scalar(@bits)-1]);
 
     $log_entry{'speaker'} = $name;                          # Character
@@ -89,6 +107,8 @@ sub parse_log_line {
     $log_entry{'message'} = $message;                       # Message body
 
     $log_entry{'is_emote'} = undef;                         # Can't tell from the logs without more parsing...
+    $log_entry{'is_url'} = undef;                           # Default NULL, but may be set if matched below
+    $log_entry{'is_url'} = 1 if $message =~ /((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)+/;
 
     #$message = encode_entities($message);
     #$message = s/((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)/<a href="$1" target="I3-link">$1<\/a>/;
@@ -111,10 +131,10 @@ sub load_logs {
             chomp $line;
             my @parts = split /\t/, $line;
             if( scalar(@parts) == 4) {
-                push @lines, $line;
                 my $oldest = parse_log_line($line);
                 $oldest_date = str2time($oldest->{'msg_date'});
                 $is_old = 1 if $oldest_date < $recent_date;
+                push @lines, $line if $oldest_date >= $recent_date;
             }
             #last if $is_old;
         }
@@ -132,18 +152,58 @@ sub load_logs {
     my $total = scalar @lines;
     print "Collected $total lines to insert\n";
     my $done = 0;
+    my @tweets = ();
     foreach my $line (@lines) {
         my $entry = parse_log_line($line);
         my $entry_date = str2time($entry->{'msg_date'});
-        $done += add_entry($entry) if defined $entry and $entry_date >= $recent_date;
+        if ((defined $entry) and ($entry_date >= $recent_date)) {
+            my $work = add_entry($entry);
+            if( $work ) {
+                $done++;
+                push @tweets, $entry;
+            }
+        }
     }
     print "Inserted $done lines\n";
+
+    if( $BE_A_TWIT ) {
+        my $rate_limit = $twitter->rate_limit_status()->{'remaining_hits'};
+        my $ip_limit = $twitter->rate_limit_status({ authenticate => 0 })->{'remaining_hits'};
+        print "Rate Limit: $rate_limit\n";
+        print "IP Rate Limit: $ip_limit\n";
+
+        eval {
+            local $SIG{ALRM} = sub { die "Exceeded Timeout of 50 seconds for twitter loop." };
+            alarm 50;
+            foreach my $entry (@tweets) {
+                my $guy = sprintf("<%s> %s@%s", $entry->{'channel'}, $entry->{'speaker'}, $entry->{'mud'});
+                #my $guylen = length($guy);
+                my $msg = $entry->{'message'};
+                #my $msglen = length($msg);
+                my $output = "$guy: $msg";
+                $output = (substr($output, 0, 137) . "...") if(length($output) > 140);
+
+                if( $rate_limit > 1 ) {
+                    $rate_limit--;
+
+                    print "Sent Twitter $output\n";
+                    my $twit = $twitter->update($output);
+                    print "Error: $!\n" if $!;
+                    print "Twitter said " . Dumper($twit) . "\n";
+                } else {
+                    print "Skipped Twitter $output\n";
+                }
+            }
+            alarm 0;
+        };
+        print "Error: $@\n" if $@; # and $EVAL_ERROR =~ /^Exceeded Timeout/;
+    }
 }
 
 sub add_entry {
     my $data = shift;
 
-    my $rv = $add_entry_sql->execute($data->{'msg_date'}, $data->{'network'}, $data->{'channel'}, $data->{'speaker'}, $data->{'mud'}, $data->{'message'});
+    my $rv = $add_entry_sql->execute($data->{'msg_date'}, $data->{'network'}, $data->{'channel'}, $data->{'speaker'}, $data->{'mud'}, $data->{'message'}, $data->{'is_url'});
     if($rv) {
         $dbc->commit;
         return 1;

@@ -22,6 +22,10 @@ use MIME::Base64;
 use Image::ANSI;
 use Encode;
 
+if(scalar @ARGV != 1) {
+    print "Usage:  $0 < build | verify >\n";
+    exit 0;
+}
 
 my $get_details = 0;
 
@@ -54,7 +58,7 @@ ORDER BY last_verified DESC
 
 !)->[0];
 
-print STDERR "There were $count MUDs listed at $last_verified\n";
+#print STDERR "There were $count MUDs listed at $last_verified\n";
 
 my $sth_live = $dbc->prepare( qq!
     UPDATE mudlist SET last_verified = now(), live = ?
@@ -65,8 +69,15 @@ my $sth_update = $dbc->prepare( qq!
     WHERE mud_id = ?
 !);
 
-#do_verify_all();
-do_build();
+if($ARGV[0] eq 'build') {
+    do_build();
+} elsif($ARGV[0] eq 'verify') {
+    do_verify_all();
+} else {
+    print "Usage:  $0 < build | verify >\n";
+    exit 0;
+}
+
 exit 1;
 
 sub ansi2png {
@@ -120,10 +131,10 @@ sub fetch_login_screen {
 
 sub do_verify_all {
     my $key_field = 'mud_id';
+#        WHERE ansi_login IS NULL AND live
     my $big_list = $dbc->selectall_hashref(qq!
         SELECT mud_id, name, site, port, live
         FROM mudlist
-        WHERE ansi_login IS NULL AND live
     !, $key_field);
 
     foreach my $id (sort { $a <=> $b } keys %$big_list) {
