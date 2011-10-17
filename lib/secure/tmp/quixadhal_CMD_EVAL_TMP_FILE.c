@@ -26,4 +26,4 @@
 #include <message_class.h>
 inherit LIB_ITEM;
 #include "/realms/quixadhal/evaldefs.h"
-mixed eval() { mixed *a = ({}); a += ({ 2 }); a+= ({ 1 }); return a;; }
+mixed eval() { foreach( ({ 1,2,3 }));; }

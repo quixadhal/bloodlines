@@ -1,4 +1,4 @@
 #/secure/daemon/bboard.c
 __Owner "SECURE"
-__Posts ({(["time":1300931071,"author":"Quixadhal","post":"This is a test.","read":({"quixadhal",}),"subject":"Foo",]),})
+__Posts ({(["author":"Quixadhal","time":1300931071,"post":"This is a test.","subject":"Foo","read":({"quixadhal",}),]),})
 Location "/secure/room/arch"

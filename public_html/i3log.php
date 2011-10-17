@@ -1,4 +1,4 @@
-<?php
+<?
 $time_start = microtime(true);
 $now = date('g:ia \o\n l, \t\h\e jS \o\f F, Y');
 
@@ -13,7 +13,6 @@ define("RSS_URL",   "http://www.shadowlord.org:8088/~bloodlines/i3log.php?fm=rss
 $colormap = array();
 //$current_speaker = 0;
 //$current_channel = 0;
-$max_page = 0;
 
 $colors = array(
     "<SPAN style=\"color: #bb0000\">",
@@ -79,8 +78,13 @@ $pinkfish_html = array(
 '%^B_YELLOW%^%^GREEN%^'     => '<SPAN style="background-color: #ffff55; color: #00bb00">',
 '%^B_WHITE%^%^GREEN%^'      => '<SPAN style="background-color: #ffffff; color: #00bb00">',
 
-'%^B_BLACK%^%^GREY%^'       => '<SPAN style="background-color: #000000; color: #bbbbbb">',
-'%^B_BLACK%^%^WHITE%^'      => '<SPAN style="background-color: #000000; color: #ffffff">',
+// In this case, our web page background is black, so pretend there is none.
+// That's because on a terminal, it just resets the character cells and looks fine, but
+// in HTML, it makes the background stick out if the table cell isn't also black.
+//'%^B_BLACK%^%^GREY%^'       => '<SPAN style="background-color: #000000; color: #bbbbbb">',
+//'%^B_BLACK%^%^WHITE%^'      => '<SPAN style="background-color: #000000; color: #ffffff">',
+'%^B_BLACK%^%^GREY%^'       => '<SPAN style="color: #bbbbbb">',
+'%^B_BLACK%^%^WHITE%^'      => '<SPAN style="color: #ffffff">',
 
 '%^B_RED%^%^GREEN%^'        => '<SPAN style="background-color: #bb0000; color: #00bb00">',
 '%^B_RED%^%^LIGHTGREEN%^'   => '<SPAN style="background-color: #bb0000; color: #00ff00">'
@@ -185,9 +189,11 @@ function load_logs() {
     global $speaker_filter;
     global $search_filter;
     global $page_size;
+    global $default_page_size;
     global $page_number;
-    global $max_page;
     global $links_only;
+    global $total_page_count;
+    global $page_chunk;
 
     if(! isset($skip_lines)) {
         $skip_lines = 0;
@@ -195,7 +201,10 @@ function load_logs() {
     $limit = $page_size;
     $offset = $page_number * $page_size;
 
-    $query = "SELECT to_char(msg_date, 'MM/DD') AS the_date, to_char(msg_date, 'HH:MI') AS the_time, to_char(msg_date, 'HH') AS the_hour, channel, speaker, mud, message FROM chanlogs";
+    $select = "SELECT to_char(msg_date, 'MM/DD') AS the_date, to_char(msg_date, 'HH:MI') AS the_time, to_char(msg_date, 'HH') AS the_hour, channel, speaker, mud, message FROM chanlogs";
+    $where = "";
+    $order = "";
+    $query = "";
 
     $dbconn = pg_connect("host=localhost dbname=i3logs user=quixadhal password=tardis69")
         or die('Could not connect: ' . pg_last_error());
@@ -210,40 +219,73 @@ function load_logs() {
     if(isset($search_filter)) {
         if(isset($chan_filter)) {
             if(isset($speaker_filter)) {
-                $query = $query .  " WHERE message ILIKE $1 AND channel ILIKE $2 AND speaker ILIKE $3 $links_term ORDER BY msg_date DESC OFFSET $4 LIMIT $5";
+                $where = " WHERE message ILIKE $1 AND channel ILIKE $2 AND speaker ILIKE $3 $links_term";
+                $order = " ORDER BY msg_date DESC OFFSET $4 LIMIT $5";
+                $query = $select . $where . $order;
+                $count_query = "SELECT COUNT(*)/$page_size AS page_count FROM chanlogs $where";
+                $count_result = pg_query_params($count_query, array($search_filter, $chan_filter, $speaker_filter)) or die('Query failed: ' . pg_last_error());
                 $result = pg_query_params($query, array($search_filter, $chan_filter, $speaker_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
             } else {
-                $query = $query .  " WHERE message ILIKE $1 AND channel ILIKE $2 $links_term ORDER BY msg_date DESC OFFSET $3 LIMIT $4";
+                $where = " WHERE message ILIKE $1 AND channel ILIKE $2 $links_term";
+                $order = " ORDER BY msg_date DESC OFFSET $3 LIMIT $4";
+                $query = $select . $where . $order;
+                $count_query = "SELECT COUNT(*)/$page_size AS page_count FROM chanlogs $where";
+                $count_result = pg_query_params($count_query, array($search_filter, $chan_filter)) or die('Query failed: ' . pg_last_error());
                 $result = pg_query_params($query, array($search_filter, $chan_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
             }
         } else {
             if(isset($speaker_filter)) {
-                $query = $query .  " WHERE message ILIKE $1 AND speaker ILIKE $2 $links_term ORDER BY msg_date DESC OFFSET $3 LIMIT $4";
+                $where = " WHERE message ILIKE $1 AND speaker ILIKE $2 $links_term";
+                $order = " ORDER BY msg_date DESC OFFSET $3 LIMIT $4";
+                $query = $select . $where . $order;
+                $count_query = "SELECT COUNT(*)/$page_size AS page_count FROM chanlogs $where";
+                $count_result = pg_query_params($count_query, array($search_filter, $speaker_filter)) or die('Query failed: ' . pg_last_error());
                 $result = pg_query_params($query, array($search_filter, $speaker_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
             } else {
-                $query = $query .  " WHERE message ILIKE $1 $links_term ORDER BY msg_date DESC OFFSET $2 LIMIT $3";
+                $where = " WHERE message ILIKE $1 $links_term";
+                $order = " ORDER BY msg_date DESC OFFSET $2 LIMIT $3";
+                $query = $select . $where . $order;
+                $count_query = "SELECT COUNT(*)/$page_size AS page_count FROM chanlogs $where";
+                $count_result = pg_query_params($count_query, array($search_filter)) or die('Query failed: ' . pg_last_error());
                 $result = pg_query_params($query, array($search_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
             }
         }
     } else {
         if(isset($chan_filter)) {
             if(isset($speaker_filter)) {
-                $query = $query .  " WHERE channel ILIKE $1 AND speaker ILIKE $2 $links_term ORDER BY msg_date DESC OFFSET $3 LIMIT $4";
+                $where = " WHERE channel ILIKE $1 AND speaker ILIKE $2 $links_term";
+                $order = " ORDER BY msg_date DESC OFFSET $3 LIMIT $4";
+                $query = $select . $where . $order;
+                $count_query = "SELECT COUNT(*)/$page_size AS page_count FROM chanlogs $where";
+                $count_result = pg_query_params($count_query, array($chan_filter, $speaker_filter)) or die('Query failed: ' . pg_last_error());
                 $result = pg_query_params($query, array($chan_filter, $speaker_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
             } else {
-                $query = $query .  " WHERE channel ILIKE $1 $links_term ORDER BY msg_date DESC OFFSET $2 LIMIT $3";
+                $where = " WHERE channel ILIKE $1 $links_term";
+                $order = " ORDER BY msg_date DESC OFFSET $2 LIMIT $3";
+                $query = $select . $where . $order;
+                $count_query = "SELECT COUNT(*)/$page_size AS page_count FROM chanlogs $where";
+                $count_result = pg_query_params($count_query, array($chan_filter)) or die('Query failed: ' . pg_last_error());
                 $result = pg_query_params($query, array($chan_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
             }
         } else {
             if(isset($speaker_filter)) {
-                $query = $query .  " WHERE speaker ILIKE $1 $links_term ORDER BY msg_date DESC OFFSET $2 LIMIT $3";
+                $where = " WHERE speaker ILIKE $1 $links_term";
+                $order = " ORDER BY msg_date DESC OFFSET $2 LIMIT $3";
+                $query = $select . $where . $order;
+                $count_query = "SELECT COUNT(*)/$page_size AS page_count FROM chanlogs $where";
+                $count_result = pg_query_params($count_query, array($speaker_filter)) or die('Query failed: ' . pg_last_error());
                 $result = pg_query_params($query, array($speaker_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
             } else {
                 if(isset($links_only)) {
-                    $query = $query .  " WHERE is_url ORDER BY msg_date DESC OFFSET $1 LIMIT $2";
+                    $where = " WHERE is_url";
+                    $order = " ORDER BY msg_date DESC OFFSET $1 LIMIT $2";
                 } else {
-                    $query = $query .  " ORDER BY msg_date DESC OFFSET $1 LIMIT $2";
+                    $where = "";
+                    $order = " ORDER BY msg_date DESC OFFSET $1 LIMIT $2";
                 }
+                $query = $select . $where . $order;
+                $count_query = "SELECT COUNT(*)/$page_size AS page_count FROM chanlogs $where";
+                $count_result = pg_query_params($count_query, array()) or die('Query failed: ' . pg_last_error());
                 $result = pg_query_params($query, array($offset, $limit)) or die('Query failed: ' . pg_last_error());
             }
         }
@@ -254,15 +296,28 @@ function load_logs() {
         array_push( $rows, $row ); 
     }
     pg_free_result($result);
+
+    $count_rows = array();
+    while( $count_row = pg_fetch_object($count_result) ) {
+        array_push( $count_rows, $count_row ); 
+    }
+    pg_free_result($count_result);
+
+    $total_page_count = $count_rows[0]->page_count + 1;
+    $page_chunk = max(1, min(100, (int)($total_page_count / 20)));
     return $rows;
 }
 
 get_chatter_colors();
 
+$total_page_count = 1;
+$page_chunk = 1;
+$default_page_size = 15;
+
 if( isset($_REQUEST) && isset($_REQUEST["ps"]) ) {
     $page_size = $_REQUEST["ps"];
 } else {
-    $page_size = 20;
+    $page_size = $default_page_size;
 }
 if( $page_size < 1 ) {
     $page_size = 1;
@@ -337,25 +392,45 @@ foreach ($rows as $row) {
         $channel_color = $channel_colors['default'];
     }
     $channel = "$channel_color$channel_raw</SPAN>";
-    $channel_url = $_SERVER['PHP_SELF'] .
-        "?cf=" . urlencode($channel_raw) .
-        (isset($speaker_filter) ? "&sf=" . urlencode($row->speaker) : "") .
-        (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "") .
-        ((isset($page_size) && $page_size != 25 ) ? "&ps=" . urlencode($page_size) : "") .
-        ((isset($page_number) && $page_number != 0 ) ? "&pn=" . urlencode($page_number) : "") .
-        ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "");
+    if(isset($chan_filter)) {
+        $channel_url = $_SERVER['PHP_SELF'] .
+            "?xx" .
+            (isset($speaker_filter) ? "&sf=" . urlencode($row->speaker) : "") .
+            (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "") .
+            ((isset($page_size) && $page_size != $default_page_size ) ? "&ps=" . urlencode($page_size) : "") .
+            // ((isset($page_number) && $page_number != 0 ) ? "&pn=" . urlencode($page_number) : "") .
+            ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "");
+    } else {
+        $channel_url = $_SERVER['PHP_SELF'] .
+            "?cf=" . urlencode($channel_raw) .
+            (isset($speaker_filter) ? "&sf=" . urlencode($row->speaker) : "") .
+            (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "") .
+            ((isset($page_size) && $page_size != $default_page_size ) ? "&ps=" . urlencode($page_size) : "") .
+            // ((isset($page_number) && $page_number != 0 ) ? "&pn=" . urlencode($page_number) : "") .
+            ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "");
+    }
     $channel = "<a href=\"" . $channel_url . "\">" . $channel . "</a>";
 
     $speaker_name = strtolower($row->speaker);
     $speaker_color = $colormap[$speaker_name];
     $speaker = $speaker_color . $speaker_raw . "</SPAN>";
-    $speaker_url = $_SERVER['PHP_SELF'] .
-        "?sf=" . urlencode($row->speaker) .
-        (isset($chan_filter) ? "&cf=" . urlencode($channel_raw) : "") .
-        (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "") .
-        ((isset($page_size) && $page_size != 25 ) ? "&ps=" . urlencode($page_size) : "") .
-        ((isset($page_number) && $page_number != 0 ) ? "&pn=" . urlencode($page_number) : "") .
-        ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "");
+    if(isset($speaker_filter)) {
+        $speaker_url = $_SERVER['PHP_SELF'] .
+            "?xx" .
+            (isset($chan_filter) ? "&cf=" . urlencode($channel_raw) : "") .
+            (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "") .
+            ((isset($page_size) && $page_size != $default_page_size ) ? "&ps=" . urlencode($page_size) : "") .
+            // ((isset($page_number) && $page_number != 0 ) ? "&pn=" . urlencode($page_number) : "") .
+            ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "");
+    } else {
+        $speaker_url = $_SERVER['PHP_SELF'] .
+            "?sf=" . urlencode($row->speaker) .
+            (isset($chan_filter) ? "&cf=" . urlencode($channel_raw) : "") .
+            (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "") .
+            ((isset($page_size) && $page_size != $default_page_size ) ? "&ps=" . urlencode($page_size) : "") .
+            // ((isset($page_number) && $page_number != 0 ) ? "&pn=" . urlencode($page_number) : "") .
+            ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "");
+    }
     $speaker = "<a href=\"" . $speaker_url . "\">" . $speaker . "</a>";
 
     $message = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '_', $message_raw);
@@ -392,32 +467,73 @@ foreach ($rows as $row) {
     $count++;
 }
 
-$prev_url = $_SERVER['PHP_SELF'] .
-        "?pn=" . urlencode($page_number - 1) .
-        ((isset($page_size) && $page_size != 25 ) ? "&ps=" . urlencode($page_size) : "") .
+$prev_chunk = $page_number - $page_chunk;
+if($prev_chunk < 0)
+    $prev_chunk = 0;
+$next_chunk = $page_number + $page_chunk;
+if($next_chunk > $total_page_count - 1)
+    $next_chunk = $total_page_count - 1;
+
+$first_url = $_SERVER['PHP_SELF'] .
+        "?pn=0" .
+        ((isset($page_size) && $page_size != $default_page_size ) ? "&ps=" . urlencode($page_size) : "") .
         ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
         (isset($links_only) ? "&lo" : "") .
         (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
         (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "") .
         (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "");
+$prev_chunk_url = $_SERVER['PHP_SELF'] .
+        "?pn=" . urlencode($prev_chunk) .
+        ((isset($page_size) && $page_size != $default_page_size ) ? "&ps=" . urlencode($page_size) : "") .
+        ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
+        (isset($links_only) ? "&lo" : "") .
+        (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
+        (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "") .
+        (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "");
+$prev_url = $_SERVER['PHP_SELF'] .
+        "?pn=" . urlencode($page_number - 1) .
+        ((isset($page_size) && $page_size != $default_page_size ) ? "&ps=" . urlencode($page_size) : "") .
+        ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
+        (isset($links_only) ? "&lo" : "") .
+        (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
+        (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "") .
+        (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "");
+
 $nolinks_url = $_SERVER['PHP_SELF'] .
         "?pn=" . urlencode($page_number) .
-        ((isset($page_size) && $page_size != 25 ) ? "&ps=" . urlencode($page_size) : "") .
+        ((isset($page_size) && $page_size != $default_page_size ) ? "&ps=" . urlencode($page_size) : "") .
         ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
         (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
         (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "") .
         (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "");
 $links_url = $_SERVER['PHP_SELF'] .
         "?pn=" . urlencode($page_number) .
-        ((isset($page_size) && $page_size != 25 ) ? "&ps=" . urlencode($page_size) : "") .
+        ((isset($page_size) && $page_size != $default_page_size ) ? "&ps=" . urlencode($page_size) : "") .
         ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
         ("&lo") .
         (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
         (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "") .
         (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "");
+
 $next_url = $_SERVER['PHP_SELF'] .
         "?pn=" . urlencode($page_number + 1) .
-        ((isset($page_size) && $page_size != 25 ) ? "&ps=" . urlencode($page_size) : "") .
+        ((isset($page_size) && $page_size != $default_page_size ) ? "&ps=" . urlencode($page_size) : "") .
+        ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
+        (isset($links_only) ? "&lo" : "") .
+        (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
+        (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "") .
+        (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "");
+$next_chunk_url = $_SERVER['PHP_SELF'] .
+        "?pn=" . urlencode($next_chunk) .
+        ((isset($page_size) && $page_size != $default_page_size ) ? "&ps=" . urlencode($page_size) : "") .
+        ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
+        (isset($links_only) ? "&lo" : "") .
+        (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
+        (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "") .
+        (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "");
+$last_url = $_SERVER['PHP_SELF'] .
+        "?pn=" . urlencode($total_page_count - 1) .
+        ((isset($page_size) && $page_size != $default_page_size ) ? "&ps=" . urlencode($page_size) : "") .
         ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
         (isset($links_only) ? "&lo" : "") .
         (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
@@ -458,7 +574,10 @@ if($format == 'rss') {
     <!-- <body bgcolor="black" text="#bbbbbb"> -->
     <!-- <body background="gfx/dark_wood.jpg" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040"> -->
     <body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
-        <table border=0 cellspacing=0 cellpadding=0 width=80% align="center">
+        <table id="header" border=0 cellspacing=0 cellpadding=0 width=80% align="center">
+        <tr>
+        <td align="right" valign="bottom">
+        <table id="logo" border=0 cellspacing=0 cellpadding=0 width=100% align="center">
             <tr>
                 <td align="right" valign="top">
                     <!-- <a href="/anyterm/anyterm.shtml?rows=40&cols=100"> -->
@@ -476,10 +595,12 @@ if($format == 'rss') {
                 </td>
             </tr>
         </table>
+        </td>
+        <td align="left" valign="bottom">
         <form action="" method="get">
-            <table border=0 cellspacing=0 cellpadding=0 width=90% align="center">
+            <table id="searchform" border=0 cellspacing=0 cellpadding=0 width=100% align="center">
                 <tr>
-                    <td align="right" valign="top">
+                    <td align="right" valign="bottom">
                         <span style="color: #1F1F1F;">
                             <label id="srlabel" for="sr"
                                 onmouseover="srinput.style.color='#FFFF00'; srinput.style.backgroundColor='#1F1F1F'; srlabel.style.color='#FFFFFF';"
@@ -489,78 +610,201 @@ if($format == 'rss') {
                             > Search:&nbsp; </label>
                         </span>
                     </td>
-                    <td bgcolor="#1F1F1F" width="200" align="left" valign="top">
+                    <td bgcolor="#1F1F1F" width="200" align="left" valign="bottom">
                             <input id="srinput" type="text" style="background-color: #000000; color: #3F3F00; border: 1px; border-color: #000000; border-style: solid; width: 200px;"
                                 onmouseover="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; srlabel.style.color='#FFFFFF';"
                                 onfocus="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; srlabel.style.color='#FFFFFF'; if(!this._haschanged){this.value=''};this._haschanged=true;"
                                 onblur="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; srlabel.style.color='#1F1F1F';"
                                 onmouseout="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; srlabel.style.color='#1F1F1F';"
-                                maxlength="30" name="sr" value="<?php if(isset($search_filter)) echo preg_replace('/%/', '*', $search_filter); ?>" />
-                            <?php if(isset($page_number)) { ?>
-                                <input type="hidden" name="pn" value="<?php echo $page_number; ?>">
-                            <?php } ?>
-                            <?php if(isset($page_size)) { ?>
-                                <input type="hidden" name="ps" value="<?php echo $page_size; ?>">
-                            <?php } ?>
-                            <?php if(isset($format)) { ?>
-                                <input type="hidden" name="fm" value="<?php echo $format; ?>">
-                            <?php } ?>
-                            <?php if(isset($links_only)) { ?>
-                                <input type="hidden" name="lo" value="<?php echo $links_only; ?>">
-                            <?php } ?>
-                            <?php if(isset($speaker_filter)) { ?>
-                                <input type="hidden" name="sf" value="<?php echo $speaker_filter; ?>">
-                            <?php } ?>
-                            <?php if(isset($chan_filter)) { ?>
-                                <input type="hidden" name="cf" value="<?php echo $chan_filter; ?>">
-                            <?php } ?>
+                                maxlength="30" name="sr" value="<? if(isset($search_filter)) echo preg_replace('/%/', '*', $search_filter); ?>" />
+                            <? if(isset($page_number)) { ?>
+                                <input type="hidden" name="pn" value="<? echo $page_number; ?>">
+                            <? } ?>
+                            <? if(isset($page_size)) { ?>
+                                <input type="hidden" name="ps" value="<? echo $page_size; ?>">
+                            <? } ?>
+                            <? if(isset($format)) { ?>
+                                <input type="hidden" name="fm" value="<? echo $format; ?>">
+                            <? } ?>
+                            <? if(isset($links_only)) { ?>
+                                <input type="hidden" name="lo" value="<? echo $links_only; ?>">
+                            <? } ?>
+                            <? if(isset($speaker_filter)) { ?>
+                                <input type="hidden" name="sf" value="<? echo $speaker_filter; ?>">
+                            <? } ?>
+                            <? if(isset($chan_filter)) { ?>
+                                <input type="hidden" name="cf" value="<? echo $chan_filter; ?>">
+                            <? } ?>
                     </td>
                 </tr>
             </table>
         </form>
-        <table width="100%">
+        </td>
+        </tr>
+        </table>
+        <table id="navbar" border=0 cellspacing=0 cellpadding=0 width=100% align="center">
             <tr>
-                <? if( $max_page == 0 ) { ?>
-                <td align="left" width="45%"><span style="color: #555555">
-                    <a href="<? echo $next_url; ?>">&nbsp;Previous&nbsp;Page&nbsp;(<? echo $page_number + 1; ?>)</a>
-                </span></td>
-                <? } else { ?>
-                <td align="left" width="45%"><span style="color: #555555">&nbsp;</span></td>
-                <? } ?>
-                <? if( $page_number > 0 || isset($chan_filter) || isset($speaker_filter)) { ?>
-                <td align="center" width="10%"><span style="color: #555555">
-                    <a href="<? echo $_SERVER['PHP_SELF']; ?>">Home</a>
+                <td id="navbegin" align="left" valign="center" width="50"
+                    <? if( $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
+                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                    <? } else { ?>
+                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    <? } ?>
+                >
+                    <span style="color: #555555">
+                    <? if( $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
+                        <a href="<? echo $last_url; ?>" title="The&nbsp;Beginning&nbsp;(1&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
+                            <img src="gfx/navbegin.png" border=0 width=48 height=48 alt="(start)" />
+                        </a>
+                    <? } else { ?>
+                        <img src="gfx/navbegin.png" border=0 width=48 height=48 alt="(start)" />
+                    <? } ?>
+                    </span>
+                </td>
+                <td id="navback" align="left" valign="center" width="50"
+                    <? if( $total_page_count > 1 && $page_number < $total_page_count - $page_chunk - 1) { ?>
+                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                    <? } else { ?>
+                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    <? } ?>
+                >
+                    <span style="color: #555555">
+                    <? if( $total_page_count > 1 && $page_number < $total_page_count - $page_chunk - 1) { ?>
+                        <a href="<? echo $next_chunk_url; ?>" title="Back&nbsp;<? echo $page_chunk; ?>&nbsp;(<? echo $total_page_count - ($page_number + $page_chunk); ?>&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
+                            <img src="gfx/navback.png" border=0 width=48 height=48 alt="(back)" />
+                        </a>
+                    <? } else { ?>
+                        <img src="gfx/navback.png" border=0 width=48 height=48 alt="(back)" />
+                    <? } ?>
+                    </span>
+                </td>
+                <td id="navprev" align="left" valign="center" width="50"
+                    <? if( $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
+                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                    <? } else { ?>
+                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    <? } ?>
+                >
+                    <span style="color: #555555">
+                    <? if( $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
+                        <a href="<? echo $next_url; ?>" title="Previous&nbsp;Page&nbsp;(<? echo $total_page_count - ($page_number + 1); ?>&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
+                            <img src="gfx/navprev.png" border=0 width=48 height=48 alt="(previous)" />
+                        </a>
+                    <? } else { ?>
+                        <img src="gfx/navprev.png" border=0 width=48 height=48 alt="(previous)" />
+                    <? } ?>
+                    </span>
+                </td>
+                <td>
                     &nbsp;
-                    <? if( ! isset($links_only) ) { ?>
-                        <a href="<? echo $links_url; ?>">Links&nbsp;Only</a>
+                </td>
+                <td id="navlinks" align="center" valign="center" width="50"
+                    <? if( isset($links_only) ) { ?>
+                    style="opacity: 1.0; filter: alpha(opacity=100);"
+                    onmouseover="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
+                    onmouseout="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     <? } else { ?>
-                        <a href="<? echo $nolinks_url; ?>">No&nbsp;Links</a>
+                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    onmouseout="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
                     <? } ?>
-                </span></td>
-                <? } else { ?>
-                <td align="center" width="10%"><span style="color: #555555">
-                    <? if( ! isset($links_only) ) { ?>
-                        <a href="<? echo $links_url; ?>">Links&nbsp;Only</a>
+                >
+                    <? if( isset($links_only) ) { ?>
+                    <a title='Include all content' href="<? echo $nolinks_url; ?>">
                     <? } else { ?>
-                        <a href="<? echo $nolinks_url; ?>">No&nbsp;Links</a>
+                    <a title='Include only messages with URLs' href="<? echo $links_url; ?>">
                     <? } ?>
-                </span></td>
-                <? } ?>
-                <? if( $page_number > 0 ) { ?>
-                <td align="right" width="45%"><span style="color: #555555">
-                    <a href="<? echo $prev_url; ?>">(<? echo $page_number - 1; ?>)&nbsp;Next&nbsp;Page&nbsp;</a>
-                </span></td>
-                <? } else { ?>
-                <td align="right" width="45%"><span style="color: #555555">&nbsp;</span></td>
-                <? } ?>
+                        <img src="gfx/navlinks.png" border=0 width=48 height=48 alt="(links)" />
+                    </a>
+                </td>
+                <td id="navhome" style="opacity: 0.4; filter: alpha(opacity=40);" align="center" valign="center" width="50"
+                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                >
+                    <a href="<? echo $_SERVER['PHP_SELF']; ?>">
+                        <img src="gfx/navhome.png" border=0 width=48 height=48 alt="(home)" />
+                    </a>
+                </td>
+                <td>
+                    &nbsp;
+                </td>
+                <td id="navnext" align="right" valign="center" width="50"
+                    <? if( $total_page_count > 1 && $page_number > 0 ) { ?>
+                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                    <? } else { ?>
+                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    <? } ?>
+                >
+                    <? if( $page_number > 0 ) { ?>
+                        <a href="<? echo $prev_url; ?>" title="Next&nbsp;Page&nbsp;(<? echo $total_page_count - ($page_number - 1); ?>&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
+                            <img src="gfx/navnext.png" border=0 width=48 height=48 alt="(next)" />
+                        </a>
+                    <? } else { ?>
+                        <img src="gfx/navnext.png" border=0 width=48 height=48 alt="(next)" />
+                    <? } ?>
+                </td>
+                <td id="navforward" align="right" valign="center" width="50"
+                    <? if( $total_page_count > 1 && $page_number >= $page_chunk) { ?>
+                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                    <? } else { ?>
+                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    <? } ?>
+                >
+                    <? if( $total_page_count > 1 && $page_number >= $page_chunk) { ?>
+                        <a href="<? echo $prev_chunk_url; ?>" title="Next&nbsp;<? echo $page_chunk; ?>&nbsp;(<? echo $total_page_count - ($page_number - $page_chunk); ?>&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
+                            <img src="gfx/navforward.png" border=0 width=48 height=48 alt="(forward)" />
+                        </a>
+                    <? } else { ?>
+                        <img src="gfx/navforward.png" border=0 width=48 height=48 alt="(forward)" />
+                    <? } ?>
+                </td>
+                <td id="navend" align="right" valign="center" width="50"
+                    <? if( $total_page_count > 1 && $page_number > 0) { ?>
+                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                    <? } else { ?>
+                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    <? } ?>
+                >
+                    <? if( $total_page_count > 1 && $page_number > 0) { ?>
+                        <a href="<? echo $first_url; ?>" title="Current&nbsp;Time&nbsp;(<? echo $total_page_count; ?>&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
+                            <img src="gfx/navend.png" border=0 width=48 height=48 alt="(end)" />
+                        </a>
+                    <? } else { ?>
+                        <img src="gfx/navend.png" border=0 width=48 height=48 alt="(end)" />
+                    <? } ?>
+                </td>
             </tr>
         </table>
         <table width="100%">
             <tr>
-                <th align="left" width="5%">Date</th>
-                <th align="left" width="5%">Time</th>
-                <th align="left" width="10%">Channel</th>
-                <th align="left" width="20%">Speaker</th>
+                <th align="left" width="5%" style="color: #DDDDDD;">Date</th>
+                <th align="left" width="5%" style="color: #DDDDDD;">Time</th>
+                <th id="channelheader" align="left" width="10%"
+                <? if(isset($chan_filter)) { ?>
+                    style="color: #FFFF00;"
+                <? } else { ?>
+                    style="color: #DDDDDD;"
+                <? } ?>
+                >Channel</th>
+                <th id="speakerheader" align="left" width="20%"
+                <? if(isset($speaker_filter)) { ?>
+                    style="color: #FFFF00;"
+                <? } else { ?>
+                    style="color: #DDDDDD;"
+                <? } ?>
+                >Speaker</th>
                 <th align="left" width="60%">&nbsp;</th>
             </tr>
             <?
@@ -569,12 +813,12 @@ if($format == 'rss') {
                 <tr>
                     <td bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['datestamp']; ?></td>
                     <td bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['timestamp']; ?></td>
-                    <td onmouseover="this.style.backgroundColor = '<?php echo $output[$k]['bold_bgcolor']; ?>';"
-                        onmouseout="this.style.backgroundColor = '<?php echo $output[$k]['bgcolor']; ?>';"
-                        onclick="document.location.href='<?php echo $output[$k]['channel_url']; ?>';" bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['channel']; ?></td>
-                    <td onmouseover="this.style.backgroundColor = '<?php echo $output[$k]['bold_bgcolor']; ?>';"
-                        onmouseout="this.style.backgroundColor = '<?php echo $output[$k]['bgcolor']; ?>';"
-                        onclick="document.location.href='<?php echo $output[$k]['speaker_url']; ?>';" bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['speaker']; ?></td>
+                    <td onmouseover="this.style.backgroundColor = '<? echo $output[$k]['bold_bgcolor']; ?>';"
+                        onmouseout="this.style.backgroundColor = '<? echo $output[$k]['bgcolor']; ?>';"
+                        onclick="document.location.href='<? echo $output[$k]['channel_url']; ?>';" bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['channel']; ?></td>
+                    <td onmouseover="this.style.backgroundColor = '<? echo $output[$k]['bold_bgcolor']; ?>';"
+                        onmouseout="this.style.backgroundColor = '<? echo $output[$k]['bgcolor']; ?>';"
+                        onclick="document.location.href='<? echo $output[$k]['speaker_url']; ?>';" bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['speaker']; ?></td>
                     <td bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['message']; ?></td>
                 </tr>
             <? } ?>
@@ -586,9 +830,20 @@ if($format == 'rss') {
         ?>
         <table width="100%">
             <tr>
-                <td align="left" width="45%"><span style="color: #333333">Last refreshed at <? echo $now; ?>.&nbsp;</span></td>
-                <td align="center" width="10%"><span style="color: #333333"><a href="i3log.php?fm=rss"><img src="gfx/valid-rss-rogers.png" border=0 width=88 height=31 alt="(RSS)" /></a></span></td>
-                <td align="right" width="45%"><span style="color: #333333">&nbsp;Page generated in <? printf( "%7.3f", $time_spent); ?> seconds.</span></td>
+                <td align="left" width="45%"
+                    onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000'; rssimg.style.opacity='1.0'; rssimg.style.filter='alpha(opacity=100';"
+                    onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F'; rssimg.style.opacity='0.4'; rssimg.style.filter='alpha(opacity=40';"
+                ><span id="lastrefresh" style="color: #1F1F1F">Last refreshed at <? echo $now; ?>.&nbsp;</span></td>
+                <td align="center" width="10%"
+                    onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000'; rssimg.style.opacity='1.0'; rssimg.style.filter='alpha(opacity=100';"
+                    onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F'; rssimg.style.opacity='0.4'; rssimg.style.filter='alpha(opacity=40';"
+                ><span style="color: #1F1F1F"><a href="i3log.php?fm=rss"><img id="rssimg" style="opacity: 0.4; filter: alpha(opacity=40);" src="gfx/valid-rss-rogers.png" border=0 width=88 height=31 alt="(RSS)" /></a></span></td>
+                <td align="right" width="45%"
+                    onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000'; rssimg.style.opacity='1.0'; rssimg.style.filter='alpha(opacity=100';"
+                    onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F'; rssimg.style.opacity='0.4'; rssimg.style.filter='alpha(opacity=40';"
+                ><span id="pagegen" style="color: #1F1F1F">&nbsp;Page generated in 
+                <span id="timespent" style="color: #1F1F1F"><? printf( "%7.3f", $time_spent); ?></span>
+                 seconds.</span></td>
             </tr>
         </table>
     </body>

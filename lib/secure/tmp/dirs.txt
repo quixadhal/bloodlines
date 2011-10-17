@@ -10,6 +10,7 @@
 /doc/lfun/lib/leader
 /secure/tmp
 /daemon/services
+/domains/town/virtual/void
 /verbs/admins
 /domains/default/virtual/sky
 /domains/cave/weap

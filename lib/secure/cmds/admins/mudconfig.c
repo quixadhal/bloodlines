@@ -5,6 +5,7 @@
 #include <commands.h>
 #include NETWORK_H
 #include <sockets.h>
+#include <message_class.h>
 string GetHelp();
 
 inherit LIB_DAEMON;
@@ -962,6 +963,83 @@ varargs static int ModCfg(string which, string arg){
 }
 
 string GetHelp(){
+    string str = 
+            "\nSyntax:  '%^B_WHITE%^%^BLACK%^mudconfig %^MAGENTA%^<parameter> <value>%^RESET%^'"
+            "\n "
+            "\nModifies various system settings."
+            "\nExamples:"
+            "\nmudconfig mudname <name>                                    (Currently %^YELLOW%^" + MUD_NAME + "%^RESET%^)"
+            "\nmudconfig mudport <port>                                    (Currently %^YELLOW%^" + __PORT__ + "%^RESET%^)"
+            "\nmudconfig email <the admin's email address>                 (Currently %^YELLOW%^" + ADMIN_EMAIL + "%^RESET%^)"
+#ifdef ROOM_START
+            "\nmudconfig startroom <filename of start room>                (Currently %^YELLOW%^" + ROOM_START + "%^RESET%^)"
+#else
+            "\nmudconfig startroom <filename of start room>"
+#endif
+            "\nmudconfig defaultdomain </full/path>"
+            "\nmudconfig hostip <the computer's ip address (eg 111.222.333.444)>"
+            "\nmudconfig websourceip <the remote web server's ip address (eg 111.222.333.444)>"
+            "\nmudconfig websourcename <the remote web server's ip name (eg a.b.com)>"
+            "\nmudconfig liveupgrade <the default liveupgrade mud's name>  (Currently %^YELLOW%^" + LIVEUPGRADE_SERVER + "%^RESET%^)"
+            "\nmudconfig maxip <max connections per IP>                    (Currently %^YELLOW%^" + SAME_IP_MAX + "%^RESET%^)"
+            "\nmudconfig pinginterval <i3 ping interval in seconds>        (Currently %^YELLOW%^" + PING_INTERVAL + "%^RESET%^)"
+            "\nmudconfig monitor <monitoring level, 0 to 2>                (Currently %^YELLOW%^" + GLOBAL_MONITOR + "%^RESET%^)"
+            "\nmudconfig newbielevel <max newbie level>                    (Currently %^YELLOW%^" + MAX_NEWBIE_LEVEL + "%^RESET%^)"
+            "\nmudconfig resets <interval between resets>                  (Currently %^YELLOW%^" + TIME_TO_RESET + "%^RESET%^)"
+            "\nmudconfig offset <offset from GMT in seconds>               (Currently %^YELLOW%^" + GMT_OFFSET + "%^RESET%^)"
+            "\nmudconfig extraoffset <offset from GMT in hours>            (Currently %^YELLOW%^" + EXTRA_TIME_OFFSET + "%^RESET%^)"
+            "\nmudconfig maxcommands <max number of commands per second>   (Currently %^YELLOW%^" + MAX_COMMANDS_PER_SECOND + "%^RESET%^)"
+            "\nmudconfig maxidle <number of idle seconds before autoquit>  (Currently %^YELLOW%^" + IDLE_TIMEOUT + "%^RESET%^)"
+            "\nmudconfig autowiz         [" + ( AUTO_WIZ == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( AUTO_WIZ == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]"
+            "\nmudconfig locked          [" + ( MUD_IS_LOCKED == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( MUD_IS_LOCKED == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]"
+            "\nmudconfig justenglish     [" + ( ENGLISH_ONLY == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( ENGLISH_ONLY == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]"
+            "\nmudconfig justhumans      [" + ( HUMANS_ONLY == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( HUMANS_ONLY == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]"
+            "\nmudconfig encumbrance     [" + ( ENABLE_ENCUMBRANCE == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( ENABLE_ENCUMBRANCE == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]"
+            "\nmudconfig severable       [" + ( SEVERABLE_LIMBS == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( SEVERABLE_LIMBS == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]  (Whether limbs can be severed in combat. Requires a warmboot.)"
+            "\nmudconfig pk              [" + ( PLAYER_KILL == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( PLAYER_KILL == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]"
+            "\nmudconfig minimap         [" + ( MINIMAP == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( MINIMAP == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]  (Whether players get a minimap.)"
+            "\nmudconfig wizmap          [" + ( WIZMAP == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( WIZMAP == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]  (Whether cres get an area map.)"
+            "\nmudconfig grid            [" + ( GRID == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( GRID == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]  (Enable or disable the room grid system.)"
+            "\nmudconfig compat          [" + ( COMPAT_MODE == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( COMPAT_MODE == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]"
+            "\nmudconfig retain          [" + ( RETAIN_ON_QUIT == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( RETAIN_ON_QUIT == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]  (Whether items are retained on quit.)"
+            "\nmudconfig defaultparse    [" + ( DEFAULT_PARSING == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( DEFAULT_PARSING == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]"
+            "\nmudconfig disablereboot   [" + ( DISABLE_REBOOTS == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( DISABLE_REBOOTS == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]"
+            "\nmudconfig matchcommand    [" + ( COMMAND_MATCHING == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( COMMAND_MATCHING == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]  (Enable or disable fuzzy command matching.)"
+            "\nmudconfig matchobject     [" + ( OBJECT_MATCHING == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( OBJECT_MATCHING == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]  (Enable or disable fuzzy object name matching.)"
+            "\nmudconfig exitsbare       [" + ( BARE_EXITS == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( BARE_EXITS == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]"
+            "\nmudconfig nmexits         [" + ( NM_STYLE_EXITS == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( NM_STYLE_EXITS == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]  (This togggles where default exits are displayed.)"
+            "\nmudconfig fastcombat      [" + ( FAST_COMBAT == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( FAST_COMBAT == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]  (Heart rate overridden in combat.)"
+            "\nmudconfig selectclass     [" + ( CLASS_SELECTION == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( CLASS_SELECTION == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]  (Whether new players choose a class on login.)"
+            "\nmudconfig instances       [" + ( ENABLE_INSTANCES == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( ENABLE_INSTANCES == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]  (Whether mud instances are used.)"
+            "\nmudconfig localtime       [" + ( LOCAL_TIME == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( LOCAL_TIME == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]"
+            "\nmudconfig questrequired   [" + ( REQUIRE_QUESTING == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( REQUIRE_QUESTING == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]"
+            "\nmudconfig autoadvance     [" + ( AUTO_ADVANCE == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( AUTO_ADVANCE == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]"
+            "\nmudconfig ced             [" + ( CED_DISABLED == 0 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( CED_DISABLED == 1 ? "%^B_RED%^" : "" ) + " no %^RESET%^] (toggles the fullscreen editor)"
+            "\nmudconfig router       [" + ( ROUTER_TESTING == 1 ? "%^B_GREEN%^" : "" ) + " enable %^RESET%^|" + ( ROUTER_TESTING == 0 ? "%^B_RED%^" : "" ) + " disable %^RESET%^]"
+            "\nmudconfig channelpipes [ enable %^RESET%^| disable %^RESET%^]  (Whether to allow piping messages.  Not recommended.)"
+            "\nmudconfig inet         [ enable %^RESET%^| disable %^RESET%^| start %^RESET%^| stop %^RESET%^| restart %^RESET%^| status %^RESET%^]"
+            "\nmudconfig ftp          [ enable %^RESET%^| disable %^RESET%^| start %^RESET%^| stop %^RESET%^| restart %^RESET%^| status %^RESET%^]"
+            "\nmudconfig hftp         [ enable %^RESET%^| disable %^RESET%^| start %^RESET%^| stop %^RESET%^| restart %^RESET%^| status %^RESET%^]"
+            "\nmudconfig rcp          [ enable %^RESET%^| disable %^RESET%^| start %^RESET%^| stop %^RESET%^| restart %^RESET%^| status %^RESET%^]"
+            "\nmudconfig oob          [ enable %^RESET%^| disable %^RESET%^| start %^RESET%^| stop %^RESET%^| restart %^RESET%^| status %^RESET%^]"
+            "\nmudconfig http         [ enable %^RESET%^| disable %^RESET%^| start %^RESET%^| stop %^RESET%^| restart %^RESET%^| status %^RESET%^]"
+            "\nmudconfig cgi          [" + ( ENABLE_CGI == 1 ? "%^B_GREEN%^" : "" ) + " enable %^RESET%^|" + ( ENABLE_CGI == 0 ? "%^B_RED%^" : "" ) + " disable %^RESET%^]  (Whether the mud webserver should use CGI.)"
+            "\nmudconfig dirlist      [" + ( WWW_DIR_LIST == 1 ? "%^B_GREEN%^" : "" ) + " enable %^RESET%^|" + ( WWW_DIR_LIST == 0 ? "%^B_RED%^" : "" ) + " disable %^RESET%^]  (Allow the webserver to display dir contents.)"
+            "\nmudconfig creweb       [" + ( ENABLE_CREWEB == 1 ? "%^B_GREEN%^" : "" ) + " enable %^RESET%^|" + ( ENABLE_CREWEB == 0 ? "%^B_RED%^" : "" ) + " disable %^RESET%^]  (Allow web based editing [requires cgi and dirlist].)"
+            "\nmudconfig loglocal     [" + ( LOG_LOCAL_CHANS == 1 ? "%^B_GREEN%^" : "" ) + " enable %^RESET%^|" + ( LOG_LOCAL_CHANS == 0 ? "%^B_RED%^" : "" ) + " disable %^RESET%^]  (Whether local channels are logged.)"
+            "\nmudconfig logremote    [" + ( LOG_REMOTE_CHANS == 1 ? "%^B_GREEN%^" : "" ) + " enable %^RESET%^|" + ( LOG_REMOTE_CHANS == 0 ? "%^B_RED%^" : "" ) + " disable %^RESET%^]  (Whether remote channels are logged.)"
+            "\nmudconfig intermud     [" + ( DISABLE_INTERMUD == 0 ? "%^B_GREEN%^" : "" ) + " enable %^RESET%^|" + ( DISABLE_INTERMUD == 1 ? "%^B_RED%^" : "" ) + " disable %^RESET%^|" + ( RESTRICTED_INTERMUD == 1 ? "%^BOLD%^%^RED%^" : "" ) + " restrict %^RESET%^| unrestrict %^RESET%^| reset %^RESET%^]"
+            "\nmudconfig imc2         [" + ( DISABLE_IMC2 == 0 ? "%^B_GREEN%^" : "" ) + " enable %^RESET%^|" + ( DISABLE_IMC2 == 1 ? "%^B_RED%^" : "" ) + " disable %^RESET%^]"
+            "\nmudconfig imc2clientpass <client password for IMC2>"
+            "\nmudconfig imc2serverpass <server password for IMC2>"
+            "\n "
+            "\nSee also:  admintool, config";
+
+    //return this_player()->eventPage(str, MSG_SYSTEM | MSG_NOCOLOUR);
+    return this_player()->eventPage(explode(str, "\n"), MSG_SYSTEM);
+}
+
+string OldGetHelp(){
     return ("Syntax: mudconfig PARAMETER VALUE \n\n"
             "Modifies various system settings.\n"
             "Examples: \n"

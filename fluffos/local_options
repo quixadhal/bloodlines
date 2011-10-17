@@ -912,6 +912,11 @@
 #undef PACKAGE_SHA1
 #undef MALLOC32
 #undef DTRACE
+#define TRACE
+#define TRACE_CODE
 
 #define ULIMIT 1024
-#undef PACKAGE_PCRE
+#define PACKAGE_PCRE
+#define WARN_OLD_RANGE_BEHAVIOR
+#define STRUCT_CLASS
+#undef STRUCT_STRUCT
