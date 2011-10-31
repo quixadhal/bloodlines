@@ -122,18 +122,32 @@ if ($result == 0) {
         </title>
         <link rev="made" href="mailto:quixadhal@shadowlord.org">
     </head>
-    <body background="gfx/dark_wood.jpg" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" onload="startClock()">
+    <body background="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" onload="startClock()">
         <table border=0 cellspacing=0 cellpadding=0 width=80% align="center">
             <tr>
                 <td align="right" valign="top">
                     <a href="anyterm/anyterm.shtml?rows=40&cols=100">
-                        <img src="gfx/bloodlines.png" border=0 width=469 height=160 alt="(Bloodlines:)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png" border=0 width=469 height=160 alt="(Bloodlines:)">
                     </a>
                 </td>
                 <td align="left" valign="bottom">
                     <a href="anyterm/anyterm.shtml?rows=40&cols=100">
-                        <img src="gfx/wileymud4.png" border=0 width=354 height=81 alt="(WileyMUD IV)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/wileymud4.png" border=0 width=354 height=81 alt="(WileyMUD IV)">
                     </a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table border=0 cellspacing=0 cellpadding=0 width=100% align="center">
+                        <tr>
+                            <td align="right" valign="top"> 
+                                <font size="-2" color="#FFFFBF"><a href="/~wiley/">Also visit WileyMUD III, for amusement!</a></font>
+                            </td>
+                            <td align="right" valign="bottom" width="5%">
+                                &nbsp;
+                            </td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
         </table>
@@ -141,11 +155,11 @@ if ($result == 0) {
             <tr>
                 <td align="center" width="20%" valign="bottom">
                     <a href="http://www.oldtimersguild.com/vb/forum.php">
-                        <img src="gfx/otg_logo_glow.png" border=0 align="center" width=155 height=200 alt="(OTG)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/otg_logo_glow.png" border=0 align="center" width=155 height=200 alt="(OTG)">
                     </a>
                     <br />
                     <br />
-                    <a href="gitweb.cgi?p=.git;a=summary">
+                    <a href="https://github.com/quixadhal/bloodlines">
                         <img src="/gitweb/git-logo.png" border=0 align="center" width=72 height=27 alt="(Git)">
                     </a>
                     <br />
@@ -159,7 +173,7 @@ if ($result == 0) {
 <!--
                     <br />
                     <a href="/~quixadhal/rift/riftstatus.php">
-                        <img src="gfx/rift.png" border=0 align="center" width=100 height=67 alt="(Rift)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/rift.png" border=0 align="center" width=100 height=67 alt="(Rift)">
                     </a>
 -->
                 </td>
@@ -211,31 +225,31 @@ if ($result == 0) {
                 <td align="center" width="20%" valign="bottom">
 <!--
                     <a href="http://www.mudbytes.net/index.php?a=recent">
-                        <img src="gfx/koolaid.png" border=0 align="center" width=95 height=100 alt="(DramaBytes)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/koolaid.png" border=0 align="center" width=95 height=100 alt="(DramaBytes)">
                     </a>
                     <br />
                     <br />
 -->
                     <a href="mudlist.php">
-                        <img src="gfx/mudlist_button.png" border=0 align="center" width=121 height=92 alt="(Mudlist)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/mudlist_button.png" border=0 align="center" width=121 height=92 alt="(Mudlist)">
                     </a>
                     <br />
                     <br />
                     <a href="http://www.smaugmuds.org/">
-                        <img src="gfx/smaugmuds_button.png" border=0 align="center" width=119 height=26 alt="(SmaugMUDs)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/smaugmuds_button.png" border=0 align="center" width=119 height=26 alt="(SmaugMUDs)">
                     </a>
                     <br />
                     <a href="http://lpmuds.net/forum/index.php">
-                        <img src="gfx/lpmuds.net_button.png" border=0 align="center" width=119 height=26 alt="(LpMUDs.net)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/lpmudsnet_button.png" border=0 align="center" width=119 height=26 alt="(LpMUDs.net)">
                     </a>
                     <br />
                     <a href="http://www.mudbytes.net/index.php?a=recent">
-                        <img src="gfx/mudbytes_button.png" border=0 align="center" width=119 height=26 alt="(DramaBytes)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/mudbytes_button.png" border=0 align="center" width=119 height=26 alt="(DramaBytes)">
                     </a>
                     <br />
                     <br />
                     <a href="i3log.php">
-                        <img src="gfx/intermud_logs.png" border=0 align="center" width=154 height=200 alt="(Intermud)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/intermud_logs.png" border=0 align="center" width=154 height=200 alt="(Intermud)">
                     </a>
                 </td>
             </tr>

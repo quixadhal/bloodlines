@@ -112,6 +112,7 @@ sub parse_log_line {
 
     #$message = encode_entities($message);
     #$message = s/((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)/<a href="$1" target="I3-link">$1<\/a>/;
+    #print Dumper(\%log_entry) if $log_entry{'channel'} eq 'free_speech';
 
     return \%log_entry;
 }

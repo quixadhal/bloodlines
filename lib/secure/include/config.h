@@ -95,5 +95,4 @@
 #define ENABLE_INSTANCES         0
 #define CED_DISABLED             1
 #define CHANNEL_PIPES            1
-
 #endif /* s_config_h */

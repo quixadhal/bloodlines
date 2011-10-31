@@ -72,3 +72,8 @@ int GetCharmode(object ob){
     return query_charmode(ob);
 }
 #endif
+
+mapping getTermInfo(string term) {
+    return term_info[term];
+}
+

@@ -46,6 +46,9 @@ mixed cmd(string str) {
                 case "d":
                     x = 7;
                 break;
+                case "i":
+                    x = 1;
+                break;
                 case "n":
                     x = 0;
                 break;
@@ -56,8 +59,12 @@ mixed cmd(string str) {
 
 
             if( lower_case(str) == lower_case(tmpstr) ) {
-                borg = ([ mud : info ]);
-                break;
+                if( x == 1 ) {
+                    borg[mud] = info;
+                } else {
+                    borg = ([ mud : info ]);
+                    break;
+                }
             }
 
             else if( y > z &&

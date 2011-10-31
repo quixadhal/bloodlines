@@ -312,7 +312,7 @@ get_chatter_colors();
 
 $total_page_count = 1;
 $page_chunk = 1;
-$default_page_size = 15;
+$default_page_size = 20;
 
 if( isset($_REQUEST) && isset($_REQUEST["ps"]) ) {
     $page_size = $_REQUEST["ps"];
@@ -366,6 +366,10 @@ if( isset($_REQUEST) && isset($_REQUEST["lo"]) ) {
     $links_only = 1;
 }
  
+if( isset($_REQUEST) && isset($_REQUEST["co"]) ) {
+    $config_mode = 1;
+}
+
 $rows = array_reverse(load_logs());
 
 $output = array();
@@ -514,6 +518,23 @@ $links_url = $_SERVER['PHP_SELF'] .
         (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
         (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "") .
         (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "");
+$noconfig_url = $_SERVER['PHP_SELF'] .
+        "?pn=" . urlencode($page_number) .
+        ((isset($page_size) && $page_size != $default_page_size ) ? "&ps=" . urlencode($page_size) : "") .
+        ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
+        (isset($links_only) ? "&lo" : "") .
+        (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
+        (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "") .
+        (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "");
+$config_url = $_SERVER['PHP_SELF'] .
+        "?pn=" . urlencode($page_number) .
+        ((isset($page_size) && $page_size != $default_page_size ) ? "&ps=" . urlencode($page_size) : "") .
+        ((isset($format) && $format != 'html' ) ? "&fm=" . urlencode($format) : "") .
+        (isset($links_only) ? "&lo" : "") .
+        ("&co") .
+        (isset($speaker_filter) ? "&sf=" . urlencode($speaker_filter) : "") .
+        (isset($chan_filter) ? "&cf=" . urlencode($chan_filter) : "") .
+        (isset($search_filter) ? "&sr=" . urlencode(preg_replace('/%/', '*', $search_filter)) : "");
 
 $next_url = $_SERVER['PHP_SELF'] .
         "?pn=" . urlencode($page_number + 1) .
@@ -582,15 +603,13 @@ if($format == 'rss') {
                 <td align="right" valign="top">
                     <!-- <a href="/anyterm/anyterm.shtml?rows=40&cols=100"> -->
                     <a href="/~bloodlines">
-                        <!-- <img src="gfx/bloodlines.png" border=0 width=469 height=160 alt="(Bloodlines:)"> -->
-                        <img src="gfx/bloodlines.png" border=0 width=234 height=80 alt="(Bloodlines:)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png" border=0 width=234 height=80>
                     </a>
                 </td>
                 <td align="left" valign="bottom">
                     <!-- <a href="/anyterm/anyterm.shtml?rows=40&cols=100"> -->
                     <a href="/~bloodlines">
-                        <!-- <img src="gfx/wileymud4.png" border=0 width=354 height=81 alt="(WileyMUD IV)"> -->
-                        <img src="gfx/wileymud4.png" border=0 width=177 height=40 alt="(WileyMUD IV)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/wileymud4.png" border=0 width=177 height=40">
                     </a>
                 </td>
             </tr>
@@ -602,38 +621,46 @@ if($format == 'rss') {
                 <tr>
                     <td align="right" valign="bottom">
                         <span style="color: #1F1F1F;">
-                            <label id="srlabel" for="sr"
-                                onmouseover="srinput.style.color='#FFFF00'; srinput.style.backgroundColor='#1F1F1F'; srlabel.style.color='#FFFFFF';"
-                                onmouseout="srinput.style.color='#4F4F00'; srinput.style.backgroundColor='#000000'; srlabel.style.color='#1F1F1F';"
-                                onfocus="srinput.focus();"
-                                onclick="srinput.focus();"
-                            > Search:&nbsp; </label>
+                            <? if(isset($config_mode)) { ?>
+                                <label id="srlabel"> Search:&nbsp; </label>
+                            <? } else { ?>
+                                <label id="srlabel" for="sr"
+                                    onmouseover="srinput.style.color='#FFFF00'; srinput.style.backgroundColor='#1F1F1F'; srlabel.style.color='#FFFFFF';"
+                                    onmouseout="srinput.style.color='#4F4F00'; srinput.style.backgroundColor='#000000'; srlabel.style.color='#1F1F1F';"
+                                    onfocus="srinput.focus();"
+                                    onclick="srinput.focus();"
+                                > Search:&nbsp; </label>
+                            <? } ?>
                         </span>
                     </td>
-                    <td bgcolor="#1F1F1F" width="200" align="left" valign="bottom">
-                            <input id="srinput" type="text" style="background-color: #000000; color: #3F3F00; border: 1px; border-color: #000000; border-style: solid; width: 200px;"
-                                onmouseover="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; srlabel.style.color='#FFFFFF';"
-                                onfocus="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; srlabel.style.color='#FFFFFF'; if(!this._haschanged){this.value=''};this._haschanged=true;"
-                                onblur="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; srlabel.style.color='#1F1F1F';"
-                                onmouseout="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; srlabel.style.color='#1F1F1F';"
-                                maxlength="30" name="sr" value="<? if(isset($search_filter)) echo preg_replace('/%/', '*', $search_filter); ?>" />
-                            <? if(isset($page_number)) { ?>
-                                <input type="hidden" name="pn" value="<? echo $page_number; ?>">
-                            <? } ?>
-                            <? if(isset($page_size)) { ?>
-                                <input type="hidden" name="ps" value="<? echo $page_size; ?>">
-                            <? } ?>
-                            <? if(isset($format)) { ?>
-                                <input type="hidden" name="fm" value="<? echo $format; ?>">
-                            <? } ?>
-                            <? if(isset($links_only)) { ?>
-                                <input type="hidden" name="lo" value="<? echo $links_only; ?>">
-                            <? } ?>
-                            <? if(isset($speaker_filter)) { ?>
-                                <input type="hidden" name="sf" value="<? echo $speaker_filter; ?>">
-                            <? } ?>
-                            <? if(isset($chan_filter)) { ?>
-                                <input type="hidden" name="cf" value="<? echo $chan_filter; ?>">
+                    <td bgcolor="#000000" width="200" align="left" valign="bottom">
+                            <? if(isset($config_mode)) { ?>
+                                &nbsp;
+                            <? } else { ?>
+                                <input id="srinput" type="text" style="background-color: #000000; color: #4F4F00; border: 1px; border-color: #000000; border-style: solid; width: 200px;"
+                                    onmouseover="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; srlabel.style.color='#FFFFFF';"
+                                    onfocus="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; srlabel.style.color='#FFFFFF'; if(!this._haschanged){this.value=''};this._haschanged=true;"
+                                    onblur="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; srlabel.style.color='#1F1F1F';"
+                                    onmouseout="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; srlabel.style.color='#1F1F1F';"
+                                    maxlength="30" name="sr" value="<? if(isset($search_filter)) echo preg_replace('/%/', '*', $search_filter); ?>" />
+                                <? if(isset($page_number)) { ?>
+                                    <input type="hidden" name="pn" value="<? echo $page_number; ?>">
+                                <? } ?>
+                                <? if(isset($page_size)) { ?>
+                                    <input type="hidden" name="ps" value="<? echo $page_size; ?>">
+                                <? } ?>
+                                <? if(isset($format)) { ?>
+                                    <input type="hidden" name="fm" value="<? echo $format; ?>">
+                                <? } ?>
+                                <? if(isset($links_only)) { ?>
+                                    <input type="hidden" name="lo" value="<? echo $links_only; ?>">
+                                <? } ?>
+                                <? if(isset($speaker_filter)) { ?>
+                                    <input type="hidden" name="sf" value="<? echo $speaker_filter; ?>">
+                                <? } ?>
+                                <? if(isset($chan_filter)) { ?>
+                                    <input type="hidden" name="cf" value="<? echo $chan_filter; ?>">
+                                <? } ?>
                             <? } ?>
                     </td>
                 </tr>
@@ -645,7 +672,7 @@ if($format == 'rss') {
         <table id="navbar" border=0 cellspacing=0 cellpadding=0 width=100% align="center">
             <tr>
                 <td id="navbegin" align="left" valign="center" width="50"
-                    <? if( $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
+                    <? if( !$config_mode && $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
                     style="opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
@@ -654,17 +681,17 @@ if($format == 'rss') {
                     <? } ?>
                 >
                     <span style="color: #555555">
-                    <? if( $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
+                    <? if( !$config_mode && $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
                         <a href="<? echo $last_url; ?>" title="The&nbsp;Beginning&nbsp;(1&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
-                            <img src="gfx/navbegin.png" border=0 width=48 height=48 alt="(start)" />
+                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navbegin.png" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="gfx/navbegin.png" border=0 width=48 height=48 alt="(start)" />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navbegin.png" border=0 width=48 height=48 />
                     <? } ?>
                     </span>
                 </td>
                 <td id="navback" align="left" valign="center" width="50"
-                    <? if( $total_page_count > 1 && $page_number < $total_page_count - $page_chunk - 1) { ?>
+                    <? if( !$config_mode && $total_page_count > 1 && $page_number < $total_page_count - $page_chunk - 1) { ?>
                     style="opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
@@ -673,17 +700,17 @@ if($format == 'rss') {
                     <? } ?>
                 >
                     <span style="color: #555555">
-                    <? if( $total_page_count > 1 && $page_number < $total_page_count - $page_chunk - 1) { ?>
+                    <? if( !$config_mode && $total_page_count > 1 && $page_number < $total_page_count - $page_chunk - 1) { ?>
                         <a href="<? echo $next_chunk_url; ?>" title="Back&nbsp;<? echo $page_chunk; ?>&nbsp;(<? echo $total_page_count - ($page_number + $page_chunk); ?>&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
-                            <img src="gfx/navback.png" border=0 width=48 height=48 alt="(back)" />
+                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navback.png" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="gfx/navback.png" border=0 width=48 height=48 alt="(back)" />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navback.png" border=0 width=48 height=48 />
                     <? } ?>
                     </span>
                 </td>
                 <td id="navprev" align="left" valign="center" width="50"
-                    <? if( $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
+                    <? if( !$config_mode && $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
                     style="opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
@@ -692,20 +719,20 @@ if($format == 'rss') {
                     <? } ?>
                 >
                     <span style="color: #555555">
-                    <? if( $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
+                    <? if( !$config_mode && $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
                         <a href="<? echo $next_url; ?>" title="Previous&nbsp;Page&nbsp;(<? echo $total_page_count - ($page_number + 1); ?>&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
-                            <img src="gfx/navprev.png" border=0 width=48 height=48 alt="(previous)" />
+                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navprev.png" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="gfx/navprev.png" border=0 width=48 height=48 alt="(previous)" />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navprev.png" border=0 width=48 height=48 />
                     <? } ?>
                     </span>
                 </td>
                 <td>
                     &nbsp;
                 </td>
-                <td id="navlinks" align="center" valign="center" width="50"
-                    <? if( isset($links_only) ) { ?>
+                <td id="navconfig" align="center" valign="center" width="50"
+                    <? if( isset($config_mode) ) { ?>
                     style="opacity: 1.0; filter: alpha(opacity=100);"
                     onmouseover="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
                     onmouseout="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -715,27 +742,55 @@ if($format == 'rss') {
                     onmouseout="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
                     <? } ?>
                 >
-                    <? if( isset($links_only) ) { ?>
-                    <a title='Include all content' href="<? echo $nolinks_url; ?>">
+                    <? if( isset($config_mode) ) { ?>
+                    <a title='Normal operation' href="<? echo $noconfig_url; ?>">
                     <? } else { ?>
-                    <a title='Include only messages with URLs' href="<? echo $links_url; ?>">
+                    <a title='Configuration Options' href="<? echo $config_url; ?>">
                     <? } ?>
-                        <img src="gfx/navlinks.png" border=0 width=48 height=48 alt="(links)" />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navconfig.png" border=0 width=48 height=48 />
                     </a>
                 </td>
-                <td id="navhome" style="opacity: 0.4; filter: alpha(opacity=40);" align="center" valign="center" width="50"
+                <td id="navlinks" align="center" valign="center" width="50"
+                    <? if( !$config_mode && isset($links_only) ) { ?>
+                    style="opacity: 1.0; filter: alpha(opacity=100);"
+                    onmouseover="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
+                    onmouseout="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    <? } else { ?>
+                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    onmouseout="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
+                    <? } ?>
+                >
+                    <? if( !isset($config_mode) ) { ?>
+                        <? if( isset($links_only) ) { ?>
+                        <a title='Include all content' href="<? echo $nolinks_url; ?>">
+                        <? } else { ?>
+                        <a title='Include only messages with URLs' href="<? echo $links_url; ?>">
+                        <? } ?>
+                    <? } ?>
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navlinks.png" border=0 width=48 height=48 />
+                    <? if( !isset($config_mode) ) { ?>
+                    </a>
+                    <? } ?>
+                </td>
+                <td id="navhome" align="center" valign="center" width="50"
+                    <? if( count( $_GET  ) > 0 ) { ?>
+                    style="opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                    <? } else { ?>
+                    style="opacity: 1.0; filter: alpha(opacity=100);"
+                    <? } ?>
                 >
                     <a href="<? echo $_SERVER['PHP_SELF']; ?>">
-                        <img src="gfx/navhome.png" border=0 width=48 height=48 alt="(home)" />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navhome.png" border=0 width=48 height=48 />
                     </a>
                 </td>
                 <td>
                     &nbsp;
                 </td>
                 <td id="navnext" align="right" valign="center" width="50"
-                    <? if( $total_page_count > 1 && $page_number > 0 ) { ?>
+                    <? if( !$config_mode && $total_page_count > 1 && $page_number > 0 ) { ?>
                     style="opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
@@ -743,16 +798,16 @@ if($format == 'rss') {
                     style="opacity: 0.2; filter: alpha(opacity=20);"
                     <? } ?>
                 >
-                    <? if( $page_number > 0 ) { ?>
+                    <? if( !$config_mode && $page_number > 0 ) { ?>
                         <a href="<? echo $prev_url; ?>" title="Next&nbsp;Page&nbsp;(<? echo $total_page_count - ($page_number - 1); ?>&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
-                            <img src="gfx/navnext.png" border=0 width=48 height=48 alt="(next)" />
+                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navnext.png" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="gfx/navnext.png" border=0 width=48 height=48 alt="(next)" />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navnext.png" border=0 width=48 height=48 />
                     <? } ?>
                 </td>
                 <td id="navforward" align="right" valign="center" width="50"
-                    <? if( $total_page_count > 1 && $page_number >= $page_chunk) { ?>
+                    <? if( !$config_mode && $total_page_count > 1 && $page_number >= $page_chunk) { ?>
                     style="opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
@@ -760,16 +815,16 @@ if($format == 'rss') {
                     style="opacity: 0.2; filter: alpha(opacity=20);"
                     <? } ?>
                 >
-                    <? if( $total_page_count > 1 && $page_number >= $page_chunk) { ?>
+                    <? if( !$config_mode && $total_page_count > 1 && $page_number >= $page_chunk) { ?>
                         <a href="<? echo $prev_chunk_url; ?>" title="Next&nbsp;<? echo $page_chunk; ?>&nbsp;(<? echo $total_page_count - ($page_number - $page_chunk); ?>&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
-                            <img src="gfx/navforward.png" border=0 width=48 height=48 alt="(forward)" />
+                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navforward.png" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="gfx/navforward.png" border=0 width=48 height=48 alt="(forward)" />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navforward.png" border=0 width=48 height=48 />
                     <? } ?>
                 </td>
                 <td id="navend" align="right" valign="center" width="50"
-                    <? if( $total_page_count > 1 && $page_number > 0) { ?>
+                    <? if( !$config_mode && $total_page_count > 1 && $page_number > 0) { ?>
                     style="opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
@@ -777,52 +832,98 @@ if($format == 'rss') {
                     style="opacity: 0.2; filter: alpha(opacity=20);"
                     <? } ?>
                 >
-                    <? if( $total_page_count > 1 && $page_number > 0) { ?>
+                    <? if( !$config_mode && $total_page_count > 1 && $page_number > 0) { ?>
                         <a href="<? echo $first_url; ?>" title="Current&nbsp;Time&nbsp;(<? echo $total_page_count; ?>&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
-                            <img src="gfx/navend.png" border=0 width=48 height=48 alt="(end)" />
+                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navend.png" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="gfx/navend.png" border=0 width=48 height=48 alt="(end)" />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navend.png" border=0 width=48 height=48 />
                     <? } ?>
                 </td>
             </tr>
         </table>
-        <table width="100%">
-            <tr>
-                <th align="left" width="5%" style="color: #DDDDDD;">Date</th>
-                <th align="left" width="5%" style="color: #DDDDDD;">Time</th>
-                <th id="channelheader" align="left" width="10%"
-                <? if(isset($chan_filter)) { ?>
-                    style="color: #FFFF00;"
-                <? } else { ?>
-                    style="color: #DDDDDD;"
-                <? } ?>
-                >Channel</th>
-                <th id="speakerheader" align="left" width="20%"
-                <? if(isset($speaker_filter)) { ?>
-                    style="color: #FFFF00;"
-                <? } else { ?>
-                    style="color: #DDDDDD;"
-                <? } ?>
-                >Speaker</th>
-                <th align="left" width="60%">&nbsp;</th>
-            </tr>
-            <?
-            foreach ($output as $k => $v) {
-            ?>
+        <? if(isset($config_mode)) { ?>
+            <table id="content" width="90%" height="500" align="center">
                 <tr>
-                    <td bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['datestamp']; ?></td>
-                    <td bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['timestamp']; ?></td>
-                    <td onmouseover="this.style.backgroundColor = '<? echo $output[$k]['bold_bgcolor']; ?>';"
-                        onmouseout="this.style.backgroundColor = '<? echo $output[$k]['bgcolor']; ?>';"
-                        onclick="document.location.href='<? echo $output[$k]['channel_url']; ?>';" bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['channel']; ?></td>
-                    <td onmouseover="this.style.backgroundColor = '<? echo $output[$k]['bold_bgcolor']; ?>';"
-                        onmouseout="this.style.backgroundColor = '<? echo $output[$k]['bgcolor']; ?>';"
-                        onclick="document.location.href='<? echo $output[$k]['speaker_url']; ?>';" bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['speaker']; ?></td>
-                    <td bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['message']; ?></td>
+                    <td>
+                        <form action="" method="get">
+                            <fieldset style="height: 400px;">
+                                <legend style="color: #CCCCCC;">Configuration Options:</legend>
+                                <span style="color: #CCCCCC;">
+                                    <label id="cfgpslabel" for="cfgps"
+                                        onmouseover="cfgps.style.color='#FFFF00'; cfgps.style.backgroundColor='#1F1F1F'; cfgpslabel.style.color='#FFFFFF';"
+                                        onmouseout="cfgps.style.color='#4F4F00'; cfgps.style.backgroundColor='#000000'; cfgpslabel.style.color='#CCCCCC';"
+                                        onfocus="cfgps.focus();"
+                                        onclick="cfgps.focus();"
+                                    > Entries per page:&nbsp; </label>
+                                    <input id="cfgps" type="text" style="background-color: #000000; color: #4F4F00; border: 1px; border-color: #000000; border-style: solid; width: 200px;"
+                                        onmouseover="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; cfgpslabel.style.color='#FFFFFF';"
+                                        onfocus="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; cfgpslabel.style.color='#FFFFFF'; if(!this._haschanged){this.value='<? echo $page_size; ?>'};this._haschanged=true;"
+                                        onblur="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; cfgpslabel.style.color='#CCCCCC';"
+                                        onmouseout="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; cfgpslabel.style.color='#CCCCCC';"
+                                        maxlength="30" name="ps" value="<? echo $page_size; ?>" />
+                                </span>
+                                <? if(isset($search_filter)) { ?>
+                                    <input type="hidden" name="sr" value="<? echo preg_replace('/%/', '*', $search_filter); ?>">
+                                <? } ?>
+                                <? if(isset($page_number)) { ?>
+                                    <input type="hidden" name="pn" value="<? echo $page_number; ?>">
+                                <? } ?>
+                                <? if(isset($format)) { ?>
+                                    <input type="hidden" name="fm" value="<? echo $format; ?>">
+                                <? } ?>
+                                <? if(isset($links_only)) { ?>
+                                    <input type="hidden" name="lo" value="<? echo $links_only; ?>">
+                                <? } ?>
+                                <? if(isset($speaker_filter)) { ?>
+                                    <input type="hidden" name="sf" value="<? echo $speaker_filter; ?>">
+                                <? } ?>
+                                <? if(isset($chan_filter)) { ?>
+                                    <input type="hidden" name="cf" value="<? echo $chan_filter; ?>">
+                                <? } ?>
+                            </fieldset>
+                        </form>
+                    </td>
                 </tr>
-            <? } ?>
-        </table>
+            </table>
+        <? } else { ?>
+            <table id="content" width="100%">
+                <tr>
+                    <th align="left" width="5%" style="color: #DDDDDD;">Date</th>
+                    <th align="left" width="5%" style="color: #DDDDDD;">Time</th>
+                    <th id="channelheader" align="left" width="10%"
+                    <? if(isset($chan_filter)) { ?>
+                        style="color: #FFFF00;"
+                    <? } else { ?>
+                        style="color: #DDDDDD;"
+                    <? } ?>
+                    >Channel</th>
+                    <th id="speakerheader" align="left" width="20%"
+                    <? if(isset($speaker_filter)) { ?>
+                        style="color: #FFFF00;"
+                    <? } else { ?>
+                        style="color: #DDDDDD;"
+                    <? } ?>
+                    >Speaker</th>
+                    <th align="left" width="60%">&nbsp;</th>
+                </tr>
+                <?
+                foreach ($output as $k => $v) {
+                ?>
+                    <tr>
+                        <td bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['datestamp']; ?></td>
+                        <td bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['timestamp']; ?></td>
+                        <td onmouseover="this.style.backgroundColor = '<? echo $output[$k]['bold_bgcolor']; ?>';"
+                            onmouseout="this.style.backgroundColor = '<? echo $output[$k]['bgcolor']; ?>';"
+                            onclick="document.location.href='<? echo $output[$k]['channel_url']; ?>';" bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['channel']; ?></td>
+                        <td onmouseover="this.style.backgroundColor = '<? echo $output[$k]['bold_bgcolor']; ?>';"
+                            onmouseout="this.style.backgroundColor = '<? echo $output[$k]['bgcolor']; ?>';"
+                            onclick="document.location.href='<? echo $output[$k]['speaker_url']; ?>';" bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['speaker']; ?></td>
+                        <td bgcolor="<? echo $output[$k]['bgcolor']; ?>"><? echo $output[$k]['message']; ?></td>
+                    </tr>
+                <? } ?>
+            </table>
+        <? } ?>
         <?
         $time_end = microtime(true);
         $time_spent = $time_end - $time_start;
@@ -837,7 +938,7 @@ if($format == 'rss') {
                 <td align="center" width="10%"
                     onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000'; rssimg.style.opacity='1.0'; rssimg.style.filter='alpha(opacity=100';"
                     onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F'; rssimg.style.opacity='0.4'; rssimg.style.filter='alpha(opacity=40';"
-                ><span style="color: #1F1F1F"><a href="i3log.php?fm=rss"><img id="rssimg" style="opacity: 0.4; filter: alpha(opacity=40);" src="gfx/valid-rss-rogers.png" border=0 width=88 height=31 alt="(RSS)" /></a></span></td>
+                ><span style="color: #1F1F1F"><a href="i3log.php?fm=rss"><img id="rssimg" style="opacity: 0.4; filter: alpha(opacity=40);" src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/valid-rss-rogers.png" border=0 width=88 height=31 alt="(RSS)" /></a></span></td>
                 <td align="right" width="45%"
                     onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000'; rssimg.style.opacity='1.0'; rssimg.style.filter='alpha(opacity=100';"
                     onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F'; rssimg.style.opacity='0.4'; rssimg.style.filter='alpha(opacity=40';"
