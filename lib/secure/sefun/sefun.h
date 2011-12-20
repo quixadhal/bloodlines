@@ -244,6 +244,8 @@ int bitshiftedp(int x);
 #if CALL_OUT_LOGGING
 int call_out(mixed args...);
 #endif
+string strip_rgb(string msg);
+string strip_raw_ansi(string str);
 string strip_colors(string str);
 string strip_colors_old(string str);
 varargs string *chunk_string(string str, int width);

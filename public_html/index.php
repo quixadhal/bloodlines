@@ -120,19 +120,34 @@ if ($result == 0) {
         <title>
             Bloodlines:  WileyMUD IV
         </title>
+        <link rel="shortcut icon" href="gfx/fire.ico" />
         <link rev="made" href="mailto:quixadhal@shadowlord.org">
+        <style>
+            a { text-decoration:none; }
+            a:hover { text-decoration:underline; }
+        </style>
     </head>
     <body background="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" onload="startClock()">
         <table border=0 cellspacing=0 cellpadding=0 width=80% align="center">
             <tr>
                 <td align="right" valign="top">
                     <a href="anyterm/anyterm.shtml?rows=40&cols=100">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png" border=0 width=469 height=160 alt="(Bloodlines:)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png"
+                             border=0 width=469 height=160
+                             style="opacity: 0.6; filter: alpha(opacity=60);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                        />
                     </a>
                 </td>
                 <td align="left" valign="bottom">
                     <a href="anyterm/anyterm.shtml?rows=40&cols=100">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/wileymud4.png" border=0 width=354 height=81 alt="(WileyMUD IV)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/wileymud4.png"
+                             border=0 width=354 height=81
+                             style="opacity: 0.6; filter: alpha(opacity=60);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                        />
                     </a>
                 </td>
             </tr>
@@ -140,7 +155,11 @@ if ($result == 0) {
                 <td colspan="2">
                     <table border=0 cellspacing=0 cellpadding=0 width=100% align="center">
                         <tr>
-                            <td align="right" valign="top"> 
+                            <td align="right" valign="top"
+                                style="opacity: 0.6; filter: alpha(opacity=60);"
+                                onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                                onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                            > 
                                 <font size="-2" color="#FFFFBF"><a href="/~wiley/">Also visit WileyMUD III, for amusement!</a></font>
                             </td>
                             <td align="right" valign="bottom" width="5%">
@@ -155,20 +174,48 @@ if ($result == 0) {
             <tr>
                 <td align="center" width="20%" valign="bottom">
                     <a href="http://www.oldtimersguild.com/vb/forum.php">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/otg_logo_glow.png" border=0 align="center" width=155 height=200 alt="(OTG)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/otg_logo_glow.png"
+                             border=0 align="center" width=155 height=200
+                             style="opacity: 0.6; filter: alpha(opacity=60);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                         />
                     </a>
                     <br />
                     <br />
-                    <a href="https://github.com/quixadhal/bloodlines">
-                        <img src="/gitweb/git-logo.png" border=0 align="center" width=72 height=27 alt="(Git)">
-                    </a>
-                    <br />
-                    <br />
+                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                    <input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="RNV3EB7MLFRWA">
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"
+                           id="paypal"
+                           border="0" name="submit"
+                           alt="PayPal - The safer, easier way to pay online!"
+                           style="opacity: 0.6; filter: alpha(opacity=60);"
+                           onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                           onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                    >
+                    <!-- <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1"> -->
+                    </form>
                     <div id="clock" align="center" style="color: #d0d000;"><?php echo date('g:i:s a'); ?></div>
                     <div id="date" align="center" style="color: #d0d000;"><?php echo date('F j, Y'); ?></div>
                     <br />
                     <a href="http://www.wunderground.com/cgi-bin/findweather/getForecast?query=zmw:49004.2.99999&bannertypeclick=wu_blueglass">
-                        <img src="http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_blueglass&pwscode=KMIKALAM1&ForcedCity=Kalamazoo&ForcedState=MI&zipcode=49048&language=EN" alt="Click for Kalamazoo, Michigan Forecast" height="68" width="120" border="0" />
+                        <img src="http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_blueglass&pwscode=KMIKALAM1&ForcedCity=Kalamazoo&ForcedState=MI&zipcode=49048&language=EN"
+                             height=68 width=120 border=0
+                             style="opacity: 0.6; filter: alpha(opacity=60);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                        />
+                    </a>
+                    <br />
+                    <br />
+                    <a href="https://github.com/quixadhal/bloodlines">
+                        <img src="/gitweb/git-logo.png"
+                             border="0" align="center" width=72 height=27
+                             style="opacity: 0.6; filter: alpha(opacity=60);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                        />
                     </a>
 <!--
                     <br />
@@ -231,25 +278,50 @@ if ($result == 0) {
                     <br />
 -->
                     <a href="mudlist.php">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/mudlist_button.png" border=0 align="center" width=121 height=92 alt="(Mudlist)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/mudlist_button.png"
+                             border=0 align="center" width=121 height=92
+                             style="opacity: 0.6; filter: alpha(opacity=60);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                        />
                     </a>
                     <br />
                     <br />
                     <a href="http://www.smaugmuds.org/">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/smaugmuds_button.png" border=0 align="center" width=119 height=26 alt="(SmaugMUDs)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/smaugmuds_button.png"
+                             border=0 align="center" width=119 height=26
+                             style="opacity: 0.6; filter: alpha(opacity=60);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                        />
                     </a>
                     <br />
                     <a href="http://lpmuds.net/forum/index.php">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/lpmudsnet_button.png" border=0 align="center" width=119 height=26 alt="(LpMUDs.net)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/lpmudsnet_button.png"
+                             border=0 align="center" width=119 height=26
+                             style="opacity: 0.6; filter: alpha(opacity=60);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                        />
                     </a>
                     <br />
                     <a href="http://www.mudbytes.net/index.php?a=recent">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/mudbytes_button.png" border=0 align="center" width=119 height=26 alt="(DramaBytes)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/mudbytes_button.png"
+                             border=0 align="center" width=119 height=26
+                             style="opacity: 0.6; filter: alpha(opacity=60);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                        />
                     </a>
                     <br />
                     <br />
                     <a href="i3log.php">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/intermud_logs.png" border=0 align="center" width=154 height=200 alt="(Intermud)">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/intermud_logs.png"
+                             border=0 align="center" width=154 height=200
+                             style="opacity: 0.6; filter: alpha(opacity=60);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                        />
                     </a>
                 </td>
             </tr>

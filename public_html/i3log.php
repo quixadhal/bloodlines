@@ -201,7 +201,7 @@ function load_logs() {
     $limit = $page_size;
     $offset = $page_number * $page_size;
 
-    $select = "SELECT to_char(msg_date, 'MM/DD') AS the_date, to_char(msg_date, 'HH:MI') AS the_time, to_char(msg_date, 'HH') AS the_hour, channel, speaker, mud, message FROM chanlogs";
+    $select = "SELECT to_char(msg_date, 'MM/DD') AS the_date, to_char(msg_date, 'HH24:MI') AS the_time, to_char(msg_date, 'HH24') AS the_hour, channel, speaker, mud, message FROM chanlogs";
     $where = "";
     $order = "";
     $query = "";
@@ -591,10 +591,33 @@ if($format == 'rss') {
     <head>
         <title> Intermud-3 network traffic, as seen by <? echo MUD_NAME; ?>. </title>
         <meta http-equiv="refresh" content="60">
+        <style>
+            a { text-decoration:none; }
+            a:hover { text-decoration:underline; }
+        </style>
     </head>
     <!-- <body bgcolor="black" text="#bbbbbb"> -->
     <!-- <body background="gfx/dark_wood.jpg" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040"> -->
     <body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
+        <table id="outerheader" border=0 cellspacing=0 cellpadding=0 width=100% align="left">
+            <tr>
+                <td align="left" valign="center">
+                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                    <input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="RQ5EXJY6CVU66">
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"
+                           id="paypal"
+                           width="147" height="47"
+                           border="0" name="submit"
+                           alt="PayPal - The safer, easier way to pay online!"
+                           style="opacity: 0.6; filter: alpha(opacity=60);"
+                           onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                           onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                    >
+                    <!-- <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1"> -->
+                    </form>
+                </td>
+                <td>
         <table id="header" border=0 cellspacing=0 cellpadding=0 width=80% align="center">
         <tr>
         <td align="right" valign="bottom">
@@ -669,6 +692,9 @@ if($format == 'rss') {
         </td>
         </tr>
         </table>
+</td>
+</tr>
+</table>
         <table id="navbar" border=0 cellspacing=0 cellpadding=0 width=100% align="center">
             <tr>
                 <td id="navbegin" align="left" valign="center" width="50"

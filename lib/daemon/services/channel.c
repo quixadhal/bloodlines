@@ -128,7 +128,9 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
 
 #ifdef EXTENDED_PINKFISH
     msg = "/lib/interface"->rgb_downto_xterm256(msg);
+    tn("eventSendChannel after_rbgdown: "+identify( msg ),"green");
     msg = replace_strings(msg, extended_to_pinkfish);
+    tn("eventSendChannel after_replace: "+identify( msg ),"green");
 #endif
     // Because others only have crufty 1980's 8 colour ANSI.
     msg = replace_string(msg, "%^DARKGREY%^",   "%^BOLD%^%^BLACK%^");
@@ -140,6 +142,7 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
     // Order matters for these two!
     msg = replace_string(msg, "%^WHITE%^",      "%^BOLD%^%^WHITE%^");
     msg = replace_string(msg, "%^GREY%^",       "%^WHITE%^");
+    tn("eventSendChannel after_oldfix: "+identify( msg ),"green");
 
     if( emote ) {
         if( target && targmsg ) {

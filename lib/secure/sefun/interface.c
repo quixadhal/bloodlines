@@ -12,7 +12,7 @@ string strip_rgb(string msg) {
     string *parts;
 
     if( !msg || msg == "" ) return msg;
-    parts = explode(msg, "%^");
+    parts = rexplode(msg, "%^");
     for(int i = 0; i < sizeof(parts); i++) {
         string chunk = parts[i];
         if(strlen(chunk) == 7 && chunk[0] == '#') {
@@ -24,11 +24,28 @@ string strip_rgb(string msg) {
     return msg;
 }
 
+string strip_raw_ansi(string str) {
+    mixed stuff;
+    string ret = "";
+
+    stuff = pcre_assoc( str, ({ "(\e[[][0-9]+m)", "(\e[[][0-9]+;[0-9]+m)" }), ({ 1, 2 }), 0);
+    for(int i = 0; i < sizeof(stuff[0]); i++) {
+        if(!stuff[1][i])
+            ret += stuff[0][i];
+    }
+    return ret;
+}
+
 string strip_colours(string str){
     string ret;
-    ret = strip_rgb(str);
+    ret = strip_raw_ansi(str);
+    ret = strip_rgb(ret);
     ret = terminal_colour(ret, unknown_terminfo);
     return ret;
+}
+
+string strip_colors(string str){
+    return strip_colours(str);
 }
 
 string strip_colours_newbutold(string str){
@@ -41,10 +58,6 @@ string strip_colours_newbutold(string str){
             "ENDTERM":""]);
     ret = terminal_colour(str, Uncolor);
     return replace_string(ret, "\b", "");
-}
-
-string strip_colors(string str){
-    return strip_colours(str);
 }
 
 string strip_colors_old(string str){

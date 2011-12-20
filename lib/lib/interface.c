@@ -398,7 +398,7 @@ string rgb_downto_xterm256(string msg) {
     string *parts;
 
     if( !msg || msg == "" ) return msg;
-    parts = explode(msg, "%^");
+    parts = rexplode(msg, "%^");
     for(int i = 0; i < sizeof(parts); i++) {
         string chunk = parts[i];
         if(strlen(chunk) == 7 && chunk[0] == '#') {
@@ -456,6 +456,10 @@ varargs int eventPrint(string msg, mixed arg2, mixed arg3){
         //
         // Eventually, this should know about MXP and just
         // transform them to native MXP symbols.
+        if(!msg || !stringp(msg)) {
+            msg = "";
+            //msg = "________WHAT???________";
+        }
         msg = rgb_downto_xterm256(msg);
 
         //Uncomment below to enable indentation of "conversation"

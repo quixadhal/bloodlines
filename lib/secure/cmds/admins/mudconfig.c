@@ -962,7 +962,7 @@ varargs static int ModCfg(string which, string arg){
     return 1;
 }
 
-string GetHelp(){
+string MyGetHelp(){
     string str = 
             "\nSyntax:  '%^B_WHITE%^%^BLACK%^mudconfig %^MAGENTA%^<parameter> <value>%^RESET%^'"
             "\n "
@@ -1036,95 +1036,140 @@ string GetHelp(){
             "\nSee also:  admintool, config";
 
     //return this_player()->eventPage(str, MSG_SYSTEM | MSG_NOCOLOUR);
-    return this_player()->eventPage(explode(str, "\n"), MSG_SYSTEM);
+    this_player()->eventPage(explode(str, "\n"), MSG_SYSTEM);
+    return 0;
 }
 
-string OldGetHelp(){
-    return ("Syntax: mudconfig PARAMETER VALUE \n\n"
-            "Modifies various system settings.\n"
-            "Examples: \n"
-            "\nmudconfig autowiz [ yes | no ]"
-            "\nmudconfig locked [ yes | no ]"
-            "\nmudconfig justenglish [ yes | no ]"
-            "\nmudconfig justhumans [ yes | no ]"
-            "\nmudconfig encumbrance [ yes | no ]"
-            "\nmudconfig severable [ yes | no ] (whether limbs can be "
-        "severed in combat. Requires a warmboot.)"
-            "\nmudconfig pk [ yes | no ]"
-            "\nmudconfig minimap [ yes | no ] (whether players get a minimap)"
-            "\nmudconfig wizmap [ yes | no ] (whether cres get an area map)"
-            "\nmudconfig grid [ yes | no ] (enable or disable the room grid "
-        "system)"
-            "\nmudconfig compat [ yes | no ]"
-            "\nmudconfig retain [ yes | no ]"
-            "\nmudconfig defaultparse [ yes | no ]"
-            "\nmudconfig disablereboot [ yes | no ]"
-            "\nmudconfig matchcommand [ yes | no ]"
-            "\nmudconfig matchobject [ yes | no ]"
-            "\nmudconfig exitsbare [ yes | no ]"
-            "\nmudconfig nmexits [ yes | no ] (This togggles where default "
-            "exits are displayed)"
-            "\nmudconfig fastcombat [ yes | no ] (heart rate overridden "
-            "in combat)"
-            "\nmudconfig selectclass [ yes | no ] (whether new players "
-            "choose a class on login)"
-            "\nmudconfig instances [ yes | no ] (whether mud instances "
-            "are used)"
-            "\nmudconfig localtime [ yes | no ]"
-            "\nmudconfig offset <offset from gmt in seconds>"
-            "\nmudconfig extraoffset <offset from GMT in hours>"
-            "\nmudconfig maxcommands <max number of commands per second>"
-            "\nmudconfig maxidle <number of idle seconds before autoquit>"
-            "\nmudconfig questrequired [ yes | no ]"
-            "\nmudconfig autoadvance [ yes | no ]"
-            "\nmudconfig ced [ yes | no ] (toggles the fullscreen editor)"
-            "\nmudconfig maxip <max connections per IP>"
-            "\nmudconfig pinginterval <i3 ping interval in seconds>"
-            "\nmudconfig monitor <monitoring level, 0 to 2>"
-            "\nmudconfig newbielevel <max newbie level>"
-            "\nmudconfig resets <interval between resets>"
-            "\nmudconfig router [ enable | disable ]"
-            "\nmudconfig startroom <filename of start room>"
-            "\nmudconfig defaultdomain </full/path>"
-            "\nmudconfig email <the admin's email address>"
-            "\nmudconfig liveupgrade <the default liveupgrade mud's name>"
-            "\nmudconfig hostip <the computer's ip address "
-            "(eg 111.222.333.444)>"
-            "\nmudconfig websourceip <the remote web server's ip address "
-            "(eg 111.222.333.444)>"
-            "\nmudconfig websourcename <the remote web server's ip name "
-            "(eg a.b.com)>"
-            "\nmudconfig channelpipes [ enable | disable ] (whether to allow "
-            "piping messages. not recommended.)"
-            "\nmudconfig intermud [ enable | disable | restrict | "
-            "unrestrict | reset ]"
-            "\nmudconfig imc2 [ enable | disable ]"
-            "\nmudconfig imc2clientpass <client password for IMC2>"
-            "\nmudconfig imc2serverpass <server password for IMC2>"
-            "\nmudconfig inet [ enable | disable | start | stop | restart "
-            "| status ]"
-            "\nmudconfig ftp [ enable | disable | start | stop | restart "
-            "| status ]"
-            "\nmudconfig hftp [ enable | disable | start | stop | restart "
-            "| status ]"
-            "\nmudconfig rcp [ enable | disable | start | stop | restart "
-            "| status ]"
-            "\nmudconfig oob [ enable | disable | start | stop | restart "
-            "| status ]"
-            "\nmudconfig http [ enable | disable | start | stop | restart "
-            "| status ]"
-            "\nmudconfig cgi [ enable | disable ] (Whether the mud webserver "
-            "should use CGI)"
-            "\nmudconfig dirlist [ enable | disable ] (Allow the webserver "
-            "to display dir contents)"
-            "\nmudconfig creweb [ enable | disable ] (Allow web based "
-            "editing [requires cgi and dirlist])"
-            "\nmudconfig loglocal [ enable | disable ] (whether local "
-            "channels are logged)"
-            "\nmudconfig logremote [ enable | disable ] (whether remote "
-            "channels are logged)"
-            "\nmudconfig mudname <name>"
-            "\nmudconfig mudport <port>"
-            "\n\nSee also: admintool, config");
+string GetHelp(){
+        int width = this_player()->GetScreen()[0];
+        string *preloads = explode( read_file( CFG_PRELOAD ), "\n" );
+        string yesline = "/secure/daemon/inet";
+        string noline = "#/secure/daemon/inet";
+        string Y = "%^YELLOW%^", X  ="%^RESET%^", BG = "%^B_GREEN%^", BR = "%^B_RED%^";
+
+        string enabled = "[" + BG + Y + " yes " + X + "|  no ]";
+        string disabled = "[ yes |" + BR + Y + "  no " + X + "]";
+        string srvenabled = "[" + BG + Y + "   yes   " + X + "|    no   |  start  |   stop  | restart |  status ]";
+        string srvdisabled = "[   yes   |" + BR + Y + "    no   " + X + "|  start  |   stop  | restart |  status ]";
+        string i3ena = "[" + BG + Y + "   yes   " + X + "|    no   ";
+        string i3dis = "[   yes   |" + BR + Y + "    no   " + X;
+        string i3un = "|" + BG + Y + "  unrestrict  " + X + "|   restrict   |  reset  ]";
+        string i3res  = "|  unrestrict  |" + BR + Y + "   restrict   " + X + "|  reset  ]";
+
+        int y_width = strlen(Y+X);
+        int ena_width = strlen(BG+Y+X);
+        int dis_width = strlen(BR+Y+X);
+        int i3eu_width = strlen(BG+Y+X+BG+Y+X);
+        int i3du_width = strlen(BR+Y+X+BG+Y+X);
+        int i3er_width = strlen(BG+Y+X+BR+Y+X);
+        int i3dr_width = strlen(BR+Y+X+BR+Y+X);
+        int router_here = find_object(ROUTER_D) ? 1 : 0;
+        int inet_enabled = member_array( yesline, preloads ) == -1 ? 0 : 1;
+        int ftp_enabled = INET_D->GetService("ftp");
+        int hftp_enabled = INET_D->GetService("hftp");
+        int rcp_enabled = INET_D->GetService("rcp");
+        int oob_enabled = INET_D->GetService("oob");
+        int http_enabled = INET_D->GetService("http");
+
+        string *output = ({ });
+        output += ({ "Syntax:  '%^B_WHITE%^%^BLACK%^mudconfig %^MAGENTA%^<parameter> <value>%^RESET%^'" });
+        output += ({ "" });
+        output += ({ "Modifies various system settings." });
+        output += ({ "Parameters: " });
+        output += ({ sprintf( "%%^BOLD%%^%%^CYAN%%^%|*'='s%%^RESET%%^", width, "[ MUD SETTINGS ]") });
+
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "mudname",        width-2-15-1+y_width-1-36-2, Y + MUD_NAME + X,                     "MUD name") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "mudport",        width-2-15-1+y_width-1-36-2, Y + "" + __PORT__ + X,                "MUD access port") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "email",          width-2-15-1+y_width-1-36-2, Y + ADMIN_EMAIL + X,                  "administrator e-mail address") });
+
+#ifdef ROOM_START
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "startroom",      width-2-15-1+y_width-1-36-2, Y + ROOM_START + X,                   "start room") });
+#else
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "startroom",      width-2-15-1+y_width-1-36-2, Y + "NONE" + X,                       "start room") });
+#endif
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "defaultdomain",  width-2-15-1+y_width-1-36-2, Y + DIR_STANDARD_DOMAIN + X,          "default domain path") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "hostip",         width-2-15-1+y_width-1-36-2, Y + HOST_IP + X,                      "host computer IP address") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "websourceip",    width-2-15-1+y_width-1-36-2, Y + WEB_SOURCE_IP + X,                "liveupgrade server IP address") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "websourcename",  width-2-15-1+y_width-1-36-2, Y + WEB_SOURCE_NAME + X,              "liveupgrade server domain name") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "liveupgrade",    width-2-15-1+y_width-1-36-2, Y + LIVEUPGRADE_SERVER + X,           "default liveupgrade MUD name") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "imc2clientpass", width-2-15-1+y_width-1-36-2, Y + "******" + X,                     "IMC2 client password") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "imc2serverpass", width-2-15-1+y_width-1-36-2, Y + "******" + X,                     "IMC2 server password") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "maxip",          width-2-15-1+y_width-1-36-2, Y + "" + SAME_IP_MAX + X,             "maximum connections per IP address") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "pinginterval",   width-2-15-1+y_width-1-36-2, Y + "" + PING_INTERVAL + X,           "seconds between I3 pings") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "monitor",        width-2-15-1+y_width-1-36-2, Y + "" + GLOBAL_MONITOR + X,          "monitoring level, 0 to 2") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "newbielevel",    width-2-15-1+y_width-1-36-2, Y + "" + MAX_NEWBIE_LEVEL + X,        "maximum newbie level") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "resets",         width-2-15-1+y_width-1-36-2, Y + "" + TIME_TO_RESET + X,           "seconds between reset calls") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "offset",         width-2-15-1+y_width-1-36-2, Y + "" + GMT_OFFSET + X,              "seconds of offset from GMT") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "extraoffset",    width-2-15-1+y_width-1-36-2, Y + "" + EXTRA_TIME_OFFSET + X,       "hours of offset from GMT") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "maxcommands",    width-2-15-1+y_width-1-36-2, Y + "" + MAX_COMMANDS_PER_SECOND + X, "maximum user commands per second") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "maxidle",        width-2-15-1+y_width-1-36-2, Y + "" + IDLE_TIMEOUT + X,            "seconds to idle autoquit") });
+
+        output += ({ sprintf( "%%^BOLD%%^%%^CYAN%%^%|*'='s%%^RESET%%^", width, "[ SYSTEM OPTIONS ]") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "locked",         width-2-15-1+(MUD_IS_LOCKED ? ena_width : dis_width)-1-36-2,      (MUD_IS_LOCKED ? enabled : disabled),      "restrict logins") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "instances",      width-2-15-1+(ENABLE_INSTANCES ? ena_width : dis_width)-1-36-2,   (ENABLE_INSTANCES ? enabled : disabled),   "use MUD instances") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "disablereboot",  width-2-15-1+(DISABLE_REBOOTS ? ena_width : dis_width)-1-36-2,    (DISABLE_REBOOTS ? enabled : disabled),    "disable reboots") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "compat",         width-2-15-1+(COMPAT_MODE ? ena_width : dis_width)-1-36-2,        (COMPAT_MODE ? enabled : disabled),        "use compatibility mode") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "grid",           width-2-15-1+(GRID ? ena_width : dis_width)-1-36-2,               (GRID ? enabled : disabled),               "use room grid system") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "localtime",      width-2-15-1+(LOCAL_TIME ? ena_width : dis_width)-1-36-2,         (LOCAL_TIME ? enabled : disabled),         "use local system time") });
+
+        output += ({ sprintf( "%%^BOLD%%^%%^CYAN%%^%|*'='s%%^RESET%%^", width, "[ CHARACTER OPTIONS ]") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "autowiz",        width-2-15-1+(AUTO_WIZ ? ena_width : dis_width)-1-36-2,           (AUTO_WIZ ? enabled : disabled),           "all users are wizards") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "justhumans",     width-2-15-1+(HUMANS_ONLY ? ena_width : dis_width)-1-36-2,        (HUMANS_ONLY ? enabled : disabled),        "restrict to a single race") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "justenglish",    width-2-15-1+(ENGLISH_ONLY ? ena_width : dis_width)-1-36-2,       (ENGLISH_ONLY ? enabled : disabled),       "restrict to a single language") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "selectclass",    width-2-15-1+(CLASS_SELECTION ? ena_width : dis_width)-1-36-2,    (CLASS_SELECTION ? enabled : disabled),    "class choice at create") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "encumbrance",    width-2-15-1+(ENABLE_ENCUMBRANCE ? ena_width : dis_width)-1-36-2, (ENABLE_ENCUMBRANCE ? enabled : disabled), "stricter encumbrance") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "severable",      width-2-15-1+(SEVERABLE_LIMBS ? ena_width : dis_width)-1-36-2,    (SEVERABLE_LIMBS ? enabled : disabled),    "severable limbs (req. reboot)") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "pk",             width-2-15-1+(PLAYER_KILL ? ena_width : dis_width)-1-36-2,        (PLAYER_KILL ? enabled : disabled),        "allow player-killing") });
+
+        output += ({ sprintf( "%%^BOLD%%^%%^CYAN%%^%|*'='s%%^RESET%%^", width, "[ GAMEPLAY OPTIONS ]") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "retain",         width-2-15-1+(RETAIN_ON_QUIT ? ena_width : dis_width)-1-36-2,     (RETAIN_ON_QUIT ? enabled : disabled),     "inventory persistence") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "fastcombat",     width-2-15-1+(FAST_COMBAT ? ena_width : dis_width)-1-36-2,        (FAST_COMBAT ? enabled : disabled),        "disable default combat heartbeat") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "questrequired",  width-2-15-1+(REQUIRE_QUESTING ? ena_width : dis_width)-1-36-2,   (REQUIRE_QUESTING ? enabled : disabled),   "require questing") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "autoadvance",    width-2-15-1+(AUTO_ADVANCE ? ena_width : dis_width)-1-36-2,       (AUTO_ADVANCE ? enabled : disabled),       "autoadvance characters") });
+
+        output += ({ sprintf( "%%^BOLD%%^%%^CYAN%%^%|*'='s%%^RESET%%^", width, "[ INTERFACE OPTIONS ]") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "minimap",        width-2-15-1+(MINIMAP ? ena_width : dis_width)-1-36-2,            (MINIMAP ? enabled : disabled),            "player minimap access") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "wizmap",         width-2-15-1+(WIZMAP ? ena_width : dis_width)-1-36-2,             (WIZMAP ? enabled : disabled),             "creator wizmap access") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "defaultparse",   width-2-15-1+(DEFAULT_PARSING ? ena_width : dis_width)-1-36-2,    (DEFAULT_PARSING ? enabled : disabled),    "use default parser") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "matchcommand",   width-2-15-1+(COMMAND_MATCHING ? ena_width : dis_width)-1-36-2,   (COMMAND_MATCHING ? enabled : disabled),   "fuzzy-match commands") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "matchobject",    width-2-15-1+(OBJECT_MATCHING ? ena_width : dis_width)-1-36-2,    (OBJECT_MATCHING ? enabled : disabled),    "fuzzy-match object names") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "exitsbare",      width-2-15-1+(BARE_EXITS ? ena_width : dis_width)-1-36-2,         (BARE_EXITS ? enabled : disabled),         "simple-match exits") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "nmexits",        width-2-15-1+(NM_STYLE_EXITS ? ena_width : dis_width)-1-36-2,     (NM_STYLE_EXITS ? enabled : disabled),     "Nightmare-style exits") });
+        /* Pay attention!  This is a negative flag! */
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "ced",            width-2-15-1+(!CED_DISABLED ? ena_width : dis_width)-1-36-2,      (!CED_DISABLED ? enabled : disabled),      "use fullscreen editor") });
+
+        output += ({ sprintf( "%%^BOLD%%^%%^CYAN%%^%|*'='s%%^RESET%%^", width, "[ NETWORK OPTIONS ]") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "router",         width-2-15-1+(router_here ? ena_width : dis_width)-1-36-2,        (router_here ? enabled : disabled),        "BE an intermud router") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "cgi",            width-2-15-1+(ENABLE_CGI ? ena_width : dis_width)-1-36-2,         (ENABLE_CGI ? enabled : disabled),         "allow MUD webserver CGI") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "dirlist",        width-2-15-1+(WWW_DIR_LIST ? ena_width : dis_width)-1-36-2,       (WWW_DIR_LIST ? enabled : disabled),       "allow webserver dir listing") });
+
+        if( ENABLE_CGI == 1 && WWW_DIR_LIST == 1 ) {
+            output += ({ sprintf( "  %-=15s %-=*s %=36s", "creweb",         width-2-15-1+(ENABLE_CREWEB ? ena_width : dis_width)-1-36-2,      (ENABLE_CREWEB ? enabled : disabled),      "allow web-based editing") });
+        }
+
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "loglocal",       width-2-15-1+(LOG_LOCAL_CHANS ? ena_width : dis_width)-1-36-2,    (LOG_LOCAL_CHANS ? enabled : disabled),    "log local channels") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "logremote",      width-2-15-1+(LOG_REMOTE_CHANS ? ena_width : dis_width)-1-36-2,   (LOG_REMOTE_CHANS ? enabled : disabled),   "log remote channels") });
+        /* Pay attention!  This is a negative flag! */
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "imc2",           width-2-15-1+(!DISABLE_IMC2 ? ena_width : dis_width)-1-36-2,      (!DISABLE_IMC2 ? enabled : disabled),      "IMC2 InterMUD Network") });
+
+        output += ({ sprintf( "%%^BOLD%%^%%^CYAN%%^%|*'='s%%^RESET%%^", width, "[ NETWORK SERVICES ]") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "inet",           width-2-15-1+(inet_enabled ? ena_width : dis_width)-1-36-2,      (inet_enabled ? srvenabled : srvdisabled),      "inet services") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "ftp",            width-2-15-1+(ftp_enabled ? ena_width : dis_width)-1-36-2,       (ftp_enabled ? srvenabled : srvdisabled),       "FTP service") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "hftp",           width-2-15-1+(hftp_enabled ? ena_width : dis_width)-1-36-2,      (hftp_enabled ? srvenabled : srvdisabled),      "FTP over HTTP service") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "rcp",            width-2-15-1+(rcp_enabled ? ena_width : dis_width)-1-36-2,       (rcp_enabled ? srvenabled : srvdisabled),       "RCP service") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "oob",            width-2-15-1+(oob_enabled ? ena_width : dis_width)-1-36-2,       (oob_enabled ? srvenabled : srvdisabled),       "OOB services") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "http",           width-2-15-1+(http_enabled ? ena_width : dis_width)-1-36-2,      (http_enabled ? srvenabled : srvdisabled),      "WEB server") });
+        if(!DISABLE_INTERMUD) {
+            output += ({ sprintf( "  %-=15s %-=*s %=36s", "intermud",       width-2-15-1+(!RESTRICTED_INTERMUD ? i3eu_width: i3er_width)-1-36-2, (!RESTRICTED_INTERMUD ? i3ena + i3un : i3ena + i3res), "I3 InterMUD Network") });
+        } else {
+            output += ({ sprintf( "  %-=15s %-=*s %=36s", "intermud",       width-2-15-1+(!RESTRICTED_INTERMUD ? i3du_width: i3dr_width)-1-36-2, (!RESTRICTED_INTERMUD ? i3dis + i3un : i3dis + i3res), "I3 InterMUD Network") });
+        }
+
+        //"\n  channelpipes [ enable %^RESET%^| disable %^RESET%^]  (Whether to allow piping messages.  Not recommended.)"
+        output += ({ "" });
+        output += ({ "See also:  admintool, config" });
+
+        this_player()->eventPage(output, MSG_SYSTEM);
+        return 0;
 }
 

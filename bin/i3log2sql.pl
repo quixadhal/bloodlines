@@ -41,6 +41,32 @@ CREATE INDEX ix_mud ON chanlogs (mud);
 CREATE UNIQUE INDEX ix_chanlogs ON chanlogs (msg_date, network, channel, speaker, mud, is_emote, message); 
 CREATE INDEX ix_twat ON chanlogs (twat);
 
+CREATE VIEW today AS
+    SELECT to_char(chanlogs.msg_date, 'MM/DD HH24:MI'::text) AS "time", chanlogs.channel, (chanlogs.speaker || '@'::text) || chanlogs.mud AS speaker, chanlogs.message
+    FROM chanlogs
+    WHERE chanlogs.msg_date >= (now() - '1 day'::interval)
+    ORDER BY chanlogs.msg_date;
+
+CREATE FUNCTION fn_wordcount(text) RETURNS integer AS
+'   my $text = $_[0];
+    return undef if !defined $text;
+    my @words = split /\\s+/, $text;
+    return undef if !defined @words;
+    return scalar(@words);'
+LANGUAGE plperlu;
+
+CREATE FUNCTION fn_properwordcount(text) RETURNS integer AS
+'   my $text = $_[0];
+    return undef if !defined $text;
+    my @words = split /[^a-zA-Z0-9_-]+/, $text;
+    my $count = 0;
+    foreach (@words) {
+      $count++ if /[a-zA-Z0-9_-]{5,}/;
+    }
+    return undef if !defined @words;
+    return $count;'
+LANGUAGE plperlu;
+
 =cut
 
 my $twitter;

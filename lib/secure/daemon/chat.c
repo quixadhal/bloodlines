@@ -343,7 +343,8 @@ string decolor(string str){
         tmp = sscanf(str,"<%s>%s",s2,s3);
     if(tmp != 2) return str;
     else {
-        test = s1+"<"+s2+">%^RESET%^"+TERMINAL_D->no_colours(s3);
+        //test = s1+"<"+s2+">%^RESET%^"+TERMINAL_D->no_colours(s3);
+        test = s1+"<"+s2+">%^RESET%^"+strip_colours(s3);
         return test;
     }
 }
@@ -461,6 +462,86 @@ varargs int eventAddLast(string feep, string str, string pchan, string pmsg, str
     return 1;
 }
 
+string gnomish(string str) {
+    string ret = "";
+    array words = explode(str, " ");
+    foreach( string word in words ) {
+        ret += capitalize(lower_case(word));
+    }
+    ret = implode(filter(explode(ret, ""), (: ($1 >= "A" && $1 <= "Z") || ($1 >= "a" && $1 <= "z" ) || ($1 >= "0" && $1 <= "9") ? 1 : 0 :)), "");
+    return ret;
+}
+
+string boldify(string str, string color) {
+    string ret = "";
+    int counter = 0;
+
+    if( strlen(str) < 1 )
+        return ret;
+
+    foreach(mixed element in str) {
+        if(counter%2)
+            ret += "%^BOLD%^";
+        ret += "%^"+color+"%^";
+        ret += convert_ascii(element);
+        ret += "%^RESET%^";
+        counter++;
+    }
+    return ret;
+}
+
+string rainbow(string str) {
+    string ret = "";
+    string *colors = ({ 
+            "RED", 
+            "LIGHTRED", 
+            "ORANGE", 
+            "YELLOW", 
+            "GREEN", 
+            "LIGHTGREEN", 
+            "GREY", 
+            "WHITE", 
+            "LIGHTCYAN", 
+            "CYAN", 
+            "LIGHTBLUE", 
+            "BLUE", 
+            "DARKGREY", 
+            "MAGENTA", 
+            "PINK"
+            });
+    string tmp = "";
+    int len = 0;
+    int seglen = 0;
+    int pos = 0;
+    int i = 0;
+   
+    if( strlen(str) < 1 )
+        return ret;
+
+    tmp = implode(filter(explode(str, ""), (: $1 != " " && $1 != "\t" && $1 != "\n" && $1 != "\r" ? 1 : 0 :)), "");
+    len = strlen(tmp);
+
+    if( len < 1 )
+        return ret;
+
+    seglen = min( ({ 5, max( ({ len / sizeof(colors), 1 }) ) }) );
+    foreach( string letter in explode(str, "")) {
+        if(letter == " " || letter == "\t" || letter == "\n" || letter == "\r") {
+            ret += letter;
+        } else {
+            ret += "%^" + colors[i % sizeof(colors)] + "%^" + letter + "%^RESET%^";
+            pos++;
+        }
+        if( pos >= seglen ) {
+            i++;
+            pos = 0;
+        }
+    }
+    //write2("Result == \"" + ret + "\"\n");
+
+    return ret;
+}
+
 int cmdChannel(string verb, string str){
     string msg, name, rc, target, targetkey, target_msg, emote_cmd, remains;
     string *exploded;
@@ -472,6 +553,32 @@ int cmdChannel(string verb, string str){
         string foo, bar;
 
         if(CHANNEL_PIPES){
+            if(grepp(verb,"|boldred")){
+                str = boldify(str, "RED");
+                verb = replace_string(verb,"|boldred","");
+            }
+            if(grepp(verb,"|boldyellow")){
+                str = boldify(str, "YELLOW");
+                verb = replace_string(verb,"|boldyellow","");
+            }
+            if(grepp(verb,"|boldgreen")){
+                str = boldify(str, "GREEN");
+                verb = replace_string(verb,"|boldgreen","");
+            }
+            if(grepp(verb,"|boldblue")){
+                str = boldify(str, "BLUE");
+                verb = replace_string(verb,"|boldblue","");
+            }
+
+            if(grepp(verb,"|rainbow")){
+                str = rainbow(str);
+                verb = replace_string(verb,"|rainbow","");
+            }
+            if(grepp(verb,"|gnomish")){
+                str = gnomish(str);
+                verb = replace_string(verb,"|gnomish","");
+            }
+
             if(grepp(verb,"|morse")){
                 str = morse(str);
                 verb = replace_string(verb,"|morse","");
@@ -1275,8 +1382,8 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
         //        +", "+identify(msg)+", "+identify(emote)+", "+identify(target)+", "
         //        +identify(targmsg), "green");
 
-        //pmsg = strip_colours(pmsg);
-        pmsg = TERMINAL_D->no_colours(pmsg);
+        pmsg = strip_colours(pmsg);
+        //pmsg = TERMINAL_D->no_colours(pmsg);
         eventAddLast(ch, msg, pchan, pmsg);
         eventChannelMsgToListeners(who, ch, msg, emote, target, targmsg);
     }
@@ -1286,8 +1393,8 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
 
         msg = formChatString(ch, who, msg);
         //tn("CHAT_D->eventSendChannel: not emote?", "green");
-        //pmsg = strip_colours(pmsg);
-        pmsg = TERMINAL_D->no_colours(pmsg);
+        pmsg = strip_colours(pmsg);
+        //pmsg = TERMINAL_D->no_colours(pmsg);
         eventAddLast(ch, msg, pchan, pmsg, who);
         eventChannelMsgToListeners(who, ch, msg, emote, target, targmsg);
     }
