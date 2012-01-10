@@ -22,6 +22,14 @@ my $BE_A_TWIT = 0;
 
 =head1 SQL
 
+CREATE TABLE bots (
+    channel     TEXT NOT NULL,
+    speaker     TEXT NOT NULL,
+    mud         TEXT NOT NULL
+);
+
+CREATE UNIQUE INDEX ix_bottable ON bots(channel, speaker, mud);
+
 CREATE TABLE chanlogs (
     msg_date    TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
     network     TEXT NOT NULL,
@@ -31,7 +39,8 @@ CREATE TABLE chanlogs (
     is_emote    BOOLEAN DEFAULT false,
     message     TEXT,
     is_url      BOOLEAN DEFAULT false,
-    twat        BOOLEAN DEFAULT false
+    twat        BOOLEAN DEFAULT false,
+    is_bot      BOOLEAN DEFAULT false
 );
 
 CREATE INDEX ix_msg_date ON chanlogs (msg_date);
@@ -40,6 +49,7 @@ CREATE INDEX ix_speaker ON chanlogs (speaker);
 CREATE INDEX ix_mud ON chanlogs (mud);
 CREATE UNIQUE INDEX ix_chanlogs ON chanlogs (msg_date, network, channel, speaker, mud, is_emote, message); 
 CREATE INDEX ix_twat ON chanlogs (twat);
+CREATE INDEX ix_bot ON chanlogs (is_bot);
 
 CREATE VIEW today AS
     SELECT to_char(chanlogs.msg_date, 'MM/DD HH24:MI'::text) AS "time", chanlogs.channel, (chanlogs.speaker || '@'::text) || chanlogs.mud AS speaker, chanlogs.message
@@ -67,6 +77,16 @@ CREATE FUNCTION fn_properwordcount(text) RETURNS integer AS
     return $count;'
 LANGUAGE plperlu;
 
+CREATE VIEW words AS
+    SELECT speaker, sum(wordcount) AS words
+    FROM (  SELECT speaker, length(message) AS wordcount
+            FROM chanlogs
+            WHERE NOT is_bot AND msg_date >= now() - INTERVAL '1 weeks'
+            GROUP BY speaker, message )
+    AS foo
+    GROUP BY speaker
+    ORDER BY words DESC LIMIT 10;
+
 =cut
 
 my $twitter;
@@ -82,9 +102,11 @@ if( $BE_A_TWIT ) {
 }
 
 my $add_entry_sql = $dbc->prepare( qq!
-    INSERT INTO chanlogs (msg_date, network, channel, speaker, mud, message, is_url)
-    VALUES (?,trim(?),trim(?),trim(?),trim(?),trim(?),?)
+    INSERT INTO chanlogs (msg_date, network, channel, speaker, mud, message, is_url, is_bot)
+    VALUES (?,trim(?),trim(?),trim(?),trim(?),trim(?),?,?)
     !);
+
+my $botlist = bot_list();
 
 sub most_recent_sql {
     my $res = $dbc->selectrow_hashref(qq!
@@ -95,6 +117,18 @@ sub most_recent_sql {
          LIMIT 1
 
     !, undef);
+    print STDERR $DBI::errstr."\n" if !defined $res;
+    return $res;
+}
+
+sub bot_list {
+    my $res = $dbc->selectall_arrayref(qq!
+
+        SELECT *
+          FROM bots
+      ORDER BY channel, speaker, mud DESC
+
+    !, { Slice => {} } );
     print STDERR $DBI::errstr."\n" if !defined $res;
     return $res;
 }
@@ -229,8 +263,14 @@ sub load_logs {
 
 sub add_entry {
     my $data = shift;
+    my $is_bot = 0;
 
-    my $rv = $add_entry_sql->execute($data->{'msg_date'}, $data->{'network'}, $data->{'channel'}, $data->{'speaker'}, $data->{'mud'}, $data->{'message'}, $data->{'is_url'});
+    $is_bot = 1 if grep {   $data->{'channel'} eq $_->{'channel'} 
+                        &&  $data->{'speaker'} eq $_->{'speaker'} 
+                        &&  $data->{'mud'} eq $_->{'mud'} 
+                        } @$botlist;
+
+    my $rv = $add_entry_sql->execute($data->{'msg_date'}, $data->{'network'}, $data->{'channel'}, $data->{'speaker'}, $data->{'mud'}, $data->{'message'}, $data->{'is_url'}, $is_bot);
     if($rv) {
         $dbc->commit;
         return 1;
