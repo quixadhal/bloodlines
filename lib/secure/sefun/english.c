@@ -447,7 +447,7 @@ string consolidate(int x, string str) {
 
     }
     if( member_array(lower_case(strip_colours(words[0])), 
-                ({"a", "an", "the", "one"}) ) > -1 ) words = words[1..];
+                ({"a", "an", "the", "one"}) ) > -1 && sizeof( words ) > 1) words = words[1..];
     return (cardinal(x) + " " + pluralize(implode(words, " ")));
 }
 
@@ -466,4 +466,66 @@ varargs int ordinalp(string str, int parseflag){
             return 1;
     }
     return 0;
+}
+
+string _soundex(string word) {
+    string array letters = ({});
+    string output = "";
+    int pos = 0;
+    string last = "";
+    mapping codex = ([
+            "B" : 1, "F" : 1, "P" : 1, "V" : 1,
+            "C" : 2, "G" : 2, "J" : 2, "K" : 2, "Q" : 2, "S" : 2, "X" : 2, "Z" : 2,
+            "D" : 3, "T" : 3,
+            "L" : 4,
+            "M" : 5, "N" : 5,
+            "R" : 6
+            ]);
+
+    if(!word) return "Z000";
+    if(!stringp(word)) return "Z000";
+    letters = explode(upper_case(word), "");
+    foreach(string letter in letters) {
+        if(pos == 0) {
+            last = letter;
+            output += letter;
+        } else if(letter == last) {
+            ;
+        } else {
+            match = codex[letter];
+            if(undefinedp(match))
+                continue;
+            else if(last == match)
+                continue;
+            else {
+                last = match;
+                output += match;
+            }
+        }
+        pos++;
+        if(strlen(output) >= 4) break;
+    }
+    output += "000";
+    return output[0..3];
+}
+
+string array soundex(mixed data) {
+    string array stuff = ({});
+
+    if(!data) stuff += ({ "Z000" });
+    if(objectp(data)) stuff += ({ _soundex(data->GetName()) });
+    else if(stringp(data)) {
+        foreach(string word in explode(data, " ")) {
+            if(!word) continue;
+            if(strlen(word) < 1) continue;
+            stuff += ({ _soundex(word) });
+        }
+    }
+    else if(arrayp(data)) {
+        foreach(string word in data) {
+            stuff += ({ _soundex(word) });
+        }
+    } else stuff += ({ "Z000" });
+
+    return stuff;
 }
