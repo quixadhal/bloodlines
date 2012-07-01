@@ -199,14 +199,16 @@ if ($result == 0) {
                     <div id="clock" align="center" style="color: #d0d000;"><?php echo date('g:i:s a'); ?></div>
                     <div id="date" align="center" style="color: #d0d000;"><?php echo date('F j, Y'); ?></div>
                     <br />
-                    <a href="http://www.wunderground.com/cgi-bin/findweather/getForecast?query=zmw:49004.2.99999&bannertypeclick=wu_blueglass">
-                        <img src="http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_blueglass&pwscode=KMIKALAM1&ForcedCity=Kalamazoo&ForcedState=MI&zipcode=49048&language=EN"
-                             height=68 width=120 border=0
+                    <span style="display: block !important; width: 120px; text-align: center; font-family: sans-serif; font-size: 12px;">
+                        <a  href="http://www.wunderground.com/cgi-bin/findweather/getForecast?query=zmw:49004.2.99999&bannertypeclick=wu_blueglass">
+                            <img    src="http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_blueglass&airportcode=KAZO&ForcedCity=Kalamazoo&ForcedState=MI&zipcode=49004&language=EN"
+                                    height="68" width="120" border="0"
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                              onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
-                        />
-                    </a>
+                            />
+                        </a>
+                    </span>
                     <br />
                     <br />
                     <a href="https://github.com/quixadhal/bloodlines">

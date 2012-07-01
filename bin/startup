@@ -1,3 +1,3 @@
-/home/bloodlines/bin/anytermd --port 5555 -u nobody -c 'telnet -E 127.0.0.1 3000 -l %p' >/dev/null 2>&1 &
+/home/bloodlines/bin/anytermd --port 5555 -u nobody -c 'telnet -E wiley.shadowlord.org 3000 -l %p' >/dev/null 2>&1 &
 /home/bloodlines/bin/addr_server 4990 >/dev/null 2>&1 &
 /home/bloodlines/bin/driver /home/bloodlines/bin/mudos.cfg >/home/bloodlines/bin/driver.log 2>&1 &

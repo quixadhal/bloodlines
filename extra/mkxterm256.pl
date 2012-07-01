@@ -33,6 +33,7 @@ my $FORMAT_LAST = 6;
 #my $FORMAT_HTML = 6;
 #my $FORMAT_LAST = 6;
 
+my @themes = ( "default", "afk", "smaug" );
 #my @term_name = ( "unknown", "ansi", "xterm-256color", "xterm-grey", "imc2", "i3", "mxp", "html" );
 my @term_name = ( "unknown", "ansi", "xterm-256color", "xterm-grey", "imc2", "i3", "mxp" );
 
@@ -69,6 +70,7 @@ my %terminal_trans;
 my %ansi_trans;
 my %xterm_trans;
 my %x11_trans;
+my %symbolic_trans;
 
 my @hexes;
 my @greys;
@@ -356,6 +358,126 @@ sub setup_colour_maps
 #                '/TD'       => '</TD>',
 #  };
 
+}
+
+sub setup_symbolic
+{
+    # There is only one format for this one.
+    $symbolic_trans{$FORMAT_NONE} = {
+        'black'         => { 'default' => '%^BLACK%^', },
+        'dred'          => { 'default' => '%^RED%^',  },
+        'dgreen'        => { 'default' => '%^GREEN%^', },
+        'orange'        => { 'default' => '%^ORANGE%^', },
+        'dblue'         => { 'default' => '%^BLUE%^', },
+        'purple'        => { 'default' => '%^MAGENTA%^', },
+        'cyan'          => { 'default' => '%^LIGHTCYAN%^', },
+        'grey'          => { 'default' => '%^GREY%^', },
+        'dgrey'         => { 'default' => '%^DARKGREY%^', },
+        'red'           => { 'default' => '%^LIGHTRED%^', },
+        'green'         => { 'default' => '%^LIGHTGREEN%^', },
+        'yellow'        => { 'default' => '%^YELLOW%^', },
+        'blue'          => { 'default' => '%^LIGHTBLUE%^', },
+        'pink'          => { 'default' => '%^PINK%^', },
+        'lblue'         => { 'default' => '%^CYAN%^', },
+        'white'         => { 'default' => '%^WHITE%^', },
+
+        'blink'         => { 'default' => '%^FLASH%^%^BLACK%^', },
+        'bdred'         => { 'default' => '%^FLASH%^%^RED%^', },
+        'bdgreen'       => { 'default' => '%^FLASH%^%^GREEN%^', },
+        'bdorange'      => { 'default' => '%^FLASH%^%^ORANGE%^', },
+        'bdblue'        => { 'default' => '%^FLASH%^%^BLUE%^', },
+        'bpurple'       => { 'default' => '%^FLASH%^%^MAGENTA%^', },
+        'bcyan'         => { 'default' => '%^FLASH%^%^LIGHTCYAN%^', },
+        'bgrey'         => { 'default' => '%^FLASH%^%^GREY%^', },
+        'bdgrey'        => { 'default' => '%^FLASH%^%^DARKGREY%^', },
+        'bred'          => { 'default' => '%^FLASH%^%^LIGHTRED%^', },
+        'bgreen'        => { 'default' => '%^FLASH%^%^LIGHTGREEN%^', },
+        'byellow'       => { 'default' => '%^FLASH%^%^YELLOW%^', },
+        'bblue'         => { 'default' => '%^FLASH%^%^LIGHTBLUE%^', },
+        'bpink'         => { 'default' => '%^FLASH%^%^PINK%^', },
+        'blblue'        => { 'default' => '%^FLASH%^%^CYAN%^', },
+        'bwhite'        => { 'default' => '%^FLASH%^%^WHITE%^', },
+
+        'plain'         => { 'default' => '%^GREY%^', },
+        'action'        => { 'default' => '%^GREY%^', },
+        'say'           => { 'default' => '%^LIGHTBLUE%^', },
+        'chat'          => { 'default' => '%^LIGHTGREEN%^', },
+        'yells'         => { 'default' => '%^CYAN%^', },
+        'tell'          => { 'default' => '%^WHITE%^', },
+        'hit'           => { 'default' => '%^GREY%^', },
+        'hitme'         => { 'default' => '%^GREY%^', },
+        'immortal'      => { 'default' => '%^YELLOW%^', },
+        'hurt'          => { 'default' => '%^GREY%^', },
+        'falling'       => { 'default' => '%^GREY%^', },
+        'danger'        => { 'default' => '%^GREY%^', },
+        'magic'         => { 'default' => '%^LIGHTBLUE%^', },
+        'consider'      => { 'default' => '%^GREY%^', },
+        'report'        => { 'default' => '%^GREY%^', },
+        'poison'        => { 'default' => '%^GREEN%^', },
+        'social'        => { 'default' => '%^LIGHTCYAN%^', },
+        'dying'         => { 'default' => '%^GREY%^', },
+        'dead'          => { 'default' => '%^GREY%^', },
+        'skill'         => { 'default' => '%^LIGHTBLUE%^', },
+        'carnage'       => { 'default' => '%^GREY%^', },
+        'damage'        => { 'default' => '%^GREY%^', },
+        'fleeing'       => { 'default' => '%^GREY%^', },
+        'rmname'        => { 'default' => '%^LIGHTRED%^', },
+        'rmdesc'        => { 'default' => '%^GREY%^', },
+        'objects'       => { 'default' => '%^LIGHTBLUE%^', },
+        'people'        => { 'default' => '%^PINK%^', },
+        'list'          => { 'default' => '%^GREY%^', },
+        'bye'           => { 'default' => '%^GREY%^', },
+        'gold'          => { 'default' => '%^YELLOW%^', },
+        'gtells'        => { 'default' => '%^GREY%^', },
+        'note'          => { 'default' => '%^GREY%^', },
+        'hungry'        => { 'default' => '%^ORANGE%^', },
+        'thirsty'       => { 'default' => '%^LIGHTBLUE%^', },
+        'fire'          => { 'default' => '%^LIGHTRED%^', },
+        'sober'         => { 'default' => '%^%^', },
+        'wearoff'       => { 'default' => '%^%^', },
+        'exits'         => { 'default' => '%^%^', },
+        'score'         => { 'default' => '%^%^', },
+        'reset'         => { 'default' => '%^%^', },
+        'log'           => { 'default' => '%^%^', },
+        'die_msg'       => { 'default' => '%^%^', },
+        'wartalk'       => { 'default' => '%^%^', },
+        'arena'         => { 'default' => '%^%^', },
+        'muse'          => { 'default' => '%^%^', },
+        'think'         => { 'default' => '%^%^', },
+        'aflags'        => { 'default' => '%^%^', },
+        'who'           => { 'default' => '%^%^', },
+        'racetalk'      => { 'default' => '%^%^', },
+        'ignore'        => { 'default' => '%^%^', },
+        'whisper'       => { 'default' => '%^%^', },
+        'divider'       => { 'default' => '%^%^', },
+        'morph'         => { 'default' => '%^%^', },
+        'shout'         => { 'default' => '%^%^', },
+        'rflags'        => { 'default' => '%^%^', },
+        'stype'         => { 'default' => '%^%^', },
+        'aname'         => { 'default' => '%^%^', },
+        'auction'       => { 'default' => '%^%^', },
+        'score2'        => { 'default' => '%^%^', },
+        'score3'        => { 'default' => '%^%^', },
+        'score4'        => { 'default' => '%^%^', },
+        'who2'          => { 'default' => '%^%^', },
+        'who3'          => { 'default' => '%^%^', },
+        'who4'          => { 'default' => '%^%^', },
+        'intermud'      => { 'default' => '%^%^', },
+        'helpfiles'     => { 'default' => '%^%^', },
+        'who5'          => { 'default' => '%^%^', },
+        'score5'        => { 'default' => '%^%^', },
+        'who6'          => { 'default' => '%^%^', },
+        'who7'          => { 'default' => '%^%^', },
+        'prac'          => { 'default' => '%^%^', },
+        'prac2'         => { 'default' => '%^%^', },
+        'prac3'         => { 'default' => '%^%^', },
+        'prac4'         => { 'default' => '%^%^', },
+        'mxpprompt'     => { 'default' => '%^%^', },
+        'guildtalk'     => { 'default' => '%^%^', },
+        'board'         => { 'default' => '%^%^', },
+        'board2'        => { 'default' => '%^%^', },
+        'board3'        => { 'default' => '%^%^', },
+    };
 }
 
 sub setup_xterm {
@@ -2337,6 +2459,7 @@ sub output_data {
 
 setup_hex_arrays();
 setup_colour_maps();
+setup_symbolic();
 setup_xterm();
 setup_x11();
 setup_imc();

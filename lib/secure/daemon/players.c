@@ -757,6 +757,63 @@ static mapping GatherUserData(){
     return cands;
 }
 
+mixed room_env(object ob){
+    string *riders;
+    object env = environment(ob);
+    if(!env) return 0;
+    if(!living(env)) return env;
+    if(arrayp(riders = env->GetRiders()) && member_array(ob, riders) != -1 &&
+            environment(env)) env = environment(env);
+    return env;
+}
+
+static mapping GrabAUser( string who ) {
+    mapping cands = ([]);
+
+    if(undefinedp(who))
+        return cands;
+
+    reset_eval_cost();
+    gplayer = who;         
+    if(ob = find_player(gplayer)){
+        unguarded( (: ob->save_player(gplayer) :));
+    }
+    //SaveObject(SaveFile);
+    unguarded( (: LoadPlayer(gplayer) :) );
+    cands[gplayer] = ([
+                        "LoginTime" : LoginTime, 
+                        "HostSite" : HostSite,
+                        "Room" : LoginSite,
+                     ]);
+    //RestoreObject(SaveFile);
+
+    return cands;
+}
+
+static mapping CollectUserData( string who ) {
+    mapping cands = ([]);
+
+    if(undefinedp(who)) {
+        foreach(string user in user_list){         
+            cands += GrabAUser( user );
+        }
+    } else {
+        cands += GrabAUser( who );
+    }
+    return cands;
+}
+
+string ShowUserData( string who ) {
+    string output;
+    mapping user_data = CollectUserData( who );
+
+    output = sprintf("%20s %32s %20s %s\n", "User", "Last Login", "Host", "Room");
+    foreach(string user, mapping data in user_data) {
+        output += sprintf("%20s %32s %20s %s\n", user, ctime(data["LoginTime"]), data["HostSite"], data["Room"]);
+    }
+    return output;
+}
+
 int SelektUsers(int gather){
     mapping cands = ([]);
     int last, count, interval;

@@ -23,8 +23,8 @@ my $BE_A_TWIT = 0;
 =head1 SQL
 
 CREATE TABLE bots (
-    channel     TEXT NOT NULL,
-    speaker     TEXT NOT NULL,
+    channel     TEXT,
+    speaker     TEXT,
     mud         TEXT NOT NULL
 );
 
@@ -85,7 +85,10 @@ CREATE VIEW words AS
             GROUP BY speaker, message )
     AS foo
     GROUP BY speaker
-    ORDER BY words DESC LIMIT 10;
+    ORDER BY words DESC;
+
+-- insert into bots (channel, speaker, mud) select distinct channel, speaker, mud from chanlogs where speaker ilike 'gribbles'; 
+-- begin; update chanlogs set is_bot = true where NOT is_bot and channel IN (select distinct channel from bots) and speaker IN (select distinct speaker from bots) and mud IN (select distinct mud from bots);
 
 =cut
 
@@ -265,8 +268,8 @@ sub add_entry {
     my $data = shift;
     my $is_bot = 0;
 
-    $is_bot = 1 if grep {   $data->{'channel'} eq $_->{'channel'} 
-                        &&  $data->{'speaker'} eq $_->{'speaker'} 
+    $is_bot = 1 if grep {   ( !defined $_->{'channel'} || $data->{'channel'} eq $_->{'channel'} )
+                        &&  ( !defined $_->{'speaker'} || $data->{'speaker'} eq $_->{'speaker'} )
                         &&  $data->{'mud'} eq $_->{'mud'} 
                         } @$botlist;
 

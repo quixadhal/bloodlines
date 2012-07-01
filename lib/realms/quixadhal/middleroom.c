@@ -3,16 +3,11 @@
 #include "/realms/quixadhal/area/customdefs.h"
 
 inherit LIB_ROOM;
-int ReadSign();
-int ReadSheet();
 int privacy = 0;
 string privs = "";
 string LongString(){
-    string ret = "You are standing in the workroom of the mighty " + privs +
-    "!  \nYou may return to the Creators' Hall by going down.\n"+
-    "A sample room is east."+
-    "\n%^GREEN%^There is a sign here you can read.%^RESET%^"+
-    "\n%^GREEN%^There is a sheet here you can read.%^RESET%^";
+    string ret = "You are in the Middle Testroom of " + privs + ".\n";
+    ret += "Other rooms lie east and west.";
     if(privacy) ret += "\n%^YELLOW%^There is a privacy force field "+
         "active around this room.%^RESET%^";
     return ret;
@@ -26,36 +21,16 @@ static void create() {
 
     SetClimate("indoors");
     SetAmbientLight(40);
-    SetShort(possessive_noun(privs) + " workroom");
+    SetShort("Middle test");
     SetLong( (: LongString :) );
-    SetItems( ([ "workroom" : "It looks very nice.",
-        ({"sign","hint","hints"}) : "A sign with hints for creators.",
-        ({"sheet","reminder","reminders"}) : "A sheet with quick reminders for creators.",
-      ]) );
     SetExits( ([
-        "east" : "/realms/quixadhal/area/room/sample_room",
-        "down" : "/domains/default/room/wiz_hall",
-        "south" : "/realms/quixadhal/westroom.c",
+        "west" : "/realms/quixadhal/westroom.c",
+        "east" : "/realms/quixadhal/eastroom.c",
       ]) );
-    SetRead( ([
-        ({"sign","hint","hints"}) : (: ReadSign :),
-        ({"sheet","reminder","reminders"}) : (: ReadSheet :)
-      ]) );
-    SetInventory( ([
-        MY_OBJ "/chest" : 1,
-        "/domains/default/obj/bbucket" :1,
-      ]) );
+    SetDoor( "east" , "/domains/default/doors/steel_door.c" );
+    SetDoor( "west" , "/domains/default/doors/steel_door.c" );
+
     SetNoModify(0);
-}
-
-int ReadSign(){
-    this_player()->eventPage("/news/hints.txt");
-    return 1;
-}
-
-int ReadSheet(){
-    this_player()->eventPage("/news/reminders.txt");
-    return 1;
 }
 
 void init(){
@@ -128,4 +103,3 @@ int mod_privacy(string str){
         return 1;
     }
 }
-

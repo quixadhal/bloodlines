@@ -473,6 +473,7 @@ string _soundex(string word) {
     string output = "";
     int pos = 0;
     string last = "";
+    string match = "";
     mapping codex = ([
             "B" : 1, "F" : 1, "P" : 1, "V" : 1,
             "C" : 2, "G" : 2, "J" : 2, "K" : 2, "Q" : 2, "S" : 2, "X" : 2, "Z" : 2,

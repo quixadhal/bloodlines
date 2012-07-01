@@ -307,5 +307,7 @@ string replace_strings(string str, mapping m);
 string new_savename(string name);
 string old_savename(string name);
 string comma(mixed x);
+float atan2( float x, float y );
+float heading( float x, float y );
 
 #endif /* l_sefun_h */

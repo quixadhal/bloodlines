@@ -216,17 +216,23 @@ function load_logs() {
         // Need to mark as links in the log insertion thing...
     }
 
+    if(!isset($show_bots)) {
+        $bot_sql = "NOT is_bot AND ";
+    } else {
+        $bot_sql = "";
+    }
+
     if(isset($search_filter)) {
         if(isset($chan_filter)) {
             if(isset($speaker_filter)) {
-                $where = " WHERE message ILIKE $1 AND channel ILIKE $2 AND speaker ILIKE $3 $links_term";
+                $where = " WHERE $bot_sql message ILIKE $1 AND channel ILIKE $2 AND speaker ILIKE $3 $links_term";
                 $order = " ORDER BY msg_date DESC OFFSET $4 LIMIT $5";
                 $query = $select . $where . $order;
                 $count_query = "SELECT COUNT(*)/$page_size AS page_count FROM chanlogs $where";
                 $count_result = pg_query_params($count_query, array($search_filter, $chan_filter, $speaker_filter)) or die('Query failed: ' . pg_last_error());
                 $result = pg_query_params($query, array($search_filter, $chan_filter, $speaker_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
             } else {
-                $where = " WHERE message ILIKE $1 AND channel ILIKE $2 $links_term";
+                $where = " WHERE $bot_sql message ILIKE $1 AND channel ILIKE $2 $links_term";
                 $order = " ORDER BY msg_date DESC OFFSET $3 LIMIT $4";
                 $query = $select . $where . $order;
                 $count_query = "SELECT COUNT(*)/$page_size AS page_count FROM chanlogs $where";
@@ -235,14 +241,14 @@ function load_logs() {
             }
         } else {
             if(isset($speaker_filter)) {
-                $where = " WHERE message ILIKE $1 AND speaker ILIKE $2 $links_term";
+                $where = " WHERE $bot_sql message ILIKE $1 AND speaker ILIKE $2 $links_term";
                 $order = " ORDER BY msg_date DESC OFFSET $3 LIMIT $4";
                 $query = $select . $where . $order;
                 $count_query = "SELECT COUNT(*)/$page_size AS page_count FROM chanlogs $where";
                 $count_result = pg_query_params($count_query, array($search_filter, $speaker_filter)) or die('Query failed: ' . pg_last_error());
                 $result = pg_query_params($query, array($search_filter, $speaker_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
             } else {
-                $where = " WHERE message ILIKE $1 $links_term";
+                $where = " WHERE $bot_sql message ILIKE $1 $links_term";
                 $order = " ORDER BY msg_date DESC OFFSET $2 LIMIT $3";
                 $query = $select . $where . $order;
                 $count_query = "SELECT COUNT(*)/$page_size AS page_count FROM chanlogs $where";
@@ -253,14 +259,14 @@ function load_logs() {
     } else {
         if(isset($chan_filter)) {
             if(isset($speaker_filter)) {
-                $where = " WHERE channel ILIKE $1 AND speaker ILIKE $2 $links_term";
+                $where = " WHERE $bot_sql channel ILIKE $1 AND speaker ILIKE $2 $links_term";
                 $order = " ORDER BY msg_date DESC OFFSET $3 LIMIT $4";
                 $query = $select . $where . $order;
                 $count_query = "SELECT COUNT(*)/$page_size AS page_count FROM chanlogs $where";
                 $count_result = pg_query_params($count_query, array($chan_filter, $speaker_filter)) or die('Query failed: ' . pg_last_error());
                 $result = pg_query_params($query, array($chan_filter, $speaker_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
             } else {
-                $where = " WHERE channel ILIKE $1 $links_term";
+                $where = " WHERE $bot_sql channel ILIKE $1 $links_term";
                 $order = " ORDER BY msg_date DESC OFFSET $2 LIMIT $3";
                 $query = $select . $where . $order;
                 $count_query = "SELECT COUNT(*)/$page_size AS page_count FROM chanlogs $where";
@@ -269,7 +275,7 @@ function load_logs() {
             }
         } else {
             if(isset($speaker_filter)) {
-                $where = " WHERE speaker ILIKE $1 $links_term";
+                $where = " WHERE $bot_sql speaker ILIKE $1 $links_term";
                 $order = " ORDER BY msg_date DESC OFFSET $2 LIMIT $3";
                 $query = $select . $where . $order;
                 $count_query = "SELECT COUNT(*)/$page_size AS page_count FROM chanlogs $where";
@@ -277,10 +283,14 @@ function load_logs() {
                 $result = pg_query_params($query, array($speaker_filter, $offset, $limit)) or die('Query failed: ' . pg_last_error());
             } else {
                 if(isset($links_only)) {
-                    $where = " WHERE is_url";
+                    $where = " WHERE $bot_sql is_url";
                     $order = " ORDER BY msg_date DESC OFFSET $1 LIMIT $2";
                 } else {
-                    $where = "";
+                    if(!isset($show_bots)) {
+                        $where = " WHERE NOT is_bot";
+                    } else {
+                        $where = "";
+                    }
                     $order = " ORDER BY msg_date DESC OFFSET $1 LIMIT $2";
                 }
                 $query = $select . $where . $order;
@@ -368,6 +378,10 @@ if( isset($_REQUEST) && isset($_REQUEST["lo"]) ) {
  
 if( isset($_REQUEST) && isset($_REQUEST["co"]) ) {
     $config_mode = 1;
+}
+
+if( isset($_REQUEST) && isset($_REQUEST["sb"]) ) {
+    $show_bots = 1;
 }
 
 $rows = array_reverse(load_logs());
@@ -599,6 +613,7 @@ if($format == 'rss') {
     <!-- <body bgcolor="black" text="#bbbbbb"> -->
     <!-- <body background="gfx/dark_wood.jpg" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040"> -->
     <body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
+<!--
         <table id="outerheader" border=0 cellspacing=0 cellpadding=0 width=100% align="left">
             <tr>
                 <td align="left" valign="center">
@@ -614,10 +629,10 @@ if($format == 'rss') {
                            onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                            onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
                     >
-                    <!-- <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1"> -->
                     </form>
                 </td>
                 <td>
+-->
         <table id="header" border=0 cellspacing=0 cellpadding=0 width=80% align="center">
         <tr>
         <td align="right" valign="bottom">
@@ -692,9 +707,9 @@ if($format == 'rss') {
         </td>
         </tr>
         </table>
-</td>
+<!-- </td>
 </tr>
-</table>
+</table> -->
         <table id="navbar" border=0 cellspacing=0 cellpadding=0 width=100% align="center">
             <tr>
                 <td id="navbegin" align="left" valign="center" width="50"
@@ -888,6 +903,18 @@ if($format == 'rss') {
                                         onblur="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; cfgpslabel.style.color='#CCCCCC';"
                                         onmouseout="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; cfgpslabel.style.color='#CCCCCC';"
                                         maxlength="30" name="ps" value="<? echo $page_size; ?>" />
+                                    <label id="cfgbotlabel" for="cfgbot"
+                                        onmouseover="cfgps.style.color='#FFFF00'; cfgps.style.backgroundColor='#1F1F1F'; cfgpslabel.style.color='#FFFFFF';"
+                                        onmouseout="cfgps.style.color='#4F4F00'; cfgps.style.backgroundColor='#000000'; cfgpslabel.style.color='#CCCCCC';"
+                                        onfocus="cfgps.focus();"
+                                        onclick="cfgps.focus();"
+                                    > Show bot content:&nbsp; </label>
+                                    <input id="cfgbot" type="checkbox" style="background-color: #000000; color: #4F4F00; border: 1px; border-color: #000000; border-style: solid; width: 200px;"
+                                        onmouseover="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; cfgpslabel.style.color='#FFFFFF';"
+                                        onfocus="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; cfgpslabel.style.color='#FFFFFF'; if(!this._haschanged){this.value='<? echo $page_size; ?>'};this._haschanged=true;"
+                                        onblur="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; cfgpslabel.style.color='#CCCCCC';"
+                                        onmouseout="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; cfgpslabel.style.color='#CCCCCC';"
+                                        name="sb" value="true" />
                                 </span>
                                 <? if(isset($search_filter)) { ?>
                                     <input type="hidden" name="sr" value="<? echo preg_replace('/%/', '*', $search_filter); ?>">

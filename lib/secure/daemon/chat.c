@@ -462,6 +462,13 @@ varargs int eventAddLast(string feep, string str, string pchan, string pmsg, str
     return 1;
 }
 
+string novowel(string str) {
+    string ret = "";
+    //ret = implode(filter(explode(str, ""), (: ($1 >= "A" && $1 <= "Z") || ($1 >= "a" && $1 <= "z" ) || ($1 >= "0" && $1 <= "9") ? 1 : 0 :)), "");
+    ret = implode(filter(explode(str, ""), (: (member_array(lower_case($1), ({ "a", "e", "i", "o", "u" })) > -1) ? 0 : 1 :)), "");
+    return ret;
+}
+
 string gnomish(string str) {
     string ret = "";
     array words = explode(str, " ");
@@ -483,6 +490,25 @@ string boldify(string str, string color) {
         if(counter%2)
             ret += "%^BOLD%^";
         ret += "%^"+color+"%^";
+        ret += convert_ascii(element);
+        ret += "%^RESET%^";
+        counter++;
+    }
+    return ret;
+}
+
+string bruise(string str) {
+    string ret = "";
+    int counter = 0;
+
+    if( strlen(str) < 1 )
+        return ret;
+
+    foreach(mixed element in str) {
+        if(counter%2)
+            ret += "%^BLUE%^";
+        else
+            ret += "%^BOLD%^%^BLACK%^";
         ret += convert_ascii(element);
         ret += "%^RESET%^";
         counter++;
@@ -553,6 +579,10 @@ int cmdChannel(string verb, string str){
         string foo, bar;
 
         if(CHANNEL_PIPES){
+            if(grepp(verb,"|bruise")){
+                str = bruise(str);
+                verb = replace_string(verb,"|bruise","");
+            }
             if(grepp(verb,"|boldred")){
                 str = boldify(str, "RED");
                 verb = replace_string(verb,"|boldred","");
@@ -577,6 +607,10 @@ int cmdChannel(string verb, string str){
             if(grepp(verb,"|gnomish")){
                 str = gnomish(str);
                 verb = replace_string(verb,"|gnomish","");
+            }
+            if(grepp(verb,"|novowel")){
+                str = novowel(str);
+                verb = replace_string(verb,"|novowel","");
             }
 
             if(grepp(verb,"|morse")){
@@ -1382,7 +1416,9 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
         //        +", "+identify(msg)+", "+identify(emote)+", "+identify(target)+", "
         //        +identify(targmsg), "green");
 
+        tn("CHAT_D->eventSendChannel: in emote, just before strip_colours(pmsg); \"" + pmsg + "\"", "green");
         pmsg = strip_colours(pmsg);
+        tn("CHAT_D->eventSendChannel: in emote, just after strip_colours(pmsg); \"" + pmsg + "\"", "green");
         //pmsg = TERMINAL_D->no_colours(pmsg);
         eventAddLast(ch, msg, pchan, pmsg);
         eventChannelMsgToListeners(who, ch, msg, emote, target, targmsg);

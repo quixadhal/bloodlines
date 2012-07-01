@@ -10,16 +10,25 @@
 
 string strip_rgb(string msg) {
     string *parts;
+    string *newparts = ({ });
+    int skip = 0;
 
     if( !msg || msg == "" ) return msg;
     parts = rexplode(msg, "%^");
     for(int i = 0; i < sizeof(parts); i++) {
         string chunk = parts[i];
         if(strlen(chunk) == 7 && chunk[0] == '#') {
-            parts[i] = "";
+            skip++;
+        } else {
+            if(skip > 0) {
+                newparts[-1] += parts[i];
+                skip = 0;
+            } else {
+                newparts += ({ parts[i] });
+            }
         }
     }
-    msg = implode(parts, "");
+    msg = implode(newparts, "%^");
 
     return msg;
 }
@@ -28,7 +37,7 @@ string strip_raw_ansi(string str) {
     mixed stuff;
     string ret = "";
 
-    stuff = pcre_assoc( str, ({ "(\e[[][0-9]+m)", "(\e[[][0-9]+;[0-9]+m)" }), ({ 1, 2 }), 0);
+    stuff = pcre_assoc( str, ({ "(\e\[[0-9]+m)", "(\e\[[0-9]+\;[0-9]+m)" }), ({ 1, 2 }), 0);
     for(int i = 0; i < sizeof(stuff[0]); i++) {
         if(!stuff[1][i])
             ret += stuff[0][i];

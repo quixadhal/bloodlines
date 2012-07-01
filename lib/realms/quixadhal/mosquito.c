@@ -1,5 +1,7 @@
 inherit "/std/monster";
 
+// comment.
+
 create() {
   set_name("mosquito");
   set_id( ({ "mosquito", "bug" }) );

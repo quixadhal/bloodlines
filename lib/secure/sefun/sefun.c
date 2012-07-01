@@ -88,6 +88,7 @@
 #include "/secure/sefun/minimap.c"
 #include "/secure/sefun/fuzzymatch.c"
 #include "/secure/sefun/astar.c"
+#include "/secure/sefun/math.c"
 
 object globalob;
 string globalstr;
