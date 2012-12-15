@@ -117,6 +117,26 @@ if ($result == 0) {
             return i;
         }
         </script>
+        <script language="JavaScript">
+            Xmas_TargetDate = "12/25/2012 5:00 AM";
+            Xmas_BackColor = "transparent";
+            Xmas_ForeColor = "#00FF00";
+            Xmas_CountActive = true;
+            Xmas_CountStepper = -1;
+            Xmas_LeadingZero = true;
+            Xmas_DisplayFormat = "%%D%% Days, %%H%% Hours, %%M%% Minutes, %%S%% Seconds.";
+            Xmas_FinishMessage = "Ho! Ho! Ho!";
+        </script>
+        <script language="JavaScript">
+            Myan_TargetDate = "12/21/2012 6:11:11 AM";
+            Myan_BackColor = "transparent";
+            Myan_ForeColor = "#FF0000";
+            Myan_CountActive = true;
+            Myan_CountStepper = -1;
+            Myan_LeadingZero = true;
+            Myan_DisplayFormat = "%%D%% Days, %%H%% Hours, %%M%% Minutes, %%S%% Seconds.";
+            Myan_FinishMessage = "Apocalypse!";
+        </script>
         <title>
             Bloodlines:  WileyMUD IV
         </title>
@@ -131,7 +151,7 @@ if ($result == 0) {
         <table border=0 cellspacing=0 cellpadding=0 width=80% align="center">
             <tr>
                 <td align="right" valign="top">
-                    <a href="anyterm/anyterm.shtml?rows=40&cols=100">
+                    <a href="/anyterm/anyterm.shtml?rows=40&cols=100">
                         <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png"
                              border=0 width=469 height=160
                              style="opacity: 0.6; filter: alpha(opacity=60);"
@@ -141,7 +161,7 @@ if ($result == 0) {
                     </a>
                 </td>
                 <td align="left" valign="bottom">
-                    <a href="anyterm/anyterm.shtml?rows=40&cols=100">
+                    <a href="/anyterm/anyterm.shtml?rows=40&cols=100">
                         <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/wileymud4.png"
                              border=0 width=354 height=81
                              style="opacity: 0.6; filter: alpha(opacity=60);"
@@ -172,7 +192,7 @@ if ($result == 0) {
         </table>
         <table border=0 cellspacing=0 cellpadding=0 width=100% align="center">
             <tr>
-                <td align="center" width="20%" valign="bottom">
+                <td align="center" width="180" valign="bottom">
                     <a href="http://www.oldtimersguild.com/vb/forum.php">
                         <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/otg_logo_glow.png"
                              border=0 align="center" width=155 height=200
@@ -209,24 +229,8 @@ if ($result == 0) {
                             />
                         </a>
                     </span>
-                    <br />
-                    <br />
-                    <a href="https://github.com/quixadhal/bloodlines">
-                        <img src="/gitweb/git-logo.png"
-                             border="0" align="center" width=72 height=27
-                             style="opacity: 0.6; filter: alpha(opacity=60);"
-                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
-                             onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
-                        />
-                    </a>
-<!--
-                    <br />
-                    <a href="/~quixadhal/rift/riftstatus.php">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/rift.png" border=0 align="center" width=100 height=67 alt="(Rift)">
-                    </a>
--->
                 </td>
-                <td align="center" width="60%">
+                <td align="center">
                     <table border=0 cellspacing=5 cellpadding=5 width=100% align="center">
                         <tr>
                             <td align="left" valign="top">
@@ -271,7 +275,7 @@ if ($result == 0) {
                         </tr>
                     </table>
                 </td>
-                <td align="center" width="20%" valign="bottom">
+                <td align="center" width="180" valign="bottom">
 <!--
                     <a href="http://www.mudbytes.net/index.php?a=recent">
                         <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/koolaid.png" border=0 align="center" width=95 height=100 alt="(DramaBytes)">
@@ -325,14 +329,94 @@ if ($result == 0) {
                              onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
                         />
                     </a>
+<!--
+                    <br />
+                    <a href="/~quixadhal/rift/riftstatus.php">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/rift.png" border=0 align="center" width=100 height=67 alt="(Rift)">
+                    </a>
+-->
                 </td>
             </tr>
         </table>
         <table border=0 cellspacing=0 cellpadding=0 width=100% align="center">
             <tr>
-                <td align="center">
-                    <span style="color: #00FF00">
+                <td align="center" colspan="3">
+                    <span style="color: #FFFF00">
                         <?php echo "An astral traveller shouts, '" . $stuff[rand(0,sizeof($stuff)-1)] . "'"; ?>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">&nbsp;</td>
+                <td align="center">
+                    <fieldset>
+                        <legend>&raquo;&nbsp;Apocalypse!&nbsp;&laquo;</legend>
+                        <table border=0 cellspacing=0 cellpadding=0 width=100% align="center">
+                        <tr>
+                        <td align="right" width="25%">Myan:&nbsp;&nbsp;</td>
+                        <td align="left"><script language="JavaScript" src="myan.js"></script></td>
+                        </tr>
+                        <tr>
+                        <td align="right" width="25%">Christmas:&nbsp;&nbsp;</td>
+                        <td align="left"><script language="JavaScript" src="xmas.js"></script></td>
+                        </tr>
+                        </table>
+                    </fieldset>
+                </td>
+                <td align="center">&nbsp;</td>
+            </tr>
+            <tr>
+                <td align="center">
+                    <span style="display: block !important; width: 120px; text-align: center; font-family: sans-serif; font-size: 12px;">
+                        <a  href="http://www.wunderground.com/radar/radblast.asp?zoommode=pan&prevzoom=zoom&num=1&frame=0&delay=15&scale=1.000&noclutter=0&ID=GRR&type=N0R&showstorms=10&lat=42.29166794&lon=-85.58721924&label=Kalamazoo,%20MI&map.x=400&map.y=240&scale=1.000&centerx=400&centery=240&showlabels=1">
+                            <img    src="gfx/radar.png"
+                                    height="64" width="64" border="0"
+                             style="opacity: 0.6; filter: alpha(opacity=60);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                            />
+                        </a>
+                    </span>
+                </td>
+                <td align="center">
+                    <a href="https://github.com/quixadhal/bloodlines">
+                        <img src="gfx/git-logo.png"
+                             border="0" align="center" width=72 height=27
+                             style="opacity: 0.6; filter: alpha(opacity=60);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                        />
+                    </a>
+                </td>
+                <td align="center">
+                    <span style="display: block !important; width: 120px; text-align: center; font-family: sans-serif; font-size: 12px;">
+                        <?php
+                        $visitor_ip = $_SERVER['REMOTE_ADDR'];
+                        $varr = explode(".", $visitor_ip);
+                        //$visitor_net = inet_pton($visitor) & 0xFFFFFF00;
+                        //$local_net = inet_pton('192.168.1.0') & 0xFFFFFF00;
+                        //if($visitor_net == $local_net)
+                        if($varr[0] == "192" && $varr[1] == "168")
+                        {
+                        ?>
+                        <a href="http://192.168.1.1/">
+                            <img src="gfx/tomato.png"
+                                 border="0" align="center" width=64 height=64
+                                 style="opacity: 0.6; filter: alpha(opacity=60);"
+                                 onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                                 onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                            />
+                        </a>
+                        <?php } else { ?>
+                        <a href="http://www.shadowandy.net/2012/03/asus-rt-n66u-tomatousb-firmware-flashing-guide.htm">
+                            <img src="gfx/tomato.png"
+                                 border="0" align="center" width=64 height=64
+                                 style="opacity: 0.6; filter: alpha(opacity=60);"
+                                 onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                                 onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                            />
+                        </a>
+                        <?php } ?>
                     </span>
                 </td>
             </tr>
@@ -341,7 +425,7 @@ if ($result == 0) {
                 $time_end = microtime(true);
                 $time_spent = $time_end - $time_start;
                 ?>
-                <td align="right" width="50%"><span style="color: #333333">&nbsp;Page generated in <? printf( "%8.4f", $time_spent); ?> seconds.</span></td>
+                <td align="right" width="50%" colspan="3"><span style="color: #333333">&nbsp;Page generated in <? printf( "%8.4f", $time_spent); ?> seconds.</span></td>
             </tr>
        </table>
     </body>

@@ -17,7 +17,7 @@ my $CHATTER = '/home/bloodlines/lib/secure/save/chat.o';
 my $LOGDIR = '/home/bloodlines/lib/log/chan';
 my $LOCAL_MUD = 'Bloodlines';
 my $network = 'i3';
-my $dbc = DBI->connect('DBI:Pg:dbname=i3logs;host=localhost;port=5432;sslmode=prefer', 'quixadhal', 'tardis69', { AutoCommit => 0, PrintError => 0, });
+my $dbc = DBI->connect('DBI:Pg:dbname=i3logs;host=localhost;port=5432;sslmode=prefer', 'bloodlines', 'tardis69', { AutoCommit => 0, PrintError => 0, });
 my $BE_A_TWIT = 0;
 
 =head1 SQL
@@ -40,7 +40,8 @@ CREATE TABLE chanlogs (
     message     TEXT,
     is_url      BOOLEAN DEFAULT false,
     twat        BOOLEAN DEFAULT false,
-    is_bot      BOOLEAN DEFAULT false
+    is_bot      BOOLEAN DEFAULT false,
+    id          SERIAL NOT NULL
 );
 
 CREATE INDEX ix_msg_date ON chanlogs (msg_date);
@@ -170,7 +171,7 @@ sub parse_log_line {
     $log_entry{'message'} = $message;                       # Message body
 
     $log_entry{'is_emote'} = undef;                         # Can't tell from the logs without more parsing...
-    $log_entry{'is_url'} = undef;                           # Default NULL, but may be set if matched below
+    $log_entry{'is_url'} = 0;                               # Default false, but may be set if matched below
     $log_entry{'is_url'} = 1 if $message =~ /((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)+/;
 
     #$message = encode_entities($message);
@@ -283,6 +284,10 @@ sub add_entry {
         return 0;
     }
 }
+
+#system ("chmod" "644" "$CHATTER");
+#system ("chmod" "644" "$TEXT_FILE");
+#system ("chmod" "644" "$ARCHIVE");
 
 load_logs();
 

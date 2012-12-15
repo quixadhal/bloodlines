@@ -46,8 +46,13 @@ inherit LIB_DAEMON;
 #endif
 
 // In theory, live server
-#define HOSTPORT 5000
-#define HOSTIP "96.126.117.92"
+//#define HOSTPORT 5000
+//#define HOSTIP "96.126.117.92"
+
+// In theory, live server as of 2012.09.30
+// Server02.mudbytes.net
+#define HOSTPORT 9000
+#define HOSTIP "50.116.16.90"
 
 // What name the network knows your mud as. Replace MUD_NAME with "whatever" if you want it to be different.
 #define MUDNAME (imc2_mud_name())

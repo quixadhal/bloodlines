@@ -6,7 +6,8 @@ define("TEXT_FILE", "/home/bloodlines/lib/secure/log/allchan.log");
 define("ARCHIVE",   "/home/bloodlines/lib/secure/log/archive/allchan.log-*");
 define("CHATTER",   "/home/bloodlines/lib/secure/save/chat.o");
 define("MUD_NAME",  "WileyMUD IV: Bloodlines");
-define("RSS_URL",   "http://www.shadowlord.org:8088/~bloodlines/i3log.php?fm=rss");
+define("RSS_URL",   "http://www.shadowlord.org/~bloodlines/i3log.php?fm=rss");
+define("VISITOR_LOG",   "/home/bloodlines/i3_visitors.log");
 
 //$speakers = array();
 //$channels = array();
@@ -176,12 +177,61 @@ function get_chatter_colors() {
     //}
     for($i = 0; $i < sizeof($mapping); $i++ ) {
         $map = explode(":", $mapping[$i]);
+        if(sizeof($map) < 2) {
+            //echo "WARNING: Invalid entry for color map \"";
+            //print_r($map);
+            //echo "\".<br>";
+            continue;
+        }
         $mapname = substr($map[0], 1, -1); // Strip quotes
         $mapcolor = substr($map[1], 1, -1); // Strip quotes
         $colormap[$mapname] = $pinkfish_html[$mapcolor];
         //echo "colormap[$mapname] = ".htmlentities($colormap[$mapname])."<br>";
     }
     //return $colormap;
+}
+
+function append_visitor_log() {
+    //echo "Reading file...<br />";
+    $fp = fopen(VISITOR_LOG, "r+");
+    $text = "";
+
+    if(flock($fp, LOCK_SH)) {
+        //echo "Got read lock...<br />";
+        $text = file_get_contents( VISITOR_LOG );
+        flock($fp, LOCK_UN);
+    }
+    fclose($fp);
+    //echo "Read...<br />";
+
+    $lines = explode("\n", $text);
+    $found = false;
+    for($i = 0; $i < sizeof($lines); $i++) {
+        if($lines[$i] == $_SERVER['REMOTE_ADDR']) {
+            $found = true;
+            break;
+        }
+    }
+
+    if($found == true) {
+        return;
+    }
+
+    //echo "Found new address...<br />";
+    $text .= $_SERVER['REMOTE_ADDR'] . "\n";
+
+    //echo "Writing file...<br />";
+    $fp = fopen(VISITOR_LOG, "r+");
+
+    if(flock($fp, LOCK_EX)) {
+        //echo "Got write lock...<br />";
+        ftruncate($fp, 0);
+        fwrite($fp, $text);
+        fflush($fp);
+        flock($fp, LOCK_UN);
+    }
+    fclose($fp);
+    //echo "Written...<br />";
 }
 
 function load_logs() {
@@ -713,7 +763,7 @@ if($format == 'rss') {
         <table id="navbar" border=0 cellspacing=0 cellpadding=0 width=100% align="center">
             <tr>
                 <td id="navbegin" align="left" valign="center" width="50"
-                    <? if( !$config_mode && $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
+                    <? if( !isset($config_mode) && $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
                     style="opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
@@ -722,7 +772,7 @@ if($format == 'rss') {
                     <? } ?>
                 >
                     <span style="color: #555555">
-                    <? if( !$config_mode && $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
+                    <? if( !isset($config_mode) && $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
                         <a href="<? echo $last_url; ?>" title="The&nbsp;Beginning&nbsp;(1&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
                             <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navbegin.png" border=0 width=48 height=48 />
                         </a>
@@ -732,7 +782,7 @@ if($format == 'rss') {
                     </span>
                 </td>
                 <td id="navback" align="left" valign="center" width="50"
-                    <? if( !$config_mode && $total_page_count > 1 && $page_number < $total_page_count - $page_chunk - 1) { ?>
+                    <? if( !isset($config_mode) && $total_page_count > 1 && $page_number < $total_page_count - $page_chunk - 1) { ?>
                     style="opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
@@ -741,7 +791,7 @@ if($format == 'rss') {
                     <? } ?>
                 >
                     <span style="color: #555555">
-                    <? if( !$config_mode && $total_page_count > 1 && $page_number < $total_page_count - $page_chunk - 1) { ?>
+                    <? if( !isset($config_mode) && $total_page_count > 1 && $page_number < $total_page_count - $page_chunk - 1) { ?>
                         <a href="<? echo $next_chunk_url; ?>" title="Back&nbsp;<? echo $page_chunk; ?>&nbsp;(<? echo $total_page_count - ($page_number + $page_chunk); ?>&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
                             <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navback.png" border=0 width=48 height=48 />
                         </a>
@@ -751,7 +801,7 @@ if($format == 'rss') {
                     </span>
                 </td>
                 <td id="navprev" align="left" valign="center" width="50"
-                    <? if( !$config_mode && $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
+                    <? if( !isset($config_mode) && $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
                     style="opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
@@ -760,7 +810,7 @@ if($format == 'rss') {
                     <? } ?>
                 >
                     <span style="color: #555555">
-                    <? if( !$config_mode && $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
+                    <? if( !isset($config_mode) && $total_page_count > 1 && $page_number < $total_page_count - 1) { ?>
                         <a href="<? echo $next_url; ?>" title="Previous&nbsp;Page&nbsp;(<? echo $total_page_count - ($page_number + 1); ?>&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
                             <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navprev.png" border=0 width=48 height=48 />
                         </a>
@@ -792,7 +842,7 @@ if($format == 'rss') {
                     </a>
                 </td>
                 <td id="navlinks" align="center" valign="center" width="50"
-                    <? if( !$config_mode && isset($links_only) ) { ?>
+                    <? if( !isset($config_mode) && isset($links_only) ) { ?>
                     style="opacity: 1.0; filter: alpha(opacity=100);"
                     onmouseover="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
                     onmouseout="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -828,10 +878,20 @@ if($format == 'rss') {
                     </a>
                 </td>
                 <td>
+                <td id="navpie" align="center" valign="center" width="50"
+                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                >
+                    <a href="i3pie.html">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/pie_chart_zps670773a1.png" border=0 width=48 height=48 />
+                    </a>
+                </td>
+                <td>
                     &nbsp;
                 </td>
                 <td id="navnext" align="right" valign="center" width="50"
-                    <? if( !$config_mode && $total_page_count > 1 && $page_number > 0 ) { ?>
+                    <? if( !isset($config_mode) && $total_page_count > 1 && $page_number > 0 ) { ?>
                     style="opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
@@ -839,7 +899,7 @@ if($format == 'rss') {
                     style="opacity: 0.2; filter: alpha(opacity=20);"
                     <? } ?>
                 >
-                    <? if( !$config_mode && $page_number > 0 ) { ?>
+                    <? if( !isset($config_mode) && $page_number > 0 ) { ?>
                         <a href="<? echo $prev_url; ?>" title="Next&nbsp;Page&nbsp;(<? echo $total_page_count - ($page_number - 1); ?>&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
                             <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navnext.png" border=0 width=48 height=48 />
                         </a>
@@ -848,7 +908,7 @@ if($format == 'rss') {
                     <? } ?>
                 </td>
                 <td id="navforward" align="right" valign="center" width="50"
-                    <? if( !$config_mode && $total_page_count > 1 && $page_number >= $page_chunk) { ?>
+                    <? if( !isset($config_mode) && $total_page_count > 1 && $page_number >= $page_chunk) { ?>
                     style="opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
@@ -856,7 +916,7 @@ if($format == 'rss') {
                     style="opacity: 0.2; filter: alpha(opacity=20);"
                     <? } ?>
                 >
-                    <? if( !$config_mode && $total_page_count > 1 && $page_number >= $page_chunk) { ?>
+                    <? if( !isset($config_mode) && $total_page_count > 1 && $page_number >= $page_chunk) { ?>
                         <a href="<? echo $prev_chunk_url; ?>" title="Next&nbsp;<? echo $page_chunk; ?>&nbsp;(<? echo $total_page_count - ($page_number - $page_chunk); ?>&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
                             <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navforward.png" border=0 width=48 height=48 />
                         </a>
@@ -865,7 +925,7 @@ if($format == 'rss') {
                     <? } ?>
                 </td>
                 <td id="navend" align="right" valign="center" width="50"
-                    <? if( !$config_mode && $total_page_count > 1 && $page_number > 0) { ?>
+                    <? if( !isset($config_mode) && $total_page_count > 1 && $page_number > 0) { ?>
                     style="opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
@@ -873,7 +933,7 @@ if($format == 'rss') {
                     style="opacity: 0.2; filter: alpha(opacity=20);"
                     <? } ?>
                 >
-                    <? if( !$config_mode && $total_page_count > 1 && $page_number > 0) { ?>
+                    <? if( !isset($config_mode) && $total_page_count > 1 && $page_number > 0) { ?>
                         <a href="<? echo $first_url; ?>" title="Current&nbsp;Time&nbsp;(<? echo $total_page_count; ?>&nbsp;of&nbsp;<? echo $total_page_count; ?>)">
                             <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navend.png" border=0 width=48 height=48 />
                         </a>
@@ -978,6 +1038,7 @@ if($format == 'rss') {
             </table>
         <? } ?>
         <?
+        append_visitor_log();
         $time_end = microtime(true);
         $time_spent = $time_end - $time_start;
         //print_r($speakers);
