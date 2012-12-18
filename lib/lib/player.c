@@ -657,3 +657,7 @@ mixed SetTeloptIp(mixed str){
             !(archp(this_player()))) return 0;
     return telopt_ip = str;
 }
+
+mapping query_custom_colours() {
+    return ([ ]);
+}

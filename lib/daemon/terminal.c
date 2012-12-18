@@ -22,6 +22,24 @@ void create() {
     SetNoClean(1);
 }
 
+mapping default_custom = ([
+            "TELL" : "%^MAGENTA%^",
+        ]);
+
+mapping query_custom_colours() {
+    mapping player_colours;
+
+    if(!this_player())
+        return default_custom;
+
+    player_colours = this_player()->query_custom_colours();
+
+    if(undefinedp(player_colours))
+        return default_custom;
+
+    return default_custom + player_colours;
+}
+
 mapping query_term_info(string type) {
     return (term_info[type] ? term_info[type] : term_info["unknown"]);
 }

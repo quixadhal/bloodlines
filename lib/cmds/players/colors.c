@@ -4,76 +4,121 @@
 inherit LIB_DAEMON;
 
 int cmd(string args) {
-    if( !args || args == "" ) {
-        write(
-            "%^RED%^RED\t%%^^RED%%^^\t\t%^BOLD%^%%^^BOLD%%^^%%^^RED%%^^%^RESET%^\n"
-            "%^GREEN%^GREEN\t%%^^GREEN%%^^\t%^BOLD%^%%^^BOLD%%^^%%^^GREEN%%^^%^RESET%^\n"
-            "%^ORANGE%^ORANGE\t%%^^ORANGE%%^^\t%^BOLD%^%%^^BOLD%%^^%%^^ORANGE%%^^%^RESET%^\n"
-            "%^YELLOW%^YELLOW\t%%^^YELLOW%%^^\t%^BOLD%^%%^^BOLD%%^^%%^^YELLOW%%^^%^RESET%^\n"
-            "%^BLUE%^BLUE\t%%^^BLUE%%^^\t%^BOLD%^%%^^BOLD%%^^%%^^BLUE%%^^%^RESET%^\n"
-            "%^CYAN%^CYAN\t%%^^CYAN%%^^\t%^BOLD%^%%^^BOLD%%^^%%^^CYAN%%^^%^RESET%^\n"
-            "%^MAGENTA%^MAGENTA\t%%^^MAGENTA%%^^\t%^BOLD%^%%^^BOLD%%^^%%^^MAGENTA%%^^%^RESET%^\n"
-            "%^BLACK%^BLACK\t%%^^BLACK%%^^\t%^BOLD%^%%^^BOLD%%^^%%^^BLACK%%^^%^RESET%^\n"
-            "%^WHITE%^WHITE\t%%^^WHITE%%^^\t%^BOLD%^%%^^BOLD%%^^%%^^WHITE%%^^%^RESET%^\n"
-            "%^BLACK%^B_RED%^B_RED\t\t\t%%^^B_RED%%^^%^RESET%^\n"
-            "%^BLACK%^%^B_GREEN%^B_GREEN\t\t\t%%^^B_GREEN%%^^%^RESET%^\n"
-            "%^BLACK%^%^B_ORANGE%^B_ORANGE\t\t%%^^B_ORANGE%%^^%^RESET%^\n"
-            "%^BLACK%^%^B_YELLOW%^B_YELLOW\t\t%%^^B_YELLOW%%^^%^RESET%^\n"
-            "%^BLACK%^%^B_BLUE%^B_BLUE\t\t\t%%^^B_BLUE%%^^%^RESET%^\n"
-            "%^BLACK%^%^B_CYAN%^B_CYAN\t\t\t%%^^B_CYAN%%^^%^RESET%^\n"
-            "%^BLACK%^%^B_MAGENTA%^B_MAGENTA\t\t%%^^B_MAGENTA%%^^%^RESET%^\n"
-            "%^BOLD%^%^BLACK%^%^B_BLACK%^B_BLACK\t\t\t%%^^B_BLACK%%^^%^RESET%^\n"
-            "%^BLACK%^%^B_WHITE%^B_WHITE\t\t\t%%^^B_WHITE%%^^%^RESET%^\n"
-            "Special tags: %%^^BOLD%%^^ and %%^^FLASH%%^^ and %%^^RESET%%^^\n\n"
-            "You can mix and match, for example: \n"
-            "%%^^B_RED%%^^%%^^CYAN%%^^%%^^BOLD%%^^%%^^FLASH%%^^Foo!%%^^RESET%%^^:"
-            "%^B_RED%^%^CYAN%^%^BOLD%^%^FLASH%^Foo!%^RESET%^" 
-        );
-    } else if( args == "xterm" ) {
-        string output = "";
-        string xterm = "";
-        int cols = 6;
-        int i;
+    string output = "";
+    string xterm = "";
+    string bxterm = "";
+    int ansi_cols = 4;
+    int xterm_cols = 6;
+    int grey_cols = 7;
+    int i,r,g,b;
+    array ansi = ({
+            "BLACK", "RED", "GREEN", "ORANGE", "BLUE", "MAGENTA", "CYAN", "GREY",
+            "DARKGREY", "LIGHTRED", "LIGHTGREEN", "YELLOW", "LIGHTBLUE", "PINK", "LIGHTCYAN", "WHITE",
+            });
+    array special = ({
+            "BOLD", "FLASH", "ITALIC", "RESET", "REVERSE", "STRIKETHRU", "UNDERLINE",
+            });
 
-        for(i = 0; i < 16; i++) {
-            if( i > 0 && !(i % cols) ) {
-                output += xterm + "\n";
-                xterm = "";
-            }
-            xterm += sprintf("%%^XTERM:%02x%%^XTERM:%02x %%^RESET%%^", i, i);
-        }
-        output += xterm + "\n\n";
-        xterm = "";
+    output += "Pinkfish color codes are always surrounded by %%^^ tokens, like %%^^RED%%^^\n";
+    output += "They are cumulative, so you can do %%^^BOLD%%^^%%^^UNDERLINE%%^^%%^^RED%%^^%^BOLD%^%^UNDERLINE%^%^RED%^fun stuff,\n";
+    output += "but you should always remember to add a%^RESET%^ %%^^RESET%%^^ at the end,\n";
+    output += "or colors will bleed into the next thing.\n\n";
 
-        for(i = 16; i < 232; i++) {
-            if( (i-16) > 0 && !((i-16) % cols) ) {
-                output += xterm + "\n";
-                xterm = "";
-            }
-            xterm += sprintf("%%^XTERM:%02x%%^XTERM:%02x %%^RESET%%^", i, i);
+    output += "ANSI colors:\n    ";
+    for(i = 0; i < 16; i++) {
+        if( i > 0 && !(i % ansi_cols) ) {
+            output += xterm + "\n    ";
+            xterm = "";
         }
-        output += xterm + "\n\n";
-        xterm = "";
+        if(i == 0)
+            xterm += sprintf("%%^B_DARKGREY%%^%%^%s%%^ %|12s %%^RESET%%^", ansi[i], ansi[i]);
+        else
+            xterm += sprintf("%%^%s%%^ %|12s %%^RESET%%^", ansi[i], ansi[i]);
+    }
+    output += xterm + "\n\n";
+    xterm = "";
 
-        for(i = 232; i < 256; i++) {
-            if( (i-232) > 0 && !((i-232) % cols) ) {
-                output += xterm + "\n";
-                xterm = "";
-            }
-            xterm += sprintf("%%^XTERM:%02x%%^XTERM:%02x %%^RESET%%^", i, i);
+    output += "Background colors:\n    ";
+    for(i = 0; i < 16; i++) {
+        if( i > 0 && !(i % ansi_cols) ) {
+            output += xterm + "\n    ";
+            xterm = "";
         }
-        output += xterm + "\n\n";
+        if(i == 0)
+            xterm += sprintf("%%^DARKGREY%%^%%^B_%s%%^ %|12s %%^RESET%%^", ansi[i], "B_"+ansi[i]);
+        else
+            xterm += sprintf("%%^BLACK%%^%%^B_%s%%^ %|12s %%^RESET%%^", ansi[i], "B_"+ansi[i]);
+    }
+    output += xterm + "\n\n";
+    xterm = "";
+
+    output += "Special tags:\n    ";
+    for(i = 0; i < sizeof(special); i++) {
+        if( i > 0 && !(i % ansi_cols) ) {
+            output += xterm + "\n    ";
+            xterm = "";
+        }
+        xterm += sprintf(" %|12s ", special[i]);
+    }
+    output += xterm + "\n\n";
+    xterm = "";
+    bxterm = "";
+
+    if( args && args == "xterm" ) {
+
+        output += "XTERM256 colors:                           XTERM256 background colors:\n    ";
+        for(i = r = g = b = 0; r < 6 && g < 6 && b < 6; i++) {
+            if( i > 0 && !(i % xterm_cols) ) {
+                output += xterm + "      " + bxterm + "\n    ";
+                xterm = "";
+                bxterm = "";
+            }
+            if(r == 0 && g == 0 && b == 0)
+                xterm += sprintf("%%^B_DARKGREY%%^%%^F%d%d%d%%^ F%d%d%d %%^RESET%%^", r,g,b, r,g,b);
+            else
+                xterm += sprintf("%%^F%d%d%d%%^ F%d%d%d %%^RESET%%^", r,g,b, r,g,b);
+            bxterm += sprintf("%%^F%d%d%d%%^%%^B%d%d%d%%^ B%d%d%d %%^RESET%%^", (r+3)%6, (g+3)%6, (b+3)%6, r,g,b, r,g,b);
+            b++;
+            if(b > 5) { g++; b = 0; }
+            if(g > 5) { r++; g = 0; b = 0; }
+            if(r > 5) break;
+        }
+        output += xterm + "      " + bxterm + "\n\n";
         xterm = "";
-        write(output);
-    } else {
+        bxterm = "";
+
+        output += "XTERM256 greyscale colors:                 XTERM256 greyscale background colors:\n    ";
+        for(i = 0; i < 26; i++) {
+            if( i > 0 && !(i % grey_cols) ) {
+                output += xterm + "       " + bxterm + "\n    ";
+                xterm = "";
+                bxterm = "";
+            }
+            if(i == 0)
+                xterm += sprintf("%%^B_DARKGREY%%^%%^G%02d%%^ G%02d %%^RESET%%^", i, i);
+            else
+                xterm += sprintf("%%^G%02d%%^ G%02d %%^RESET%%^", i, i);
+            if(i > 13)
+                bxterm += sprintf("%%^BLACK%%^%%^BG%02d%%^ BG%02d %%^RESET%%^", i, i);
+            else
+                bxterm += sprintf("%%^BG%02d%%^ BG%02d %%^RESET%%^", i, i);
+        }
+        output += xterm + "                 " + bxterm + "\n\n";
+        xterm = "";
+        bxterm = "";
+
+        this_player()->eventPage(explode(output, "\n"));
+    } else if(args) {
         string converted;
-        int i, st, et;
+        int st, et;
 
         st = eval_cost();
         i = time_expression( converted = "/lib/interface"->rgb2xterm256(args));
         et = eval_cost();
         write(sprintf("%s converts to %%^%s%%^%s %%^RESET%%^\n", args, converted, converted));
         write(sprintf("Evaluation took %d microseconds (eval cost %d).\n", i, st - et));
+    } else {
+        write(output);
     }
     return 1;
 }
