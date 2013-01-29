@@ -84,6 +84,7 @@ void eventReceiveChannelMessage(mixed array packet) {
 
     if( file_name(previous_object()) != INTERMUD_D ) return;
     if( packet[2] == mud_name() ) return;
+    if( !packet[2] || packet[2] == "" ) packet[2] = "BustedAssMUD";
 
     CHAT_D->eventSendChannel(packet[7] + "@" + packet[2], packet[6],
             packet[8]);
@@ -98,6 +99,7 @@ void eventReceiveChannelEmote(mixed array packet) {
     if( file_name(previous_object()) != INTERMUD_D ) return;
     if( packet[2] == mud_name() ) return;
     if( !packet[7] ) return;
+    if( !packet[2] || packet[2] == "" ) packet[2] = "BustedAssMUD";
     CHAT_D->eventSendChannel(packet[7] + "@" + packet[2], packet[6],
             packet[8], 1, 0, 0);
     //if(packet[2] != mud_name()) CHAT_D->eventAddLast(packet[6],"",packet[6],packet[7] + "@" + packet[2] + replace_string(packet[8],"$N",""));
@@ -112,6 +114,7 @@ void eventReceiveChannelTargettedEmote(mixed array packet) {
     if( packet[2] == mud_name() ) return;
     if( packet[7] != mud_name() ) target = packet[12] + "@" + packet[7];
     else target = packet[12];
+    if( !packet[2] || packet[2] == "" ) packet[2] = "BustedAssMUD";
     CHAT_D->eventSendChannel(packet[11] + "@" + packet[2], packet[6],
             packet[9], 1, target, packet[10]);
     if(packet[2] != mud_name()) true();

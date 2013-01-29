@@ -10,7 +10,7 @@ string privs = "";
 string LongString(){
     string ret = "You are standing in the workroom of the mighty " + privs +
     "!  \nYou may return to the Creators' Hall by going down.\n"+
-    "A sample room is east."+
+    "A sample room is north.  The Griffin's Tale is east. "+
     "\n%^GREEN%^There is a sign here you can read.%^RESET%^"+
     "\n%^GREEN%^There is a sheet here you can read.%^RESET%^";
     if(privacy) ret += "\n%^YELLOW%^There is a privacy force field "+
@@ -33,10 +33,13 @@ static void create() {
         ({"sheet","reminder","reminders"}) : "A sheet with quick reminders for creators.",
       ]) );
     SetExits( ([
-        "east" : "/realms/quixadhal/area/room/sample_room",
+        "east" : "/realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room",
+        "north" : "/realms/quixadhal/area/room/sample_room",
         "down" : "/domains/default/room/wiz_hall",
         "south" : "/realms/quixadhal/westroom.c",
       ]) );
+    SetDoor( "east", "/realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/doors/common_room" );
+
     SetRead( ([
         ({"sign","hint","hints"}) : (: ReadSign :),
         ({"sheet","reminder","reminders"}) : (: ReadSheet :)

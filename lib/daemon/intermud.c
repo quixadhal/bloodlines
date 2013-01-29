@@ -143,16 +143,16 @@ static void eventRead(mixed *packet){
                 //tn("We don't like the mudlist packet size.","red");
                 return;  
             }
-        if( !sizeof(packet[6]) ){
-            //tn("We don't like an absence of packet element 6.","red");
-            return;
-        }
-        /* Start of Tricky's patch */
+            if( !sizeof(packet[6]) ){
+                //tn("We don't like an absence of packet element 6.","red");
+                return;
+            }
+            /* Start of Tricky's patch */
             if( packet[2] != Nameservers[0][0] ){
                 tn("Illegal startup-reply from mud " + packet[2], "red");
                     return;
             }
-        /* End of Tricky's patch */ 
+            /* End of Tricky's patch */ 
             if( packet[6][0][0] == Nameservers[0][0] ){
                 Nameservers = packet[6];
                     Password = packet[7];
@@ -163,68 +163,68 @@ static void eventRead(mixed *packet){
                 Nameservers = packet[6];
                     Setup();
             }
-        return;
-            case "mudlist":
+            return;
+        case "mudlist":
             tn("INTERMUD_D mudlist received.","red");
             //log_file(LOG_I3,identify(packet),1);
             if( sizeof(packet) != 8 ){
                 //tn("We don't like the mudlist packet size.","red");
                 return;  
             }
-        if( packet[6] == MudList["ID"] )  {
-            //tn("We don't like packet element 6. It is: "+identify(packet[6]),"red");
-            //tn("We will continue anyway.","red");
-        }
-        if( packet[2] != Nameservers[0][0] ){
-            //tn("We don't like packet element 2. It is: "+identify(packet[2]),"red");
-            return;
-        }
+            if( packet[6] == MudList["ID"] )  {
+                //tn("We don't like packet element 6. It is: "+identify(packet[6]),"red");
+                //tn("We will continue anyway.","red");
+            }
+            if( packet[2] != Nameservers[0][0] ){
+                //tn("We don't like packet element 2. It is: "+identify(packet[2]),"red");
+                return;
+            }
         
             MudList["ID"] = packet[6];
             foreach(cle, val in packet[7]){
                 string tmp = "";
-                    if(cle){
-                        string lib = "unknown";
-                            if(val && sizeof(val) > 5 && arrayp(val)){
-                                if(!my_ip && cle == mud_name()) my_ip = val[1];
-                                    lib = val[5];
-                            }
-                        MUDINFO_D->ReceiveMudInfo(cle, val);
-                            tmp += "%^BOLD%^CYAN%^Processing mud: "+identify(cle)+
-                            ", lib: "+lib;
-                            if(val){
-                                if(!val[0]) tmp += " %^RED%^BOLD%^offline%^RESET%^";
-                                else tmp += " %^GREEN%^BOLD%^ONLINE%^RESET%^";
-                            }
-                            else tmp += " removed from mudlist";
-                                tn(tmp);
-                                    //tn(tmp,"cyan",ROOM_ARCH);
-                                    if(val && sizeof(val) > 5 && arrayp(val))
-                                        tmp = (val[0] ? "%^BLUE%^online" : "%^RED%^offline")+ 
-                                            "%^RESET%^, lib: "+lib+", driver: "+val[7];
-                                    else tmp = "removed from mudlist.";
-                                        CHAT_D->eventSendChannel(cle+"@i3","muds",tmp,0);
+                if(cle){
+                    string lib = "unknown";
+                    if(val && sizeof(val) > 5 && arrayp(val)){
+                        if(!my_ip && cle == mud_name()) my_ip = val[1];
+                            lib = val[5];
                     }
+                    MUDINFO_D->ReceiveMudInfo(cle, val);
+                    tmp += "%^BOLD%^CYAN%^Processing mud: "+identify(cle)+
+                    ", lib: "+lib;
+                    if(val){
+                        if(!val[0]) tmp += " %^RED%^BOLD%^offline%^RESET%^";
+                        else tmp += " %^GREEN%^BOLD%^ONLINE%^RESET%^";
+                    }
+                    else tmp += " removed from mudlist";
+                        tn(tmp);
+                            //tn(tmp,"cyan",ROOM_ARCH);
+                            if(val && sizeof(val) > 5 && arrayp(val))
+                                tmp = (val[0] ? "%^BLUE%^online" : "%^RED%^offline")+ 
+                                    "%^RESET%^, lib: "+lib+", driver: "+val[7];
+                            else tmp = "removed from mudlist.";
+                                CHAT_D->eventSendChannel(cle+"@i3","muds",tmp,0);
+                }
                 if( !val && MudList["List"][cle] != 0 ) 
                     map_delete(MudList["List"], cle);
                 else if( val ) MudList["List"][cle] = val;
             }
             SaveObject(SaveFile);
             return;
-            case "chanlist-reply":
+        case "chanlist-reply":
             tn("chanlist reply: "+identify(packet), "blue");
             if( packet[2] != Nameservers[0][0] ) return;
-                ChannelList["ID"] = packet[6];
-                    foreach(cle, val in packet[7]){
-                        if( !val && ChannelList["List"] != 0 ){
-                            map_delete(ChannelList["List"], cle);
-                                CHAT_D->RemoveRemoteChannel(cle);
-                        }
-                        else if( val ){
-                            ChannelList["List"][cle] = val;
-                                CHAT_D->AddRemoteChannel(cle);
-                        }
-                    }
+            ChannelList["ID"] = packet[6];
+            foreach(cle, val in packet[7]){
+                if( !val && ChannelList["List"] != 0 ){
+                    map_delete(ChannelList["List"], cle);
+                        CHAT_D->RemoveRemoteChannel(cle);
+                }
+                else if( val ){
+                    ChannelList["List"][cle] = val;
+                        CHAT_D->AddRemoteChannel(cle);
+                }
+            }
             SaveObject(SaveFile);
             SERVICES_D->eventRegisterChannels(packet[7]);
             return;
@@ -235,106 +235,107 @@ static void eventRead(mixed *packet){
         case "chan-filter-reply":
             tn("chan-filter-reply: "+identify(packet), "red");
             break;
-            case "ping-req":
+        case "ping-req":
             mudpacket = 1;
             SERVICES_D->eventReceiveAuthRequest(packet);
             break;
-            case "ping-reply":
+        case "ping-reply":
             mudpacket = 1;
             SERVICES_D->eventReceiveAuthReply(packet);
             break;
-            case "auth-mud-req":
+        case "auth-mud-req":
             mudpacket = 1;
             SERVICES_D->eventReceiveAuthRequest(packet);
             break;
-            case "auth-mud-reply":
+        case "auth-mud-reply":
             mudpacket = 1;
             SERVICES_D->eventReceiveAuthReply(packet);
             break;
-            case "channel-t":
+        case "channel-t":
             mudpacket = 1;
             SERVICES_D->eventReceiveChannelTargettedEmote(packet);
             break;
-            case "channel-e":
+        case "channel-e":
             mudpacket = 1;
             SERVICES_D->eventReceiveChannelEmote(packet);
             break;
-            case "channel-m":
+        case "channel-m":
             mudpacket = 1;
             SERVICES_D->eventReceiveChannelMessage(packet);
             break;
-            case "chan-who-reply":
+        case "chan-who-reply":
             mudpacket = 1;
             SERVICES_D->eventReceiveChannelWhoReply(packet);
             break;
-            case "chan-who-req":
+        case "chan-who-req":
             mudpacket = 1;
             SERVICES_D->eventReceiveChannelWhoRequest(packet);
             break;
-            case "chan-user-req":
+        case "chan-user-req":
             mudpacket = 1;
             SERVICES_D->eventReceiveChannelUserRequest(packet);
             break;
-            case "emoteto":
+        case "emoteto":
             mudpacket = 1;
             SERVICES_D->eventReceiveEmote(packet);
             break;
-            case "finger-req":
+        case "finger-req":
             mudpacket = 1;
             SERVICES_D->eventReceiveFingerRequest(packet);
             break;
-            case "finger-reply":
+        case "finger-reply":
             mudpacket = 1;
             SERVICES_D->eventReceiveFingerReply(packet);
             break;
-            case "locate-req":
+        case "locate-req":
             mudpacket = 1;
             SERVICES_D->eventReceiveLocateRequest(packet);
             break;
-            case "locate-reply":
+        case "locate-reply":
             mudpacket = 1;
             SERVICES_D->eventReceiveLocateReply(packet);
             break;
-            case "tell":
+        case "tell":
             mudpacket = 1;
             SERVICES_D->eventReceiveTell(packet);
             break;
-            case "chan-user-reply":
+        case "chan-user-reply":
             mudpacket = 1;
             tn("INTERMUD_D: chan-user-reply received.","red");
-            case "ucache-update":
+            break;
+        case "ucache-update":
             mudpacket = 1;
             SERVICES_D->eventReceiveUcacheUpdate(packet);
             break;
-            case "who-req":
+        case "who-req":
             mudpacket = 1;
             SERVICES_D->eventReceiveWhoRequest(packet);
             break;
-            case "who-reply":
+        case "who-reply":
             mudpacket = 1;
             SERVICES_D->eventReceiveWhoReply(packet);
             break;
-            case "news":
+        case "news":
             mudpacket = 1;
             SERVICES_D->eventReceiveNews(packet);
             break;
-            case "mail":
+        case "mail":
             mudpacket = 1;
             SERVICES_D->eventReceiveMail(packet);
             break;
-            case "mail-ok":
+        case "mail-ok":
             mudpacket = 1;
             SERVICES_D->eventReceiveMailOk(packet);
             break;
-            case "file":
+        case "file":
             mudpacket = 1;
             tn("INTERMUD_D: file packet received.","red");
             break;
-            case "error":
+        case "error":
             SERVICES_D->eventReceiveError(packet);
             break;
         default:
-                break;
+            break;
     }
     if(mudpacket){
         if(!GetStatus(packet[2])){

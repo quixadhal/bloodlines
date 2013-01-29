@@ -26,4 +26,4 @@
 #include <message_class.h>
 inherit LIB_ITEM;
 #include "/realms/quixadhal/evaldefs.h"
-mixed eval() { foreach( ({ 1,2,3 }));; }
+mixed eval() { return CHAT_D->showSpeakerColors();; }

@@ -4,3 +4,13 @@ driver*
 mudos.bak
 portbind
 driver.log
+addr_server.x64
+addr_server.x86
+anytermd.x64
+anytermd.x86
+i3log2sql.pl.ok
+irc.pl
+pgsql_handler.py
+portbind.x64
+portbind.x86
+test_sha.pl

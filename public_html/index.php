@@ -70,7 +70,13 @@ if ($result == 0) {
 ?>
 <html>
     <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta http-equiv="refresh" content="300">
+        <script type='text/javascript' src='clock/jquery.js'></script>
+        <link href="http://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet" type="text/css">
+        <link href="clock/clock.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="clock/clock.js"></script>
+
         <script type="text/javascript">
         function startClock()
         {
@@ -104,8 +110,8 @@ if ($result == 0) {
             }
             m=zeroPad(m);
             s=zeroPad(s);
-            document.getElementById('clock').innerHTML=h+":"+m+":"+s+" "+p;
-            document.getElementById('date').innerHTML=month[M]+" "+d+", "+y;
+            document.getElementById('oldclock').innerHTML=h+":"+m+":"+s+" "+p;
+            document.getElementById('olddate').innerHTML=month[M]+" "+d+", "+y;
             t=setTimeout('startClock()',500);
         }
         function zeroPad(i)
@@ -118,7 +124,7 @@ if ($result == 0) {
         }
         </script>
         <script language="JavaScript">
-            Xmas_TargetDate = "12/25/2012 5:00 AM";
+            Xmas_TargetDate = "12/25/2012 12:00 AM";
             Xmas_BackColor = "transparent";
             Xmas_ForeColor = "#00FF00";
             Xmas_CountActive = true;
@@ -128,7 +134,7 @@ if ($result == 0) {
             Xmas_FinishMessage = "Ho! Ho! Ho!";
         </script>
         <script language="JavaScript">
-            Myan_TargetDate = "12/21/2012 6:11:11 AM";
+            Myan_TargetDate = "12/21/2012 6:11:00 AM";
             Myan_BackColor = "transparent";
             Myan_ForeColor = "#FF0000";
             Myan_CountActive = true;
@@ -193,6 +199,10 @@ if ($result == 0) {
         <table border=0 cellspacing=0 cellpadding=0 width=100% align="center">
             <tr>
                 <td align="center" width="180" valign="bottom">
+                    <div id="clock">
+                        <div class="clockGlass"></div>
+                    </div>
+                    <!-- <div id="olddate" align="center" style="color: #d0d000;"><?php echo date('F j, Y'); ?></div> -->
                     <a href="http://www.oldtimersguild.com/vb/forum.php">
                         <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/otg_logo_glow.png"
                              border=0 align="center" width=155 height=200
@@ -203,22 +213,7 @@ if ($result == 0) {
                     </a>
                     <br />
                     <br />
-                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-                    <input type="hidden" name="cmd" value="_s-xclick">
-                    <input type="hidden" name="hosted_button_id" value="RNV3EB7MLFRWA">
-                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"
-                           id="paypal"
-                           border="0" name="submit"
-                           alt="PayPal - The safer, easier way to pay online!"
-                           style="opacity: 0.6; filter: alpha(opacity=60);"
-                           onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
-                           onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
-                    >
-                    <!-- <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1"> -->
-                    </form>
-                    <div id="clock" align="center" style="color: #d0d000;"><?php echo date('g:i:s a'); ?></div>
-                    <div id="date" align="center" style="color: #d0d000;"><?php echo date('F j, Y'); ?></div>
-                    <br />
+                    <!-- <div id="oldclock" align="center" style="color: #d0d000;"><?php echo date('g:i:s a'); ?></div> -->
                     <span style="display: block !important; width: 120px; text-align: center; font-family: sans-serif; font-size: 12px;">
                         <a  href="http://www.wunderground.com/cgi-bin/findweather/getForecast?query=zmw:49004.2.99999&bannertypeclick=wu_blueglass">
                             <img    src="http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_blueglass&airportcode=KAZO&ForcedCity=Kalamazoo&ForcedState=MI&zipcode=49004&language=EN"
@@ -346,6 +341,7 @@ if ($result == 0) {
                     </span>
                 </td>
             </tr>
+<!--
             <tr>
                 <td align="center">&nbsp;</td>
                 <td align="center">
@@ -365,8 +361,9 @@ if ($result == 0) {
                 </td>
                 <td align="center">&nbsp;</td>
             </tr>
+-->
             <tr>
-                <td align="center">
+                <td align="center" width="33%">
                     <span style="display: block !important; width: 120px; text-align: center; font-family: sans-serif; font-size: 12px;">
                         <a  href="http://www.wunderground.com/radar/radblast.asp?zoommode=pan&prevzoom=zoom&num=1&frame=0&delay=15&scale=1.000&noclutter=0&ID=GRR&type=N0R&showstorms=10&lat=42.29166794&lon=-85.58721924&label=Kalamazoo,%20MI&map.x=400&map.y=240&scale=1.000&centerx=400&centery=240&showlabels=1">
                             <img    src="gfx/radar.png"
@@ -388,7 +385,7 @@ if ($result == 0) {
                         />
                     </a>
                 </td>
-                <td align="center">
+                <td align="center" width="33%">
                     <span style="display: block !important; width: 120px; text-align: center; font-family: sans-serif; font-size: 12px;">
                         <?php
                         $visitor_ip = $_SERVER['REMOTE_ADDR'];
@@ -421,11 +418,27 @@ if ($result == 0) {
                 </td>
             </tr>
             <tr>
+                <td align="left"> &nbsp; </td>
+                <td align="center">
+                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                    <input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="RNV3EB7MLFRWA">
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"
+                           id="paypal"
+                           border="0" name="submit"
+                           alt="PayPal - The safer, easier way to pay online!"
+                           style="opacity: 0.6; filter: alpha(opacity=60);"
+                           onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                           onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                    >
+                    <!-- <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1"> -->
+                    </form>
+                </td>
                 <?php
                 $time_end = microtime(true);
                 $time_spent = $time_end - $time_start;
                 ?>
-                <td align="right" width="50%" colspan="3"><span style="color: #333333">&nbsp;Page generated in <? printf( "%8.4f", $time_spent); ?> seconds.</span></td>
+                <td align="right"><span style="color: #333333">&nbsp;Page generated in <? printf( "%8.4f", $time_spent); ?> seconds.</span></td>
             </tr>
        </table>
     </body>

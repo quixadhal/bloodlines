@@ -9,6 +9,7 @@ use Date::Parse;
 use HTML::Entities;
 use DBI;
 use Net::Twitter;
+use Digest::SHA qw(sha256_base64);
 
 my $TEXT_FILE = '/home/bloodlines/lib/secure/log/allchan.log';
 my $ARCHIVE = '/home/bloodlines/lib/secure/log/archive/allchan.log-*';
@@ -41,7 +42,8 @@ CREATE TABLE chanlogs (
     is_url      BOOLEAN DEFAULT false,
     twat        BOOLEAN DEFAULT false,
     is_bot      BOOLEAN DEFAULT false,
-    id          SERIAL NOT NULL
+    id          SERIAL NOT NULL,
+    checksum    TEXT
 );
 
 CREATE INDEX ix_msg_date ON chanlogs (msg_date);
@@ -51,6 +53,7 @@ CREATE INDEX ix_mud ON chanlogs (mud);
 CREATE UNIQUE INDEX ix_chanlogs ON chanlogs (msg_date, network, channel, speaker, mud, is_emote, message); 
 CREATE INDEX ix_twat ON chanlogs (twat);
 CREATE INDEX ix_bot ON chanlogs (is_bot);
+CREATE INDEX ix_checksum ON chanlogs (checksum);
 
 CREATE VIEW today AS
     SELECT to_char(chanlogs.msg_date, 'MM/DD HH24:MI'::text) AS "time", chanlogs.channel, (chanlogs.speaker || '@'::text) || chanlogs.mud AS speaker, chanlogs.message
@@ -91,6 +94,32 @@ CREATE VIEW words AS
 -- insert into bots (channel, speaker, mud) select distinct channel, speaker, mud from chanlogs where speaker ilike 'gribbles'; 
 -- begin; update chanlogs set is_bot = true where NOT is_bot and channel IN (select distinct channel from bots) and speaker IN (select distinct speaker from bots) and mud IN (select distinct mud from bots);
 
+CREATE FUNCTION fn_sha256(text) RETURNS text
+    AS '
+    use Digest::SHA qw(sha256_base64);
+    my $data = $_[0];
+    my $b64 = sha256_base64($data);
+    my $padlen = length($b64) % 4;
+    my $result = $b64 . ("=" x $padlen);
+
+    return $result;
+'
+    LANGUAGE plperlu;
+
+ALTER FUNCTION fn_sha256(text) OWNER TO bloodlines;
+
+CREATE OR REPLACE FUNCTION fn_update_checksum() RETURNS trigger AS $fn_update_checksum$
+BEGIN
+  new.checksum := fn_sha256(to_char(new.msg_date, 'YYYY-MM-DD HH:MI:SS')||new.channel||new.speaker||new.mud||new.message);
+  RETURN new;
+END;
+$fn_update_checksum$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_update_checksum
+    BEFORE INSERT OR UPDATE ON chanlogs
+    FOR EACH ROW
+    EXECUTE PROCEDURE fn_update_checksum();
+
 =cut
 
 my $twitter;
@@ -112,6 +141,15 @@ my $add_entry_sql = $dbc->prepare( qq!
 
 my $botlist = bot_list();
 
+sub sha256 {
+    my $data = shift;
+    my $b64 = sha256_base64($data);
+    my $padlen = length($b64) % 4;
+    my $result = $b64 . ("=" x $padlen);
+
+    return $result;
+}
+
 sub most_recent_sql {
     my $res = $dbc->selectrow_hashref(qq!
 
@@ -123,6 +161,21 @@ sub most_recent_sql {
     !, undef);
     print STDERR $DBI::errstr."\n" if !defined $res;
     return $res;
+}
+
+sub is_already_there {
+    my $checksum = shift;
+    my $res = $dbc->selectrow_hashref(qq!
+
+        SELECT id, checksum
+          FROM chanlogs
+         WHERE checksum = '$checksum'
+         LIMIT 1
+
+    !, undef);
+    print STDERR $DBI::errstr."\n" if defined $DBI::errstr and !defined $res;
+    return 1 if $res && $res->{'checksum'} && $res->{'checksum'} eq $checksum;
+    return undef;
 }
 
 sub bot_list {
@@ -274,6 +327,10 @@ sub add_entry {
                         &&  $data->{'mud'} eq $_->{'mud'} 
                         } @$botlist;
 
+    my $string = $data->{'msg_date'} . $data->{'channel'} . $data->{'speaker'} . $data->{'mud'} . $data->{'message'};
+    my $checksum = sha256($string);
+    return 0 if is_already_there($checksum);
+    
     my $rv = $add_entry_sql->execute($data->{'msg_date'}, $data->{'network'}, $data->{'channel'}, $data->{'speaker'}, $data->{'mud'}, $data->{'message'}, $data->{'is_url'}, $is_bot);
     if($rv) {
         $dbc->commit;

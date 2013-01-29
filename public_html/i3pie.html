@@ -1,0 +1,208 @@
+<html>
+  <head>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+
+      // Load the Visualization API and the piechart package.
+      google.load('visualization', '1.0', {'packages':['corechart']});
+
+            // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawDaily);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawDaily() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Speaker');
+        data.addColumn('number', 'Words');
+        data.addRows([
+['Hamlet', 1314],
+['Cratylus', 921],
+['Kalinice', 830],
+['Goose', 440],
+['DaxHall', 358],
+['Quixadhal', 232],
+['Ninja', 141],
+['Duuk', 131],
+['Sinistrad', 96],
+['Scoyn', 91]
+        ]);
+
+        // Set chart options
+        var options = {
+                       "title":'Stuff people said yesterday',
+                       "legend":'left',
+                       // "backgroundColor": { fill: "none" },
+                       // "backgroundColor": "#505050",
+                       "width":400,
+                       "height":300,
+                       "is3D":'true'
+                      };
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('drawDaily_div'));
+        chart.draw(data, options);
+      }
+
+
+            // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawWeekly);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawWeekly() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Speaker');
+        data.addColumn('number', 'Words');
+        data.addRows([
+['Cratylus', 3717],
+['Kalinice', 3459],
+['Sinistrad', 3411],
+['Quixadhal', 3182],
+['Hamlet', 2101],
+['Ninja', 1565],
+['Goose', 637],
+['Dexter', 572],
+['Kayle', 564],
+['Joshua', 501]
+        ]);
+
+        // Set chart options
+        var options = {
+                       "title":'Stuff people said this week',
+                       "legend":'right',
+                       // "backgroundColor": { fill: "none" },
+                       // "backgroundColor": "#505050",
+                       "width":400,
+                       "height":300,
+                       "is3D":'true'
+                      };
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('drawWeekly_div'));
+        chart.draw(data, options);
+      }
+
+
+            // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawMonthly);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawMonthly() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Speaker');
+        data.addColumn('number', 'Words');
+        data.addRows([
+['Cratylus', 33023],
+['Quixadhal', 22182],
+['Kalinice', 19440],
+['Ninja', 13816],
+['Sinistrad', 7554],
+['Lyanic', 7294],
+['Aidil', 6180],
+['Hamlet', 5776],
+['Mecha', 5383],
+['Nafe', 5198]
+        ]);
+
+        // Set chart options
+        var options = {
+                       "title":'Stuff people said this month',
+                       "legend":'left',
+                       // "backgroundColor": { fill: "none" },
+                       // "backgroundColor": "#505050",
+                       "width":400,
+                       "height":300,
+                       "is3D":'true'
+                      };
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('drawMonthly_div'));
+        chart.draw(data, options);
+      }
+
+
+            // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawYearly);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawYearly() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Speaker');
+        data.addColumn('number', 'Words');
+        data.addRows([
+['Cratylus', 369161],
+['Quixadhal', 305090],
+['Sinistrad', 154107],
+['Kalinash', 132977],
+['Ardneh', 103499],
+['Lyanic', 92684],
+['Ninja', 91504],
+['Nafe', 61418],
+['Hamlet', 61157],
+['Ploosk', 50499]
+        ]);
+
+        // Set chart options
+        var options = {
+                       "title":'Stuff people said this year',
+                       "legend":'right',
+                       // "backgroundColor": { fill: "none" },
+                       // "backgroundColor": "#505050",
+                       "width":400,
+                       "height":300,
+                       "is3D":'true'
+                      };
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('drawYearly_div'));
+        chart.draw(data, options);
+      }
+
+
+    </script>
+  </head>
+
+  <!-- <body background="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040"> -->
+  <body>
+    <table id="piecharts" border=0 cellspacing=0 cellpadding=0 width=80% align="center">
+      <tr>
+        <td align="center" valign="top">
+          <div id="drawDaily_div"></div>
+        </td>
+        <td align="center" valign="top">
+          <div id="drawWeekly_div"></div>
+        </td>
+      </tr>
+      <tr>
+        <td align="center" valign="bottom">
+          <div id="drawMonthly_div"></div>
+        </td>
+        <td align="center" valign="bottom">
+          <div id="drawYearly_div"></div>
+        </td>
+      </tr>
+      <tr>
+        <td align="center" valign="center" colspan="2">
+          <h3><span style="color:blue">Ninja@Dead&nbsp;Souls&nbsp;Dev</span>&nbsp;said &quot;<i>Like "Eli Manning"?</i>&quot;</h3>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+

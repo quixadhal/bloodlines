@@ -2,3 +2,87 @@
 2011.07.23-03.34,12 /realms/quixadhal/mosquito.c line 97: Undefined function interact
 2011.07.23-03.46,12 /realms/quixadhal/mosquito.c line 103: Undefined function this_whoject
 2011.07.23-03.46,12 /realms/quixadhal/mosquito.c line 103: Undefined function this_whoject
+2011.12.11-01.46,10 /realms/quixadhal/middleroom.c line 39: syntax error
+2011.12.11-01.46,10 /realms/quixadhal/middleroom.c line 72: Undefined variable 'sneak'
+2011.12.11-01.46,10 /realms/quixadhal/middleroom.c line 72: Illegal LHS
+2011.12.11-01.46,10 /realms/quixadhal/middleroom.c line 72: syntax error
+2011.12.11-01.46,10 /realms/quixadhal/middleroom.c line 73: Illegal LHS
+2011.12.11-01.46,10 /realms/quixadhal/middleroom.c line 73: syntax error
+2011.12.11-01.46,10 /realms/quixadhal/middleroom.c line 39: syntax error
+2011.12.11-01.46,10 /realms/quixadhal/middleroom.c line 72: Undefined variable 'sneak'
+2011.12.11-01.46,10 /realms/quixadhal/middleroom.c line 72: Illegal LHS
+2011.12.11-01.46,10 /realms/quixadhal/middleroom.c line 72: syntax error
+2011.12.11-01.46,10 /realms/quixadhal/middleroom.c line 73: Illegal LHS
+2011.12.11-01.46,10 /realms/quixadhal/middleroom.c line 73: syntax error
+2011.12.11-01.46,57 /realms/quixadhal/middleroom.c line 39: syntax error
+2011.12.11-01.46,57 /realms/quixadhal/middleroom.c line 72: Undefined variable 'sneak'
+2011.12.11-01.46,57 /realms/quixadhal/middleroom.c line 72: Illegal LHS
+2011.12.11-01.46,57 /realms/quixadhal/middleroom.c line 72: syntax error
+2011.12.11-01.46,57 /realms/quixadhal/middleroom.c line 73: Illegal LHS
+2011.12.11-01.46,57 /realms/quixadhal/middleroom.c line 73: syntax error
+2011.12.11-01.50,17 /realms/quixadhal/westroom.c line 31: syntax error
+2011.12.11-01.50,17 /realms/quixadhal/westroom.c line 46: Undefined variable 'sneak'
+2011.12.11-01.50,17 /realms/quixadhal/westroom.c line 46: Illegal LHS
+2011.12.11-01.50,17 /realms/quixadhal/westroom.c line 46: syntax error
+2011.12.11-01.50,17 /realms/quixadhal/westroom.c line 47: Illegal LHS
+2011.12.11-01.50,17 /realms/quixadhal/westroom.c line 47: syntax error
+2011.12.11-02.03,01 /realms/quixadhal/westroom.c line 31: Wrong number of arguments to SetDoor
+    Expected: 2  Got: 1
+2011.12.11-02.03,01 /realms/quixadhal/westroom.c line 31: Wrong number of arguments to SetDoor
+    Expected: 2  Got: 1
+2011.12.11-02.03,19 /realms/quixadhal/middleroom.c line 39: syntax error
+2011.12.11-02.03,19 /realms/quixadhal/middleroom.c line 72: Undefined variable 'sneak'
+2011.12.11-02.03,19 /realms/quixadhal/middleroom.c line 72: Illegal LHS
+2011.12.11-02.03,19 /realms/quixadhal/middleroom.c line 72: syntax error
+2011.12.11-02.03,19 /realms/quixadhal/middleroom.c line 73: Illegal LHS
+2011.12.11-02.03,19 /realms/quixadhal/middleroom.c line 73: syntax error
+2011.12.11-02.03,19 /realms/quixadhal/middleroom.c line 39: syntax error
+2011.12.11-02.03,19 /realms/quixadhal/middleroom.c line 72: Undefined variable 'sneak'
+2011.12.11-02.03,19 /realms/quixadhal/middleroom.c line 72: Illegal LHS
+2011.12.11-02.03,19 /realms/quixadhal/middleroom.c line 72: syntax error
+2011.12.11-02.03,19 /realms/quixadhal/middleroom.c line 73: Illegal LHS
+2011.12.11-02.03,19 /realms/quixadhal/middleroom.c line 73: syntax error
+2012.08.20-02.42,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 8: syntax error
+2012.08.20-02.42,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 9: Undefined variable 'p'
+2012.08.20-02.42,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 9: Illegal LHS
+2012.08.20-02.42,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 11: syntax error
+2012.08.20-02.42,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 8: syntax error
+2012.08.20-02.42,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 9: Undefined variable 'p'
+2012.08.20-02.42,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 9: Illegal LHS
+2012.08.20-02.42,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 11: syntax error
+2012.08.20-02.48,56 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 8: Undefined variable 'p'
+2012.08.20-02.48,56 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 9: Illegal to redeclare local name 'p'
+2012.08.20-02.48,56 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 8: Undefined variable 'p'
+2012.08.20-02.48,56 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 9: Illegal to redeclare local name 'p'
+2012.08.20-02.51,16 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 9: Undefined variable 'p'
+2012.08.20-02.51,16 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 9: Illegal lvalue
+2012.08.20-02.51,31 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 9: Undefined variable 'p'
+2012.08.20-02.51,31 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 9: Illegal lvalue
+2012.08.20-02.51,31 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 9: Undefined variable 'p'
+2012.08.20-02.51,31 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 9: Illegal lvalue
+2012.08.20-03.44,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 60: Wrong number of arguments to format_desc
+    Expected: 5  Got: 4
+2012.08.20-03.44,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 69: Wrong number of arguments to format_desc
+    Expected: 5  Got: 4
+2012.08.20-03.44,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 76: Wrong number of arguments to format_desc
+    Expected: 5  Got: 4
+2012.08.20-03.44,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 81: Wrong number of arguments to format_desc
+    Expected: 5  Got: 4
+2012.08.20-03.44,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 86: Wrong number of arguments to format_desc
+    Expected: 5  Got: 4
+2012.08.20-03.44,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 92: Wrong number of arguments to format_desc
+    Expected: 5  Got: 4
+2012.08.20-03.44,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 60: Wrong number of arguments to format_desc
+    Expected: 5  Got: 4
+2012.08.20-03.44,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 69: Wrong number of arguments to format_desc
+    Expected: 5  Got: 4
+2012.08.20-03.44,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 76: Wrong number of arguments to format_desc
+    Expected: 5  Got: 4
+2012.08.20-03.44,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 81: Wrong number of arguments to format_desc
+    Expected: 5  Got: 4
+2012.08.20-03.44,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 86: Wrong number of arguments to format_desc
+    Expected: 5  Got: 4
+2012.08.20-03.44,58 /realms/quixadhal/Shylar/TradeDistrict/GriffinsTale/rooms/common_room.c line 92: Wrong number of arguments to format_desc
+    Expected: 5  Got: 4
+2012.12.30-00.38,32 /realms/quixadhal/cmds/chatcolors.c line 7: Undefined variable 'TERMINAL_D'
+2012.12.30-00.38,32 /realms/quixadhal/cmds/chatcolors.c line 7: Undefined variable 'TERMINAL_D'

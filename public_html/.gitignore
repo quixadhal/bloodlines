@@ -1,2 +1,8 @@
 *.zip
 concepts.txt
+calendar/
+gfx/unused/
+i3log_nosql.php
+i3log_test.php
+i3log_working.php
+mki3logpage.pl.txt

@@ -638,7 +638,7 @@
 /* PACKAGE_EXTERNAL: Allows the driver to exec() commands specified in the
  * config file.
  */
-#define PACKAGE_EXTERNAL
+#undef PACKAGE_EXTERNAL
 
 /* NUM_EXTERNAL_CMDS: the number of external commands supported */
 #define NUM_EXTERNAL_CMDS 100
@@ -820,8 +820,8 @@
 #define CFG_MAX_GLOBAL_VARIABLES         256
 
 #define CFG_EVALUATOR_STACK_SIZE        30000
-#define CFG_COMPILER_STACK_SIZE         600000
-#define CFG_MAX_CALL_DEPTH              150
+#define CFG_COMPILER_STACK_SIZE         1600000
+#define CFG_MAX_CALL_DEPTH              250
 /* This must be one of 4, 16, 64, 256, 1024, 4096 */
 #define CFG_LIVING_HASH_SIZE		256
 
@@ -904,19 +904,21 @@
 #define FLUFFOS
 #define HAS_CONSOLE
 #define ANSI_SUBSTITUTE 0x1e
-#define USE_32BIT_ADDRESSES
 #endif
 #undef IPV6
-#undef MALLOC64
+#define MALLOC64
 #undef PACKAGE_CRYPTO
 #undef PACKAGE_SHA1
 #undef MALLOC32
 #undef DTRACE
-#define TRACE
-#define TRACE_CODE
-
-#define ULIMIT 1024
-#define PACKAGE_PCRE
 #define WARN_OLD_RANGE_BEHAVIOR
 #define STRUCT_CLASS
 #undef STRUCT_STRUCT
+
+#define ULIMIT 2048
+#define PACKAGE_EXTERNAL
+#define PACKAGE_PCRE
+#define USE_32BIT_ADDRESSES
+#define TRACE
+#define TRACE_CODE
+

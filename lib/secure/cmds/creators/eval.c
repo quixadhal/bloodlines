@@ -25,8 +25,15 @@ int cmd( string a )
     evaldefs = "";
 
     filename = user_path(previous_object()->GetKeyName());
+    if( !filename ) {
+        notify_fail( "Invalid previous_object GetKeyName?\n" );
+        return 0;
+    }
     if( file_size( filename ) != -2 && !securep(previous_object()) ) {
         notify_fail( "You must have a valid home directory!\n" );
+        return 0;
+    } else if( file_size( filename ) != -2 ) {
+        notify_fail( filename + " doesn't exist or is not accessible!\n" );
         return 0;
     }
 

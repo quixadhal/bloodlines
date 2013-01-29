@@ -39,3 +39,6 @@ packages/packages.a
 portbind
 system_libs
 y.tab.c
+local_options.bkp
+local_options.brezhnev
+local_options.overlord
