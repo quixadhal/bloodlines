@@ -154,7 +154,7 @@ div.time, div.date {
     width:200px; height:12px;  /* (---MOD---) */
     margin:0 0 0 -100px; /* (---MOD---) Centered with half this size - no JS */
     text-align:center;
-    font:bold 14px 'Courrier New','Courier',serif; /* (---MOD---) */
+    font:bold 12px 'Arial','Helvetica',sans-serif; /* (---MOD---) */
     text-shadow:0 0 1px rgba(255, 255, 255, 0.5);
     color:#dd0;
     color:rgba(208,208,0,0.3);

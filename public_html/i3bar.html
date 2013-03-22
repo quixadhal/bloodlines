@@ -17,25 +17,19 @@
 
         // Create the data table.
         var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Speaker');
-        data.addColumn('number', 'Words');
+        data.addColumn('string', 'Channel');
+        data.addColumn('number', 'Messages');
         data.addRows([
-['Quixadhal', 2631],
-['Gimlet', 1583],
-['Mog', 1554],
-['Cratylus', 1456],
-['Dexter', 1148],
-['Kalinice', 738],
-['Nafe', 547],
-['Viriato', 413],
-['Joshua', 391],
-['Ninja', 273]
+['intergossip', 705],
+['dchat', 309],
+['free_speech', 47],
+['ds', 1]
         ]);
 
         // Set chart options
         var options = {
                        "title":'Stuff people said yesterday',
-                       "legend":'left',
+                       "legend":'none',
                        // "backgroundColor": { fill: "none" },
                        // "backgroundColor": "#505050",
                        "width":400,
@@ -44,7 +38,7 @@
                       };
 
         // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById('drawDaily_div'));
+        var chart = new google.visualization.BarChart(document.getElementById('drawDaily_div'));
         chart.draw(data, options);
       }
 
@@ -59,25 +53,25 @@
 
         // Create the data table.
         var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Speaker');
-        data.addColumn('number', 'Words');
+        data.addColumn('string', 'Channel');
+        data.addColumn('number', 'Messages');
         data.addRows([
-['Cratylus', 8982],
-['Quixadhal', 7983],
-['Kalinice', 3983],
-['Dexter', 3903],
-['Gimlet', 2856],
-['Mog', 1558],
-['Joshua', 1424],
-['Hamlet', 1408],
-['Ninja', 1208],
-['Sinistrad', 1131]
+['intergossip', 3138],
+['dchat', 916],
+['intercre', 82],
+['free_speech', 80],
+['bsg', 8],
+['ds', 5],
+['discworld-chat', 2],
+['mbchat', 1],
+['ds_test', 1],
+['discworld-cre', 1]
         ]);
 
         // Set chart options
         var options = {
                        "title":'Stuff people said this week',
-                       "legend":'right',
+                       "legend":'none',
                        // "backgroundColor": { fill: "none" },
                        // "backgroundColor": "#505050",
                        "width":400,
@@ -86,7 +80,7 @@
                       };
 
         // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById('drawWeekly_div'));
+        var chart = new google.visualization.BarChart(document.getElementById('drawWeekly_div'));
         chart.draw(data, options);
       }
 
@@ -101,25 +95,25 @@
 
         // Create the data table.
         var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Speaker');
-        data.addColumn('number', 'Words');
+        data.addColumn('string', 'Channel');
+        data.addColumn('number', 'Messages');
         data.addRows([
-['Cratylus', 41531],
-['Quixadhal', 29084],
-['Kalinice', 17320],
-['Gimlet', 12225],
-['Sinistrad', 12162],
-['DaxHall', 11012],
-['Joshua', 8316],
-['Ninja', 8095],
-['Mecha', 6392],
-['Hamlet', 6138]
+['intergossip', 17141],
+['dchat', 4198],
+['ds', 194],
+['free_speech', 132],
+['intercre', 116],
+['discworld-chat', 56],
+['bsg', 20],
+['german', 16],
+['dgd', 6],
+['lima', 4]
         ]);
 
         // Set chart options
         var options = {
                        "title":'Stuff people said this month',
-                       "legend":'left',
+                       "legend":'none',
                        // "backgroundColor": { fill: "none" },
                        // "backgroundColor": "#505050",
                        "width":400,
@@ -128,7 +122,7 @@
                       };
 
         // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById('drawMonthly_div'));
+        var chart = new google.visualization.BarChart(document.getElementById('drawMonthly_div'));
         chart.draw(data, options);
       }
 
@@ -143,25 +137,25 @@
 
         // Create the data table.
         var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Speaker');
-        data.addColumn('number', 'Words');
+        data.addColumn('string', 'Channel');
+        data.addColumn('number', 'Messages');
         data.addRows([
-['Cratylus', 389608],
-['Quixadhal', 299743],
-['Sinistrad', 135171],
-['Kalinash', 114298],
-['Ninja', 99735],
-['Lyanic', 97694],
-['Ardneh', 88032],
-['Nafe', 63414],
-['Hamlet', 62760],
-['Maw', 53964]
+['intergossip', 142522],
+['dchat', 67830],
+['free_speech', 10318],
+['ds', 5115],
+['intercre', 3617],
+['bsg', 3067],
+['discworld-chat', 1272],
+['coffeemud_universe', 661],
+['dgd', 285],
+['bofh', 249]
         ]);
 
         // Set chart options
         var options = {
                        "title":'Stuff people said this year',
-                       "legend":'right',
+                       "legend":'none',
                        // "backgroundColor": { fill: "none" },
                        // "backgroundColor": "#505050",
                        "width":400,
@@ -170,7 +164,7 @@
                       };
 
         // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById('drawYearly_div'));
+        var chart = new google.visualization.BarChart(document.getElementById('drawYearly_div'));
         chart.draw(data, options);
       }
 
@@ -199,7 +193,7 @@
       </tr>
       <tr>
         <td align="center" valign="center" colspan="2">
-          <h3><span style="color:blue">Joshua@Dead&nbsp;Souls&nbsp;Dev</span>&nbsp;said &quot;<i>hair cut, beard trimmed =(</i>&quot;</h3>
+          <h3><span style="color:blue">Dexter@Nanvaent</span>&nbsp;said &quot;<i>nor with dell or hp. Sun was cool to work with</i>&quot;</h3>
         </td>
       </tr>
     </table>

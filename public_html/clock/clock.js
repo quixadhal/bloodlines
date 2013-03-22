@@ -59,7 +59,8 @@
                 rotateHours      :true, // Rotate digit time ?
                 withUnits        :true, // Print unit ?
                 withDigitalTime  :false, // Print time (digital) in center
-                withDate         :false // Print date
+                withDate         :false, // Print date
+                withYear         :false // Print Year (overwritten by time)
             }, options || {});  
             
             return this.each(function() {
@@ -72,7 +73,7 @@
                     $sec = $('<div class="sec"><div class="clockwise"></div></div>').appendTo($clock),
                     $min = $('<div class="min"><div class="clockwise"></div></div>').appendTo($clock),
                     $hour = $('<div class="hour"><div class="clockwise"></div></div>').appendTo($clock),
-                    $time = (options.withDigitalTime ? $('<div class="time"></div>').appendTo($clock) : null),
+                    $time = ((options.withDigitalTime || options.withYear) ? $('<div class="time"></div>').appendTo($clock) : null),
                     $date = (options.withDate ? $('<div class="date"></div>').appendTo($clock) : null),
                     $innerCenter = $('<div class="innerCenter"></div>').appendTo($clock);
                 
@@ -117,9 +118,13 @@
                     $min.rotate((mins * 6)+'deg');
                     $hour.rotate((hours * 30 + (mins / 2))+'deg');
                     if (options.withDate) // Tue Oct 11 2011 00:37:36 GMT+0200 (Paris, Madrid (heure d't))
-                        $date.html(now.toString().split(now.getFullYear())[0]);
+                        $date.html(strftime("%B %d"));
+                        //$date.html(now.toString().split(now.getFullYear())[0]);
+                    if (options.withYear) 
+                        $time.html(strftime("%Y"));
                     if (options.withDigitalTime) 
-                        $time.html(now.toString().split(now.getFullYear())[1].split(' ')[1]);
+                        $time.html(strftime("%H:$M:$S"));
+                        //$time.html(now.toString().split(now.getFullYear())[1].split(' ')[1]);
                     setTimeout(timer, 300); // precision 300ms is fine when widget is alone
                 };
                 timer(); // init !
@@ -131,6 +136,6 @@
 })(jQuery, window);
 
 $(document).ready(function(){
-    $('div#clock').analogueClock({withDate:true});
+    $('div#clock').analogueClock({withDate:true, withYear:true});
 });
 

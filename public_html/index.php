@@ -75,6 +75,7 @@ if ($result == 0) {
         <script type='text/javascript' src='clock/jquery.js'></script>
         <link href="http://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet" type="text/css">
         <link href="clock/clock.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="clock/strftime.js"></script>
         <script type="text/javascript" src="clock/clock.js"></script>
 
         <script type="text/javascript">
@@ -153,7 +154,8 @@ if ($result == 0) {
             a:hover { text-decoration:underline; }
         </style>
     </head>
-    <body background="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" onload="startClock()">
+    <!-- <body background="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" onload="startClock()"> -->
+    <body background="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
         <table border=0 cellspacing=0 cellpadding=0 width=80% align="center">
             <tr>
                 <td align="right" valign="top">

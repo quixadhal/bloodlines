@@ -78,19 +78,19 @@ void god_death_1(object pl) {
 }
 
 void god_death_2(object pl) {
-  tell_room(environment(this_object()),
+    tell_room(environment(this_object()),
             "The little bug imagines the sweet taste of " + pl->GetName() + "'s blood...\n");
-  call_out("god_death_3", 4, pl);
+    call_out("god_death_3", 4, pl);
 }
 
 void god_death_3(object pl) {
-  tell_room(environment(this_object()),
+    tell_room(environment(this_object()),
             "The evil mosquito performs a kamakazi attack on the immortal "+ pl->GetName() + "\n" +
             "and gets a critical hit, slaying the mighty god even as she dies in agony!\n",
             pl);
-  tell_player(pl, "Bad luck for you!  The tiny mosquito commits suicide, but she gets a critical hit\n" +
-          " and takes you with her!\n");
-  pl->quit();
-  this_object()->remove();
+    tell_player(pl, "Bad luck for you!  The tiny mosquito commits suicide, but she gets a critical hit\n" +
+            " and takes you with her!\n");
+    pl->quit();
+    this_object()->remove();
 }
 
