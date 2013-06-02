@@ -67,6 +67,32 @@ if ($result == 0) {
 }
 */
 
+function is_local_ip() {
+    $visitor_ip = $_SERVER['REMOTE_ADDR'];
+    $varr = explode(".", $visitor_ip);
+    if($varr[0] == "192" && $varr[1] == "168")
+        return 1;
+    return 0;
+}
+
+$isLocal = is_local_ip();
+
+$graphics = array();
+$graphics['background'] = $isLocal ? "gfx/dark_wood.jpg" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg";
+$graphics['bloodlines'] = $isLocal ? "gfx/bloodlines.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png";
+$graphics['wileymud4'] = $isLocal ? "gfx/wileymud4.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/wileymud4.png";
+$graphics['otglogo'] = $isLocal ? "gfx/otg_logo_glow.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/otg_logo_glow.png";
+$graphics['mudlist'] = $isLocal ? "gfx/mudlist_button.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/mudlist_button.png";
+$graphics['smaug'] = $isLocal ? "gfx/smaugmuds_button.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/smaugmuds_button.png";
+$graphics['lpmuds'] = $isLocal ? "gfx/lpmuds.net_button.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/lpmudsnet_button.png";
+$graphics['mudbytes'] = $isLocal ? "gfx/mudbytes_button.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/mudbytes_button.png";
+$graphics['intermud'] = $isLocal ? "gfx/intermud_logs.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/intermud_logs.png";
+$graphics['radar'] = $isLocal ? "gfx/radar.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/radar_zpsafd5e16d.png";
+$graphics['gitlogo'] = $isLocal ? "gfx/git-logo.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/git-logo_zps6a5af960.png";
+$graphics['tomato'] = $isLocal ? "gfx/tomato.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/tomato_zps8edf3fbb.png";
+$graphics['paypal'] = $isLocal ? "gfx/paypal.gif" : "https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif";
+$graphics['server_icon'] = $isLocal ? "gfx/server_icon.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/server_icon_zps624a919d.png";
+
 ?>
 <html>
     <head>
@@ -154,13 +180,13 @@ if ($result == 0) {
             a:hover { text-decoration:underline; }
         </style>
     </head>
-    <!-- <body background="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" onload="startClock()"> -->
-    <body background="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
+    <!-- <body background="<? echo $graphics['background']; ?>" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" onload="startClock()"> -->
+    <body background="<? echo $graphics['background']; ?>" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
         <table border=0 cellspacing=0 cellpadding=0 width=80% align="center">
             <tr>
                 <td align="right" valign="top">
-                    <a href="/anyterm/anyterm.shtml?rows=40&cols=100">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png"
+                    <a href="/anyterm/anyterm.shtml?rows=40&cols=100" title="Play WileyMUD III">
+                        <img src="<? echo $graphics['bloodlines']; ?>"
                              border=0 width=469 height=160
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -169,8 +195,8 @@ if ($result == 0) {
                     </a>
                 </td>
                 <td align="left" valign="bottom">
-                    <a href="/anyterm/anyterm.shtml?rows=40&cols=100">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/wileymud4.png"
+                    <a href="/anyterm/anyterm.shtml?rows=40&cols=100" title="Play WileyMUD III">
+                        <img src="<? echo $graphics['wileymud4']; ?>"
                              border=0 width=354 height=81
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -188,7 +214,7 @@ if ($result == 0) {
                                 onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                                 onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
                             > 
-                                <font size="-2" color="#FFFFBF"><a href="/~wiley/">Also visit WileyMUD III, for amusement!</a></font>
+                                <font size="-2" color="#FFFFBF"><a href="/~wiley/" title="OLD WileyMUD Homepage">Also visit WileyMUD III, for amusement!</a></font>
                             </td>
                             <td align="right" valign="bottom" width="5%">
                                 &nbsp;
@@ -205,8 +231,8 @@ if ($result == 0) {
                         <div class="clockGlass"></div>
                     </div>
                     <!-- <div id="olddate" align="center" style="color: #d0d000;"><?php echo date('F j, Y'); ?></div> -->
-                    <a href="http://www.oldtimersguild.com/vb/forum.php">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/otg_logo_glow.png"
+                    <a href="http://www.oldtimersguild.com/vb/forum.php" title="No Drama!">
+                        <img src="<? echo $graphics['otglogo']; ?>"
                              border=0 align="center" width=155 height=200
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -280,8 +306,8 @@ if ($result == 0) {
                     <br />
                     <br />
 -->
-                    <a href="mudlist.php">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/mudlist_button.png"
+                    <a href="mudlist.php" title="MUD Listing">
+                        <img src="<? echo $graphics['mudlist']; ?>"
                              border=0 align="center" width=121 height=92
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -290,8 +316,8 @@ if ($result == 0) {
                     </a>
                     <br />
                     <br />
-                    <a href="http://www.smaugmuds.org/">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/smaugmuds_button.png"
+                    <a href="http://www.smaugmuds.org/" title="The best Dikurivative codebase">
+                        <img src="<? echo $graphics['smaug']; ?>"
                              border=0 align="center" width=119 height=26
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -299,8 +325,8 @@ if ($result == 0) {
                         />
                     </a>
                     <br />
-                    <a href="http://lpmuds.net/forum/index.php">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/lpmudsnet_button.png"
+                    <a href="http://lpmuds.net/forum/index.php" title="LPMUD faithful">
+                        <img src="<? echo $graphics['lpmuds']; ?>"
                              border=0 align="center" width=119 height=26
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -308,8 +334,8 @@ if ($result == 0) {
                         />
                     </a>
                     <br />
-                    <a href="http://www.mudbytes.net/index.php?a=recent">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/mudbytes_button.png"
+                    <a href="http://www.mudbytes.net/index.php?a=recent" title="ALL about the DRAMA!">
+                        <img src="<? echo $graphics['mudbytes']; ?>"
                              border=0 align="center" width=119 height=26
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -318,8 +344,8 @@ if ($result == 0) {
                     </a>
                     <br />
                     <br />
-                    <a href="i3log.php">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/intermud_logs.png"
+                    <a href="i3log.php" title="I3 Chat Logs">
+                        <img src="<? echo $graphics['intermud']; ?>"
                              border=0 align="center" width=154 height=200
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -365,42 +391,43 @@ if ($result == 0) {
             </tr>
 -->
             <tr>
-                <td align="center" width="33%">
-                    <span style="display: block !important; width: 120px; text-align: center; font-family: sans-serif; font-size: 12px;">
+                <td align="center" valign="center" width="33%">
+                    <!-- <span style="display: block !important; width: 120px; text-align: center; font-family: sans-serif; font-size: 12px;"> -->
                         <a  href="http://www.wunderground.com/radar/radblast.asp?zoommode=pan&prevzoom=zoom&num=1&frame=0&delay=15&scale=1.000&noclutter=0&ID=GRR&type=N0R&showstorms=10&lat=42.29166794&lon=-85.58721924&label=Kalamazoo,%20MI&map.x=400&map.y=240&scale=1.000&centerx=400&centery=240&showlabels=1">
-                            <img    src="gfx/radar.png"
+                            <img    src="<? echo $graphics['radar']; ?>"
                                     height="64" width="64" border="0"
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                              onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
                             />
                         </a>
-                    </span>
+                    <!-- </span> -->
                 </td>
-                <td align="center">
-                    <a href="https://github.com/quixadhal/bloodlines">
-                        <img src="gfx/git-logo.png"
-                             border="0" align="center" width=72 height=27
+                <td align="center" valign="center">
+                    <a href="https://github.com/quixadhal">
+                        <img src="<? echo $graphics['gitlogo']; ?>" title="My GitHub repositories"
+                             border="0" align="center" width="72" height="27"
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                              onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
                         />
                     </a>
                 </td>
-                <td align="center" width="33%">
-                    <span style="display: block !important; width: 120px; text-align: center; font-family: sans-serif; font-size: 12px;">
+                <td align="center" valign="center" width="33%">
+                    <!-- <span style="display: block !important; width: 120px; text-align: center; font-family: sans-serif; font-size: 12px;"> -->
                         <?php
-                        $visitor_ip = $_SERVER['REMOTE_ADDR'];
-                        $varr = explode(".", $visitor_ip);
+                        //$visitor_ip = $_SERVER['REMOTE_ADDR'];
+                        //$varr = explode(".", $visitor_ip);
                         //$visitor_net = inet_pton($visitor) & 0xFFFFFF00;
                         //$local_net = inet_pton('192.168.1.0') & 0xFFFFFF00;
                         //if($visitor_net == $local_net)
-                        if($varr[0] == "192" && $varr[1] == "168")
+                        //if($varr[0] == "192" && $varr[1] == "168")
+                        if(is_local_ip())
                         {
                         ?>
                         <a href="http://192.168.1.1/">
-                            <img src="gfx/tomato.png"
-                                 border="0" align="center" width=64 height=64
+                            <img src="<? echo $graphics['tomato']; ?>" title="Router Page"
+                                 border="0" align="center" width="64" height="64"
                                  style="opacity: 0.6; filter: alpha(opacity=60);"
                                  onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                                  onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
@@ -408,15 +435,23 @@ if ($result == 0) {
                         </a>
                         <?php } else { ?>
                         <a href="http://www.shadowandy.net/2012/03/asus-rt-n66u-tomatousb-firmware-flashing-guide.htm">
-                            <img src="gfx/tomato.png"
-                                 border="0" align="center" width=64 height=64
+                            <img src="<? echo $graphics['tomato']; ?>" title="Tomato Firmware"
+                                 border="0" align="center" width="64" height="64"
                                  style="opacity: 0.6; filter: alpha(opacity=60);"
                                  onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                                  onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
                             />
                         </a>
                         <?php } ?>
-                    </span>
+                        <span style="color: #1F1F1F"><a href="/~bloodlines/server.php" title="Server Stats">
+                            <img src="<? echo $graphics['server_icon']; ?>" 
+                                 border="0" width="78" height="78" alt="(server)"
+                                 style="opacity: 0.4; filter: alpha(opacity=40);"
+                                 onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                                 onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                             />
+                        </a></span>
+                    <!-- </span> -->
                 </td>
             </tr>
             <tr>
@@ -425,7 +460,7 @@ if ($result == 0) {
                     <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
                     <input type="hidden" name="cmd" value="_s-xclick">
                     <input type="hidden" name="hosted_button_id" value="RNV3EB7MLFRWA">
-                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"
+                    <input type="image" src="<? echo $graphics['paypal']; ?>"
                            id="paypal"
                            border="0" name="submit"
                            alt="PayPal - The safer, easier way to pay online!"

@@ -1,0 +1,89 @@
+<head>
+    <title>
+        i3log HELP page
+    </title>
+    <script language="javascript">
+        function toggleDiv(divID) {
+            if(document.getElementById(divID).style.display == 'none') {
+                document.getElementById(divID).style.display = 'block';
+            } else {
+                document.getElementById(divID).style.display = 'none';
+            }
+        }
+    </script>
+</head>
+<body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
+    <h1>HELP!</h1>
+
+    <p>So, it occured to me today, that my i3 log page seems to be useful to people, but
+    since I'm not a graphics guy, the UI is probably impossible for anyone but me to
+    understand.</p>
+
+    <p>To address that, here's a quick overview of how things work.</p>
+
+    <h3><a href="javascript:;" onmousedown="toggleDiv('defaults');">Defaults:</a></h3>
+    <div id="defaults" style="display: block;">
+    When you first load the page, it defaults to showing the current view of the
+    most recent logs from all channels, excluding known "bots".  The default view is
+    HTML.
+    </div>
+
+    <h3><a href="javascript:;" onmousedown="toggleDiv('versions');">Alternate Versions:</a></h3>
+    <div id="versions" style="display: block;">
+    A text version is also available, as is a JSON data dump, and an RSS feed, all
+    accessed by the icons/links along the center bottom edge of the display.  The RSS
+    feed has only been tested with firefox, and with my old Logitech LCD keyboard.
+    </div>
+
+    <h3><a href="javascript:;" onmousedown="toggleDiv('nav');">Navigation:</a></h3>
+    <div id="nav" style="display: block;">
+    <p>The navigation bar sits above the actual data, and has 14 icons.  The leftmost 4
+    navigate backwards in time, going back 1, 10, or 100 pages at a time, or the far left
+    taking you to page 1.  The rightmost 4 work the same way for going forwards.  If one
+    of them is not available (dimmed out), it means you're closer than that many pages
+    from either end.</p>
+
+    <p>The center icon is the HOME icon.  It takes you back to the default configuration,
+    as if you'd just shown up.  Most current page, no options selected.</p>
+
+    <p>The "world" icon toggles the display of ONLY messages which contained hyperlinks.
+    If lit, you will only see messages with links in them.  If dimmed, you see all
+    messages.  It defaults to all messages.</p>
+
+    <p>The cog-wheel icon toggles the display of BOT messages.  Several people run
+    I3 news feeds and similar things, which can be quite spammy.  Most people checking the
+    log page seem to want see what people have said, not bots... so this is also disabled
+    by default.  As above, lit means show bots, dimmed means don't show them.</p>
+
+    <p>The pie chart shows the people who have been talking the most on I3, by today, this week,
+    this month, or this year.  Talk more, get pie.  The Bar icon shows a bar chart of channel
+    activity, done the same way, just broken down by channel instead of speaker.</p>
+    </div>
+
+    <h3><a href="javascript:;" onmousedown="toggleDiv('filter');">Filtering:</a></h3>
+    <div id="filter" style="display: block;">
+
+    <p>There is a search box up along the top right edge.  If you type stuff in, it will try
+    to filter the messages based so it has what you typed.  A '*' is a wildcard, but it
+    probably doesn't quite work as you'd expect.  Someday I may sit down and make it a
+    little more predictable... </p>
+
+    <p>The meat of the interface is, of course, the actual message display section.  If you
+    move your mouse around, you'll notice some columns will highlight as the mouse moves over
+    them.  In particular, the Date, Time, Channel, and Speaker columns.  If you click on a
+    channel or speaker, you will set a filter that limits the message display to only that
+    channel or speaker.  Someday, I'd like to allow multiple clicks to select multiple
+    channels or speakers, but for now... you get all or just one.</p>
+
+    <p>Once you've selected a channel or speaker, you'll notice that column no longer highlights.
+    That's because it now will have ONLY a single value which you've already selected.  No point
+    in re-selecting it again.  To clear it, you might notice the column header has now become an
+    active link.. click on that, and it wipes the filter.</p>
+
+    <p>Date and Time work the same way, but instead of a filter, they set a starting date.
+    The two columns are linked, so clicking on a row in either one will select the date and
+    time shown as the starting date.  Once selected, only data newer than that row will show
+    up until you clear it via the column header.</p>
+    </div>
+
+</body>

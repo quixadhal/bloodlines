@@ -220,6 +220,43 @@ function get_cache($fileName, $sql, $column) {
 
 }
 
+function is_local_ip() {
+    $visitor_ip = $_SERVER['REMOTE_ADDR'];
+    $varr = explode(".", $visitor_ip);
+    if($varr[0] == "192" && $varr[1] == "168")
+        return 1;
+    return 0;
+}
+
+$isLocal = is_local_ip();
+
+$graphics = array();
+
+$graphics['background'] = $isLocal ? "gfx/dark_wood.jpg" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg";
+$graphics['bloodlines'] = $isLocal ? "gfx/bloodlines.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png";
+$graphics['wileymud4'] = $isLocal ? "gfx/wileymud4.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/wileymud4.png";
+$graphics['navbegin'] = $isLocal ? "gfx/navbegin.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navbegin.png";
+$graphics['navback'] = $isLocal ? "gfx/navback.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navback.png";
+$graphics['navprev'] = $isLocal ? "gfx/navprev.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navprev.png";
+$graphics['navconfig'] = $isLocal ? "gfx/navconfig.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navconfig.png";
+$graphics['navlinks'] = $isLocal ? "gfx/navlinks.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navlinks.png";
+$graphics['navhome'] = $isLocal ? "gfx/navhome.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navhome.png";
+$graphics['pie_chart'] = $isLocal ? "gfx/pie_chart.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/pie_chart_zps670773a1.png";
+$graphics['bar_chart'] = $isLocal ? "gfx/bar_chart.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/i3bar_zps9d063211.png";
+$graphics['navnext'] = $isLocal ? "gfx/navnext.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navnext.png";
+$graphics['navforward'] = $isLocal ? "gfx/navforward.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navforward.png";
+$graphics['navend'] = $isLocal ? "gfx/navend.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navend.png";
+$graphics['rss'] = $isLocal ? "gfx/rss.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/rss_zps6b73d7e2.png";
+$graphics['rssMouseOver'] = $isLocal ? "gfx/rssMouseOver.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/rssMouseOver_zps52b86e27.png";
+$graphics['json'] = $isLocal ? "gfx/json.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/json_zps34e3c065.png";
+$graphics['jsonMouseOver'] = $isLocal ? "gfx/jsonMouseOver.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/jsonMouseOver_zps46d5148d.png";
+$graphics['text'] = $isLocal ? "gfx/text.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/text_zps49ecc982.png";
+$graphics['textMouseOver'] = $isLocal ? "gfx/textMouseOver.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/textMouseOver_zpsc7cbdd88.png";
+$graphics['server_icon'] = $isLocal ? "gfx/server_icon.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/server_icon_zps624a919d.png";
+$graphics['help_icon'] = $isLocal ? "gfx/help.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/help_zps181221b1.png";
+
+$serverUrl = 
+
 $pinkfish_map = get_pinkfish_map();
 $hourColors = get_hour_colors($pinkfish_map);
 $channelColors = get_channel_colors($pinkfish_map);
@@ -234,6 +271,7 @@ $defaultFormat = "html";
 
 $pageSize = $defaultPageSize;
 $pageNumber = $defaultPageNumber;
+$startDate = null;
 $linksOnly = null;
 $showBots = null;
 $format = $defaultFormat;
@@ -286,6 +324,22 @@ if( isset($_REQUEST) && isset($_REQUEST["pd"]) ) {
     $pageNumberEntered = $_REQUEST["pd"];
     if(!is_numeric($pageNumberEntered)) {
         $pageNumberEntered = 0;
+    }
+}
+
+// This specifies a start date for the query, it's mostly
+// used to allow one to click on a date and see stuff
+// from there forwards.  Unix timestamp.
+
+$startDateSql = '';
+if( isset($_REQUEST) && isset($_REQUEST["sd"]) ) {
+    $startDate = $_REQUEST["sd"];
+    if(!is_numeric($startDate)) {
+        $startDate = null;
+    }
+    if(isset($startDate)) {
+        //$startDateSql = "AND date_part('epoch', msg_date)::integer >= $startDate";
+        $startDateSql = "AND msg_date >= to_timestamp($startDate)";
     }
 }
 
@@ -406,7 +460,7 @@ if( isset($_REQUEST) && isset($_REQUEST["an"]) ) {
 }
 
 $totalRows = 0;
-$countSql = "SELECT COUNT(*) FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql";
+$countSql = "SELECT COUNT(*) FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $startDateSql";
 $countSql = preg_replace('/chanlogs\s+AND/', 'chanlogs WHERE', $countSql);
 //echo "SQL: $countSql\n";
 
@@ -443,7 +497,7 @@ if( $pageNumber < ($totalPages / 2) ) {
 $limitSql = "LIMIT $pageSize";
 $offsetSql = "OFFSET $offset";
 
-$pageSql = "SELECT id, msg_date, to_char(msg_date, 'MM/DD') AS the_date, to_char(msg_date, 'HH24:MI') AS the_time, to_char(msg_date, 'HH24') AS the_hour, channel, speaker, mud, message FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $sortSql $offsetSql $limitSql";
+$pageSql = "SELECT id, msg_date, date_part('epoch', msg_date) AS unix_date, to_char(msg_date, 'MM/DD') AS the_date, to_char(msg_date, 'HH24:MI') AS the_time, to_char(msg_date, 'HH24') AS the_hour, channel, speaker, mud, message FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $startDateSql $sortSql $offsetSql $limitSql";
 $pageSql = preg_replace('/chanlogs\s+AND/', 'chanlogs WHERE', $pageSql);
 
 try {
@@ -524,6 +578,7 @@ function build_url() {
     global $searchFilter;
     global $anchorID;
     global $urlParams;
+    global $startDate;
 
     $urlParams = ($pageSize != $defaultPageSize ? "&ps=" . urlencode($pageSize) : "")
         . (isset($linksOnly) ? "&lo" : "")
@@ -532,6 +587,7 @@ function build_url() {
         . (isset($channelFilter) ? "&cf=" . urlencode($channelFilter) : "")
         . (isset($speakerFilter) ? "&sf=" . urlencode($speakerFilter) : "")
         . (isset($mudFilter) ? "&mf=" . urlencode($mudFilter) : "")
+        . (isset($startDate) ? "&sd=" . urlencode($startDate) : "")
         . (isset($sortOrder) ? "&so=" . urlencode($sortOrder) : "")
         . (isset($searchFilter) ? "&sr=" . urlencode($searchFilter) : "")
         . (isset($anchorID) ? "&an=" . urlencode($anchorID) : "");
@@ -603,6 +659,7 @@ foreach ($data['rows'] as $row) {
         "channel"       => $channel,
         "speaker"       => $speaker,
         "message"       => $message,
+        "unix_date"     => $row->unix_date,
         "raw_channel"   => $row->channel,
         "raw_speaker"   => $row->speaker,
         "raw_mud"       => $row->mud,
@@ -662,8 +719,9 @@ if($format == 'html') {
             a { text-decoration:none; }
             a:hover { text-decoration:underline; }
         </style>
-        <script src="jq/js/jquery-1.9.1.js"></script>
-        <script src="jq/js/jquery-ui-1.10.1.custom.js"></script>
+        <!-- <script src="jq/js/jquery-1.9.1.js"></script>
+        <script src="jq/js/jquery-ui-1.10.1.custom.js"></script> -->
+        <script type="text/javascript" src="popup.js"></script>
     </head>
     <body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
         <table id="header" border=0 cellspacing=0 cellpadding=0 width=80% align="center">
@@ -679,13 +737,13 @@ if($format == 'html') {
                             <td align="right" valign="top">
                                 <!-- <a href="/anyterm/anyterm.shtml?rows=40&cols=100"> -->
                                 <a href="/~bloodlines">
-                                    <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png" border=0 width=234 height=80>
+                                    <img src="<? echo $graphics['bloodlines']; ?>" border=0 width=234 height=80>
                                 </a>
                             </td>
                             <td align="left" valign="bottom">
                                 <!-- <a href="/anyterm/anyterm.shtml?rows=40&cols=100"> -->
                                 <a href="/~bloodlines">
-                                    <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/wileymud4.png" border=0 width=177 height=40">
+                                    <img src="<? echo $graphics['wileymud4']; ?>" border=0 width=177 height=40">
                                 </a>
                             </td>
                         </tr>
@@ -766,10 +824,10 @@ if($format == 'html') {
                     <span style="color: #555555">
                     <? if( $pageNumber < $beginningPage) { ?>
                         <a href="<? echo $beginningUrl; ?>" title="The&nbsp;Beginning&nbsp;(<? echo $beginningPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navbegin.png" border=0 width=48 height=48 />
+                            <img src="<? echo $graphics['navbegin']; ?>" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navbegin.png" border=0 width=48 height=48 />
+                        <img src="<? echo $graphics['navbegin']; ?>" border=0 width=48 height=48 />
                     <? } ?>
                     </span>
                 </td>
@@ -785,10 +843,10 @@ if($format == 'html') {
                     <span style="color: #555555">
                     <? if( $pageNumber < $backManyPage && $backManyPage <= $beginningPage) { ?>
                         <a href="<? echo $backManyUrl; ?>" title="Back&nbsp;<? echo $manyPages; ?>&nbsp;(<? echo $backManyPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navback.png" border=0 width=48 height=48 />
+                            <img src="<? echo $graphics['navback']; ?>" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navback.png" border=0 width=48 height=48 />
+                        <img src="<? echo $graphics['navback']; ?>" border=0 width=48 height=48 />
                     <? } ?>
                     </span>
                 </td>
@@ -804,10 +862,10 @@ if($format == 'html') {
                     <span style="color: #555555">
                     <? if( $pageNumber < $backFewPage && $backFewPage <= $beginningPage) { ?>
                         <a href="<? echo $backFewUrl; ?>" title="Back&nbsp;<? echo $fewPages; ?>&nbsp;(<? echo $backFewPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navback.png" border=0 width=48 height=48 />
+                            <img src="<? echo $graphics['navback']; ?>" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navback.png" border=0 width=48 height=48 />
+                        <img src="<? echo $graphics['navback']; ?>" border=0 width=48 height=48 />
                     <? } ?>
                     </span>
                 </td>
@@ -823,10 +881,10 @@ if($format == 'html') {
                     <span style="color: #555555">
                     <? if( $pageNumber < $backOnePage && $backOnePage <= $beginningPage) { ?>
                         <a href="<? echo $backOneUrl; ?>" title="Previous&nbsp;Page&nbsp;(<? echo $backOnePageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navprev.png" border=0 width=48 height=48 />
+                            <img src="<? echo $graphics['navprev']; ?>" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navprev.png" border=0 width=48 height=48 />
+                        <img src="<? echo $graphics['navprev']; ?>" border=0 width=48 height=48 />
                     <? } ?>
                     </span>
                 </td>
@@ -838,6 +896,15 @@ if($format == 'html') {
                 </td>
                 <td>
                     &nbsp;
+                </td>
+                <td id="navhelp" align="center" valign="center" width="50"
+                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    onmouseout="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
+                >
+                    <a title="HELP!" href="i3log_help.html" class="popup2">
+                        <img src="<? echo $graphics['help_icon']; ?>" border=0 width=48 height=48 />
+                    </a>
                 </td>
                 <td id="navbot" align="center" valign="center" width="50"
                     <? if( isset($showBots) ) { ?>
@@ -852,11 +919,11 @@ if($format == 'html') {
                 >
                     <? if( !isset($showBots) ) { ?>
                     <a title='Include bot content' href="<? $showBots = 1; echo build_url(); $showBots = null; build_url(); ?>">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navconfig.png" border=0 width=48 height=48 />
+                        <img src="<? echo $graphics['navconfig']; ?>" border=0 width=48 height=48 />
                     </a>
                     <? } else { ?>
                     <a title='Block messages from known bots' href="<? $showBots = null; echo build_url(); $showBots = 1; build_url(); ?>">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navconfig.png" border=0 width=48 height=48 />
+                        <img src="<? echo $graphics['navconfig']; ?>" border=0 width=48 height=48 />
                     </a>
                     <? } ?>
                 </td>
@@ -873,11 +940,11 @@ if($format == 'html') {
                 >
                     <? if( isset($linksOnly) ) { ?>
                     <a title='Include all content' href="<? $linksOnly = null; echo build_url(); $linksOnly = 1; build_url(); ?>">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navlinks.png" border=0 width=48 height=48 />
+                        <img src="<? echo $graphics['navlinks']; ?>" border=0 width=48 height=48 />
                     </a>
                     <? } else { ?>
                     <a title='Include only messages with URLs' href="<? $linksOnly = 1; echo build_url(); $linksOnly = null; build_url(); ?>">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navlinks.png" border=0 width=48 height=48 />
+                        <img src="<? echo $graphics['navlinks']; ?>" border=0 width=48 height=48 />
                     </a>
                     <? } ?>
                 </td>
@@ -891,7 +958,7 @@ if($format == 'html') {
                     <? } ?>
                 >
                     <a title="HOME!" href="<? echo $_SERVER['PHP_SELF']; ?>">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navhome.png" border=0 width=48 height=48 />
+                        <img src="<? echo $graphics['navhome']; ?>" border=0 width=48 height=48 />
                     </a>
                 </td>
                 <td>
@@ -901,7 +968,7 @@ if($format == 'html') {
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                 >
                     <a title="Everyone loves PIE!" href="i3pie.html">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/pie_chart_zps670773a1.png" border=0 width=48 height=48 />
+                        <img src="<? echo $graphics['pie_chart']; ?>" border=0 width=48 height=48 />
                     </a>
                 </td>
                 <td id="navchart" align="center" valign="center" width="50"
@@ -910,7 +977,7 @@ if($format == 'html') {
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                 >
                     <a title="BAR chat" href="i3bar.html">
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/i3bar_zps9d063211.png" border=0 width=48 height=48 />
+                        <img src="<? echo $graphics['bar_chart']; ?>" border=0 width=48 height=48 />
                     </a>
                 </td>
                 <td>
@@ -997,10 +1064,10 @@ if($format == 'html') {
                 >
                     <? if( $pageNumber > $forwardOnePage && $forwardOnePage >= $endPage) { ?>
                         <a href="<? echo $forwardOneUrl; ?>" title="Next&nbsp;Page&nbsp;(<? echo $forwardOnePageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navnext.png" border=0 width=48 height=48 />
+                            <img src="<? echo $graphics['navnext']; ?>" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navnext.png" border=0 width=48 height=48 />
+                        <img src="<? echo $graphics['navnext']; ?>" border=0 width=48 height=48 />
                     <? } ?>
                 </td>
                 <td id="navforwardfew" align="right" valign="center" width="50"
@@ -1014,10 +1081,10 @@ if($format == 'html') {
                 >
                     <? if( $pageNumber > $forwardFewPage && $forwardFewPage >= $endPage) { ?>
                         <a href="<? echo $forwardFewUrl; ?>" title="Next&nbsp;<? echo $fewPages; ?>&nbsp;(<? echo $forwardFewPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navforward.png" border=0 width=48 height=48 />
+                            <img src="<? echo $graphics['navforward']; ?>" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navforward.png" border=0 width=48 height=48 />
+                        <img src="<? echo $graphics['navforward']; ?>" border=0 width=48 height=48 />
                     <? } ?>
                 </td>
                 <td id="navforwardmany" align="right" valign="center" width="50"
@@ -1031,10 +1098,10 @@ if($format == 'html') {
                 >
                     <? if( $pageNumber > $forwardManyPage && $forwardManyPage >= $endPage) { ?>
                         <a href="<? echo $forwardManyUrl; ?>" title="Next&nbsp;<? echo $manyPages; ?>&nbsp;(<? echo $forwardManyPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navforward.png" border=0 width=48 height=48 />
+                            <img src="<? echo $graphics['navforward']; ?>" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navforward.png" border=0 width=48 height=48 />
+                        <img src="<? echo $graphics['navforward']; ?>" border=0 width=48 height=48 />
                     <? } ?>
                 </td>
                 <td id="navend" align="right" valign="center" width="50"
@@ -1048,18 +1115,30 @@ if($format == 'html') {
                 >
                     <? if( $pageNumber > $endPage) { ?>
                         <a href="<? echo $endUrl; ?>" title="Current&nbsp;Time&nbsp;(<? echo $endPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navend.png" border=0 width=48 height=48 />
+                            <img src="<? echo $graphics['navend']; ?>" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navend.png" border=0 width=48 height=48 />
+                        <img src="<? echo $graphics['navend']; ?>" border=0 width=48 height=48 />
                     <? } ?>
                 </td>
             </tr>
         </table>
         <table id="content" width="100%">
             <tr>
-                <th align="left" width="5%" style="color: #DDDDDD;">Date</th>
-                <th align="left" width="5%" style="color: #DDDDDD;">Time</th>
+                <? if(isset($startDate)) { ?>
+                <th id="dateheader" align="left" width="10%" style="color: #FFFF00;">
+                    <a href="<? $old = $startDate; $startDate = null; echo build_url(); $startDate = $old; build_url(); ?>">Date</a>
+                </th>
+                <? } else { ?>
+                <th id="dateheader" align="left" width="10%" style="color: #DDDDDD;">Date</th>
+                <? } ?>
+                <? if(isset($startDate)) { ?>
+                <th id="timeheader" align="left" width="10%" style="color: #FFFF00;">
+                    <a href="<? $old = $startDate; $startDate = null; echo build_url(); $startDate = $old; build_url(); ?>">Time</a>
+                </th>
+                <? } else { ?>
+                <th id="timeheader" align="left" width="10%" style="color: #DDDDDD;">Time</th>
+                <? } ?>
                 <? if(isset($channelFilter)) { ?>
                 <th id="channelheader" align="left" width="10%" style="color: #FFFF00;">
                     <a href="<? $old = $channelFilter; $channelFilter = null; echo build_url(); $channelFilter = $old; build_url(); ?>">Channel</a>
@@ -1077,6 +1156,16 @@ if($format == 'html') {
                 <th align="left" width="60%">&nbsp;</th>
             </tr>
             <?  foreach ($html as $row) {
+                    if(isset($startDate)) {
+                        $old = $startDate;
+                        $startDate = null;
+                        $dateUrl = build_url();
+                        $startDate = $old;
+                    } else {
+                        $startDate = $row["unix_date"];
+                        $dateUrl = build_url();
+                        $startDate = null;
+                    }
                     if(isset($channelFilter)) {
                         $channels = array_unique(array_merge( explode(",", $channelFilter), array($row["raw_channel"])));
                         $old = $channelFilter;
@@ -1107,15 +1196,35 @@ if($format == 'html') {
                     }
              ?>
             <tr>
-                <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['datestamp']; ?></td>
-                <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['timestamp']; ?></td>
-                <td onmouseover="this.style.backgroundColor = '<? echo $row['bgbold']; ?>';"
-                    onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
-                    onclick="document.location.href='<? echo $channelUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['channel']; ?></td>
-                <td onmouseover="this.style.backgroundColor = '<? echo $row['bgbold']; ?>';"
-                    onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
-                    onclick="document.location.href='<? echo $speakerUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['speaker']; ?></td>
-                <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['message']; ?></td>
+                <? if(isset($startDate)) { ?>
+                    <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['datestamp']; ?></td>
+                    <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['timestamp']; ?></td>
+                <? } else { ?>
+                    <td onmouseover="this.style.backgroundColor = '<? echo $row['bgbold']; ?>';"
+                        onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
+                        onclick="document.location.href='<? echo $dateUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['datestamp']; ?></td>
+                    <td onmouseover="this.style.backgroundColor = '<? echo $row['bgbold']; ?>';"
+                        onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
+                        onclick="document.location.href='<? echo $dateUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['timestamp']; ?></td>
+                <? } ?>
+
+                <? if(isset($channelFilter)) { ?>
+                    <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['channel']; ?></td>
+                <? } else { ?>
+                    <td onmouseover="this.style.backgroundColor = '<? echo $row['bgbold']; ?>';"
+                        onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
+                        onclick="document.location.href='<? echo $channelUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['channel']; ?></td>
+                <? } ?>
+
+                <? if(isset($speakerFilter)) { ?>
+                    <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['speaker']; ?></td>
+                <? } else { ?>
+                    <td onmouseover="this.style.backgroundColor = '<? echo $row['bgbold']; ?>';"
+                        onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
+                        onclick="document.location.href='<? echo $speakerUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['speaker']; ?></td>
+                <? } ?>
+
+                    <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['message']; ?></td>
             </tr>
             <? } ?>
         </table>
@@ -1125,19 +1234,28 @@ if($format == 'html') {
                     <span id="lastrefresh" style="color: #1F1F1F">Last refreshed at <? echo $now; ?>.&nbsp;</span>
                 </td>
                 <td>&nbsp;</td>
+                <td id="server" align="center" valign="center" width="80"
+                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                >
+                    <span style="color: #1F1F1F"><a href="/~bloodlines/server.php" title="Server Stats">
+                        <img src="<? echo $graphics['server_icon']; ?>" border=0 width=78 height=78 alt="(server)" />
+                    </a></span>
+                </td>
                 <td align="center" width="71" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
-                    <span style="color: #1F1F1F"><a href="<? echo $rssUrl; ?>">
-                        <img onmouseover="this.src='http://i302.photobucket.com/albums/nn96/quixadhal/rssMouseOver_zps52b86e27.png';" onmouseout="this.src='http://i302.photobucket.com/albums/nn96/quixadhal/rss_zps6b73d7e2.png';" id="rssimg" src="http://i302.photobucket.com/albums/nn96/quixadhal/rss_zps6b73d7e2.png" border=0 width=71 height=55 alt="(RSS)" />
+                    <span style="color: #1F1F1F"><a href="<? echo $rssUrl; ?>" title="RSS Feed">
+                        <img onmouseover="this.src='<?echo $graphics['rssMouseOver'];?>';" onmouseout="this.src='<?echo $graphics['rss'];?>';" id="rssimg" src="<?echo $graphics['rss'];?>" border=0 width=71 height=55 alt="(RSS)" />
                     </a></span>
                 </td>
                 <td align="center" width="75" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000'; jsonimg.src='http://i302.photobucket.com/albums/nn96/quixadhal/json_zps34e3c065.png';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F'; jsonimg.src='http://i302.photobucket.com/albums/nn96/quixadhal/jsonMouseOver_zps46d5148d.png';">
-                    <span style="color: #1F1F1F"><a href="<? echo $jsonUrl; ?>">
-                        <img onmouseover="this.src='http://i302.photobucket.com/albums/nn96/quixadhal/jsonMouseOver_zps46d5148d.png';" onmouseout="this.src='http://i302.photobucket.com/albums/nn96/quixadhal/json_zps34e3c065.png';" id="jsonimg" src="http://i302.photobucket.com/albums/nn96/quixadhal/json_zps34e3c065.png" border=0 width=75 height=51 alt="(JSON)" />
+                    <span style="color: #1F1F1F"><a href="<? echo $jsonUrl; ?>" title="JSON output">
+                        <img onmouseover="this.src='<?echo $graphics['jsonMouseOver'];?>';" onmouseout="this.src='<?echo $graphics['json'];?>';" id="jsonimg" src="<?echo $graphics['json'];?>" border=0 width=75 height=51 alt="(JSON)" />
                     </a></span>
                 </td>
                 <td align="center" width="84" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
-                    <span style="color: #1F1F1F"><a href="<? echo $textUrl; ?>">
-                        <img onmouseover="this.src='http://i302.photobucket.com/albums/nn96/quixadhal/textMouseOver_zpsc7cbdd88.png';" onmouseout="this.src='http://i302.photobucket.com/albums/nn96/quixadhal/text_zps49ecc982.png';" id="textimg" src="http://i302.photobucket.com/albums/nn96/quixadhal/text_zps49ecc982.png" border=0 width=84 height=79 alt="(TEXT)" />
+                    <span style="color: #1F1F1F"><a href="<? echo $textUrl; ?>" title="Plain Text output">
+                        <img onmouseover="this.src='<?echo $graphics['textMouseOver'];?>';" onmouseout="this.src='<?echo $graphics['text'];?>';" id="textimg" src="<?echo $graphics['text'];?>" border=0 width=84 height=79 alt="(TEXT)" />
                     </a></span>
                 </td>
                 <td>&nbsp;</td>
