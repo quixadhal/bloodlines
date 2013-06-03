@@ -589,8 +589,8 @@ function build_url() {
         . (isset($mudFilter) ? "&mf=" . urlencode($mudFilter) : "")
         . (isset($startDate) ? "&sd=" . urlencode($startDate) : "")
         . (isset($sortOrder) ? "&so=" . urlencode($sortOrder) : "")
-        . (isset($searchFilter) ? "&sr=" . urlencode($searchFilter) : "")
-        . (isset($anchorID) ? "&an=" . urlencode($anchorID) : "");
+        . (isset($searchFilter) ? "&sr=" . urlencode($searchFilter) : "");
+        //. (isset($anchorID) ? "&an=" . urlencode($anchorID) : "");
 
     return $_SERVER["PHP_SELF"] . "?pn=" . urlencode($pageNumber) . $urlParams;
 }
@@ -798,6 +798,9 @@ if($format == 'html') {
                                     <? } ?>
                                     <? if(isset($sortOrder)) { ?>
                                         <input type="hidden" name="so" value="<? echo $sortOrder; ?>">
+                                    <? } ?>
+                                    <? if(isset($startDate)) { ?>
+                                        <input type="hidden" name="sd" value="<? echo $startDate; ?>">
                                     <? } ?>
                                     <? if(isset($anchorID)) { ?>
                                         <input type="hidden" name="an" value="<? echo $anchorID; ?>">
@@ -1032,6 +1035,9 @@ if($format == 'html') {
                                     <? if(isset($sortOrder)) { ?>
                                         <input type="hidden" name="so" value="<? echo $sortOrder; ?>">
                                     <? } ?>
+                                    <? if(isset($startDate)) { ?>
+                                        <input type="hidden" name="sd" value="<? echo $startDate; ?>">
+                                    <? } ?>
                                     <? if(isset($anchorID)) { ?>
                                         <input type="hidden" name="an" value="<? echo $anchorID; ?>">
                                     <? } ?>
@@ -1148,7 +1154,7 @@ if($format == 'html') {
                 <? } ?>
                 <? if(isset($speakerFilter)) { ?>
                 <th id="speakerheader" align="left" width="20%" style="color: #FFFF00;">
-                    <a href="<? $old = $speakerFilter; $speakerFilter = null; echo build_url(); $speakerFilter = $old; build_url(); ?>">Speaker</a>
+                    <a href="<? $old = $speakerFilter; $old2 = $mudFilter; $speakerFilter = null; $mudFilter = null; echo build_url(); $speakerFilter = $old; $mudFilter = $old2; build_url(); ?>">Speaker</a>
                 </th>
                 <? } else { ?>
                 <th id="speakerheader" align="left" width="20%" style="color: #DDDDDD;">Speaker</th>
