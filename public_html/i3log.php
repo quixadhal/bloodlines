@@ -318,6 +318,9 @@ if( isset($_REQUEST) && isset($_REQUEST["pn"]) ) {
     if(!is_numeric($pageNumber)) {
         $pageNumber = 0;
     }
+    if($pageNumber < 0) {
+        $pageNumber = 0;
+    }
 }
 
 if( isset($_REQUEST) && isset($_REQUEST["pd"]) ) {
@@ -449,6 +452,7 @@ if( isset($_REQUEST) && isset($_REQUEST["so"]) ) {
 
 // Data about last position, for recalculating offsets if the criteria changed
 
+$anchorSql = '';
 if( isset($_REQUEST) && isset($_REQUEST["an"]) ) {
     $anchorID = $_REQUEST["an"];
     if(!is_numeric($anchorID)) {
@@ -458,9 +462,13 @@ if( isset($_REQUEST) && isset($_REQUEST["an"]) ) {
         $anchorID = null;
     }
 }
+if( isset($anchorID) ) {
+    //$anchorID = $data['rows'][0]->id;
+    $anchorSql = "AND id <= $anchorID";
+}
 
 $totalRows = 0;
-$countSql = "SELECT COUNT(*) FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $startDateSql";
+$countSql = "SELECT COUNT(*) FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $startDateSql $anchorSql";
 $countSql = preg_replace('/chanlogs\s+AND/', 'chanlogs WHERE', $countSql);
 //echo "SQL: $countSql\n";
 
@@ -497,7 +505,7 @@ if( $pageNumber < ($totalPages / 2) ) {
 $limitSql = "LIMIT $pageSize";
 $offsetSql = "OFFSET $offset";
 
-$pageSql = "SELECT id, msg_date, date_part('epoch', msg_date) AS unix_date, to_char(msg_date, 'MM/DD') AS the_date, to_char(msg_date, 'HH24:MI') AS the_time, to_char(msg_date, 'HH24') AS the_hour, channel, speaker, mud, message FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $startDateSql $sortSql $offsetSql $limitSql";
+$pageSql = "SELECT id, msg_date, date_part('epoch', msg_date) AS unix_date, to_char(msg_date, 'MM/DD') AS the_date, to_char(msg_date, 'HH24:MI') AS the_time, to_char(msg_date, 'HH24') AS the_hour, channel, speaker, mud, message FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $startDateSql $anchorSql $sortSql $offsetSql $limitSql";
 $pageSql = preg_replace('/chanlogs\s+AND/', 'chanlogs WHERE', $pageSql);
 
 try {
@@ -538,7 +546,7 @@ if($reverseSort) {
     $data['rows'] = array_reverse($data['rows']);
 }
 
-$anchorID = $data['rows'][0]->id;
+//$anchorID = $data['rows'][0]->id;
 
 $fewPages = 10;
 $manyPages = 100;
@@ -579,8 +587,10 @@ function build_url() {
     global $anchorID;
     global $urlParams;
     global $startDate;
+    global $showSQL;
 
-    $urlParams = ($pageSize != $defaultPageSize ? "&ps=" . urlencode($pageSize) : "")
+    $urlParams = ((isset($pageNumber) && $pageNumber != 0) ? "&pn=" . urlencode($pageNumber) : "")
+        . ($pageSize != $defaultPageSize ? "&ps=" . urlencode($pageSize) : "")
         . (isset($linksOnly) ? "&lo" : "")
         . (isset($showBots) ? "&sb" : "")
         . ($format != $defaultFormat ? "&fm=" . urlencode($format) : "")
@@ -589,29 +599,34 @@ function build_url() {
         . (isset($mudFilter) ? "&mf=" . urlencode($mudFilter) : "")
         . (isset($startDate) ? "&sd=" . urlencode($startDate) : "")
         . (isset($sortOrder) ? "&so=" . urlencode($sortOrder) : "")
-        . (isset($searchFilter) ? "&sr=" . urlencode($searchFilter) : "");
-        //. (isset($anchorID) ? "&an=" . urlencode($anchorID) : "");
+        . (isset($searchFilter) ? "&sr=" . urlencode($searchFilter) : "")
+        . ((isset($anchorID) && isset($pageNumber) && $pageNumber != 0) ? "&an=" . urlencode($anchorID) : "")
+        . (isset($showSQL) ? "&showsql" : "");
 
-    return $_SERVER["PHP_SELF"] . "?pn=" . urlencode($pageNumber) . $urlParams;
+    $urlParams = preg_replace('/&/', '?', $urlParams, 1);
+    return $_SERVER["PHP_SELF"] . $urlParams;
 }
 
-build_url();
 
-$beginningUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($beginningPage) . $urlParams;
-$backOneUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($backOnePage) . $urlParams;
-$backFewUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($backFewPage) . $urlParams;
-$backManyUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($backManyPage) . $urlParams;
+if( !isset($anchorID) ) {
+    $anchorID = $data['rows'][0]->id;
+}
+
+$old = $pageNumber; $pageNumber = $beginningPage; $beginningUrl = build_url(); $pageNumber = $old;
+$old = $pageNumber; $pageNumber = $backManyPage; $backManyUrl = build_url(); $pageNumber = $old;
+$old = $pageNumber; $pageNumber = $backFewPage; $backFewUrl = build_url(); $pageNumber = $old;
+$old = $pageNumber; $pageNumber = $backOnePage; $backOneUrl = build_url(); $pageNumber = $old;
 $pageUrl = build_url();
-$forwardOneUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($forwardOnePage) . $urlParams;
-$forwardFewUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($forwardFewPage) . $urlParams;
-$forwardManyUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($forwardManyPage) . $urlParams;
-$endUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($endPage) . $urlParams;
+$old = $pageNumber; $pageNumber = $forwardOnePage; $forwardOneUrl = build_url(); $pageNumber = $old;
+$old = $pageNumber; $pageNumber = $forwardFewPage; $forwardFewUrl = build_url(); $pageNumber = $old;
+$old = $pageNumber; $pageNumber = $forwardManyPage; $forwardManyUrl = build_url(); $pageNumber = $old;
+$old = $pageNumber; $pageNumber = $endPage; $endUrl = build_url(); $pageNumber = $old;
 
 $old = $format; $format = "text"; $textUrl = build_url(); $format = $old; build_url();
 $old = $format; $format = "rss"; $rssUrl = build_url(); $format = $old; build_url();
 $old = $format; $format = "json"; $jsonUrl = build_url(); $format = $old; build_url();
 /*
-echo "SQL: $pageSql<br>\n";
+echo "<br>SQL: $pageSql<br>\n";
 echo "anchorID == $anchorID<br>\n";
 echo "beginning == $beginningPage, $beginningPageDisplay, $beginningUrl<br>\n";
 echo "backMany == $backManyPage, $backManyPageDisplay, $backManyUrl<br>\n";
