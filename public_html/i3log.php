@@ -396,6 +396,7 @@ if( isset($_REQUEST) && isset($_REQUEST["sr"]) && $_REQUEST["sr"] != "" && preg_
     $words = array();
     //echo "Search: $searchFilter<br>\n";
     foreach (explode(",", $searchFilter) as $word) {
+        $word = trim($word);
         if(preg_match('/\*/', $word) > 0) {
             $words[] = preg_replace('/\*/', '%', $dbh->quote("$word"));
         } else {
@@ -505,7 +506,7 @@ if( $pageNumber < ($totalPages / 2) ) {
 $limitSql = "LIMIT $pageSize";
 $offsetSql = "OFFSET $offset";
 
-$pageSql = "SELECT id, msg_date, date_part('epoch', msg_date) AS unix_date, to_char(msg_date, 'MM/DD') AS the_date, to_char(msg_date, 'HH24:MI') AS the_time, to_char(msg_date, 'HH24') AS the_hour, channel, speaker, mud, message FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $startDateSql $anchorSql $sortSql $offsetSql $limitSql";
+$pageSql = "SELECT id, msg_date, date_part('epoch', msg_date) AS unix_date, to_char(msg_date, 'YYYY-MM-DD') AS the_date, to_char(msg_date, 'HH24:MI') AS the_time, to_char(msg_date, 'HH24') AS the_hour, channel, speaker, mud, message FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $startDateSql $anchorSql $sortSql $offsetSql $limitSql";
 $pageSql = preg_replace('/chanlogs\s+AND/', 'chanlogs WHERE', $pageSql);
 
 try {
