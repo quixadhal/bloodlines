@@ -244,9 +244,9 @@ sub do_build {
         http://mudconnect.com/cgi-bin/mud_list.cgi?letter=z
     );
 
-    @url_list = qw(
-        http://mudconnect.com/cgi-bin/mud_list.cgi?letter=DIGIT
-    );
+#    @url_list = qw(
+#        http://mudconnect.com/cgi-bin/mud_list.cgi?letter=DIGIT
+#    );
 
     my @result_set;
 
