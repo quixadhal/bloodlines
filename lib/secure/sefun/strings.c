@@ -87,6 +87,8 @@ varargs string wrap(string str, int x) {
             else x = 79;
         }
     }
+    return sprintf("%-=" + x + "s\n", str);
+    /*
     if(sizeof(str) < 7900) return sprintf("%-=" + x + "s\n", str);
     else {
         string tmpfile = generate_tmp();
@@ -96,6 +98,7 @@ varargs string wrap(string str, int x) {
         str += "\n*** TRUNCATED ***\n";
         return sprintf("%-=" + x + "s\n", str);
     } 
+    */
 }
 
 varargs mixed convert_string(string str, int flag) {

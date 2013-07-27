@@ -12,7 +12,7 @@ AmbientLight 40
 Money ([])
 Climate "indoors"
 DayLight -1970
-counter 8523
+counter 2486
 DummyItems ({0,})
 Gravity 1.000000
 NightLight -1970

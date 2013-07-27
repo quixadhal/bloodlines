@@ -232,51 +232,27 @@ $isLocal = is_local_ip();
 
 $graphics = array();
 
-$graphics['background']         = $isLocal ? "gfx/dark_wood.jpg"            : "https://lh5.googleusercontent.com/-zvnNrcuqbco/UdooZZelxoI/AAAAAAAAALA/9u5S92UySEA/s800/dark_wood.jpg";
-$graphics['bloodlines']         = $isLocal ? "gfx/bloodlines.png"           : "https://lh4.googleusercontent.com/-fWWe4X6fzVE/UdooZQ98rGI/AAAAAAAAAK4/vjYmeQdoaXc/s800/bloodlines.png";
-$graphics['wileymud4']          = $isLocal ? "gfx/wileymud4.png"            : "https://lh6.googleusercontent.com/-DdOSH9sMalA/UdoolEmvWMI/AAAAAAAAAP8/_wWNhacagcg/s800/wileymud4.png";
-$graphics['navbegin']           = $isLocal ? "gfx/navbegin.png"             : "https://lh5.googleusercontent.com/-1h6kwuaFuP8/UdooehtATBI/AAAAAAAAANM/Qptp3P8AQvM/s800/navbegin.png";
-$graphics['navback']            = $isLocal ? "gfx/navback.png"              : "https://lh4.googleusercontent.com/-LCtG9tmiZok/UdooeFflpWI/AAAAAAAAANI/6qNEPhnIwYo/s800/navback.png";
-$graphics['navprev']            = $isLocal ? "gfx/navprev.png"              : "https://lh3.googleusercontent.com/-HCRGUDMFsZ0/UdooghsCZII/AAAAAAAAAOQ/3Hr8wwn5gZg/s800/navprev.png";
-$graphics['navconfig']          = $isLocal ? "gfx/navconfig.png"            : "https://lh5.googleusercontent.com/-mieme8LUBjY/UdooesN4lxI/AAAAAAAAANg/37pQuLUTVf4/s800/navconfig.png";
-$graphics['navlinks']           = $isLocal ? "gfx/navlinks.png"             : "https://lh6.googleusercontent.com/-tNTnYR-bXkw/Udoofz3I5cI/AAAAAAAAAN0/JkLKX1kqxIk/s800/navlinks.png";
-$graphics['navhome']            = $isLocal ? "gfx/navhome.png"              : "https://lh6.googleusercontent.com/-cv1gkbDAJuY/Udoofg9ZBLI/AAAAAAAAANw/qVVwwP-jLpo/s800/navhome.png";
-$graphics['pie_chart']          = $isLocal ? "gfx/pie_chart.png"            : "https://lh3.googleusercontent.com/-Lp66FAfPJck/UdoohD5QKHI/AAAAAAAAAOc/jeKYr9LATL0/s800/pie_chart.png";
-$graphics['bar_chart']          = $isLocal ? "gfx/bar_chart.png"            : "https://lh3.googleusercontent.com/-WFOjntvVWso/UdooZX0LCxI/AAAAAAAAALE/9NLRnXWh6vg/s800/bar_chart.png";
-$graphics['navnext']            = $isLocal ? "gfx/navnext.png"              : "https://lh6.googleusercontent.com/-cet8lgFmDMc/Udoof9-QcxI/AAAAAAAAAOA/Mrt4Z220G3w/s800/navnext.png";
-$graphics['navforward']         = $isLocal ? "gfx/navforward.png"           : "https://lh4.googleusercontent.com/-oVjgOR3_l-M/UdoofCg9rpI/AAAAAAAAANc/OyUY0sk5XGE/s800/navforward.png";
-$graphics['navend']             = $isLocal ? "gfx/navend.png"               : "https://lh6.googleusercontent.com/-spjoGlWIF_8/UdoofESvmOI/AAAAAAAAANk/FVSQ2278e7Q/s800/navend.png";
-$graphics['rss']                = $isLocal ? "gfx/rss.png"                  : "https://lh5.googleusercontent.com/-YgG7UYtdhXw/Udooh0FTa5I/AAAAAAAAAOs/yfQ58RgBuVM/s800/rss.png";
-$graphics['rssMouseOver']       = $isLocal ? "gfx/rssMouseOver.png"         : "https://lh4.googleusercontent.com/-eFFD6FqOdfk/UdooiU3QgKI/AAAAAAAAAO8/VeuqdxMr__A/s800/rssMouseOver.png";
-$graphics['json']               = $isLocal ? "gfx/json.png"                 : "https://lh5.googleusercontent.com/-HDs8dCfnHHA/Udoob2ibVtI/AAAAAAAAAMY/1G98kLfpaSg/s800/json.png";
-$graphics['jsonMouseOver']      = $isLocal ? "gfx/jsonMouseOver.png"        : "https://lh6.googleusercontent.com/-_0ZCiX6Ogow/UdoobwZEI9I/AAAAAAAAAMM/tNHqAWjhJm8/s800/jsonMouseOver.png";
-$graphics['text']               = $isLocal ? "gfx/text.png"                 : "https://lh4.googleusercontent.com/-4ha3X9MshKA/UdoojSqEwUI/AAAAAAAAAPg/IJ7jMHEcLqE/s800/text.png";
-$graphics['textMouseOver']      = $isLocal ? "gfx/textMouseOver.png"        : "https://lh6.googleusercontent.com/-E1nAZZA-iLg/UdoojWYO0-I/AAAAAAAAAPw/jyqADyzswe4/s800/textMouseOver.png";
-$graphics['server_icon']        = $isLocal ? "gfx/server_icon.png"          : "https://lh4.googleusercontent.com/-LZ9ek46iToA/UdoojFEhuOI/AAAAAAAAAPQ/y_rRyL_1tR8/s800/server_icon.png";
-$graphics['help_icon']          = $isLocal ? "gfx/help.png"                 : "https://lh6.googleusercontent.com/-t_GKXvLrh7g/UdooayFUZKI/AAAAAAAAALg/TdVjBKVeluQ/s800/help.png";
-
-//$graphics['background'] = $isLocal ? "gfx/dark_wood.jpg" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg";
-//$graphics['bloodlines'] = $isLocal ? "gfx/bloodlines.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png";
-//$graphics['wileymud4'] = $isLocal ? "gfx/wileymud4.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/wileymud4.png";
-//$graphics['navbegin'] = $isLocal ? "gfx/navbegin.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navbegin.png";
-//$graphics['navback'] = $isLocal ? "gfx/navback.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navback.png";
-//$graphics['navprev'] = $isLocal ? "gfx/navprev.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navprev.png";
-//$graphics['navconfig'] = $isLocal ? "gfx/navconfig.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navconfig.png";
-//$graphics['navlinks'] = $isLocal ? "gfx/navlinks.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navlinks.png";
-//$graphics['navhome'] = $isLocal ? "gfx/navhome.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navhome.png";
-//$graphics['pie_chart'] = $isLocal ? "gfx/pie_chart.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/pie_chart_zps670773a1.png";
-//$graphics['bar_chart'] = $isLocal ? "gfx/bar_chart.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/i3bar_zps9d063211.png";
-//$graphics['navnext'] = $isLocal ? "gfx/navnext.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navnext.png";
-//$graphics['navforward'] = $isLocal ? "gfx/navforward.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navforward.png";
-//$graphics['navend'] = $isLocal ? "gfx/navend.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navend.png";
-//$graphics['rss'] = $isLocal ? "gfx/rss.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/rss_zps6b73d7e2.png";
-//$graphics['rssMouseOver'] = $isLocal ? "gfx/rssMouseOver.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/rssMouseOver_zps52b86e27.png";
-//$graphics['json'] = $isLocal ? "gfx/json.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/json_zps34e3c065.png";
-//$graphics['jsonMouseOver'] = $isLocal ? "gfx/jsonMouseOver.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/jsonMouseOver_zps46d5148d.png";
-//$graphics['text'] = $isLocal ? "gfx/text.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/text_zps49ecc982.png";
-//$graphics['textMouseOver'] = $isLocal ? "gfx/textMouseOver.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/textMouseOver_zpsc7cbdd88.png";
-//$graphics['server_icon'] = $isLocal ? "gfx/server_icon.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/server_icon_zps624a919d.png";
-//$graphics['help_icon'] = $isLocal ? "gfx/help.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/help_zps181221b1.png";
+$graphics['background'] = $isLocal ? "gfx/dark_wood.jpg" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg";
+$graphics['bloodlines'] = $isLocal ? "gfx/bloodlines.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png";
+$graphics['wileymud4'] = $isLocal ? "gfx/wileymud4.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/wileymud4.png";
+$graphics['navbegin'] = $isLocal ? "gfx/navbegin.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navbegin.png";
+$graphics['navback'] = $isLocal ? "gfx/navback.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navback.png";
+$graphics['navprev'] = $isLocal ? "gfx/navprev.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navprev.png";
+$graphics['navconfig'] = $isLocal ? "gfx/navconfig.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navconfig.png";
+$graphics['navlinks'] = $isLocal ? "gfx/navlinks.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navlinks.png";
+$graphics['navhome'] = $isLocal ? "gfx/navhome.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navhome.png";
+$graphics['pie_chart'] = $isLocal ? "gfx/pie_chart.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/pie_chart_zps670773a1.png";
+$graphics['bar_chart'] = $isLocal ? "gfx/bar_chart.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/i3bar_zps9d063211.png";
+$graphics['navnext'] = $isLocal ? "gfx/navnext.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navnext.png";
+$graphics['navforward'] = $isLocal ? "gfx/navforward.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navforward.png";
+$graphics['navend'] = $isLocal ? "gfx/navend.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navend.png";
+$graphics['rss'] = $isLocal ? "gfx/rss.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/rss_zps6b73d7e2.png";
+$graphics['rssMouseOver'] = $isLocal ? "gfx/rssMouseOver.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/rssMouseOver_zps52b86e27.png";
+$graphics['json'] = $isLocal ? "gfx/json.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/json_zps34e3c065.png";
+$graphics['jsonMouseOver'] = $isLocal ? "gfx/jsonMouseOver.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/jsonMouseOver_zps46d5148d.png";
+$graphics['text'] = $isLocal ? "gfx/text.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/text_zps49ecc982.png";
+$graphics['textMouseOver'] = $isLocal ? "gfx/textMouseOver.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/textMouseOver_zpsc7cbdd88.png";
+$graphics['server_icon'] = $isLocal ? "gfx/server_icon.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/server_icon_zps624a919d.png";
 
 $serverUrl = 
 
@@ -339,9 +315,6 @@ if( isset($_REQUEST) && isset($_REQUEST["ps"]) ) {
 if( isset($_REQUEST) && isset($_REQUEST["pn"]) ) {
     $pageNumber = $_REQUEST["pn"];
     if(!is_numeric($pageNumber)) {
-        $pageNumber = 0;
-    }
-    if($pageNumber < 0) {
         $pageNumber = 0;
     }
 }
@@ -419,7 +392,6 @@ if( isset($_REQUEST) && isset($_REQUEST["sr"]) && $_REQUEST["sr"] != "" && preg_
     $words = array();
     //echo "Search: $searchFilter<br>\n";
     foreach (explode(",", $searchFilter) as $word) {
-        $word = trim($word);
         if(preg_match('/\*/', $word) > 0) {
             $words[] = preg_replace('/\*/', '%', $dbh->quote("$word"));
         } else {
@@ -476,7 +448,6 @@ if( isset($_REQUEST) && isset($_REQUEST["so"]) ) {
 
 // Data about last position, for recalculating offsets if the criteria changed
 
-$anchorSql = '';
 if( isset($_REQUEST) && isset($_REQUEST["an"]) ) {
     $anchorID = $_REQUEST["an"];
     if(!is_numeric($anchorID)) {
@@ -486,13 +457,9 @@ if( isset($_REQUEST) && isset($_REQUEST["an"]) ) {
         $anchorID = null;
     }
 }
-if( isset($anchorID) ) {
-    //$anchorID = $data['rows'][0]->id;
-    $anchorSql = "AND id <= $anchorID";
-}
 
 $totalRows = 0;
-$countSql = "SELECT COUNT(*) FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $startDateSql $anchorSql";
+$countSql = "SELECT COUNT(*) FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $startDateSql";
 $countSql = preg_replace('/chanlogs\s+AND/', 'chanlogs WHERE', $countSql);
 //echo "SQL: $countSql\n";
 
@@ -529,7 +496,7 @@ if( $pageNumber < ($totalPages / 2) ) {
 $limitSql = "LIMIT $pageSize";
 $offsetSql = "OFFSET $offset";
 
-$pageSql = "SELECT id, msg_date, date_part('epoch', msg_date) AS unix_date, to_char(msg_date, 'YYYY-MM-DD') AS the_date, to_char(msg_date, 'HH24:MI') AS the_time, to_char(msg_date, 'HH24') AS the_hour, channel, speaker, mud, message FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $startDateSql $anchorSql $sortSql $offsetSql $limitSql";
+$pageSql = "SELECT id, msg_date, date_part('epoch', msg_date) AS unix_date, to_char(msg_date, 'MM/DD') AS the_date, to_char(msg_date, 'HH24:MI') AS the_time, to_char(msg_date, 'HH24') AS the_hour, channel, speaker, mud, message FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $startDateSql $sortSql $offsetSql $limitSql";
 $pageSql = preg_replace('/chanlogs\s+AND/', 'chanlogs WHERE', $pageSql);
 
 try {
@@ -566,15 +533,11 @@ while($row = $sth->fetch()) {
 
 $dbh = null;
 
-if( !isset($anchorID) ) {
-    $anchorID = $data['rows'][0]->id;
-}
-
 if($reverseSort) {
     $data['rows'] = array_reverse($data['rows']);
 }
 
-//$anchorID = $data['rows'][0]->id;
+$anchorID = $data['rows'][0]->id;
 
 $fewPages = 10;
 $manyPages = 100;
@@ -615,10 +578,8 @@ function build_url() {
     global $anchorID;
     global $urlParams;
     global $startDate;
-    global $showSQL;
 
-    $urlParams = ((isset($pageNumber) && $pageNumber != 0) ? "&pn=" . urlencode($pageNumber) : "")
-        . ($pageSize != $defaultPageSize ? "&ps=" . urlencode($pageSize) : "")
+    $urlParams = ($pageSize != $defaultPageSize ? "&ps=" . urlencode($pageSize) : "")
         . (isset($linksOnly) ? "&lo" : "")
         . (isset($showBots) ? "&sb" : "")
         . ($format != $defaultFormat ? "&fm=" . urlencode($format) : "")
@@ -628,29 +589,28 @@ function build_url() {
         . (isset($startDate) ? "&sd=" . urlencode($startDate) : "")
         . (isset($sortOrder) ? "&so=" . urlencode($sortOrder) : "")
         . (isset($searchFilter) ? "&sr=" . urlencode($searchFilter) : "")
-        . ((isset($anchorID) && isset($pageNumber) && $pageNumber != 0) ? "&an=" . urlencode($anchorID) : "")
-        . (isset($showSQL) ? "&showsql" : "");
+        . (isset($anchorID) ? "&an=" . urlencode($anchorID) : "");
 
-    $urlParams = preg_replace('/&/', '?', $urlParams, 1);
-    return $_SERVER["PHP_SELF"] . $urlParams;
+    return $_SERVER["PHP_SELF"] . "?pn=" . urlencode($pageNumber) . $urlParams;
 }
 
+build_url();
 
-$old = $pageNumber; $pageNumber = $beginningPage; $beginningUrl = build_url(); $pageNumber = $old;
-$old = $pageNumber; $pageNumber = $backManyPage; $backManyUrl = build_url(); $pageNumber = $old;
-$old = $pageNumber; $pageNumber = $backFewPage; $backFewUrl = build_url(); $pageNumber = $old;
-$old = $pageNumber; $pageNumber = $backOnePage; $backOneUrl = build_url(); $pageNumber = $old;
+$beginningUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($beginningPage) . $urlParams;
+$backOneUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($backOnePage) . $urlParams;
+$backFewUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($backFewPage) . $urlParams;
+$backManyUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($backManyPage) . $urlParams;
 $pageUrl = build_url();
-$old = $pageNumber; $pageNumber = $forwardOnePage; $forwardOneUrl = build_url(); $pageNumber = $old;
-$old = $pageNumber; $pageNumber = $forwardFewPage; $forwardFewUrl = build_url(); $pageNumber = $old;
-$old = $pageNumber; $pageNumber = $forwardManyPage; $forwardManyUrl = build_url(); $pageNumber = $old;
-$old = $pageNumber; $pageNumber = $endPage; $endUrl = build_url(); $pageNumber = $old;
+$forwardOneUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($forwardOnePage) . $urlParams;
+$forwardFewUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($forwardFewPage) . $urlParams;
+$forwardManyUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($forwardManyPage) . $urlParams;
+$endUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($endPage) . $urlParams;
 
 $old = $format; $format = "text"; $textUrl = build_url(); $format = $old; build_url();
 $old = $format; $format = "rss"; $rssUrl = build_url(); $format = $old; build_url();
 $old = $format; $format = "json"; $jsonUrl = build_url(); $format = $old; build_url();
 /*
-echo "<br>SQL: $pageSql<br>\n";
+echo "SQL: $pageSql<br>\n";
 echo "anchorID == $anchorID<br>\n";
 echo "beginning == $beginningPage, $beginningPageDisplay, $beginningUrl<br>\n";
 echo "backMany == $backManyPage, $backManyPageDisplay, $backManyUrl<br>\n";
@@ -838,9 +798,6 @@ if($format == 'html') {
                                     <? if(isset($sortOrder)) { ?>
                                         <input type="hidden" name="so" value="<? echo $sortOrder; ?>">
                                     <? } ?>
-                                    <? if(isset($startDate)) { ?>
-                                        <input type="hidden" name="sd" value="<? echo $startDate; ?>">
-                                    <? } ?>
                                     <? if(isset($anchorID)) { ?>
                                         <input type="hidden" name="an" value="<? echo $anchorID; ?>">
                                     <? } ?>
@@ -944,9 +901,7 @@ if($format == 'html') {
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
                 >
-                    <a title="HELP!" href="i3log_help.html" class="popup2">
-                        <img src="<? echo $graphics['help_icon']; ?>" border=0 width=48 height=48 />
-                    </a>
+                    <a href="i3log_help.html" class="popup2">HELP!</a>
                 </td>
                 <td id="navbot" align="center" valign="center" width="50"
                     <? if( isset($showBots) ) { ?>
@@ -1074,9 +1029,6 @@ if($format == 'html') {
                                     <? if(isset($sortOrder)) { ?>
                                         <input type="hidden" name="so" value="<? echo $sortOrder; ?>">
                                     <? } ?>
-                                    <? if(isset($startDate)) { ?>
-                                        <input type="hidden" name="sd" value="<? echo $startDate; ?>">
-                                    <? } ?>
                                     <? if(isset($anchorID)) { ?>
                                         <input type="hidden" name="an" value="<? echo $anchorID; ?>">
                                     <? } ?>
@@ -1193,7 +1145,7 @@ if($format == 'html') {
                 <? } ?>
                 <? if(isset($speakerFilter)) { ?>
                 <th id="speakerheader" align="left" width="20%" style="color: #FFFF00;">
-                    <a href="<? $old = $speakerFilter; $old2 = $mudFilter; $speakerFilter = null; $mudFilter = null; echo build_url(); $speakerFilter = $old; $mudFilter = $old2; build_url(); ?>">Speaker</a>
+                    <a href="<? $old = $speakerFilter; $speakerFilter = null; echo build_url(); $speakerFilter = $old; build_url(); ?>">Speaker</a>
                 </th>
                 <? } else { ?>
                 <th id="speakerheader" align="left" width="20%" style="color: #DDDDDD;">Speaker</th>

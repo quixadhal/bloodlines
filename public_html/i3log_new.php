@@ -2,7 +2,7 @@
 $time_start = microtime(true);
 $now = date('g:ia \o\n l, \t\h\e jS \o\f F, Y');
 
-require_once "i3config.php";
+require_once "i3config_new.php";
 
 function get_pinkfish_map() {
     $colors = array(
@@ -64,7 +64,7 @@ function get_pinkfish_map() {
     return $colors;
 }
 
-function get_hour_colors(array $pinkfish) {
+function get_hour_colors($pinkfish) {
     $colors = array(
         "00" => "%^DARKGREY%^",
         "01" => "%^DARKGREY%^",
@@ -100,7 +100,7 @@ function get_hour_colors(array $pinkfish) {
     return $colors;
 }
 
-function get_channel_colors(array $pinkfish) {
+function get_channel_colors($pinkfish) {
     $colors = array(
         "intermud"    => "%^B_BLACK%^%^GREY%^",
         "muds"        => "%^B_BLACK%^%^GREY%^",
@@ -141,7 +141,7 @@ function get_channel_colors(array $pinkfish) {
     return $colors;
 }
 
-function get_chatter_colors($pinkfish, $chatFileName) {
+function get_speaker_colors($pinkfish, $chatFileName) {
     $colormap = array ();
 
     $text = file_get_contents( $chatFileName );
@@ -190,562 +190,474 @@ function get_cache($fileName, $sql, $column) {
             $list = explode("\n", $fileData);
         }
     }
-
     if(count($list) < 1) {
-        // Connect to PoOstgreSQL database
         try {
-            global $db_dsn, $db_user, $db_pwd;
-            $dbh = new PDO( $db_dsn, $db_user, $db_pwd, array( PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION ));
-        }
-        catch(PDOException $e) {
-            echo $e->getMessage();
-        }
-
-        // Fetch list of MUDs that have had more than 100 lines of traffic, ever.
-        try {
+            global $DB_DSN, $DB_USER, $DB_PWD;
+            //echo "SQL: $sql<br>\n";
+            $dbh = new PDO( $DB_DSN, $DB_USER, $DB_PWD, array( PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION ));
             $sth = $dbh->query($sql);
+            $sth->setFetchMode(PDO::FETCH_ASSOC);
+            while($row = $sth->fetch()) {
+                $list[] = $row[$column];
+            }
+            $list = array_filter($list, "list_name_ok");
+            file_put_contents($fileName, implode("\n", $list));
         }
         catch(PDOException $e) {
             echo $e->getMessage();
         }
-
-        $sth->setFetchMode(PDO::FETCH_ASSOC);
-        while($row = $sth->fetch()) {
-            $list[] = $row[$column];
-        }
-
-        $list = array_filter($list, "list_name_ok");
-        file_put_contents($fileName, implode("\n", $list));
     }
-
+    return $list;
 }
 
-function is_local_ip() {
-    $visitor_ip = $_SERVER['REMOTE_ADDR'];
-    $varr = explode(".", $visitor_ip);
-    if($varr[0] == "192" && $varr[1] == "168")
-        return 1;
+function quote_sql($str) {
+    // Connect to PoOstgreSQL database
+    try {
+        global $DB_DSN, $DB_USER, $DB_PWD;
+        $dbh = new PDO( $DB_DSN, $DB_USER, $DB_PWD, array( PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION ));
+    }
+    catch(PDOException $e) {
+        echo $e->getMessage();
+    }
+    return $dbh->quote($str);
+}
+
+function parse_args() {
+    // Input
+    global $DEFAULT_PAGE_SIZE;
+    global $DEFAULT_PAGE_NUMBER;
+    global $DEFAULT_FORMAT;
+
+    // Output
+    global $pageSize, $pageNumber, $pageNumberEntered;
+    global $channelFilter, $channelSql, $channelList;
+    global $speakerFilter, $speakerSql, $speakerList;
+    global $mudFilter, $mudSql, $mudList;
+    global $searchFilter, $searchSql;
+    global $linksOnly, $linkSql;
+    global $showBots, $botSql;
+    global $format;
+    global $anchorID, $oldPageNumber;
+
+    // Page size (IE: LIMIT clause)
+    //
+    // This is how many results per page we're using.
+    // It may be adjustable later.
+    if( isset($_REQUEST) && isset($_REQUEST["ps"]) ) {
+        $pageSize = $_REQUEST["ps"];
+        if(!is_numeric($pageSize)) {
+            $pageSize = $DEFAULT_PAGE_SIZE;
+        }
+        if( $pageSize < 1 ) {
+            $pageSize = 1;
+        }
+    }
+
+    // Page number (IE: OFFSET clause)
+    //
+    // Once we know the result set size, we need to limit this.
+    // 0 means the END of the data set, 1..N means totalpages - x
+    // This is so that page 0 will always be "current"
+    if( isset($_REQUEST) && isset($_REQUEST["pn"]) ) {
+        $pageNumber = $_REQUEST["pn"];
+        if(!is_numeric($pageNumber)) {
+            $pageNumber = $DEFAULT_PAGE_NUMBER;
+        }
+    }
+
+    // Page display
+    //
+    // This is the page  number the user entered in the goto page field.
+    // It is effectively $totalPages - <entered value>, so the users
+    // can think in terms of page 0 being the start of the data set.
+    if( isset($_REQUEST) && isset($_REQUEST["pe"]) ) {
+        $pageNumberEntered = $_REQUEST["pe"];
+        if(!is_numeric($pageNumberEntered)) {
+            $pageNumberEntered = $DEFAULT_PAGE_NUMBER;
+        }
+    }
+
+    // Channel Filter (only display these channels)
+    // Accept a comma-seperated list of names
+    $channelSql = '';
+    if( isset($_REQUEST) && isset($_REQUEST["cf"]) ) {
+        $channelFilter = $_REQUEST["cf"];
+        $words = array();
+        foreach (explode(",", $channelFilter) as $word) {
+            $word = trim($word);
+            if( array_key_exists( $word, $channelList )) {
+                $words[] = quote_sql(strtolower($word));
+            }
+        }
+        $channelSql = "AND lower(channel) IN ( " . implode(",", $words) . " )";
+    }
+ 
+    // Speaker filter (only display these speakers)
+    // Accept a comma-seperated list of names
+    $speakerSql = '';
+    if( isset($_REQUEST) && isset($_REQUEST["sf"]) ) {
+        $speakerFilter = $_REQUEST["sf"];
+        $words = array();
+        foreach (explode(",", $speakerFilter) as $word) {
+            $word = trim($word);
+            if( array_key_exists( $word, $speakerList )) {
+                $words[] = quote(strtolower($word));
+            }
+        }
+        $speakerSql = "AND lower(speaker) IN ( " . implode(",", $words) . " )";
+    }
+
+    // MUD filter (only display lines from these MUDs)
+    // Accept a comma-seperated list of names
+    $mudSql = '';
+    if( isset($_REQUEST) && isset($_REQUEST["mf"]) ) {
+        $mudFilter = $_REQUEST["mf"];
+        $words = array();
+        foreach (explode(",", $mudFilter) as $word) {
+            $word = trim($word);
+            if( array_key_exists( $word, $mudList )) {
+                $words[] = quote(strtolower($word));
+            }
+        }
+        $mudSql = "AND lower(mud) IN ( " . implode(",", $words) . " )";
+    }
+
+    // Search filter (match against Message column)
+    $searchSql = '';
+    if( isset($_REQUEST) && isset($_REQUEST["sr"]) && $_REQUEST["sr"] != "" && preg_match('/[^\*]/', $_REQUEST["sr"] ) > 0 ) {
+        $searchFilter = $_REQUEST["sr"];
+        //$searchFilter = preg_replace('/+/', ',', $searchFilter);
+        $searchFilter = preg_replace('/[^0-9A-Za-z ,\*]/', '', $searchFilter);
+        $searchFilter = trim($searchFilter);
+        $words = array();
+        //echo "Search: $searchFilter<br>\n";
+        foreach (explode(",", $searchFilter) as $word) {
+            $word = trim($word);
+            if(preg_match('/\*/', $word) > 0) {
+                $words[] = preg_replace('/\*/', '%', quote("$word"));
+            } else {
+                $words[] = preg_replace('/\*/', '%', quote("* $word *"));
+                $words[] = preg_replace('/\*/', '%', quote("$word *"));
+                $words[] = preg_replace('/\*/', '%', quote("* $word"));
+            }
+        }
+        $searchSql = "AND ( message ILIKE " . implode(" OR message ILIKE ", $words) . " )";
+    }
+
+    // Show only lines with URL's in them
+    $linkSql = '';
+    if( isset($_REQUEST) && isset($_REQUEST["lo"]) ) {
+        $linksOnly = 1;
+        $linkSql = "AND is_url";
+    }
+     
+    // Iinclude lines from known bots
+    $botSql = "AND NOT is_bot";
+    if( isset($_REQUEST) && isset($_REQUEST["sb"]) ) {
+        $showBots = 1;
+        $botSql = '';
+    }
+
+    // Output format requested
+    if( isset($_REQUEST) && isset($_REQUEST["fm"]) ) {
+        if( $_REQUEST["fm"] == 'rss' ) {
+            $format = 'rss';
+        } elseif( $_REQUEST["fm"] == 'json' ) {
+            $format = 'json';
+        } elseif( $_REQUEST["fm"] == 'text' ) {
+            $format = 'text';
+        }
+    }
+
+    // Data about last position, for recalculating offsets if the criteria changed
+    if( isset($_REQUEST) && isset($_REQUEST["an"]) ) {
+        $anchorID = $_REQUEST["an"];
+        if(!is_numeric($anchorID)) {
+            $anchorID = null;
+        }
+        if( $anchorID < 0 ) {
+            $anchorID = null;
+        }
+    }
+    if( isset($_REQUEST) && isset($_REQUEST["op"]) ) {
+        $oldPageNumber = $_REQUEST["op"];
+        if(!is_numeric($oldPageNumber)) {
+            $oldPageNumber = $DEFAULT_PAGE_NUMBER;
+        }
+    }
+}
+
+function get_row_count($sql) {
+    // Connect to PoOstgreSQL database
+    try {
+        global $DB_DSN, $DB_USER, $DB_PWD;
+        $dbh = new PDO( $DB_DSN, $DB_USER, $DB_PWD, array( PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION ));
+        $sth = $dbh->query($sql);
+        return $sth->fetchColumn();
+    }
+    catch(PDOException $e) {
+        echo $e->getMessage();
+    }
     return 0;
 }
 
-$isLocal = is_local_ip();
+function get_row_data($sql, $reverse) {
+    $data = array ();
 
-$graphics = array();
+    // Connect to PoOstgreSQL database
+    try {
+        global $DB_DSN, $DB_USER, $DB_PWD;
+        $dbh = new PDO( $DB_DSN, $DB_USER, $DB_PWD, array( PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION ));
+        $sth = $dbh->query($sql);
 
-$graphics['background']         = $isLocal ? "gfx/dark_wood.jpg"            : "https://lh5.googleusercontent.com/-zvnNrcuqbco/UdooZZelxoI/AAAAAAAAALA/9u5S92UySEA/s800/dark_wood.jpg";
-$graphics['bloodlines']         = $isLocal ? "gfx/bloodlines.png"           : "https://lh4.googleusercontent.com/-fWWe4X6fzVE/UdooZQ98rGI/AAAAAAAAAK4/vjYmeQdoaXc/s800/bloodlines.png";
-$graphics['wileymud4']          = $isLocal ? "gfx/wileymud4.png"            : "https://lh6.googleusercontent.com/-DdOSH9sMalA/UdoolEmvWMI/AAAAAAAAAP8/_wWNhacagcg/s800/wileymud4.png";
-$graphics['navbegin']           = $isLocal ? "gfx/navbegin.png"             : "https://lh5.googleusercontent.com/-1h6kwuaFuP8/UdooehtATBI/AAAAAAAAANM/Qptp3P8AQvM/s800/navbegin.png";
-$graphics['navback']            = $isLocal ? "gfx/navback.png"              : "https://lh4.googleusercontent.com/-LCtG9tmiZok/UdooeFflpWI/AAAAAAAAANI/6qNEPhnIwYo/s800/navback.png";
-$graphics['navprev']            = $isLocal ? "gfx/navprev.png"              : "https://lh3.googleusercontent.com/-HCRGUDMFsZ0/UdooghsCZII/AAAAAAAAAOQ/3Hr8wwn5gZg/s800/navprev.png";
-$graphics['navconfig']          = $isLocal ? "gfx/navconfig.png"            : "https://lh5.googleusercontent.com/-mieme8LUBjY/UdooesN4lxI/AAAAAAAAANg/37pQuLUTVf4/s800/navconfig.png";
-$graphics['navlinks']           = $isLocal ? "gfx/navlinks.png"             : "https://lh6.googleusercontent.com/-tNTnYR-bXkw/Udoofz3I5cI/AAAAAAAAAN0/JkLKX1kqxIk/s800/navlinks.png";
-$graphics['navhome']            = $isLocal ? "gfx/navhome.png"              : "https://lh6.googleusercontent.com/-cv1gkbDAJuY/Udoofg9ZBLI/AAAAAAAAANw/qVVwwP-jLpo/s800/navhome.png";
-$graphics['pie_chart']          = $isLocal ? "gfx/pie_chart.png"            : "https://lh3.googleusercontent.com/-Lp66FAfPJck/UdoohD5QKHI/AAAAAAAAAOc/jeKYr9LATL0/s800/pie_chart.png";
-$graphics['bar_chart']          = $isLocal ? "gfx/bar_chart.png"            : "https://lh3.googleusercontent.com/-WFOjntvVWso/UdooZX0LCxI/AAAAAAAAALE/9NLRnXWh6vg/s800/bar_chart.png";
-$graphics['navnext']            = $isLocal ? "gfx/navnext.png"              : "https://lh6.googleusercontent.com/-cet8lgFmDMc/Udoof9-QcxI/AAAAAAAAAOA/Mrt4Z220G3w/s800/navnext.png";
-$graphics['navforward']         = $isLocal ? "gfx/navforward.png"           : "https://lh4.googleusercontent.com/-oVjgOR3_l-M/UdoofCg9rpI/AAAAAAAAANc/OyUY0sk5XGE/s800/navforward.png";
-$graphics['navend']             = $isLocal ? "gfx/navend.png"               : "https://lh6.googleusercontent.com/-spjoGlWIF_8/UdoofESvmOI/AAAAAAAAANk/FVSQ2278e7Q/s800/navend.png";
-$graphics['rss']                = $isLocal ? "gfx/rss.png"                  : "https://lh5.googleusercontent.com/-YgG7UYtdhXw/Udooh0FTa5I/AAAAAAAAAOs/yfQ58RgBuVM/s800/rss.png";
-$graphics['rssMouseOver']       = $isLocal ? "gfx/rssMouseOver.png"         : "https://lh4.googleusercontent.com/-eFFD6FqOdfk/UdooiU3QgKI/AAAAAAAAAO8/VeuqdxMr__A/s800/rssMouseOver.png";
-$graphics['json']               = $isLocal ? "gfx/json.png"                 : "https://lh5.googleusercontent.com/-HDs8dCfnHHA/Udoob2ibVtI/AAAAAAAAAMY/1G98kLfpaSg/s800/json.png";
-$graphics['jsonMouseOver']      = $isLocal ? "gfx/jsonMouseOver.png"        : "https://lh6.googleusercontent.com/-_0ZCiX6Ogow/UdoobwZEI9I/AAAAAAAAAMM/tNHqAWjhJm8/s800/jsonMouseOver.png";
-$graphics['text']               = $isLocal ? "gfx/text.png"                 : "https://lh4.googleusercontent.com/-4ha3X9MshKA/UdoojSqEwUI/AAAAAAAAAPg/IJ7jMHEcLqE/s800/text.png";
-$graphics['textMouseOver']      = $isLocal ? "gfx/textMouseOver.png"        : "https://lh6.googleusercontent.com/-E1nAZZA-iLg/UdoojWYO0-I/AAAAAAAAAPw/jyqADyzswe4/s800/textMouseOver.png";
-$graphics['server_icon']        = $isLocal ? "gfx/server_icon.png"          : "https://lh4.googleusercontent.com/-LZ9ek46iToA/UdoojFEhuOI/AAAAAAAAAPQ/y_rRyL_1tR8/s800/server_icon.png";
-$graphics['help_icon']          = $isLocal ? "gfx/help.png"                 : "https://lh6.googleusercontent.com/-t_GKXvLrh7g/UdooayFUZKI/AAAAAAAAALg/TdVjBKVeluQ/s800/help.png";
-
-//$graphics['background'] = $isLocal ? "gfx/dark_wood.jpg" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg";
-//$graphics['bloodlines'] = $isLocal ? "gfx/bloodlines.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png";
-//$graphics['wileymud4'] = $isLocal ? "gfx/wileymud4.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/wileymud4.png";
-//$graphics['navbegin'] = $isLocal ? "gfx/navbegin.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navbegin.png";
-//$graphics['navback'] = $isLocal ? "gfx/navback.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navback.png";
-//$graphics['navprev'] = $isLocal ? "gfx/navprev.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navprev.png";
-//$graphics['navconfig'] = $isLocal ? "gfx/navconfig.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navconfig.png";
-//$graphics['navlinks'] = $isLocal ? "gfx/navlinks.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navlinks.png";
-//$graphics['navhome'] = $isLocal ? "gfx/navhome.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navhome.png";
-//$graphics['pie_chart'] = $isLocal ? "gfx/pie_chart.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/pie_chart_zps670773a1.png";
-//$graphics['bar_chart'] = $isLocal ? "gfx/bar_chart.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/i3bar_zps9d063211.png";
-//$graphics['navnext'] = $isLocal ? "gfx/navnext.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navnext.png";
-//$graphics['navforward'] = $isLocal ? "gfx/navforward.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navforward.png";
-//$graphics['navend'] = $isLocal ? "gfx/navend.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navend.png";
-//$graphics['rss'] = $isLocal ? "gfx/rss.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/rss_zps6b73d7e2.png";
-//$graphics['rssMouseOver'] = $isLocal ? "gfx/rssMouseOver.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/rssMouseOver_zps52b86e27.png";
-//$graphics['json'] = $isLocal ? "gfx/json.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/json_zps34e3c065.png";
-//$graphics['jsonMouseOver'] = $isLocal ? "gfx/jsonMouseOver.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/jsonMouseOver_zps46d5148d.png";
-//$graphics['text'] = $isLocal ? "gfx/text.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/text_zps49ecc982.png";
-//$graphics['textMouseOver'] = $isLocal ? "gfx/textMouseOver.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/textMouseOver_zpsc7cbdd88.png";
-//$graphics['server_icon'] = $isLocal ? "gfx/server_icon.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/server_icon_zps624a919d.png";
-//$graphics['help_icon'] = $isLocal ? "gfx/help.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/help_zps181221b1.png";
-
-$serverUrl = 
-
-$pinkfish_map = get_pinkfish_map();
-$hourColors = get_hour_colors($pinkfish_map);
-$channelColors = get_channel_colors($pinkfish_map);
-$colormap = get_chatter_colors($pinkfish_map, $CHAT_COLOR_FILE);
-
-$mudList = get_cache( $MUD_CACHE_FILE, "SELECT DISTINCT mud, COUNT(*) FROM chanlogs GROUP BY mud HAVING COUNT(*) > 100 ORDER BY mud ASC, COUNT(*) ASC", "mud" );
-$speakerList = get_cache( $SPEAKER_CACHE_FILE, "SELECT DISTINCT speaker, COUNT(*) FROM chanlogs GROUP BY speaker HAVING COUNT(*) > 100 ORDER BY speaker ASC, COUNT(*) ASC", "speaker" );
-
-$defaultPageSize = 20;
-$defaultPageNumber = 0;
-$defaultFormat = "html";
-
-$pageSize = $defaultPageSize;
-$pageNumber = $defaultPageNumber;
-$startDate = null;
-$linksOnly = null;
-$showBots = null;
-$format = $defaultFormat;
-$channelFilter = null;
-$speakerFilter = null;
-$mudFilter = null;
-$searchFilter = null;
-
-$anchorID = null;
-$oldPageNumber = null;
-$showSQL = null;
-
-// Connect to PoOstgreSQL database
-try {
-    $dbh = new PDO( $db_dsn, $db_user, $db_pwd, array( PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION ));
-}
-catch(PDOException $e) {
-    echo $e->getMessage();
-}
-
-if( isset($_REQUEST) && isset($_REQUEST["showsql"]) ) {
-    $showSQL = 1;
-}
-
-// Page size (IE: LIMIT clause)
-
-if( isset($_REQUEST) && isset($_REQUEST["ps"]) ) {
-    $pageSize = $_REQUEST["ps"];
-    if(!is_numeric($pageSize)) {
-        $pageSize = $defaultPageSize;
-    }
-    if( $pageSize < 1 ) {
-        $pageSize = 1;
-    }
-}
-
-// Page number (IE: OFFSET clause)
-// Once we know the result set size, we need to limit this.
-// 0 means the END of the data set, 1..N means totalpages - x
-// This is so that page 0 will always be "current"
-
-if( isset($_REQUEST) && isset($_REQUEST["pn"]) ) {
-    $pageNumber = $_REQUEST["pn"];
-    if(!is_numeric($pageNumber)) {
-        $pageNumber = 0;
-    }
-    if($pageNumber < 0) {
-        $pageNumber = 0;
-    }
-}
-
-if( isset($_REQUEST) && isset($_REQUEST["pd"]) ) {
-    $pageNumberEntered = $_REQUEST["pd"];
-    if(!is_numeric($pageNumberEntered)) {
-        $pageNumberEntered = 0;
-    }
-}
-
-// This specifies a start date for the query, it's mostly
-// used to allow one to click on a date and see stuff
-// from there forwards.  Unix timestamp.
-
-$startDateSql = '';
-if( isset($_REQUEST) && isset($_REQUEST["sd"]) ) {
-    $startDate = $_REQUEST["sd"];
-    if(!is_numeric($startDate)) {
-        $startDate = null;
-    }
-    if(isset($startDate)) {
-        //$startDateSql = "AND date_part('epoch', msg_date)::integer >= $startDate";
-        $startDateSql = "AND msg_date >= to_timestamp($startDate)";
-    }
-}
-
-// Channel Filter (only display these channels)
-// Accept a comma-seperated list of names
-
-$chanSql = '';
-if( isset($_REQUEST) && isset($_REQUEST["cf"]) ) {
-    $channelFilter = $_REQUEST["cf"];
-    $words = array();
-    foreach (explode(",", $channelFilter) as $word) {
-        $words[] = $dbh->quote(strtolower($word));
-    }
-    $chanSql = "AND lower(channel) IN ( " . implode(",", $words) . " )";
-}
- 
-// Speaker filter (only display these speakers)
-// Accept a comma-seperated list of names
-
-$speakerSql = '';
-if( isset($_REQUEST) && isset($_REQUEST["sf"]) ) {
-    $speakerFilter = $_REQUEST["sf"];
-    $words = array();
-    foreach (explode(",", $speakerFilter) as $word) {
-        $words[] = $dbh->quote(strtolower($word));
-    }
-    $speakerSql = "AND lower(speaker) IN ( " . implode(",", $words) . " )";
-}
-
-// MUD filter (only display lines from these MUDs)
-// Accept a comma-seperated list of names
-
-$mudSql = '';
-if( isset($_REQUEST) && isset($_REQUEST["mf"]) ) {
-    $mudFilter = $_REQUEST["mf"];
-    $words = array();
-    foreach (explode(",", $mudFilter) as $word) {
-        $words[] = $dbh->quote(strtolower($word));
-    }
-    $mudSql = "AND lower(mud) IN ( " . implode(",", $words) . " )";
-}
-
-// Search filter (match against Message column)
-
-$searchSql = '';
-if( isset($_REQUEST) && isset($_REQUEST["sr"]) && $_REQUEST["sr"] != "" && preg_match('/[^\*]/', $_REQUEST["sr"] ) > 0 ) {
-    $searchFilter = $_REQUEST["sr"];
-    //$searchFilter = preg_replace('/+/', ',', $searchFilter);
-    $searchFilter = preg_replace('/[^0-9A-Za-z ,\*]/', '', $searchFilter);
-    $searchFilter = trim($searchFilter);
-    $words = array();
-    //echo "Search: $searchFilter<br>\n";
-    foreach (explode(",", $searchFilter) as $word) {
-        $word = trim($word);
-        if(preg_match('/\*/', $word) > 0) {
-            $words[] = preg_replace('/\*/', '%', $dbh->quote("$word"));
-        } else {
-            $words[] = preg_replace('/\*/', '%', $dbh->quote("* $word *"));
-            $words[] = preg_replace('/\*/', '%', $dbh->quote("$word *"));
-            $words[] = preg_replace('/\*/', '%', $dbh->quote("* $word"));
+        $data['page'] = $pageNumber;
+        $data['total'] = $totalRows;
+        $data['rows'] = array();
+        $sth->setFetchMode(PDO::FETCH_OBJ);
+        while($row = $sth->fetch()) {
+            $data['rows'][] = $row;
+        }
+        if($reverse) {
+            $data['rows'] = array_reverse($data['rows']);
         }
     }
-    $searchSql = "AND ( message ILIKE " . implode(" OR message ILIKE ", $words) . " )";
-}
-
-// Show only lines with URL's in them
-
-$linkSql = '';
-if( isset($_REQUEST) && isset($_REQUEST["lo"]) ) {
-    $linksOnly = 1;
-    $linkSql = "AND is_url";
-}
- 
-// Iinclude lines from known bots
-
-$botSql = "AND NOT is_bot";
-if( isset($_REQUEST) && isset($_REQUEST["sb"]) ) {
-    $showBots = 1;
-    $botSql = '';
-}
-
-// Output format requested
-
-if( isset($_REQUEST) && isset($_REQUEST["fm"]) ) {
-    if( $_REQUEST["fm"] == 'rss' ) {
-        $format = 'rss';
-    } elseif( $_REQUEST["fm"] == 'json' ) {
-        $format = 'json';
-    } elseif( $_REQUEST["fm"] == 'text' ) {
-        $format = 'text';
+    catch(PDOException $e) {
+        echo $e->getMessage();
     }
+    return $data;
 }
 
-// Sort order
-// Accept a comma-seperated list of column names with direction
-// IE: msg_date asc, channel desc
+function figure_page_offsets() {
+    // Input
+    global $FEW_PAGES, $MANY_PAGES;
+    global $totalPages, $pageNumber;
 
-/*
-if( isset($_REQUEST) && isset($_REQUEST["so"]) ) {
-    $sortOrder = $_REQUEST["so"];
-    $words = array();
-    foreach (explode(",", $sortOrder) as $word) {
-        $words[] = $dbh->quote($word);
-    }
-    $sortSql = "ORDER BY " . implode(",", $words);
-}
- */
+    // Output
+    global $beginningPage, $backManyPage, $backFewPage, $backOnePage;
+    global $forwardOnePage, $forwardFewPage, $forwardManyPage, $endPage;
+    global $beginningPageDisplay, $backManyPageDisplay, $backFewPageDisplay, $backOnePageDisplay;
+    global $pageNumberDisplay;
+    global $forwardOnePageDisplay, $forwardFewPageDisplay, $forwardManyPageDisplay, $endPageDisplay;
 
-// Data about last position, for recalculating offsets if the criteria changed
+    $beginningPage = $totalPages;
+    $backManyPage = $pageNumber + $MANY_PAGES;
+    $backFewPage = $pageNumber + $FEW_PAGES;
+    $backOnePage = $pageNumber + 1;
 
-$anchorSql = '';
-if( isset($_REQUEST) && isset($_REQUEST["an"]) ) {
-    $anchorID = $_REQUEST["an"];
-    if(!is_numeric($anchorID)) {
-        $anchorID = null;
-    }
-    if( $anchorID < 0 ) {
-        $anchorID = null;
-    }
-}
-if( isset($anchorID) ) {
-    //$anchorID = $data['rows'][0]->id;
-    $anchorSql = "AND id <= $anchorID";
-}
+    $forwardOnePage = $pageNumber - 1;
+    $forwardFewPage = $pageNumber - $FEW_PAGES;
+    $forwardManyPage = $pageNumber - $MANY_PAGES;
+    $endPage = 0;
 
-$totalRows = 0;
-$countSql = "SELECT COUNT(*) FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $startDateSql $anchorSql";
-$countSql = preg_replace('/chanlogs\s+AND/', 'chanlogs WHERE', $countSql);
-//echo "SQL: $countSql\n";
-
-try {
-    $sth = $dbh->query($countSql);
-}
-catch(PDOException $e) {
-    echo $e->getMessage();
+    $beginningPageDisplay = $totalPages - $beginningPage;
+    $backManyPageDisplay = $totalPages - $backManyPage;
+    $backFewPageDisplay = $totalPages - $backFewPage;
+    $backOnePageDisplay = $totalPages - $backOnePage;
+    $pageNumberDisplay = $totalPages - $pageNumber;
+    $forwardOnePageDisplay = $totalPages - $forwardOnePage;
+    $forwardFewPageDisplay = $totalPages - $forwardFewPage;
+    $forwardManyPageDisplay = $totalPages - $forwardManyPage;
+    $endPageDisplay = $totalPages - $endPage;
 }
 
-$totalRows = $sth->fetchColumn();
-$totalPages = ceil($totalRows / $pageSize);
+function url_params( $fmt, $bots, $links ) {
+    // Input
+    global $DEFAULT_PAGE_SIZE;
+    global $DEFAULT_FORMAT;
+    global $pageSize, $pageNumber;
+    global $channelFilter, $speakerFilter, $mudFilter, $searchFilter;
+    global $anchorID, $oldPageNumber;
 
-if( isset($pageNumberEntered) ) {
-    $pageNumber = $totalPages - $pageNumberEntered;
-    if($pageNumber < 0) {
-        $pageNumber = 0;
-    }
-    if($pageNumber > $totalPages) {
-        $pageNumber = $totalPages;
-    }
-}
-
-if( $pageNumber < ($totalPages / 2) ) {
-    $offset = min($totalRows, $pageSize * $pageNumber);
-    $sortSql = "ORDER BY id DESC";
-    $reverseSort = 1;
-} else {
-    $offset = max(0, $totalRows - ($pageSize * ($pageNumber + 1)));
-    $sortSql = "ORDER BY id ASC";
-    $reverseSort = 0;
-}
-
-$limitSql = "LIMIT $pageSize";
-$offsetSql = "OFFSET $offset";
-
-$pageSql = "SELECT id, msg_date, date_part('epoch', msg_date) AS unix_date, to_char(msg_date, 'YYYY-MM-DD') AS the_date, to_char(msg_date, 'HH24:MI') AS the_time, to_char(msg_date, 'HH24') AS the_hour, channel, speaker, mud, message FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $startDateSql $anchorSql $sortSql $offsetSql $limitSql";
-$pageSql = preg_replace('/chanlogs\s+AND/', 'chanlogs WHERE', $pageSql);
-
-try {
-    $sth = $dbh->query($pageSql);
-}
-catch(PDOException $e) {
-    echo $e->getMessage();
-}
-
-/*
-$data = array();
-$data['page'] = $pageNumber;
-$data['total'] = $totalRows;
-$data['rows'] = array();
-
-$sth->setFetchMode(PDO::FETCH_ASSOC);
-while($row = $sth->fetch()) {
-    $data['rows'][] = array(
-        'id' => $row['id'],
-        'cell' => array_values($row)
-    );
-}
- */
-
-$data = array();
-$data['page'] = $pageNumber;
-$data['total'] = $totalRows;
-$data['rows'] = array();
-//$sth->setFetchMode(PDO::FETCH_ASSOC);
-$sth->setFetchMode(PDO::FETCH_OBJ);
-while($row = $sth->fetch()) {
-    $data['rows'][] = $row;
-}
-
-$dbh = null;
-
-if( !isset($anchorID) ) {
-    $anchorID = $data['rows'][0]->id;
-}
-
-if($reverseSort) {
-    $data['rows'] = array_reverse($data['rows']);
-}
-
-//$anchorID = $data['rows'][0]->id;
-
-$fewPages = 10;
-$manyPages = 100;
-
-$beginningPage = $totalPages;
-$backManyPage = $pageNumber + $manyPages;
-$backFewPage = $pageNumber + $fewPages;
-$backOnePage = $pageNumber + 1;
-
-$forwardOnePage = $pageNumber - 1;
-$forwardFewPage = $pageNumber - $fewPages;
-$forwardManyPage = $pageNumber - $manyPages;
-$endPage = 0;
-
-$beginningPageDisplay = $totalPages - $beginningPage;
-$backManyPageDisplay = $totalPages - $backManyPage;
-$backFewPageDisplay = $totalPages - $backFewPage;
-$backOnePageDisplay = $totalPages - $backOnePage;
-$pageNumberDisplay = $totalPages - $pageNumber;
-$forwardOnePageDisplay = $totalPages - $forwardOnePage;
-$forwardFewPageDisplay = $totalPages - $forwardFewPage;
-$forwardManyPageDisplay = $totalPages - $forwardManyPage;
-$endPageDisplay = $totalPages - $endPage;
-
-function build_url() {
-    global $pageNumber;
-    global $defaultPageSize;
-    global $pageSize;
-    global $linksOnly;
-    global $showBots;
-    global $format;
-    global $defaultFormat;
-    global $channelFilter;
-    global $speakerFilter;
-    global $mudFilter;
-    global $sortOrder;
-    global $searchFilter;
-    global $anchorID;
-    global $urlParams;
-    global $startDate;
-    global $showSQL;
-
-    $urlParams = ((isset($pageNumber) && $pageNumber != 0) ? "&pn=" . urlencode($pageNumber) : "")
-        . ($pageSize != $defaultPageSize ? "&ps=" . urlencode($pageSize) : "")
-        . (isset($linksOnly) ? "&lo" : "")
-        . (isset($showBots) ? "&sb" : "")
-        . ($format != $defaultFormat ? "&fm=" . urlencode($format) : "")
+    $params = ($pageSize != $DEFAULT_PAGE_SIZE ? "&ps=" . urlencode($pageSize) : "")
+        . (isset($links) ? "&lo" : "")
+        . (isset($bots) ? "&sb" : "")
+        . ($fmt != $DEFAULT_FORMAT ? "&fm=" . urlencode($fmt) : "")
         . (isset($channelFilter) ? "&cf=" . urlencode($channelFilter) : "")
         . (isset($speakerFilter) ? "&sf=" . urlencode($speakerFilter) : "")
         . (isset($mudFilter) ? "&mf=" . urlencode($mudFilter) : "")
-        . (isset($startDate) ? "&sd=" . urlencode($startDate) : "")
-        . (isset($sortOrder) ? "&so=" . urlencode($sortOrder) : "")
         . (isset($searchFilter) ? "&sr=" . urlencode($searchFilter) : "")
-        . ((isset($anchorID) && isset($pageNumber) && $pageNumber != 0) ? "&an=" . urlencode($anchorID) : "")
-        . (isset($showSQL) ? "&showsql" : "");
+        . (isset($anchorID) ? "&an=" . urlencode($anchorID) : "");
 
-    $urlParams = preg_replace('/&/', '?', $urlParams, 1);
-    return $_SERVER["PHP_SELF"] . $urlParams;
+    return $params;
 }
 
+function build_url( $fmt, $bots, $links ) {
+    // Input
+    global $pageNumber;
 
-$old = $pageNumber; $pageNumber = $beginningPage; $beginningUrl = build_url(); $pageNumber = $old;
-$old = $pageNumber; $pageNumber = $backManyPage; $backManyUrl = build_url(); $pageNumber = $old;
-$old = $pageNumber; $pageNumber = $backFewPage; $backFewUrl = build_url(); $pageNumber = $old;
-$old = $pageNumber; $pageNumber = $backOnePage; $backOneUrl = build_url(); $pageNumber = $old;
-$pageUrl = build_url();
-$old = $pageNumber; $pageNumber = $forwardOnePage; $forwardOneUrl = build_url(); $pageNumber = $old;
-$old = $pageNumber; $pageNumber = $forwardFewPage; $forwardFewUrl = build_url(); $pageNumber = $old;
-$old = $pageNumber; $pageNumber = $forwardManyPage; $forwardManyUrl = build_url(); $pageNumber = $old;
-$old = $pageNumber; $pageNumber = $endPage; $endUrl = build_url(); $pageNumber = $old;
+    return $_SERVER["PHP_SELF"] . "?pn=" . urlencode($pageNumber) . url_params( $fmt, $bots, $links );
+}
 
-$old = $format; $format = "text"; $textUrl = build_url(); $format = $old; build_url();
-$old = $format; $format = "rss"; $rssUrl = build_url(); $format = $old; build_url();
-$old = $format; $format = "json"; $jsonUrl = build_url(); $format = $old; build_url();
-/*
-echo "<br>SQL: $pageSql<br>\n";
-echo "anchorID == $anchorID<br>\n";
-echo "beginning == $beginningPage, $beginningPageDisplay, $beginningUrl<br>\n";
-echo "backMany == $backManyPage, $backManyPageDisplay, $backManyUrl<br>\n";
-echo "backFew == $backFewPage, $backFewPageDisplay, $backFewUrl<br>\n";
-echo "backOne == $backOnePage, $backOnePageDisplay, $backOneUrl<br>\n";
-echo "current == $pageNumber, $pageNumberDisplay, $pageUrl<br>\n";
-echo "forwardOne == $forwardOnePage, $forwardOnePageDisplay, $forwardOneUrl<br>\n";
-echo "forwardFew == $forwardFewPage, $forwardFewPageDisplay, $forwardFewUrl<br>\n";
-echo "forwardMany == $forwardManyPage, $forwardManyPageDisplay, $forwardManyUrl<br>\n";
-echo "end == $endPage, $endPageDisplay, $endUrl<br>\n";
- */
+function construct_nav_urls() {
+    // Input
+    global $format;
+    global $beginningPage, $backManyPage, $backFewPage, $backOnePage;
+    global $forwardOnePage, $forwardFewPage, $forwardManyPage, $endPage;
 
-$bg = 0;
-$html = array();
-$text = array();
-$rss = array();
-$json = array();
-foreach ($data['rows'] as $row) {
-    $bgColor = ($bg % 2) ? "#000000" : "#1F1F1F";
-    $bgBold = ($bg % 2) ? "#202040" : "#3F3F6F";
+    // Output
+    global $beginningUrl, $backManyUrl, $backFewUrl, $backOneUrl;
+    global $pageUrl;
+    global $forwardOneUrl, $forwardFewUrl, $forwardManyUrl, $endUrl;
+    global $textUrl, $rssUrl, $jsonUrl;
 
-    $datestamp = $row->the_date;
-    $hourColor = $hourColors[$row->the_hour];
-    $timestamp = $hourColor . $row->the_time . "</SPAN>";
+    $urlParams - url_params($format);
+    $pageUrl = build_url($format);
+    $beginningUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($beginningPage) . $urlParams;
+    $backOneUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($backOnePage) . $urlParams;
+    $backFewUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($backFewPage) . $urlParams;
+    $backManyUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($backManyPage) . $urlParams;
+    $forwardOneUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($forwardOnePage) . $urlParams;
+    $forwardFewUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($forwardFewPage) . $urlParams;
+    $forwardManyUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($forwardManyPage) . $urlParams;
+    $endUrl = $_SERVER["PHP_SELF"] . "?pn=" . urlencode($endPage) . $urlParams;
 
-    $channelColor = $channelColors["default"];
-    if( array_key_exists( $row->channel, $channelColors )) {
-        $channelColor = $channelColors[strtolower($row->channel)];
+    $textUrl = build_url("text");
+    $rssUrl = build_url("rss");
+    $jsonUrl = build_url("json");
+}
+
+function construct_output() {
+    // Input
+    global $RSS_FEED_URL;
+    global $hourColors, $channelColors, $speakerColors;
+
+    // Output
+    global $data;
+    global $html, $text, $rss, $json;
+
+    $html = array();
+    $text = array();
+    $rss = array();
+    $json = array();
+    $bg = 0;
+
+    foreach ($data['rows'] as $row) {
+        $bgColor = ($bg % 2) ? "#000000" : "#1F1F1F";
+        $bgBold = ($bg % 2) ? "#202040" : "#3F3F6F";
+
+        $datestamp = $row->the_date;
+        $hourColor = $hourColors[$row->the_hour];
+        $timestamp = $hourColor . $row->the_time . "</SPAN>";
+
+        $channelColor = $channelColors["default"];
+        if( array_key_exists( $row->channel, $channelColors )) {
+            $channelColor = $channelColors[strtolower($row->channel)];
+        }
+        $channel = "$channelColor" . $row->channel . "</SPAN>";
+
+        $speakerColor = $speakerColors[strtolower($row->speaker)];
+        $speaker = "$speakerColor" . $row->speaker . "@" . $row->mud . "</SPAN>";
+
+        $filtered_message = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '_', $row->message);
+        $message = htmlentities($filtered_message);
+        $message = preg_replace( '/((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)/', '<a href="$1" target="I3-link">$1</a>', $message);
+
+        $html[] = array(
+            "row"           => $row,
+            "bgcolor"       => $bgColor,
+            "bgbold"        => $bgBold,
+            "datestamp"     => $datestamp,
+            "timestamp"     => $timestamp,
+            "channel"       => $channel,
+            "speaker"       => $speaker,
+            "message"       => $message,
+            "raw_channel"   => $row->channel,
+            "raw_speaker"   => $row->speaker,
+            "raw_mud"       => $row->mud,
+        );
+        $text[] = array(
+            "row"           => $row,
+            "datestamp"     => $row->the_date,
+            "timestamp"     => $row->the_time,
+            "channel"       => $row->channel,
+            "speaker"       => $row->speaker,
+            "mud"           => $row->mud,
+            "message"       => $filtered_message,
+        );
+        $rss[] = array(
+            "row"           => $row,
+            "title"         => $row->the_date . " " . $row->the_time . " (" . $row->channel . ") " . $row->speaker . "@" . $row->mud . ": " . substr($filtered_message, 0, 120),
+            "description"   => $filtered_message,
+            "link"          => $RSS_FEED_URL,
+            "guid"          => md5( $row->channel . $row->speaker . "@" . $row->mud . $row->message ),
+        );
+        $json[] = array(
+            "bgcolor"       => $bgColor,
+            "bgbold"        => $bgBold,
+            "hourcolor"     => $hourColor,
+            "channelcolor"  => $channelColor,
+            "speakercolor"  => $speakerColor,
+            "mudcolor"      => $speakerColor,
+            "guid"          => md5( $row->channel . $row->speaker . "@" . $row->mud . $row->message ),
+            "id"            => $row->id,
+            "datestamp"     => $row->the_date,
+            "timestamp"     => $row->the_time,
+            "channel"       => $row->channel,
+            "speaker"       => $row->speaker,
+            "mud"           => $row->mud,
+            "message"       => $row->message,
+        );
+        $bg++;
     }
-    $channel = "$channelColor" . $row->channel . "</SPAN>";
-
-    $speakerColor = $colormap[strtolower($row->speaker)];
-    $speaker = "$speakerColor" . $row->speaker . "@" . $row->mud . "</SPAN>";
-
-    $filtered_message = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '_', $row->message);
-    $message = htmlentities($filtered_message);
-    $message = preg_replace( '/((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)/', '<a href="$1" target="I3-link">$1</a>', $message);
-
-    $html[] = array(
-        "row"           => $row,
-        "bgcolor"       => $bgColor,
-        "bgbold"        => $bgBold,
-        "datestamp"     => $datestamp,
-        "timestamp"     => $timestamp,
-        "channel"       => $channel,
-        "speaker"       => $speaker,
-        "message"       => $message,
-        "unix_date"     => $row->unix_date,
-        "raw_channel"   => $row->channel,
-        "raw_speaker"   => $row->speaker,
-        "raw_mud"       => $row->mud,
-    );
-    $text[] = array(
-        "row"           => $row,
-        "datestamp"     => $row->the_date,
-        "timestamp"     => $row->the_time,
-        "channel"       => $row->channel,
-        "speaker"       => $row->speaker,
-        "mud"           => $row->mud,
-        "message"       => $filtered_message,
-    );
-    $rss[] = array(
-        "row"           => $row,
-        "title"         => $row->the_date . " " . $row->the_time . " (" . $row->channel . ") " . $row->speaker . "@" . $row->mud . ": " . substr($filtered_message, 0, 120),
-        "description"   => $filtered_message,
-        "link"          => $RSS_FEED_URL,
-        "guid"          => md5( $row->channel . $row->speaker . "@" . $row->mud . $row->message ),
-    );
-    $json[] = array(
-        "bgcolor"       => $bgColor,
-        "bgbold"        => $bgBold,
-        "hourcolor"     => $hourColor,
-        "channelcolor"  => $channelColor,
-        "speakercolor"  => $speakerColor,
-        "mudcolor"      => $speakerColor,
-        "guid"          => md5( $row->channel . $row->speaker . "@" . $row->mud . $row->message ),
-        "id"            => $row->id,
-        "datestamp"     => $row->the_date,
-        "timestamp"     => $row->the_time,
-        "channel"       => $row->channel,
-        "speaker"       => $row->speaker,
-        "mud"           => $row->mud,
-        "message"       => $row->message,
-    );
-    $bg++;
 }
 
-/*
-echo "pageSize: $pageSize\n";
-echo "pageNumber: $pageNumber\n";
-echo "totalRows: $totalRows\n";
-echo "totalPages: $totalPages\n";
+function calculate_offset() {
+    global $pageSize, $pageNumber, $pageNumberEntered;
+    global $totalRows, $totalPages;
+    global $sortSql, $limitSql, $offsetSql;
+    global $reverseSort;
 
-echo json_encode($data);
- */
+    if( isset($pageNumberEntered) ) {
+        $pageNumber = $totalPages - $pageNumberEntered;
+        if($pageNumber < 0) {
+            $pageNumber = 0;
+        }
+        if($pageNumber > $totalPages) {
+            $pageNumber = $totalPages;
+        }
+    }
+    if( $pageNumber < ($totalPages / 2) ) {
+        $offset = min($totalRows, $pageSize * $pageNumber);
+        $sortSql = "ORDER BY id DESC";
+        $reverseSort = 1;
+    } else {
+        $offset = max(0, $totalRows - ($pageSize * ($pageNumber + 1)));
+        $sortSql = "ORDER BY id ASC";
+        $reverseSort = 0;
+    }
+    $offsetSql = "OFFSET $offset";
+    $limitSql = "LIMIT $pageSize";
+}
+
+$pageSize       = $DEFAULT_PAGE_SIZE;
+$pageNumber     = $DEFAULT_PAGE_NUMBER;
+$format         = $DEFAULT_FORMAT;
+
+$pinkfish_map   = get_pinkfish_map();
+$hourColors     = get_hour_colors($pinkfish_map);
+$channelColors  = get_channel_colors($pinkfish_map);
+$speakerColors  = get_speaker_colors($pinkfish_map, $CHAT_COLOR_FILE);
+
+$channelList    = get_cache( $CHANNEL_CACHE_FILE, "SELECT DISTINCT channel, COUNT(*) FROM chanlogs GROUP BY channel HAVING COUNT(*) > 100 ORDER BY channel ASC, COUNT(*) ASC", "channel" );
+$speakerList    = get_cache( $SPEAKER_CACHE_FILE, "SELECT DISTINCT speaker, COUNT(*) FROM chanlogs GROUP BY speaker HAVING COUNT(*) > 100 ORDER BY speaker ASC, COUNT(*) ASC", "speaker" );
+$mudList        = get_cache( $MUD_CACHE_FILE, "SELECT DISTINCT mud, COUNT(*) FROM chanlogs GROUP BY mud HAVING COUNT(*) > 100 ORDER BY mud ASC, COUNT(*) ASC", "mud" );
+
+parse_args();
+
+$totalRows = get_row_count( preg_replace( '/chanlogs\s+AND/', 'chanlogs WHERE', "SELECT COUNT(*) FROM chanlogs $botSql $linkSql $channelSql $mudSql $speakerSql $searchSql" ));
+$totalPages = ceil($totalRows / $pageSize);
+
+calculate_offset();
+
+$pageSql = preg_replace( '/chanlogs\s+AND/', 'chanlogs WHERE', "SELECT id, msg_date, to_char(msg_date, 'MM/DD') AS the_date, to_char(msg_date, 'HH24:MI') AS the_time, to_char(msg_date, 'HH24') AS the_hour, channel, speaker, mud, message FROM chanlogs $botSql $linkSql $channelSql $mudSql $speakerSql $searchSql $sortSql $offsetSql $limitSql" );
+$data = get_row_data( $pageSql, $reverseSort );
+
+$anchorID = $data['rows'][0]->id;
+
+figure_page_offsets();
+construct_nav_urls();
+build_url($format);
+construct_output();
 
 if($format == 'html') {
     header('Content-type: text/html');
@@ -758,9 +670,8 @@ if($format == 'html') {
             a { text-decoration:none; }
             a:hover { text-decoration:underline; }
         </style>
-        <!-- <script src="jq/js/jquery-1.9.1.js"></script>
-        <script src="jq/js/jquery-ui-1.10.1.custom.js"></script> -->
-        <script type="text/javascript" src="popup.js"></script>
+        <script src="jq/js/jquery-1.9.1.js"></script>
+        <script src="jq/js/jquery-ui-1.10.1.custom.js"></script>
     </head>
     <body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
         <table id="header" border=0 cellspacing=0 cellpadding=0 width=80% align="center">
@@ -776,13 +687,13 @@ if($format == 'html') {
                             <td align="right" valign="top">
                                 <!-- <a href="/anyterm/anyterm.shtml?rows=40&cols=100"> -->
                                 <a href="/~bloodlines">
-                                    <img src="<? echo $graphics['bloodlines']; ?>" border=0 width=234 height=80>
+                                    <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png" border=0 width=234 height=80>
                                 </a>
                             </td>
                             <td align="left" valign="bottom">
                                 <!-- <a href="/anyterm/anyterm.shtml?rows=40&cols=100"> -->
                                 <a href="/~bloodlines">
-                                    <img src="<? echo $graphics['wileymud4']; ?>" border=0 width=177 height=40">
+                                    <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/wileymud4.png" border=0 width=177 height=40">
                                 </a>
                             </td>
                         </tr>
@@ -835,12 +746,6 @@ if($format == 'html') {
                                     <? if(isset($mudFilter)) { ?>
                                         <input type="hidden" name="mf" value="<? echo $mudFilter; ?>">
                                     <? } ?>
-                                    <? if(isset($sortOrder)) { ?>
-                                        <input type="hidden" name="so" value="<? echo $sortOrder; ?>">
-                                    <? } ?>
-                                    <? if(isset($startDate)) { ?>
-                                        <input type="hidden" name="sd" value="<? echo $startDate; ?>">
-                                    <? } ?>
                                     <? if(isset($anchorID)) { ?>
                                         <input type="hidden" name="an" value="<? echo $anchorID; ?>">
                                     <? } ?>
@@ -866,10 +771,10 @@ if($format == 'html') {
                     <span style="color: #555555">
                     <? if( $pageNumber < $beginningPage) { ?>
                         <a href="<? echo $beginningUrl; ?>" title="The&nbsp;Beginning&nbsp;(<? echo $beginningPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="<? echo $graphics['navbegin']; ?>" border=0 width=48 height=48 />
+                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navbegin.png" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="<? echo $graphics['navbegin']; ?>" border=0 width=48 height=48 />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navbegin.png" border=0 width=48 height=48 />
                     <? } ?>
                     </span>
                 </td>
@@ -884,11 +789,11 @@ if($format == 'html') {
                 >
                     <span style="color: #555555">
                     <? if( $pageNumber < $backManyPage && $backManyPage <= $beginningPage) { ?>
-                        <a href="<? echo $backManyUrl; ?>" title="Back&nbsp;<? echo $manyPages; ?>&nbsp;(<? echo $backManyPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="<? echo $graphics['navback']; ?>" border=0 width=48 height=48 />
+                        <a href="<? echo $backManyUrl; ?>" title="Back&nbsp;<? echo $MANY_PAGES; ?>&nbsp;(<? echo $backManyPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
+                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navback.png" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="<? echo $graphics['navback']; ?>" border=0 width=48 height=48 />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navback.png" border=0 width=48 height=48 />
                     <? } ?>
                     </span>
                 </td>
@@ -903,11 +808,11 @@ if($format == 'html') {
                 >
                     <span style="color: #555555">
                     <? if( $pageNumber < $backFewPage && $backFewPage <= $beginningPage) { ?>
-                        <a href="<? echo $backFewUrl; ?>" title="Back&nbsp;<? echo $fewPages; ?>&nbsp;(<? echo $backFewPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="<? echo $graphics['navback']; ?>" border=0 width=48 height=48 />
+                        <a href="<? echo $backFewUrl; ?>" title="Back&nbsp;<? echo $FEW_PAGES; ?>&nbsp;(<? echo $backFewPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
+                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navback.png" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="<? echo $graphics['navback']; ?>" border=0 width=48 height=48 />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navback.png" border=0 width=48 height=48 />
                     <? } ?>
                     </span>
                 </td>
@@ -923,30 +828,21 @@ if($format == 'html') {
                     <span style="color: #555555">
                     <? if( $pageNumber < $backOnePage && $backOnePage <= $beginningPage) { ?>
                         <a href="<? echo $backOneUrl; ?>" title="Previous&nbsp;Page&nbsp;(<? echo $backOnePageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="<? echo $graphics['navprev']; ?>" border=0 width=48 height=48 />
+                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navprev.png" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="<? echo $graphics['navprev']; ?>" border=0 width=48 height=48 />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navprev.png" border=0 width=48 height=48 />
                     <? } ?>
                     </span>
                 </td>
                 <td>
                 &nbsp;
                 </td>
-                <td id="fakepagenumber" align="center" valign="center" width="150">
+                <td id="fakepagenumber" align="center" valign="center" width="160">
                 &nbsp;
                 </td>
                 <td>
                     &nbsp;
-                </td>
-                <td id="navhelp" align="center" valign="center" width="50"
-                    style="opacity: 0.2; filter: alpha(opacity=20);"
-                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
-                    onmouseout="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
-                >
-                    <a title="HELP!" href="i3log_help.html" class="popup2">
-                        <img src="<? echo $graphics['help_icon']; ?>" border=0 width=48 height=48 />
-                    </a>
                 </td>
                 <td id="navbot" align="center" valign="center" width="50"
                     <? if( isset($showBots) ) { ?>
@@ -960,12 +856,12 @@ if($format == 'html') {
                     <? } ?>
                 >
                     <? if( !isset($showBots) ) { ?>
-                    <a title='Include bot content' href="<? $showBots = 1; echo build_url(); $showBots = null; build_url(); ?>">
-                        <img src="<? echo $graphics['navconfig']; ?>" border=0 width=48 height=48 />
+                    <a title='Include bot content' href="<? echo build_url($format, 1, $linksOnly); ?>">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navconfig.png" border=0 width=48 height=48 />
                     </a>
                     <? } else { ?>
-                    <a title='Block messages from known bots' href="<? $showBots = null; echo build_url(); $showBots = 1; build_url(); ?>">
-                        <img src="<? echo $graphics['navconfig']; ?>" border=0 width=48 height=48 />
+                    <a title='Block messages from known bots' href="<? echo build_url($format, null, $linksOnly); ?>">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navconfig.png" border=0 width=48 height=48 />
                     </a>
                     <? } ?>
                 </td>
@@ -981,12 +877,12 @@ if($format == 'html') {
                     <? } ?>
                 >
                     <? if( isset($linksOnly) ) { ?>
-                    <a title='Include all content' href="<? $linksOnly = null; echo build_url(); $linksOnly = 1; build_url(); ?>">
-                        <img src="<? echo $graphics['navlinks']; ?>" border=0 width=48 height=48 />
+                    <a title='Include all content' href="<? echo build_url($format, $showBots, null); ?>">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navlinks.png" border=0 width=48 height=48 />
                     </a>
                     <? } else { ?>
-                    <a title='Include only messages with URLs' href="<? $linksOnly = 1; echo build_url(); $linksOnly = null; build_url(); ?>">
-                        <img src="<? echo $graphics['navlinks']; ?>" border=0 width=48 height=48 />
+                    <a title='Include only messages with URLs' href="<? echo build_url($format, $showBots, 1); ?>">
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navlinks.png" border=0 width=48 height=48 />
                     </a>
                     <? } ?>
                 </td>
@@ -1000,7 +896,7 @@ if($format == 'html') {
                     <? } ?>
                 >
                     <a title="HOME!" href="<? echo $_SERVER['PHP_SELF']; ?>">
-                        <img src="<? echo $graphics['navhome']; ?>" border=0 width=48 height=48 />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navhome.png" border=0 width=48 height=48 />
                     </a>
                 </td>
                 <td>
@@ -1010,16 +906,7 @@ if($format == 'html') {
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                 >
                     <a title="Everyone loves PIE!" href="i3pie.html">
-                        <img src="<? echo $graphics['pie_chart']; ?>" border=0 width=48 height=48 />
-                    </a>
-                </td>
-                <td id="navchart" align="center" valign="center" width="50"
-                    style="opacity: 0.4; filter: alpha(opacity=40);"
-                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
-                    onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
-                >
-                    <a title="BAR chat" href="i3bar.html">
-                        <img src="<? echo $graphics['bar_chart']; ?>" border=0 width=48 height=48 />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/pie_chart_zps670773a1.png" border=0 width=48 height=48 />
                     </a>
                 </td>
                 <td>
@@ -1032,7 +919,7 @@ if($format == 'html') {
                             <tr>
                                 <td align="right" valign="bottom" width="40">
                                     <span style="color: #1F1F1F;">
-                                        <label id="pnlabel" for="pd"
+                                        <label id="pnlabel" for="pe"
                                             onmouseover="pninput.style.color='#FFFF00'; pninput.style.backgroundColor='#1F1F1F'; this.style.color='#FFFFFF'; pnoflabel.style.color='#FFFFFF';"
                                             onmouseout="pninput.style.color='#4F4F00'; pninput.style.backgroundColor='#000000'; this.style.color='#1F1F1F'; pnoflabel.style.color='#1F1F1F';"
                                             onfocus="pninput.focus();"
@@ -1046,7 +933,7 @@ if($format == 'html') {
                                         onfocus="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; pnlabel.style.color='#FFFFFF';  pnoflabel.style.color='#FFFFFF'; /* if(!this._haschanged){this.value=''};this._haschanged=true; */"
                                         onblur="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; pnlabel.style.color='#1F1F1F'; pnoflabel.style.color='#1F1F1F';"
                                         onmouseout="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; pnlabel.style.color='#1F1F1F'; pnoflabel.style.color='#1F1F1F';"
-                                        maxlength="6" name="pd" value="<? if(isset($pageNumberDisplay)) echo $pageNumberDisplay; ?>" />
+                                        maxlength="6" name="pe" value="<? if(isset($pageNumberDisplay)) echo $pageNumberDisplay; ?>" />
                                     <? if(isset($pageSize)) { ?>
                                         <input type="hidden" name="ps" value="<? echo $pageSize; ?>">
                                     <? } ?>
@@ -1070,12 +957,6 @@ if($format == 'html') {
                                     <? } ?>
                                     <? if(isset($searchFilter)) { ?>
                                         <input type="hidden" name="sr" value="<? echo $searchFilter; ?>">
-                                    <? } ?>
-                                    <? if(isset($sortOrder)) { ?>
-                                        <input type="hidden" name="so" value="<? echo $sortOrder; ?>">
-                                    <? } ?>
-                                    <? if(isset($startDate)) { ?>
-                                        <input type="hidden" name="sd" value="<? echo $startDate; ?>">
                                     <? } ?>
                                     <? if(isset($anchorID)) { ?>
                                         <input type="hidden" name="an" value="<? echo $anchorID; ?>">
@@ -1109,10 +990,10 @@ if($format == 'html') {
                 >
                     <? if( $pageNumber > $forwardOnePage && $forwardOnePage >= $endPage) { ?>
                         <a href="<? echo $forwardOneUrl; ?>" title="Next&nbsp;Page&nbsp;(<? echo $forwardOnePageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="<? echo $graphics['navnext']; ?>" border=0 width=48 height=48 />
+                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navnext.png" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="<? echo $graphics['navnext']; ?>" border=0 width=48 height=48 />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navnext.png" border=0 width=48 height=48 />
                     <? } ?>
                 </td>
                 <td id="navforwardfew" align="right" valign="center" width="50"
@@ -1125,11 +1006,11 @@ if($format == 'html') {
                     <? } ?>
                 >
                     <? if( $pageNumber > $forwardFewPage && $forwardFewPage >= $endPage) { ?>
-                        <a href="<? echo $forwardFewUrl; ?>" title="Next&nbsp;<? echo $fewPages; ?>&nbsp;(<? echo $forwardFewPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="<? echo $graphics['navforward']; ?>" border=0 width=48 height=48 />
+                        <a href="<? echo $forwardFewUrl; ?>" title="Next&nbsp;<? echo $FEW_PAGES; ?>&nbsp;(<? echo $forwardFewPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
+                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navforward.png" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="<? echo $graphics['navforward']; ?>" border=0 width=48 height=48 />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navforward.png" border=0 width=48 height=48 />
                     <? } ?>
                 </td>
                 <td id="navforwardmany" align="right" valign="center" width="50"
@@ -1142,11 +1023,11 @@ if($format == 'html') {
                     <? } ?>
                 >
                     <? if( $pageNumber > $forwardManyPage && $forwardManyPage >= $endPage) { ?>
-                        <a href="<? echo $forwardManyUrl; ?>" title="Next&nbsp;<? echo $manyPages; ?>&nbsp;(<? echo $forwardManyPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="<? echo $graphics['navforward']; ?>" border=0 width=48 height=48 />
+                        <a href="<? echo $forwardManyUrl; ?>" title="Next&nbsp;<? echo $MANY_PAGES; ?>&nbsp;(<? echo $forwardManyPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
+                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navforward.png" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="<? echo $graphics['navforward']; ?>" border=0 width=48 height=48 />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navforward.png" border=0 width=48 height=48 />
                     <? } ?>
                 </td>
                 <td id="navend" align="right" valign="center" width="50"
@@ -1160,40 +1041,28 @@ if($format == 'html') {
                 >
                     <? if( $pageNumber > $endPage) { ?>
                         <a href="<? echo $endUrl; ?>" title="Current&nbsp;Time&nbsp;(<? echo $endPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="<? echo $graphics['navend']; ?>" border=0 width=48 height=48 />
+                            <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navend.png" border=0 width=48 height=48 />
                         </a>
                     <? } else { ?>
-                        <img src="<? echo $graphics['navend']; ?>" border=0 width=48 height=48 />
+                        <img src="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navend.png" border=0 width=48 height=48 />
                     <? } ?>
                 </td>
             </tr>
         </table>
         <table id="content" width="100%">
             <tr>
-                <? if(isset($startDate)) { ?>
-                <th id="dateheader" align="left" width="10%" style="color: #FFFF00;">
-                    <a href="<? $old = $startDate; $startDate = null; echo build_url(); $startDate = $old; build_url(); ?>">Date</a>
-                </th>
-                <? } else { ?>
-                <th id="dateheader" align="left" width="10%" style="color: #DDDDDD;">Date</th>
-                <? } ?>
-                <? if(isset($startDate)) { ?>
-                <th id="timeheader" align="left" width="10%" style="color: #FFFF00;">
-                    <a href="<? $old = $startDate; $startDate = null; echo build_url(); $startDate = $old; build_url(); ?>">Time</a>
-                </th>
-                <? } else { ?>
-                <th id="timeheader" align="left" width="10%" style="color: #DDDDDD;">Time</th>
-                <? } ?>
+                <th align="left" width="5%" style="color: #DDDDDD;">Date</th>
+                <th align="left" width="5%" style="color: #DDDDDD;">Time</th>
                 <? if(isset($channelFilter)) { ?>
                 <th id="channelheader" align="left" width="10%" style="color: #FFFF00;">
-                    <a href="<? $old = $channelFilter; $channelFilter = null; echo build_url(); $channelFilter = $old; build_url(); ?>">Channel</a>
+                    <a href="<? $old = $channelFilter; $channelFilter = null; echo build_url($format, $showBots, $linksOnly); $channelFilter = $old; build_url($format, $showBots, $linksOnly); ?>">Channel</a>
                 </th>
                 <? } else { ?>
                 <th id="channelheader" align="left" width="10%" style="color: #DDDDDD;">Channel</th>
                 <? } ?>
                 <? if(isset($speakerFilter)) { ?>
                 <th id="speakerheader" align="left" width="20%" style="color: #FFFF00;">
-                    <a href="<? $old = $speakerFilter; $old2 = $mudFilter; $speakerFilter = null; $mudFilter = null; echo build_url(); $speakerFilter = $old; $mudFilter = $old2; build_url(); ?>">Speaker</a>
+                    <a href="<? $old = $speakerFilter; $speakerFilter = null; echo build_url($format, $showBots, $linksOnly); $speakerFilter = $old; build_url($format, $showBots, $linksOnly); ?>">Speaker</a>
                 </th>
                 <? } else { ?>
                 <th id="speakerheader" align="left" width="20%" style="color: #DDDDDD;">Speaker</th>
@@ -1201,25 +1070,15 @@ if($format == 'html') {
                 <th align="left" width="60%">&nbsp;</th>
             </tr>
             <?  foreach ($html as $row) {
-                    if(isset($startDate)) {
-                        $old = $startDate;
-                        $startDate = null;
-                        $dateUrl = build_url();
-                        $startDate = $old;
-                    } else {
-                        $startDate = $row["unix_date"];
-                        $dateUrl = build_url();
-                        $startDate = null;
-                    }
                     if(isset($channelFilter)) {
                         $channels = array_unique(array_merge( explode(",", $channelFilter), array($row["raw_channel"])));
                         $old = $channelFilter;
                         $channelFilter = implode(",", $channels);
-                        $channelUrl = build_url();
+                        $channelUrl = build_url($format, $showBots, $linksOnly);
                         $channelFilter = $old;
                     } else {
                         $channelFilter = $row["raw_channel"];
-                        $channelUrl = build_url();
+                        $channelUrl = build_url($format, $showBots, $linksOnly);
                         $channelFilter = null;
                     }
                     if(isset($speakerFilter)) {
@@ -1229,47 +1088,27 @@ if($format == 'html') {
                         $old2 = $mudFilter;
                         $speakerFilter = implode(",", $speakers);
                         $mudFilter = implode(",", $muds);
-                        $speakerUrl = build_url();
+                        $speakerUrl = build_url($format, $showBots, $linksOnly);
                         $speakerFilter = $old;
                         $mudFilter = $old2;
                     } else {
                         $speakerFilter = $row["raw_speaker"];
                         $mudFilter = $row["raw_mud"];
-                        $speakerUrl = build_url();
+                        $speakerUrl = build_url($format, $showBots, $linksOnly);
                         $speakerFilter = null;
                         $mudFilter = null;
                     }
              ?>
             <tr>
-                <? if(isset($startDate)) { ?>
-                    <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['datestamp']; ?></td>
-                    <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['timestamp']; ?></td>
-                <? } else { ?>
-                    <td onmouseover="this.style.backgroundColor = '<? echo $row['bgbold']; ?>';"
-                        onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
-                        onclick="document.location.href='<? echo $dateUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['datestamp']; ?></td>
-                    <td onmouseover="this.style.backgroundColor = '<? echo $row['bgbold']; ?>';"
-                        onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
-                        onclick="document.location.href='<? echo $dateUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['timestamp']; ?></td>
-                <? } ?>
-
-                <? if(isset($channelFilter)) { ?>
-                    <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['channel']; ?></td>
-                <? } else { ?>
-                    <td onmouseover="this.style.backgroundColor = '<? echo $row['bgbold']; ?>';"
-                        onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
-                        onclick="document.location.href='<? echo $channelUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['channel']; ?></td>
-                <? } ?>
-
-                <? if(isset($speakerFilter)) { ?>
-                    <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['speaker']; ?></td>
-                <? } else { ?>
-                    <td onmouseover="this.style.backgroundColor = '<? echo $row['bgbold']; ?>';"
-                        onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
-                        onclick="document.location.href='<? echo $speakerUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['speaker']; ?></td>
-                <? } ?>
-
-                    <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['message']; ?></td>
+                <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['datestamp']; ?></td>
+                <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['timestamp']; ?></td>
+                <td onmouseover="this.style.backgroundColor = '<? echo $row['bgbold']; ?>';"
+                    onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
+                    onclick="document.location.href='<? echo $channelUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['channel']; ?></td>
+                <td onmouseover="this.style.backgroundColor = '<? echo $row['bgbold']; ?>';"
+                    onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
+                    onclick="document.location.href='<? echo $speakerUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['speaker']; ?></td>
+                <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['message']; ?></td>
             </tr>
             <? } ?>
         </table>
@@ -1279,28 +1118,19 @@ if($format == 'html') {
                     <span id="lastrefresh" style="color: #1F1F1F">Last refreshed at <? echo $now; ?>.&nbsp;</span>
                 </td>
                 <td>&nbsp;</td>
-                <td id="server" align="center" valign="center" width="80"
-                    style="opacity: 0.4; filter: alpha(opacity=40);"
-                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
-                    onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
-                >
-                    <span style="color: #1F1F1F"><a href="/~bloodlines/server.php" title="Server Stats">
-                        <img src="<? echo $graphics['server_icon']; ?>" border=0 width=78 height=78 alt="(server)" />
-                    </a></span>
-                </td>
                 <td align="center" width="71" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
-                    <span style="color: #1F1F1F"><a href="<? echo $rssUrl; ?>" title="RSS Feed">
-                        <img onmouseover="this.src='<?echo $graphics['rssMouseOver'];?>';" onmouseout="this.src='<?echo $graphics['rss'];?>';" id="rssimg" src="<?echo $graphics['rss'];?>" border=0 width=71 height=55 alt="(RSS)" />
+                    <span style="color: #1F1F1F"><a href="<? echo $rssUrl; ?>">
+                        <img onmouseover="this.src='http://i302.photobucket.com/albums/nn96/quixadhal/rssMouseOver_zps52b86e27.png';" onmouseout="this.src='http://i302.photobucket.com/albums/nn96/quixadhal/rss_zps6b73d7e2.png';" id="rssimg" src="http://i302.photobucket.com/albums/nn96/quixadhal/rss_zps6b73d7e2.png" border=0 width=71 height=55 alt="(RSS)" />
                     </a></span>
                 </td>
-                <td align="center" width="75" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000'; jsonimg.src='http://i302.photobucket.com/albums/nn96/quixadhal/json_zps34e3c065.png';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F'; jsonimg.src='http://i302.photobucket.com/albums/nn96/quixadhal/jsonMouseOver_zps46d5148d.png';">
-                    <span style="color: #1F1F1F"><a href="<? echo $jsonUrl; ?>" title="JSON output">
-                        <img onmouseover="this.src='<?echo $graphics['jsonMouseOver'];?>';" onmouseout="this.src='<?echo $graphics['json'];?>';" id="jsonimg" src="<?echo $graphics['json'];?>" border=0 width=75 height=51 alt="(JSON)" />
+                <td align="center" width="75" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000'; jsonimg.src='gfx/json.png';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F'; jsonimg.src='gfx/jsonMouseOver.png';">
+                    <span style="color: #1F1F1F"><a href="<? echo $jsonUrl; ?>">
+                        <img onmouseover="this.src='http://i302.photobucket.com/albums/nn96/quixadhal/jsonMouseOver_zps46d5148d.png';" onmouseout="this.src='http://i302.photobucket.com/albums/nn96/quixadhal/json_zps34e3c065.png';" id="jsonimg" src="http://i302.photobucket.com/albums/nn96/quixadhal/json_zps34e3c065.png" border=0 width=75 height=51 alt="(JSON)" />
                     </a></span>
                 </td>
                 <td align="center" width="84" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
-                    <span style="color: #1F1F1F"><a href="<? echo $textUrl; ?>" title="Plain Text output">
-                        <img onmouseover="this.src='<?echo $graphics['textMouseOver'];?>';" onmouseout="this.src='<?echo $graphics['text'];?>';" id="textimg" src="<?echo $graphics['text'];?>" border=0 width=84 height=79 alt="(TEXT)" />
+                    <span style="color: #1F1F1F"><a href="<? echo $textUrl; ?>">
+                        <img onmouseover="this.src='http://i302.photobucket.com/albums/nn96/quixadhal/textMouseOver_zpsc7cbdd88.png';" onmouseout="this.src='http://i302.photobucket.com/albums/nn96/quixadhal/text_zps49ecc982.png';" id="textimg" src="http://i302.photobucket.com/albums/nn96/quixadhal/text_zps49ecc982.png" border=0 width=84 height=79 alt="(TEXT)" />
                     </a></span>
                 </td>
                 <td>&nbsp;</td>
@@ -1309,9 +1139,6 @@ if($format == 'html') {
                 </td>
             </tr>
         </table>
-<? if($showSQL) { ?>
-        <span id="sql" style="color: #1F1F1F"><?echo $pageSql;?></span>
-<? } ?>
     </body>
     </head>
 </html>

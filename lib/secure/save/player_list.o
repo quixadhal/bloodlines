@@ -5,9 +5,9 @@ PendingDecres ({})
 PendingPauses ({})
 PendingUnpauses ({})
 players ({"blarghy","guest","xkcdabfddgf","xkcdbiahfbb","xkcdboajefndgm","xkcddjmddif","xkcddmdg","xkcdfcjgcfbac","xkcdgkaobj","xkcdiff","xkcdjbfffan","xkcdjfmkfci","xkcdjkf","xkcdkifkfandoj","xkcdlfeh","xkcdnfikhkbhj","xkcdojkna",})
-creators ({})
-user_list ({"xkcdjkf","xkcdkifkfandoj","blarghy","xkcdnfikhkbhj","xkcddmdg","xkcdlfeh","xkcdojkna","xkcdbiahfbb","xkcdfcjgcfbac","xkcdiff","quixadhal","guest","xkcdjfmkfci","xkcdboajefndgm","xkcdjbfffan","xkcddjmddif","xkcdgkaobj","xkcdabfddgf",})
-player_save_file "/secure/save/players/x/xkcdojkna.o"
+creators ({"quixadhal",})
+user_list ({"xkcdkifkfandoj","xkcdjkf","blarghy","xkcdnfikhkbhj","xkcddmdg","xkcdojkna","xkcdlfeh","xkcdbiahfbb","xkcdiff","xkcdfcjgcfbac","quixadhal","xkcdjfmkfci","guest","xkcdjbfffan","xkcdboajefndgm","xkcdgkaobj","xkcddjmddif","xkcdabfddgf",})
+player_save_file "/secure/save/creators/q/quixadhal.o"
 Short "$N the unaccomplished"
 CapName "Xkcdabfddgf"
 ExternalDesc "$N is nondescript."

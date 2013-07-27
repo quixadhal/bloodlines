@@ -21,6 +21,7 @@ use HTML::TableExtract;
 use MIME::Base64;
 use Image::ANSI;
 use Encode;
+use Parallel::ForkManager 0.7.6;
 
 if(scalar @ARGV != 1) {
     print "Usage:  $0 < build | verify >\n";
@@ -48,15 +49,25 @@ my $count = $dbc->selectrow_arrayref(qq!
    WHERE live
 
 !)->[0];
-my $last_verified = $dbc->selectrow_arrayref(qq!
+my $last_verified;
 
-  SELECT to_char(last_verified, 'HH:MI:SS am on FMDay, DD FMMonth, YYYY TZ') 
-    FROM mudlist
-   WHERE live
-ORDER BY last_verified DESC
-   LIMIT 1
+if( $count > 0 ) {
+    $last_verified = $dbc->selectrow_arrayref(qq!
 
-!)->[0];
+      SELECT to_char(last_verified, 'HH:MI:SS am on FMDay, DD FMMonth, YYYY TZ') 
+        FROM mudlist
+       WHERE live
+    ORDER BY last_verified DESC
+       LIMIT 1
+
+    !)->[0];
+} else {
+    $last_verified = $dbc->selectrow_arrayref(qq!
+
+      SELECT to_char(now() - interval '30 years', 'HH:MI:SS am on FMDay, DD FMMonth, YYYY TZ') 
+
+    !)->[0];
+}
 
 #print STDERR "There were $count MUDs listed at $last_verified\n";
 
@@ -137,15 +148,23 @@ sub do_verify_all {
         FROM mudlist
     !, $key_field);
 
+    my $pm = Parallel::ForkManager->new(20);
+
     foreach my $id (sort { $a <=> $b } keys %$big_list) {
+        $pm->start() and next;
         do_verify($big_list->{$id});
+        $pm->finish(0);
     }
+    $pm->wait_all_children;
 }
 
 sub do_verify {
     my $data = shift;
     return if !defined $data;
 
+    $dbc = undef;
+    sleep 0.5;
+    $dbc = DBI->connect("DBI:Pg:dbname=mudlist;host=localhost;port=5432;sslmode=prefer", "quixadhal", "tardis69", { AutoCommit => 0, PrintError => 0, });
     my $id = $data->{'mud_id'};
     my $name = $data->{'name'};
     my $site = $data->{'site'};
@@ -185,9 +204,13 @@ sub do_verify {
             print "   FAIL: $id\t$site\t$port offline\n";
         }
     }
+    $dbc = undef;
 }
 
+my @global_tmp;
+
 sub do_build {
+    $dbc = undef;
     my $timeout = 90;
     my $lwp = LWP::UserAgent->new();
        $lwp->timeout($timeout/2);
@@ -221,33 +244,137 @@ sub do_build {
         http://mudconnect.com/cgi-bin/mud_list.cgi?letter=z
     );
 
+    @url_list = qw(
+        http://mudconnect.com/cgi-bin/mud_list.cgi?letter=DIGIT
+    );
+
     my @result_set;
+
     foreach my $url (@url_list) {
-        print STDERR "Fetching $url\n";
+        print STDERR "\nFetching $url ...";
         my $page = get_url( $url );
+        print STDERR "done, processing ...";
         sleep (0.25 + rand() * 2.0);
         next if !defined $page;
 
         push @result_set, process_list_page($page);
+        print STDERR "done. (" . (scalar @result_set) . " results so far)";
     }
+    print STDERR "\n";
 
-    foreach my $result (@result_set) {
-        my $url = $result->{'url'};
-        print STDERR "Fetching details from $url\n";
-        my $page = get_url( $url );
+    # Now, we need to fork so this doesn't take so long...
+
+    my $pm = Parallel::ForkManager->new(20);
+
+    $pm->run_on_finish(
+        sub {
+            my ($pid, $exit_code, $ident, $exit_signal, $core_dump, $data_reference) = @_;
+            print STDERR "PID $pid, EXIT $exit_code, IDENT $ident, SIG $exit_signal, CORE $core_dump\n";
+            if( defined $data_reference ) {
+                my $result = ${ $data_reference };
+                push @global_tmp, $result;
+            } else {
+                print STDERR "NO DATA\n";
+            }
+        }
+    );
+
+    my $set_size = scalar @result_set;
+    for(my $i = 0; $i < $set_size; $i++) {
+        $pm->start($i) and next;
+
+        my $result = $result_set[$i];
+
+        $result->{'index'} = $i;
+
         sleep (0.25 + rand() * 2.0);
-        next if !defined $page;
-        process_result_page($result, $page);
-    }
+        my $page = get_url( $result->{'url'} );
+        process_result_page($result, $page) if defined $page;
+        process_login($result) if defined $result->{'site'} and defined $result->{'port'};
+        printf STDERR "Got details and login screen from %s (%03d to go)\n", $result->{'url'}, $set_size - $i;
 
-    my $counter = scalar @result_set;
-    foreach my $result (@result_set) {
-        print STDERR "$counter to go...\n";
-        process_login($result);
+        $pm->finish(0, \$result);
+    }
+    $pm->wait_all_children;
+
+    @result_set = @global_tmp;
+    @global_tmp = ();
+
+    my $url = "http://192.168.1.11:5001/cgi/mudlist.c";
+    print STDERR "\nFetching $url ...";
+    my $page = get_url( $url );
+    print STDERR "done, processing ...";
+    if(defined $page) {
+        my @mudlist_results = process_mudlist_page($page, \@result_set);
+        my $mudlist_set_size = scalar @mudlist_results;
+        for(my $i = 0; $i < $mudlist_set_size; $i++) {
+            $pm->start($i) and next;
+
+            my $result = $mudlist_results[$i];
+            $result->{'index'} = $i + $set_size;
+            process_login($result) if defined $result->{'site'} and defined $result->{'port'};
+            printf STDERR "Got login screen from %s (%03d to go)\n", $result->{'url'}, $mudlist_set_size - $i;
+
+            $pm->finish(0, \$result);
+        }
+        $pm->wait_all_children;
+
+        push @result_set, @global_tmp;
+        @global_tmp = ();
     }
 
     sql_update(@result_set);
-    #print Dumper(@result_set);
+    #print "\nFINAL:\n" . Dumper(\@result_set);
+}
+
+sub process_mudlist_page {
+    my $page = shift;
+    my $result_set = shift;
+    my @results;
+
+    return undef if !defined $page;
+    my @rows = grep /<tr\s+class\=\"entry\"/, (split /\n/, $page);
+    print STDERR "Got " . (scalar @rows) . " rows...\n";
+    foreach my $row (@rows) {
+        $row =~ s/^<tr\s*[^>]*?><td\s*[^>]*?>//;
+        $row =~ s/<\/td><\/tr>$//;
+        $row =~ s/\&nbsp;/ /gmix;
+        my @cols = split /<\/td><td\s*[^>]*?>/, $row;
+        $cols[0] =~ s/[\x00-\x1F\x7F-\xFF]//gmix;
+        $cols[5] = 0 + $cols[5];
+        next if length $cols[0] < 1;
+        my %data = (
+            'site'      => $cols[4],
+            'port'      => $cols[5],
+            'ipaddr'    => $cols[4],
+            'url'       => "http://" . $cols[4] . "/",
+            'name'      => $cols[0],
+            'type'      => $cols[1],
+            'detail'    => $cols[3],
+            'updated'   => strftime("%B %e, %Y", localtime(time)),
+        );
+
+        push @results, \%data if !(grep {$_->{'name'} eq $cols[0]} @$result_set);
+    }
+
+    print STDERR "Got " . (scalar @results) . " results...\n";
+    #print STDERR "\nMUDLIST:\n" . Dumper(\@results);
+    return @results;
+}
+
+sub process_result_page {
+    my $result = shift;
+    my $page = shift;
+
+    return if !defined $page;
+    $page =~ /site:\s+(.*?)\s+(\d+)\s+\[((?:\d+\.\d+\.\d+\.\d+)|(?:[\w\.?]+))\]\s*<br\s*\/>/gsmix;
+    my ($site, $port, $ipaddr) = ($1, $2, $3);
+    #print "$site $port $ipaddr\n";
+    return if !defined $site;
+    return if !defined $port;
+    $result->{'site'} = $site;
+    $result->{'port'} = $port;
+    $result->{'ipaddr'} = $ipaddr if defined $ipaddr;
 }
 
 sub process_login {
@@ -259,7 +386,7 @@ sub process_login {
     my $mud = $result->{'name'};
     my $site = $result->{'site'};
     my $port = $result->{'port'};
-    print STDERR "Trying $mud $site $port\n";
+    #print STDERR "Trying $mud $site $port\n";
     my ($connect, $screen, $html, $png) = fetch_login_screen($site, $port);
     if( $connect and defined $screen) {
         my $b64ansi = $screen ? encode_base64($screen) : encode_base64('');
@@ -281,6 +408,9 @@ sub process_login {
 sub sql_update {
     my @result_set = @_;
 
+    $dbc = undef;
+    sleep 0.5;
+    $dbc = DBI->connect("DBI:Pg:dbname=mudlist;host=localhost;port=5432;sslmode=prefer", "quixadhal", "tardis69", { AutoCommit => 0, PrintError => 0, });
     my $sth = $dbc->prepare( qq!
         INSERT INTO mudlist (name, site, port, ansi_login, html_login, png_login, live, codebase)
         VALUES (?,?,?,?,?,?,?,?)
@@ -350,21 +480,6 @@ sub sql_update {
     }
 }
 
-sub process_result_page {
-    my $result = shift;
-    my $page = shift;
-
-    return if !defined $page;
-    $page =~ /site:\s+(.*?)\s+(\d+)\s+\[((?:\d+\.\d+\.\d+\.\d+)|(?:[\w\.?]+))\]\s*<br\s*\/>/gsmix;
-    my ($site, $port, $ipaddr) = ($1, $2, $3);
-    #print "$site $port $ipaddr\n";
-    return if !defined $site;
-    return if !defined $port;
-    $result->{'site'} = $site;
-    $result->{'port'} = $port;
-    $result->{'ipaddr'} = $ipaddr if defined $ipaddr;
-}
-
 sub process_list_page {
     my $page = shift;
     my @results;
@@ -380,19 +495,30 @@ sub process_list_page {
     #<li><a href="/mud-bin/adv_search.cgi?Mode=MUD&mud=8bitMUSH">8bitMUSH</a> [[MUSH] TinyBit (PennMUSH Derived)] <font size=-1>(April 5, 2011)</font></font>
     #</ol></td></tr></table></center>
 
+
+    #<li><a href="/mud-bin/adv_search.cgi?Mode=MUD&mud=Aliens+vs.+Predator">Aliens vs. Predator</a> [[Circlemud] LexiMUD] <font size=-1>(August 8, 2009)</font></font>
+    #<li><a href="/mud-bin/adv_search.cgi?Mode=MUD&mud=Almaren">Almaren</a> [Diku/HnS 1.0] <font size=-1>(October 8, 1998)</font></font>
+    #<li><a href="/mud-bin/adv_search.cgi?Mode=MUD&mud=Alter+Aeon">Alter Aeon</a> [[Custom] DentinMud 2.20] <font size=-1>(April 20, 2012)</font></font>
+
+
     return undef if !defined $page;
     my $url_base = 'http://mudconnect.com';
     $page =~ /<table\s+width=90%>\s*<tr><td\s+align=left>\s*<ol>\s*(.*?)\s*<\/ol>\s*<\/td>\s*<\/tr>\s*<\/table>/gsmix;
     my ($list) = ($1);
-    next if !defined $list;
-    while( $list =~ /\G<li>\s*<a\s+href="(.*?)">\s*(.*?)<\/a>\s*\[\[(\w+)\](.*?)\]\s*<font\s+size=-1>\s*(.*?)\s*<\/font>(?:\s*<\/font>)?\s*/cgsmix )
+    return @results if !defined $list;
+    while( $list =~ /\G<li>\s*<a\s+href="(.*?)">\s*(.*?)<\/a>\s*\[(?:\[(\w+)\]\s*)?(.*?)\]\s*<font\s+size=-1>\s*\(?(.*?)\)?\s*<\/font>(?:\s*<\/font>)?\s*/cgsmix )
     {
         my ($mud_url, $mud_name, $mud_type, $mud_detail, $last_updated) = ($1, $2, $3, $4, $5);
         next if !defined $mud_url;
         next if !defined $mud_name;
+        #next if !defined $mud_type;
+        #next if !defined $mud_detail;
+        next if !defined $last_updated;
+
+        $mud_type = "Custom" if defined $mud_detail and !defined $mud_type;
         next if !defined $mud_type;
         next if !defined $mud_detail;
-        next if !defined $last_updated;
+
         my %data = (
             'url'       => $url_base . $mud_url,
             'name'      => $mud_name,
@@ -401,6 +527,7 @@ sub process_list_page {
             'updated'   => $last_updated,
         );
         push @results, \%data;
+        #print STDERR "Found $mud_name\t$mud_type\t$mud_detail\t$last_updated\n";
     }
     return @results;
 }

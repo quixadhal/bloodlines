@@ -6,6 +6,8 @@ use Data::Dumper;
 
 use Time::HiRes qw(sleep time alarm);
 use Date::Parse;
+use POSIX qw(strftime);
+use Lingua::EN::Numbers::Ordinate;
 use HTML::Entities;
 use DBI;
 
@@ -120,6 +122,20 @@ my $quote = get_quote();
 my $quote_name = $quote->{'speaker'} . '@' . $quote->{'mud'};
 my $quote_text = $quote->{'message'};
 $quote_name =~ s/\s+/&nbsp;/gmix;
+my $now_time = time();
+my $hour_num = 0 + POSIX::strftime("%l", localtime($now_time));
+my $min_num = 0 + POSIX::strftime("%M", localtime($now_time));
+my $month_num = 0 + POSIX::strftime("%e", localtime($now_time));
+$hour_num++ if $min_num > 40;
+
+my $part = "$hour_num o'clock";
+$part = "quarter past $hour_num" if $min_num > 10;
+$part = "half past $hour_num" if $min_num > 25;
+$part = "quarter to $hour_num" if $min_num > 40;
+$part = "$hour_num o'clock" if $min_num > 55;
+my $month_part = ordinate($month_num);
+
+my $current_time = POSIX::strftime("It was recently $part, on %A, the $month_part of %B, %Y.", localtime($now_time));
 
 my $page = <<EOM
 <html>
@@ -145,6 +161,11 @@ my $page = <<EOM
   <!-- <body background="http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040"> -->
   <body>
     <table id="piecharts" border=0 cellspacing=0 cellpadding=0 width=80% align="center">
+      <tr>
+        <td align="center" valign="bottom" colspan="2">
+          <h3>$current_time</h3>
+        </td>
+      </tr>
       <tr>
         <td align="center" valign="top">
           <div id="drawDaily_div"></div>

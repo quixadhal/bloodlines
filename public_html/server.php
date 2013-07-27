@@ -44,7 +44,8 @@
     $isLocal = is_local_ip();
 
     $graphics = array();
-    $graphics['server_case'] = $isLocal ? "gfx/server_case.jpg" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/server_case_zpsdcdc0b79.jpg";
+    $graphics['server_case'] = $isLocal ? "gfx/server_case.jpg" : "https://lh6.googleusercontent.com/-w6XwIBerDjw/UdooiSE-NUI/AAAAAAAAAPI/wGjTt7QiEmA/s800/server_case.jpg";
+    //$graphics['server_case'] = $isLocal ? "gfx/server_case.jpg" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/server_case_zpsdcdc0b79.jpg";
 ?>
 
 <html>

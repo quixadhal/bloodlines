@@ -26,4 +26,4 @@
 #include <message_class.h>
 inherit LIB_ITEM;
 #include "/realms/quixadhal/evaldefs.h"
-mixed eval() { return CHAT_D->showSpeakerColors();; }
+mixed eval() { return "/www/cgi/mudlist"->gateway();; }

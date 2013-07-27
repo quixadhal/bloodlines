@@ -78,20 +78,47 @@ function is_local_ip() {
 $isLocal = is_local_ip();
 
 $graphics = array();
-$graphics['background'] = $isLocal ? "gfx/dark_wood.jpg" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg";
-$graphics['bloodlines'] = $isLocal ? "gfx/bloodlines.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png";
-$graphics['wileymud4'] = $isLocal ? "gfx/wileymud4.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/wileymud4.png";
-$graphics['otglogo'] = $isLocal ? "gfx/otg_logo_glow.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/otg_logo_glow.png";
-$graphics['mudlist'] = $isLocal ? "gfx/mudlist_button.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/mudlist_button.png";
-$graphics['smaug'] = $isLocal ? "gfx/smaugmuds_button.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/smaugmuds_button.png";
-$graphics['lpmuds'] = $isLocal ? "gfx/lpmuds.net_button.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/lpmudsnet_button.png";
-$graphics['mudbytes'] = $isLocal ? "gfx/mudbytes_button.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/mudbytes_button.png";
-$graphics['intermud'] = $isLocal ? "gfx/intermud_logs.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/intermud_logs.png";
-$graphics['radar'] = $isLocal ? "gfx/radar.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/radar_zpsafd5e16d.png";
-$graphics['gitlogo'] = $isLocal ? "gfx/git-logo.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/git-logo_zps6a5af960.png";
-$graphics['tomato'] = $isLocal ? "gfx/tomato.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/tomato_zps8edf3fbb.png";
-$graphics['paypal'] = $isLocal ? "gfx/paypal.gif" : "https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif";
-$graphics['server_icon'] = $isLocal ? "gfx/server_icon.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/server_icon_zps624a919d.png";
+$graphics['background']         = $isLocal ? "gfx/dark_wood.jpg"            : "https://lh5.googleusercontent.com/-zvnNrcuqbco/UdooZZelxoI/AAAAAAAAALA/9u5S92UySEA/s800/dark_wood.jpg";
+$graphics['bloodlines']         = $isLocal ? "gfx/bloodlines.png"           : "https://lh4.googleusercontent.com/-fWWe4X6fzVE/UdooZQ98rGI/AAAAAAAAAK4/vjYmeQdoaXc/s800/bloodlines.png";
+$graphics['wileymud4']          = $isLocal ? "gfx/wileymud4.png"            : "https://lh6.googleusercontent.com/-DdOSH9sMalA/UdoolEmvWMI/AAAAAAAAAP8/_wWNhacagcg/s800/wileymud4.png";
+$graphics['otglogo']            = $isLocal ? "gfx/otg_logo_glow.png"        : "https://lh5.googleusercontent.com/-6XTGnh8-yEU/UdoogvR0EqI/AAAAAAAAAOE/krXrEnYb-EY/s800/otg_logo_glow.png";
+$graphics['mudlist']            = $isLocal ? "gfx/mudlist_button.png"       : "https://lh4.googleusercontent.com/-iJt4sdOyHKE/UdooeCf9GzI/AAAAAAAAAM8/y83bOycnEIE/s800/mudlist_button.png";
+$graphics['smaug']              = $isLocal ? "gfx/smaugmuds_button.png"     : "https://lh3.googleusercontent.com/-X29sVSVjcUI/UdoojKA8B2I/AAAAAAAAAPU/KX-7CEDpbDw/s800/smaugmuds_button.png";
+$graphics['lpmuds']             = $isLocal ? "gfx/lpmuds.net_button.png"    : "https://lh3.googleusercontent.com/-HUETUFaG9ts/UdoocwL9L7I/AAAAAAAAAMc/fk1M3uCAg3Q/s800/lpmuds.net_button.png";
+$graphics['mudbytes']           = $isLocal ? "gfx/mudbytes_button.png"      : "https://lh4.googleusercontent.com/-lyGchDxLrpo/Udoodo_vk2I/AAAAAAAAAM4/BpLpXEqLp1A/s800/mudbytes_button.png";
+$graphics['intermud']           = $isLocal ? "gfx/intermud_logs.png"        : "https://lh3.googleusercontent.com/-SqlTafszKbk/Udoobvh-9WI/AAAAAAAAAL4/syQZMXn6lTs/s800/intermud_logs.png";
+$graphics['radar']              = $isLocal ? "gfx/radar.png"                : "https://lh5.googleusercontent.com/-ilEzbVZUqYA/UdoohkfM4vI/AAAAAAAAAOo/Mh1_e-lT1kA/s96/radar.png";
+$graphics['minecraft_icon']     = $isLocal ? "gfx/minecraft_icon.png"       : "https://lh4.googleusercontent.com/-uchsisM_vEU/UdoocweO5ZI/AAAAAAAAAMo/XfjYgO0DUjc/s96/minecraft_icon.png";
+$graphics['minecraft_map_icon'] = $isLocal ? "gfx/minecraft_map_icon.png"   : "https://lh5.googleusercontent.com/-tE6-3NFzLrc/Udoods2AgYI/AAAAAAAAAMs/jx2ju7YMnQ0/s96/minecraft_map_icon.png";
+$graphics['gitlogo']            = $isLocal ? "gfx/git-logo.png"             : "https://lh5.googleusercontent.com/-p1ATsbhYRs8/Udooa9r72ZI/AAAAAAAAALk/1N3ARu3-n10/s800/git-logo.png";
+$graphics['picasa_web']         = $isLocal ? "gfx/picasa.png"               : "https://lh5.googleusercontent.com/-l_iPTf069TY/UdtZBzPahxI/AAAAAAAAAYk/yDqDQ5HoIKc/s96/picasa.png";
+$graphics['tomato']             = $isLocal ? "gfx/tomato.png"               : "https://lh6.googleusercontent.com/-9jxhHmu9jS0/Udooj0h4OXI/AAAAAAAAAPo/-EieTRD4RmQ/s96/tomato.png";
+$graphics['server_icon']        = $isLocal ? "gfx/server_icon.png"          : "https://lh4.googleusercontent.com/-LZ9ek46iToA/UdoojFEhuOI/AAAAAAAAAPQ/y_rRyL_1tR8/s96/server_icon.png";
+$graphics['paypal']             = $isLocal ? "gfx/paypal.gif"               : "https://lh4.googleusercontent.com/-W88wG7HNrZM/UdoohGflgVI/AAAAAAAAAOY/MODtORBmSe0/s800/paypal.gif";
+
+
+// Thumbnail    https://lh5.googleusercontent.com/-zvnNrcuqbco/UdooZZelxoI/AAAAAAAAALA/9u5S92UySEA/s144/dark_wood.jpg
+// Small        https://lh5.googleusercontent.com/-zvnNrcuqbco/UdooZZelxoI/AAAAAAAAALA/9u5S92UySEA/s288/dark_wood.jpg
+// Medium       https://lh5.googleusercontent.com/-zvnNrcuqbco/UdooZZelxoI/AAAAAAAAALA/9u5S92UySEA/s400/dark_wood.jpg
+// Medium-Large https://lh5.googleusercontent.com/-zvnNrcuqbco/UdooZZelxoI/AAAAAAAAALA/9u5S92UySEA/s640/dark_wood.jpg
+// Large        https://lh5.googleusercontent.com/-zvnNrcuqbco/UdooZZelxoI/AAAAAAAAALA/9u5S92UySEA/s800/dark_wood.jpg
+//
+//$graphics['background'] = $isLocal ? "gfx/dark_wood.jpg" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg";
+//$graphics['bloodlines'] = $isLocal ? "gfx/bloodlines.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png";
+//$graphics['wileymud4'] = $isLocal ? "gfx/wileymud4.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/wileymud4.png";
+//$graphics['otglogo'] = $isLocal ? "gfx/otg_logo_glow.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/otg_logo_glow.png";
+//$graphics['mudlist'] = $isLocal ? "gfx/mudlist_button.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/mudlist_button.png";
+//$graphics['smaug'] = $isLocal ? "gfx/smaugmuds_button.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/smaugmuds_button.png";
+//$graphics['lpmuds'] = $isLocal ? "gfx/lpmuds.net_button.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/lpmudsnet_button.png";
+//$graphics['mudbytes'] = $isLocal ? "gfx/mudbytes_button.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/mudbytes_button.png";
+//$graphics['intermud'] = $isLocal ? "gfx/intermud_logs.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/intermud_logs.png";
+//$graphics['radar'] = $isLocal ? "gfx/radar.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/radar_zpsafd5e16d.png";
+//$graphics['gitlogo'] = $isLocal ? "gfx/git-logo.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/git-logo_zps6a5af960.png";
+//$graphics['tomato'] = $isLocal ? "gfx/tomato.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/tomato_zps8edf3fbb.png";
+//$graphics['paypal'] = $isLocal ? "gfx/paypal.gif" : "https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif";
+//$graphics['server_icon'] = $isLocal ? "gfx/server_icon.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/server_icon_zps624a919d.png";
+//$graphics['minecraft_icon'] = $isLocal ? "gfx/minecraft_icon.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/minecraft_icon_zpscb80773b.png";
+//$graphics['minecraft_map_icon'] = $isLocal ? "gfx/minecraft_map_icon.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/minecraft_map_icon_zpsb912c3a3.png";
 
 ?>
 <html>
@@ -363,7 +390,7 @@ $graphics['server_icon'] = $isLocal ? "gfx/server_icon.png" : "http://i302.photo
         </table>
         <table border=0 cellspacing=0 cellpadding=0 width=100% align="center">
             <tr>
-                <td align="center" colspan="3">
+                <td align="center" colspan="7" height="48" valign="top">
                     <span style="color: #FFFF00">
                         <?php echo "An astral traveller shouts, '" . $stuff[rand(0,sizeof($stuff)-1)] . "'"; ?>
                     </span>
@@ -391,11 +418,11 @@ $graphics['server_icon'] = $isLocal ? "gfx/server_icon.png" : "http://i302.photo
             </tr>
 -->
             <tr>
-                <td align="center" valign="center" width="33%">
+                <td align="center" valign="center" width="12%">
                     <!-- <span style="display: block !important; width: 120px; text-align: center; font-family: sans-serif; font-size: 12px;"> -->
                         <a  href="http://www.wunderground.com/radar/radblast.asp?zoommode=pan&prevzoom=zoom&num=1&frame=0&delay=15&scale=1.000&noclutter=0&ID=GRR&type=N0R&showstorms=10&lat=42.29166794&lon=-85.58721924&label=Kalamazoo,%20MI&map.x=400&map.y=240&scale=1.000&centerx=400&centery=240&showlabels=1">
                             <img    src="<? echo $graphics['radar']; ?>"
-                                    height="64" width="64" border="0"
+                                    height="96" width="96" border="0"
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                              onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
@@ -403,17 +430,47 @@ $graphics['server_icon'] = $isLocal ? "gfx/server_icon.png" : "http://i302.photo
                         </a>
                     <!-- </span> -->
                 </td>
-                <td align="center" valign="center">
+                <td align="center" valign="bottom" width="12%">
+                        <span style="color: #1F1F1F"><a href="/~minecraft/phpBB3/index.php" title="Minecraft!">
+                            <img src="<? echo $graphics['minecraft_icon']; ?>" 
+                                 border="0" width="96" height="96" alt="(minecraft)"
+                                 style="opacity: 0.4; filter: alpha(opacity=40);"
+                                 onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                                 onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                             />
+                        </a></span>
+                </td>
+                <td align="center" valign="bottom" width="12%">
+                        <span style="color: #1F1F1F"><a href="/~minecraft/map.html" title="Dynmap">
+                            <img src="<? echo $graphics['minecraft_map_icon']; ?>" 
+                                 border="0" width="96" height="96" alt="(dynmap)"
+                                 style="opacity: 0.4; filter: alpha(opacity=40);"
+                                 onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                                 onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                             />
+                        </a></span>
+                </td>
+                <td align="center" valign="bottom">
                     <a href="https://github.com/quixadhal">
                         <img src="<? echo $graphics['gitlogo']; ?>" title="My GitHub repositories"
                              border="0" align="center" width="72" height="27"
-                             style="opacity: 0.6; filter: alpha(opacity=60);"
+                             style="opacity: 0.6; filter: alpha(opacity=60); padding-bottom: 20;"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                              onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
                         />
                     </a>
                 </td>
-                <td align="center" valign="center" width="33%">
+                <td align="center" valign="bottom" width="12%">
+                        <span style="color: #1F1F1F"><a href="https://picasaweb.google.com/home" title="Pictures">
+                            <img src="<? echo $graphics['picasa_web']; ?>" 
+                                 border="0" width="96" height="96" alt="(dynmap)"
+                                 style="opacity: 0.4; filter: alpha(opacity=40);"
+                                 onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                                 onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                             />
+                        </a></span>
+                </td>
+                <td align="center" valign="bottom" width="12%">
                     <!-- <span style="display: block !important; width: 120px; text-align: center; font-family: sans-serif; font-size: 12px;"> -->
                         <?php
                         //$visitor_ip = $_SERVER['REMOTE_ADDR'];
@@ -422,12 +479,12 @@ $graphics['server_icon'] = $isLocal ? "gfx/server_icon.png" : "http://i302.photo
                         //$local_net = inet_pton('192.168.1.0') & 0xFFFFFF00;
                         //if($visitor_net == $local_net)
                         //if($varr[0] == "192" && $varr[1] == "168")
-                        if(is_local_ip())
+                        if($isLocal)
                         {
                         ?>
                         <a href="http://192.168.1.1/">
                             <img src="<? echo $graphics['tomato']; ?>" title="Router Page"
-                                 border="0" align="center" width="64" height="64"
+                                 border="0" align="center" width="96" height="96"
                                  style="opacity: 0.6; filter: alpha(opacity=60);"
                                  onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                                  onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
@@ -436,16 +493,18 @@ $graphics['server_icon'] = $isLocal ? "gfx/server_icon.png" : "http://i302.photo
                         <?php } else { ?>
                         <a href="http://www.shadowandy.net/2012/03/asus-rt-n66u-tomatousb-firmware-flashing-guide.htm">
                             <img src="<? echo $graphics['tomato']; ?>" title="Tomato Firmware"
-                                 border="0" align="center" width="64" height="64"
+                                 border="0" align="center" width="96" height="96"
                                  style="opacity: 0.6; filter: alpha(opacity=60);"
                                  onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                                  onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
                             />
                         </a>
                         <?php } ?>
+                </td>
+                <td align="center" valign="bottom" width="12%">
                         <span style="color: #1F1F1F"><a href="/~bloodlines/server.php" title="Server Stats">
                             <img src="<? echo $graphics['server_icon']; ?>" 
-                                 border="0" width="78" height="78" alt="(server)"
+                                 border="0" width="96" height="96" alt="(server)"
                                  style="opacity: 0.4; filter: alpha(opacity=40);"
                                  onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                                  onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
@@ -455,7 +514,7 @@ $graphics['server_icon'] = $isLocal ? "gfx/server_icon.png" : "http://i302.photo
                 </td>
             </tr>
             <tr>
-                <td align="left"> &nbsp; </td>
+                <td align="left" colspan="3"> &nbsp; </td>
                 <td align="center">
                     <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
                     <input type="hidden" name="cmd" value="_s-xclick">
@@ -475,7 +534,7 @@ $graphics['server_icon'] = $isLocal ? "gfx/server_icon.png" : "http://i302.photo
                 $time_end = microtime(true);
                 $time_spent = $time_end - $time_start;
                 ?>
-                <td align="right"><span style="color: #333333">&nbsp;Page generated in <? printf( "%8.4f", $time_spent); ?> seconds.</span></td>
+                <td align="right" colspan="3"><span style="color: #333333">&nbsp;Page generated in <? printf( "%8.4f", $time_spent); ?> seconds.</span></td>
             </tr>
        </table>
     </body>
