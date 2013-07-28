@@ -341,6 +341,7 @@ sub process_mudlist_page {
         $row =~ s/\&nbsp;/ /gmix;
         my @cols = split /<\/td><td\s*[^>]*?>/, $row;
         $cols[0] =~ s/[\x00-\x1F\x7F-\xFF]//gmix;
+        $cols[4] =~ s/<\/?a[^>]*?>//gmix;
         $cols[5] = 0 + $cols[5];
         next if length $cols[0] < 1;
         my %data = (

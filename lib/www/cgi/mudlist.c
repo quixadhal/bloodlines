@@ -4,6 +4,15 @@
 
 inherit LIB_DAEMON;
 
+int cmp(string a, string b) {
+    if(lower_case(a) < lower_case(b))
+        return -1;
+    else if(lower_case(a) > lower_case(b))
+        return 1;
+    else
+        return 0;
+}
+
 varargs string gateway(int strip_html) {
     string output = "";
     mapping mudlist = ([]);
@@ -21,7 +30,9 @@ varargs string gateway(int strip_html) {
         }
     }
 
-    keylist = sort_array(keys(mudlist), 1);
+    //keylist = sort_array(keys(mudlist), 1);
+    //keylist = sort_array(keys(mudlist), (: return lower_case($1) < lower_case($2) ? -1 : ( lower_case($1) > lower_case($2) ? 1 : 0 ); :) );
+    keylist = sort_array(keys(mudlist), "cmp", this_object());
 
     for(i = 0; i < sizeof(keylist); i++) {
         mud = keylist[i];
@@ -38,7 +49,7 @@ varargs string gateway(int strip_html) {
                     bg[bgcolor], replace_string(info[8], " ", "&nbsp;"),
                     bg[bgcolor], replace_string(info[7], " ", "&nbsp;"),
                     bg[bgcolor], replace_string(info[5], " ", "&nbsp;"),
-                    bg[bgcolor], info[1],
+                    bg[bgcolor], "<a href=\"telnet://" + info[1] + ":" + info[2] + "/\"> " + info[1] + " </a>",
                     bg[bgcolor], info[2]) });
     }
     output  = "<div align=\"center\"><table width=\"90%\" border=\"1\" cellspacing=\"0\" padding=\"0\">\n";
