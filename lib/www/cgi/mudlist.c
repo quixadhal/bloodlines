@@ -45,7 +45,7 @@ varargs string gateway(int strip_html) {
                     "<td bgcolor=\"%s\">%s</td>" +
                     "<td bgcolor=\"%s\">%s</td>" +
                     "<td align=\"right\" bgcolor=\"%s\">%d</td>",
-                    bg[bgcolor], replace_string(strip_colors(mud), " ", "&nbsp;"),
+                    bg[bgcolor], "<a href=\"http://" + info[1] + "/\"> " + replace_string(strip_colors(mud), " ", "&nbsp;") + " </a>",
                     bg[bgcolor], replace_string(info[8], " ", "&nbsp;"),
                     bg[bgcolor], replace_string(info[7], " ", "&nbsp;"),
                     bg[bgcolor], replace_string(info[5], " ", "&nbsp;"),
