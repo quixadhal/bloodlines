@@ -44,13 +44,13 @@ varargs string gateway(int strip_html) {
                     "<td bgcolor=\"%s\">%s</td>" +
                     "<td bgcolor=\"%s\">%s</td>" +
                     "<td bgcolor=\"%s\">%s</td>" +
-                    "<td align=\"right\" bgcolor=\"%s\">%d</td>",
-                    bg[bgcolor], "<a href=\"http://" + info[1] + "/\"> " + replace_string(strip_colors(mud), " ", "&nbsp;") + " </a>",
+                    "<td align=\"right\" bgcolor=\"%s\">%s</td>",
+                    bg[bgcolor], "<a href=\"http://www.awasteoftime.net/~bloodlines/i3log.php?mf=" + strip_colors(mud) + "\"> " + replace_string(strip_colors(mud), " ", "&nbsp;") + " </a>",
                     bg[bgcolor], replace_string(info[8], " ", "&nbsp;"),
                     bg[bgcolor], replace_string(info[7], " ", "&nbsp;"),
                     bg[bgcolor], replace_string(info[5], " ", "&nbsp;"),
-                    bg[bgcolor], "<a href=\"telnet://" + info[1] + ":" + info[2] + "/\"> " + info[1] + " </a>",
-                    bg[bgcolor], info[2]) });
+                    bg[bgcolor], "<a href=\"http://" + info[1] + "/\"> " + info[1] + " </a>",
+                    bg[bgcolor], "<a href=\"telnet://" + info[1] + ":" + info[2] + "/\"> " + info[2] + " </a>") });
     }
     output  = "<div align=\"center\"><table width=\"90%\" border=\"1\" cellspacing=\"0\" padding=\"0\">\n";
     output += "<tr class=\"header\"><td align=\"center\" colspan=\"6\">" + mud_name() + " recognizes " + consolidate(sizeof(mudlist), "a mud")+ ":</td></tr>\n";

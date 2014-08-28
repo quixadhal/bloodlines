@@ -1,0 +1,5 @@
+davion (Fri Jun 27 22:20:54 2014): eval write(CHAT_D->showSpeakerColors());
+davion (Sat Jun 28 03:47:23 2014): eval destruct(this_player())
+polatrite (Fri Aug  8 20:53:48 2014): eval 0
+polatrite (Fri Aug  8 20:53:59 2014): eval write(CHAT_D->showSpeakerColors())
+polatrite (Fri Aug  8 20:54:18 2014): eval write(CHAT_D->showSpeakerColors("Polatrite"))

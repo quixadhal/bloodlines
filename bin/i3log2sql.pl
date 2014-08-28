@@ -18,7 +18,7 @@ my $CHATTER = '/home/bloodlines/lib/secure/save/chat.o';
 my $LOGDIR = '/home/bloodlines/lib/log/chan';
 my $LOCAL_MUD = 'Bloodlines';
 my $network = 'i3';
-my $dbc = DBI->connect('DBI:Pg:dbname=i3logs;host=localhost;port=5432;sslmode=prefer', 'bloodlines', 'tardis69', { AutoCommit => 0, PrintError => 0, });
+my $dbc = DBI->connect('DBI:Pg:dbname=i3log2;host=localhost;port=5432;sslmode=prefer', 'bloodlines', 'tardis69', { AutoCommit => 0, PrintError => 0, });
 my $BE_A_TWIT = 0;
 
 =head1 SQL

@@ -1,0 +1,129 @@
+#/secure/save/creators/d/davion.c
+InternalDesc 0
+Opacity 0
+PersistentInventory 0
+PersistentInventoryEnabled 0
+ProperNoun 1
+Modify 1
+Short "$N the unaccomplished"
+CapName "Davion"
+ExternalDesc "$N is nondescript."
+Invisible 0
+Items ([])
+Properties (["wizmapping":1,"minimapping":0,"reprompt":0,"brand_spanking_new":0,"ReturnSite":"/realms/davion/workroom","LastLocation":"/domains/default/room/start",])
+Inventory ({"([\"Wielded\":0,\"Value\":0,\"Class\":1,\"Worn\":0,\"Deterioration\":0,\"Broken\":0,\"Poison\":0,\"Mass\":20,\"#base_name#\":\"/domains/default/obj/manual\",\"Cost\":1000,\"Properties\":([\"no steal\":1,]),])","([\"Wielded\":0,\"Value\":0,\"Class\":100,\"Worn\":0,\"Deterioration\":0,\"Broken\":0,\"Poison\":0,\"Mass\":100,\"#base_name#\":\"/secure/obj/staff\",\"Cost\":0,\"Properties\":([\"no steal\":1,]),])","([\"Value\":0,\"Mass\":50,\"Worn\":({\"head\",}),\"#base_name#\":\"/domains/default/armor/wizard_hat\",\"Deterioration\":0,\"Broken\":0,\"Cost\":50000,\"Properties\":([\"beta\":2,]),\"Poison\":0,])","([\"Value\":0,\"Keys\":({}),\"Worn\":({\"torso\",}),\"Broken\":0,\"Deterioration\":0,\"Poison\":0,\"LockStrength\":0,\"Persist\":1,\"Mass\":200,\"Locked\":0,\"#base_name#\":\"/domains/default/armor/robe\",\"Cost\":10000,\"Properties\":([\"gamma\":3,\"no steal\":1,]),\"#inventory#\":({}),])","([\"Wielded\":0,\"Value\":0,\"Class\":1,\"Worn\":0,\"Deterioration\":0,\"Broken\":0,\"Poison\":0,\"Mass\":3,\"#base_name#\":\"/domains/default/obj/handbook\",\"Cost\":1000,\"Properties\":([\"no steal\":1,]),])",})
+anchored 0
+Messages (["telin":"$N teleports in.","leave":"$N leaves $D.","telout":"$N teleports away.","vis":"$N appears.","home":"$N goes home.","invis":"$N disappears.","come":"$N enters.","dest":"$N dests $O.","clone":"$N clones $O.",])
+RestrictedChannels ({})
+NoChanColors 0
+GagMutes (["remote_mute":0,"remote_gag":0,"local_mute":0,"local_gag":0,])
+Paused 0
+localcmds ({"priv","privacy","parserefresh","quit","work","pwd","cwd","popd","pushd","nmsh","cd","nickname","unalias","alias","",})
+parsed_command ""
+HistorySize 50
+History ([50:"who",49:"socket",48:"boards",47:"uptime",46:"people",45:"source /realms/davion/.profile",44:"pyom *facepalm*",43:"pyom lmao you need git installed before pycharm can use git",42:"pyom can't seem to get it to start one with a raw git clone :(",41:"pyom Guh. I can't get the bitbucket plugin to start a new project with one of my repos.... seems to login and everything then doesn't load anything",40:"pyom Not had much time to look exactly at what's going on tho as a whole picture. I've been running off what I see in the commits",39:"pyom We could even change the global container to like contains_id or something so it's more specific about what it contains.",38:"pyom Because I've been kinda thinking about one of the issues raised. I've been thinking we have our container list which can contain any \"instance\". It stores id's. Then we use properties like @people to access specific types of that list. The list would be the actual objects sorted by id value.",37:"pyom Are we looking at this for consistant ordering?",36:"pyom It's amazing what trees do",35:"pyom Ya",34:"pyom OrderedDict will be a linear list",33:"pyom Ok that's expected",32:"pyom Ohhh",31:"pyom Mmmm. Pycharm :D",30:"pyom I get the sense he really knows ROM",29:"pyom Ya, with the ground floor being stablized by you guys and polorite has been touching up the game so much it's crazy",28:"pyom The work you've put out is pretty awesome",27:"pyom I assume 3 days means something along those lines",26:"pyom he's the type that'll not sleep for a few days working on things",25:"pyom I have a feeling his life and the way he sees things.",24:"pyom are*",23:"pyom  A friend of mine who's a pro python dev keeps messaging me cursing my name for creating it :). Last message was \"it's been 3 days now... things a blurry\"",22:"pyom I've been going over the commits and they are awesome! So many things I missed have been cleaned up",21:"pyom pyom?",20:"pyom DCUO is downloading (20gb) so when thats done I can test it",19:"pyom So far. I ran all haeven for like an hour and furymark actually did a burntest so things are looking up",18:"pyom And as long as that RMA is within 30 days I can return this Mobo",17:"pyom Wound up just buying another mobo while waiting for the RMA",16:"pyom i'm on a pc that is my own",15:"pyom oh baby",14:"pyom thats awesome",13:"pyom mobo being rma'd",12:"pyom hazzah. Found an old mac",11:"pyom I'm currently on a small small... i can't even call this a laptop. it's a kneetop.",10:"pyom Or at least, there's no way I want to do it lol",9:"pyom Ya, but being pc'less i can't repair the conflict ;)",8:"pyom header comment*",7:"pyome header comment*",6:"pyom Just the header file for bit.py",5:"pyom I merged quix's first, and it had bit mods",4:"pyom and damn i need a pc, the amount of work I have when I get it back... :(",3:"pyom I broke your pull",2:"pyom that's awesome",1:"pyom nvm i hit pgup and didn't notice that was very strange",0:".pyom nvm i hit pgup and didn't notice that was very strange",])
+Nicknames ([])
+Aliases (["east":"go east","northeast":"go northeast","southeast":"go southeast","mwhere":"findobj $*","prac":"skills","sco":"score","x":"look at $*","w":"go west","u":"go up","out":"go out","t":"tell $*","s":"go south","practice":"skills","vnum":"help find","p":"people","north":"go north","south":"go south","bio":"biography","n":"go north",".":"pyom","l":"look $*","west":"go west","k":"kill $*","northwest":"go northwest","southwest":"go southwest","zlist":"domains","i":"inventory","owhere":"findobj $*","e":"go east","d":"go down","c":"cre $*","alist":"ls /domains","nw":"go northwest","inv":"inventory","examine":"look at $*","trophy":"kills","up":"go up","chat":"newbie $*","dc":"dchat $*","sw":"go southwest","exa":"look at $*","ig":"intergossip $*","loot":"get all from $*","gossip":"pyom","ic":"intercre $*","peace":"quell","inf":"score","down":"go down","lp":"lpuni $*","ne":"go northeast","eq":"equipment","exit":"go out","se":"go southeast","sc":"status",])
+Xverbs (["'":"say $*","]":"] $*",":":"emote $*","\"":"say $*",])
+Directories (["current":"/realms/davion","home":0,"previous":"/",])
+Prompt "cwd"
+Terminal "ansi"
+Blocked (["wileymud":0,"gossip":0,"pyom":0,])
+Screen ({209,48,})
+MessageQueue 0
+PauseMessages 0
+annoyblock 0
+MessageExceptions 0
+BlockAnnoying 0
+Age 523425
+WhereBlock 0
+Brief 0
+LoginTime 1408807120
+BirthTime 1403746554
+RescueBit 0
+Password "eeblfkak!`jhflcnfnfbmbkohidl`mb`djnimafne"
+Email "davionkalhen@gmail.com"
+RealName "Unknown"
+Rank "citizen"
+LoginSite "/realms/davion/workroom"
+HostSite "24.87.128.125"
+WebPage 0
+News (["general":1233549750,"creator":1233549750,])
+Marriages ({})
+Paranoia (["homeroom":"/tmp/workroom",])
+MaxCarry 0
+PreventDrop 0
+DestructOnDrop 0
+PreventGet 0
+Position 2
+Undead 0
+UndeadType 0
+Mount 0
+Riders ({})
+BodyMass 0
+SaveRecurse 0
+Saved ({"Properties",})
+HealthPoints 980
+MagicPoints 310
+ExperiencePoints 50
+melee 0
+godmode 0
+Alcohol 0
+Caffeine 0
+Food 0
+Drink 0
+Poison 0
+Sleeping 0
+DeathEvents 0
+StaminaPoints 767.000000
+Torso "torso"
+Biter 0
+keepalive 0
+Fingers (["right hand":4,"left hand":4,])
+Limbs (["head":(["children":({}),"armors":262913,"parent":"neck","class":1,"health":940,]),"right leg":(["children":({"right foot",}),"armors":1049761,"parent":"torso","class":2,"health":470,]),"right foot":(["children":({}),"armors":241,"parent":"right leg","class":4,"health":240,]),"neck":(["children":({"head",}),"armors":786433,"parent":"torso","class":1,"health":940,]),"left foot":(["children":({}),"armors":241,"parent":"left leg","class":4,"health":240,]),"left arm":(["children":({"left hand",}),"armors":1253385,"parent":"torso","class":2,"health":470,]),"torso":(["children":({"neck","right leg","left leg","left arm","right arm",}),"armors":1538049,"parent":0,"class":1,"health":940,]),"left leg":(["children":({"left foot",}),"armors":1049761,"parent":"torso","class":2,"health":470,]),"right hand":(["children":({}),"armors":98319,"parent":"right arm","class":4,"health":240,]),"right arm":(["children":({"right hand",}),"armors":1253385,"parent":"torso","class":2,"health":470,]),"left hand":(["children":({}),"armors":98319,"parent":"left arm","class":4,"health":240,]),])
+MissingLimbs ([])
+firearms_wounds 0
+ExtraChannels ({"explorer","gossip","newbie","builder","cre","ds","ds_test","lpuni","death","connections","intercre","dchat","intermud","wileymud","pyom",})
+Agent 0
+Blind 0
+Custom (["stats":15,"deviations":4,"deviating":0,])
+LightSensitivity ({5,6500,})
+Resistance (["low":66,"high":0,"immune":0,"medium":0,"none":134217660,])
+Stats (["agility":(["class":2,"points":0,"level":22,]),"wisdom":(["class":3,"points":0,"level":32,]),"speed":(["class":3,"points":0,"level":30,]),"intelligence":(["class":3,"points":0,"level":26,]),"strength":(["class":1,"points":0,"level":77,]),"durability":(["class":1,"points":0,"level":93,]),"charisma":(["class":3,"points":0,"level":19,]),"coordination":(["class":2,"points":0,"level":25,]),"luck":(["class":1,"points":0,"level":85,]),])
+Polyglot 1
+Languages (["malkierien":(["native":1,"name":"Malkierien","points":0,"level":100,]),"common":(["native":0,"name":"Common","points":0,"level":100,]),])
+DefaultLanguage "Common"
+TalkHist (["say":({"2014.07.08-15.53,50 Quixadhal says in English, \"%^BOLD%^CYAN%^Silly intermud connection.%^RESET%^\"","2014.07.08-15.54,47 You ask in Common, \"%^BOLD%^CYAN%^You break things?%^RESET%^\"",}),])
+SpeakColor "CYAN%^"
+Town "Town"
+Race "dwarf"
+Gender "male"
+Level 1
+Skills (["magic defense":(["class":2,"points":0,"level":3,]),"melee defense":(["class":2,"points":0,"level":2,]),"projectile attack":(["class":1,"points":0,"level":1,]),"knife defense":(["class":1,"points":0,"level":2,]),"blunt defense":(["class":1,"points":0,"level":2,]),"melee attack":(["class":2,"points":0,"level":1,]),"projectile defense":(["class":2,"points":0,"level":1,]),"bargaining":(["class":2,"points":0,"level":4,]),"blade defense":(["class":2,"points":0,"level":1,]),"magic attack":(["class":2,"points":0,"level":3,]),"knife attack":(["class":1,"points":0,"level":3,]),"blunt attack":(["class":1,"points":0,"level":2,]),"blade attack":(["class":2,"points":0,"level":1,]),])
+Morality 0
+Class "explorer"
+Clan 0
+SkillModifiers ([])
+Religion ({0,0,})
+Wimpy 0
+Dead 0
+WimpyCommand "go out"
+Currency (["silver":90,])
+Bank ([])
+SpellBook ([])
+QuestPoints 0
+QuestBook ([])
+isPK 0
+Attackable 1
+NoCondition 0
+Titles ({})
+Muffed ({})
+Deaths 0
+TrainingPoints 0
+TitleLength 1
+telopt_ip 0
+showgrid 0
+wizvision 0
+CreatorAge 81345
+CreatorBirth 1403746625
+LivingShort 0

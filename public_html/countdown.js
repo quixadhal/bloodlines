@@ -8,76 +8,76 @@ name, Web address and this disclaimer is kept intact.
 Usage Sample:
 
 <script language="JavaScript">
-TargetDate = "12/31/2020 5:00 AM";
-BackColor = "palegreen";
-ForeColor = "navy";
-CountActive = true;
-CountStepper = -1;
-LeadingZero = true;
-DisplayFormat = "%%D%% Days, %%H%% Hours, %%M%% Minutes, %%S%% Seconds.";
-FinishMessage = "It is finally here!";
+Countdown_TargetDate = "12/31/2020 5:00 AM";
+Countdown_BackColor = "palegreen";
+Countdown_ForeColor = "navy";
+Countdown_CountActive = true;
+Countdown_CountStepper = -1;
+Countdown_LeadingZero = true;
+Countdown_DisplayFormat = "%%D%% Days, %%H%% Hours, %%M%% Minutes, %%S%% Seconds.";
+Countdown_FinishMessage = "It is finally here!";
 </script>
 <script language="JavaScript" src="http://scripts.hashemian.com/js/countdown.js"></script>
 */
 
-function calcage(secs, num1, num2) {
+function Countdown_calcage(secs, num1, num2) {
   s = ((Math.floor(secs/num1))%num2).toString();
-  if (LeadingZero && s.length < 2)
+  if (Countdown_LeadingZero && s.length < 2)
     s = "0" + s;
   return "<b>" + s + "</b>";
 }
 
-function CountBack(secs) {
+function Countdown_CountBack(secs) {
   if (secs < 0) {
-    document.getElementById("cntdwn").innerHTML = FinishMessage;
+    document.getElementById("Countdown_cntdwn").innerHTML = Countdown_FinishMessage;
     return;
   }
-  DisplayStr = DisplayFormat.replace(/%%D%%/g, calcage(secs,86400,100000));
-  DisplayStr = DisplayStr.replace(/%%H%%/g, calcage(secs,3600,24));
-  DisplayStr = DisplayStr.replace(/%%M%%/g, calcage(secs,60,60));
-  DisplayStr = DisplayStr.replace(/%%S%%/g, calcage(secs,1,60));
+  DisplayStr = Countdown_DisplayFormat.replace(/%%D%%/g, Countdown_calcage(secs,86400,100000));
+  DisplayStr = DisplayStr.replace(/%%H%%/g, Countdown_calcage(secs,3600,24));
+  DisplayStr = DisplayStr.replace(/%%M%%/g, Countdown_calcage(secs,60,60));
+  DisplayStr = DisplayStr.replace(/%%S%%/g, Countdown_calcage(secs,1,60));
 
-  document.getElementById("cntdwn").innerHTML = DisplayStr;
-  if (CountActive)
-    setTimeout("CountBack(" + (secs+CountStepper) + ")", SetTimeOutPeriod);
+  document.getElementById("Countdown_cntdwn").innerHTML = DisplayStr;
+  if (Countdown_CountActive)
+    setTimeout("Countdown_CountBack(" + (secs+Countdown_CountStepper) + ")", Countdown_SetTimeOutPeriod);
 }
 
-function putspan(backcolor, forecolor) {
+function Countdown_putspan(backcolor, forecolor) {
     if (backcolor == "transparent")
-        document.write("<span id='cntdwn' style='color:" + forecolor + "'></span>");
+        document.write("<span id='Countdown_cntdwn' style='color:" + forecolor + "'></span>");
     else
-        document.write("<span id='cntdwn' style='background-color:" + backcolor + 
+        document.write("<span id='Countdown_cntdwn' style='background-color:" + backcolor + 
                        "; color:" + forecolor + "'></span>");
 }
 
-if (typeof(BackColor)=="undefined")
-  BackColor = "white";
-if (typeof(ForeColor)=="undefined")
-  ForeColor= "black";
-if (typeof(TargetDate)=="undefined")
-  TargetDate = "12/31/2020 5:00 AM";
-if (typeof(DisplayFormat)=="undefined")
-  DisplayFormat = "%%D%% Days, %%H%% Hours, %%M%% Minutes, %%S%% Seconds.";
-if (typeof(CountActive)=="undefined")
-  CountActive = true;
-if (typeof(FinishMessage)=="undefined")
-  FinishMessage = "";
-if (typeof(CountStepper)!="number")
-  CountStepper = -1;
-if (typeof(LeadingZero)=="undefined")
-  LeadingZero = true;
+if (typeof(Countdown_BackColor)=="undefined")
+  Countdown_BackColor = "white";
+if (typeof(Countdown_ForeColor)=="undefined")
+  Countdown_ForeColor= "black";
+if (typeof(Countdown_TargetDate)=="undefined")
+  Countdown_TargetDate = "12/31/2020 5:00 AM";
+if (typeof(Countdown_DisplayFormat)=="undefined")
+  Countdown_DisplayFormat = "%%D%% Days, %%H%% Hours, %%M%% Minutes, %%S%% Seconds.";
+if (typeof(Countdown_CountActive)=="undefined")
+  Countdown_CountActive = true;
+if (typeof(Countdown_FinishMessage)=="undefined")
+  Countdown_FinishMessage = "";
+if (typeof(Countdown_CountStepper)!="number")
+  Countdown_CountStepper = -1;
+if (typeof(Countdown_LeadingZero)=="undefined")
+  Countdown_LeadingZero = true;
 
 
-CountStepper = Math.ceil(CountStepper);
-if (CountStepper == 0)
-  CountActive = false;
-var SetTimeOutPeriod = (Math.abs(CountStepper)-1)*1000 + 990;
-putspan(BackColor, ForeColor);
-var dthen = new Date(TargetDate);
-var dnow = new Date();
-if(CountStepper>0)
-  ddiff = new Date(dnow-dthen);
+Countdown_CountStepper = Math.ceil(Countdown_CountStepper);
+if (Countdown_CountStepper == 0)
+  Countdown_CountActive = false;
+var Countdown_SetTimeOutPeriod = (Math.abs(Countdown_CountStepper)-1)*1000 + 990;
+Countdown_putspan(Countdown_BackColor, Countdown_ForeColor);
+var Countdown_dthen = new Date(Countdown_TargetDate);
+var Countdown_dnow = new Date();
+if(Countdown_CountStepper>0)
+  Countdown_ddiff = new Date(Countdown_dnow-Countdown_dthen);
 else
-  ddiff = new Date(dthen-dnow);
-gsecs = Math.floor(ddiff.valueOf()/1000);
-CountBack(gsecs);
+  Countdown_ddiff = new Date(Countdown_dthen-Countdown_dnow);
+Countdown_gsecs = Math.floor(Countdown_ddiff.valueOf()/1000);
+Countdown_CountBack(Countdown_gsecs);

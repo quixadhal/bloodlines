@@ -1082,6 +1082,11 @@ string GetHelp(){
         output += ({ sprintf( "  %-=15s %-=*s %=36s", "mudport",        width-2-15-1+y_width-1-36-2, Y + "" + __PORT__ + X,                "MUD access port") });
         output += ({ sprintf( "  %-=15s %-=*s %=36s", "email",          width-2-15-1+y_width-1-36-2, Y + ADMIN_EMAIL + X,                  "administrator e-mail address") });
 
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "ftp",            width-2-15-1+y_width-1-36-2, Y + PORT_FTP + X,                     "MUD FTP Service port") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "http",           width-2-15-1+y_width-1-36-2, Y + PORT_HTTP + X,                    "MUD HTTP Service port") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "hftp",           width-2-15-1+y_width-1-36-2, Y + PORT_HFTP + X,                    "MUD HFTP Service port") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "rcp",            width-2-15-1+y_width-1-36-2, Y + PORT_RCP + X,                     "MUD RCP Service port") });
+
 #ifdef ROOM_START
         output += ({ sprintf( "  %-=15s %-=*s %=36s", "startroom",      width-2-15-1+y_width-1-36-2, Y + ROOM_START + X,                   "start room") });
 #else

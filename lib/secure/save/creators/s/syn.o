@@ -1,0 +1,129 @@
+#/secure/save/creators/s/syn.c
+InternalDesc 0
+Opacity 0
+PersistentInventory 0
+PersistentInventoryEnabled 0
+ProperNoun 1
+Modify 1
+Short "$N the unaccomplished"
+CapName "Syn"
+ExternalDesc "$N is nondescript."
+Invisible 0
+Items ([])
+Properties (["wizmapping":1,"minimapping":0,"reprompt":0,"brand_spanking_new":0,"LastLocation":"/domains/default/room/freezer",])
+Inventory ({"([\"Wielded\":0,\"Value\":0,\"Class\":1,\"Worn\":0,\"Deterioration\":0,\"Broken\":0,\"Poison\":0,\"Mass\":3,\"#base_name#\":\"/domains/default/obj/handbook\",\"Cost\":1000,\"Properties\":([\"no steal\":1,]),])","([\"Value\":0,\"Keys\":({}),\"Worn\":({\"torso\",}),\"Broken\":0,\"Deterioration\":0,\"Poison\":0,\"LockStrength\":0,\"Persist\":1,\"Mass\":200,\"Locked\":0,\"#base_name#\":\"/domains/default/armor/robe\",\"Cost\":10000,\"Properties\":([\"gamma\":3,\"no steal\":1,]),\"#inventory#\":({}),])","([\"Value\":0,\"Mass\":50,\"Worn\":({\"head\",}),\"#base_name#\":\"/domains/default/armor/wizard_hat\",\"Deterioration\":0,\"Broken\":0,\"Cost\":50000,\"Properties\":([\"beta\":2,]),\"Poison\":0,])","([\"Wielded\":0,\"Value\":0,\"Class\":100,\"Worn\":0,\"Deterioration\":0,\"Broken\":0,\"Poison\":0,\"Mass\":100,\"#base_name#\":\"/secure/obj/staff\",\"Cost\":0,\"Properties\":([\"no steal\":1,]),])","([\"Wielded\":0,\"Value\":0,\"Class\":1,\"Worn\":0,\"Deterioration\":0,\"Broken\":0,\"Poison\":0,\"Mass\":20,\"#base_name#\":\"/domains/default/obj/manual\",\"Cost\":1000,\"Properties\":([\"no steal\":1,]),])",})
+anchored 0
+Messages (["telin":"$N teleports in.","telout":"$N teleports away.","leave":"$N leaves $D.","vis":"$N appears.","invis":"$N disappears.","home":"$N goes home.","dest":"$N dests $O.","come":"$N enters.","clone":"$N clones $O.",])
+RestrictedChannels ({})
+NoChanColors 0
+GagMutes (["remote_gag":0,"remote_mute":0,"local_mute":0,"local_gag":0,])
+Paused 0
+localcmds ({"parserefresh","quit","work","pwd","cwd","popd","pushd","nmsh","cd","nickname","unalias","alias","",})
+parsed_command ""
+HistorySize 50
+History ([50:"pp hey in your code, it looks like your forcibly trying to literally replace images, between the old and the new 'updated' one, is that what its trying to do?",49:"pp lol",48:"pp not a fan of the new faux internal tabs of websites that is superimposed blurb, they always seem to be problematic in some way",47:"pp yeah i have issues with it sometimes when im on there for the fios-y stuff",46:"pp :(",45:"pp looks similar, but maybe theres some trick in its general composure that does the trick",44:"pp did you see this stacko approach: setInterval(function(){    $(\"#myimg\").attr(\"src\", \"/myimg.jpg?\"+new Date().getTime()); },2000)",43:"dchat i didnt much like js when i had to try to learn it, but jquery was pretty neat",42:"dchat oh the horror, depressed and angry nerds who cant have weapons",41:"dchat whats wrong with that",40:"dhcat whats wrong with that",39:"ig cool thanks",38:"ig hm ill have to check it out",37:"ig thats a cool premise",36:"ig havent seen it",35:"ig well thats good",34:"ig ugh seriously that process is never fun",33:"ig ha, have enough time?",32:"pp i made a tweak to make the project a package itself, will be nice if we ever decide to put it up on pip or something",31:"ig rofl",30:"ig http://www.speedtest.net/my-result/3719246496",29:"ig didnt figure id get near my max to them",28:"ig huh i get some impressive speeds to that place",27:"ig gogo phone without charge for 4 days",26:"ig and whoops forgot to charge my phone again today, 18% heh",25:"ig lol",24:"ig nice!",23:"pp                     else: (continues as normal)",22:"pp                         module_ref = importlib.import_module(class_name, data['module'])",21:"pp                     if data.get('module', None):",20:"pp In instance: if module_name != '' and class_name != '':",19:"pp In the class: tmp_dict['module'] = self.__module__ ",18:"pp import being de-serialize",17:"pp from pyrom_libs.utils.flag_api",16:"pp with a simple addition",15:"pp i got it to import my packaged flag_api",14:"pp yay",13:"pp hey quix you around",12:"pp as much as i complain about the horror, i do enjoy a good knot, and this has been one of epic proportions, for what it is",11:"pp sure i mean i would be/have been exposed to very different things if i had to go from square one",10:"pp probably cleaner, but less inventive, imo",9:"pp i doubt i would have learned this fast, or come up with as many zany (good and bad) ideas as i have if it was just some new project",8:"pp also i highly agree about your last comment re:refactor",7:"pp the importing is in a fairly fragile state with everything so interconnected, but still in so many places",6:"pp were straying into to many imports again",5:"pp ive been wanting to split it up more for a while",4:"pp thanks :)",3:"pp thats similar to my last proposal but a bit more streamlined",2:"pp ok, i like that",1:"pp theres 2",0:"pp thats what im asking",])
+Nicknames ([])
+Aliases (["east":"go east","mwhere":"findobj $*","southeast":"go southeast","northeast":"go northeast","prac":"skills","sco":"score","x":"look at $*","w":"go west","u":"go up","t":"tell $*","out":"go out","practice":"skills","s":"go south","vnum":"help find","p":"people","south":"go south","north":"go north","n":"go north","bio":"biography","l":"look $*","k":"kill $*","west":"go west","ww":"wileymud $*","zlist":"domains","southwest":"go southwest","northwest":"go northwest","i":"inventory","owhere":"findobj $*","e":"go east","d":"go down","c":"cre $*","alist":"ls /domains","pp":"pyom $*","inv":"inventory","nw":"go northwest","examine":"look at $*","trophy":"kills","up":"go up","chat":"newbie $*","dc":"dchat $*","exa":"look at $*","sw":"go southwest","ig":"intergossip $*","loot":"get all from $*","ic":"intercre $*","peace":"quell","inf":"score","lp":"lpuni $*","down":"go down","ne":"go northeast","exit":"go out","eq":"equipment","se":"go southeast","sc":"status",])
+Xverbs (["'":"say $*","]":"] $*","\"":"say $*",":":"emote $*",])
+Directories (["current":"/realms/syn","home":0,"previous":"/",])
+Prompt "cwd"
+Terminal "xterm-256color"
+Blocked (["intergossip":0,"wileymud":0,"imud_gossip":0,"pyom":0,"free_speech":1,"intercre":0,"intermud":0,])
+Screen ({152,19,})
+MessageQueue 0
+PauseMessages 0
+annoyblock 0
+MessageExceptions 0
+BlockAnnoying 0
+Age 4812519
+WhereBlock 0
+Brief 0
+LoginTime 1407592881
+BirthTime 1403738548
+RescueBit 0
+Password "`el`fjnd!kbgohcmghecijfhecanagoajfabbhedk"
+Email "syndicate2083@gmail.com"
+RealName "Unknown"
+Rank "citizen"
+LoginSite "/domains/default/room/wiz_corr1"
+HostSite "98.110.245.140"
+WebPage 0
+News (["general":1233549750,"creator":1233549750,])
+Marriages ({})
+Paranoia (["homeroom":"/tmp/workroom",])
+MaxCarry 0
+PreventDrop 0
+DestructOnDrop 0
+PreventGet 0
+Position 2
+Undead 0
+UndeadType 0
+Mount 0
+Riders ({})
+BodyMass 0
+SaveRecurse 0
+Saved ({"Properties",})
+HealthPoints 310
+MagicPoints 680
+ExperiencePoints 50
+melee 0
+godmode 0
+Alcohol 0
+Caffeine 0
+Food 0
+Drink 0
+Poison 0
+Sleeping 0
+DeathEvents 0
+StaminaPoints 358.000000
+Torso "torso"
+Biter 0
+keepalive 0
+Fingers (["right hand":5,"left hand":5,])
+Limbs (["right foot":(["children":({}),"armors":241,"health":70,"class":4,"parent":"right leg",]),"right leg":(["children":({"right foot",}),"armors":1049761,"health":140,"class":2,"parent":"torso",]),"head":(["children":({}),"armors":262913,"health":270,"class":1,"parent":"neck",]),"neck":(["children":({"head",}),"armors":786433,"health":270,"class":1,"parent":"torso",]),"left arm":(["children":({"left hand",}),"armors":1253385,"health":140,"class":2,"parent":"torso",]),"left foot":(["children":({}),"armors":241,"health":70,"class":4,"parent":"left leg",]),"left leg":(["children":({"left foot",}),"armors":1049761,"health":140,"class":2,"parent":"torso",]),"torso":(["children":({"neck","right leg","left leg","right arm","left arm",}),"armors":1538049,"health":270,"class":1,"parent":0,]),"right hand":(["children":({}),"armors":98319,"health":70,"class":4,"parent":"right arm",]),"left hand":(["children":({}),"armors":98319,"health":70,"class":4,"parent":"left arm",]),"right arm":(["children":({"right hand",}),"armors":1253385,"health":140,"class":2,"parent":"torso",]),])
+MissingLimbs ([])
+firearms_wounds 0
+ExtraChannels ({"explorer","gossip","newbie","builder","cre","ds","ds_test","lpuni","death","connections","intercre","dchat","intermud","wileymud","imud_code","imud_gossip","bd_devtalk","godwars","pyom","intergossip","free_speech hear hear!","free_speech",})
+Agent 0
+Blind 0
+Custom (["stats":15,"deviations":4,"deviating":0,])
+LightSensitivity ({7,7300,})
+Resistance (["low":0,"high":0,"immune":0,"medium":0,"none":134217726,])
+Stats (["wisdom":(["class":1,"points":0,"level":75,]),"agility":(["class":3,"points":0,"level":42,]),"speed":(["class":3,"points":0,"level":48,]),"strength":(["class":5,"points":0,"level":15,]),"intelligence":(["class":1,"points":0,"level":63,]),"durability":(["class":4,"points":0,"level":26,]),"charisma":(["class":1,"points":0,"level":41,]),"coordination":(["class":2,"points":0,"level":25,]),"luck":(["class":1,"points":0,"level":59,]),])
+Polyglot 1
+Languages (["common":(["native":0,"name":"Common","points":0,"level":100,]),"edhellen":(["native":1,"name":"Edhellen","points":0,"level":100,]),])
+DefaultLanguage "Common"
+TalkHist (["say":({"2014.06.25-19.30,31 You say in Common, \"%^BOLD%^CYAN%^Hi.%^RESET%^\"","2014.08.01-01.11,14 You say in Common, \"%^BOLD%^CYAN%^Abcdé.%^RESET%^\"","2014.08.23-22.02,40 You say in Common, \"%^BOLD%^CYAN%^%^FLASH%^HI%^RESET%^.%^RESET%^\"","2014.08.23-22.11,26 You say in Common, \"%^BOLD%^CYAN%^%^STRIKETHRU%^Hiu%^RESET%^.%^RESET%^\"",}),"tell":({"2014.07.15-02.34,12 %^BOLD%^RED%^Tijer@War of Legend tells you:%^RESET%^ wtf is up with that torak@haven person... hes got major issues eh?","2014.07.15-02.35,07 %^BOLD%^RED%^You tell Tijer@War of Legend:%^RESET%^ seriously","2014.07.15-02.35,37 %^BOLD%^RED%^Tijer@War of Legend tells you:%^RESET%^ my i3ignore doesnt work over here :(","2014.07.15-02.36,09 %^BOLD%^RED%^You tell Tijer@War of Legend:%^RESET%^ ouch lol, yeah i wanted to see what brand of crazy he was, and holy crap, hes batshit","2014.07.15-02.36,31 %^BOLD%^RED%^Tijer@War of Legend tells you:%^RESET%^ they all seem to be from that mud tho dont they","2014.07.15-02.36,49 %^BOLD%^RED%^You tell Tijer@War of Legend:%^RESET%^ yup","2014.07.15-02.37,06 %^BOLD%^RED%^Tijer@War of Legend tells you:%^RESET%^ im sure i read somewhere in the i3 history about haven being banned from i3 a few years back.. them setting up their own router.. and cratylus letting them back on it","2014.07.15-02.45,20 %^BOLD%^RED%^You tell Tijer@War of Legend:%^RESET%^ yeah that sounds about right","2014.07.15-02.45,47 %^BOLD%^RED%^You tell Tijer@War of Legend:%^RESET%^ that guy is just full of vitriol and self righteous indignation, its pretty sad","2014.08.10-05.42,59 %^BOLD%^RED%^Tijer@War of Legend tells you:%^RESET%^ i think i emailed you.. i may not have...","2014.08.10-10.07,00 %^BOLD%^RED%^You tell Tijer@War of Legend:%^RESET%^ whats up","2014.08.10-10.07,44 %^BOLD%^RED%^You tell Tijer@War of Legend:%^RESET%^ i dont seem to have an email but maybe its in some bin/filter somewhere heh","2014.08.25-19.51,52 %^BOLD%^RED%^Lyanic@7thplane tells you:%^RESET%^ \"I blocked Haley years ago and have been happier for it. His argument style of \\\"I'm always right, and anyone who disagrees with me deserves whatever insults I feel like directing.\\\" gets tiresome fast.\"","2014.08.25-19.52,09 %^BOLD%^RED%^You tell Lyanic@7thplane:%^RESET%^ no kidding","2014.08.25-19.52,36 %^BOLD%^RED%^You tell Lyanic@7thplane:%^RESET%^ debate != personal attack, firstly, and secondly, holy crap chill out bro heh","2014.08.25-19.52,42 %^BOLD%^RED%^Lyanic@7thplane tells you:%^RESET%^ \"It's also amusing watching only one side of an argument.\"","2014.08.25-19.52,59 %^BOLD%^RED%^You tell Lyanic@7thplane:%^RESET%^ that usually is pretty funny haha","2014.08.25-21.15,01 %^BOLD%^RED%^Salius@Dead Souls Dev tells you:%^RESET%^ are we connected on linkedin?","2014.08.25-21.15,15 %^BOLD%^RED%^You tell Salius@Dead Souls Dev:%^RESET%^ dont think so!","2014.08.25-21.15,17 %^BOLD%^RED%^Salius@Dead Souls Dev tells you:%^RESET%^ https://www.linkedin.com/profile/view?id=72097467","2014.08.25-21.17,59 %^BOLD%^RED%^Salius@Dead Souls Dev tells you:%^RESET%^ connect with me","2014.08.25-21.18,05 %^BOLD%^RED%^Salius@Dead Souls Dev tells you:%^RESET%^ we can be connected","2014.08.25-21.18,24 %^BOLD%^RED%^You tell Salius@Dead Souls Dev:%^RESET%^ yeah lemme see here","2014.08.25-21.19,34 %^BOLD%^RED%^You tell Salius@Dead Souls Dev:%^RESET%^ lol its not letting me see your profile cause we have no connections","2014.08.25-21.20,06 %^BOLD%^RED%^Salius@Dead Souls Dev tells you:%^RESET%^ can you add me or does it not show up","2014.08.25-21.20,21 %^BOLD%^RED%^You tell Salius@Dead Souls Dev:%^RESET%^ timothyrogersjr@yahoo.com is my email, it wont let me do anything with your profile unfortunately","2014.08.25-21.20,59 %^BOLD%^RED%^You tell Salius@Dead Souls Dev:%^RESET%^ and, www.linkedin.com/pub/tim-rogers/35/b59/181/","2014.08.25-21.21,35 %^BOLD%^RED%^Salius@Dead Souls Dev tells you:%^RESET%^ i think i added you","2014.08.25-21.21,54 %^BOLD%^RED%^You tell Salius@Dead Souls Dev:%^RESET%^ there we go",}),])
+SpeakColor "CYAN%^"
+Town "Town"
+Race "elf"
+Gender "male"
+Level 1
+Skills (["magic defense":(["class":2,"points":0,"level":3,]),"melee defense":(["class":2,"points":0,"level":2,]),"projectile attack":(["class":1,"points":0,"level":1,]),"blunt defense":(["class":1,"points":0,"level":2,]),"knife defense":(["class":1,"points":0,"level":2,]),"melee attack":(["class":2,"points":0,"level":1,]),"projectile defense":(["class":2,"points":0,"level":1,]),"blade defense":(["class":2,"points":0,"level":1,]),"bargaining":(["class":2,"points":0,"level":4,]),"magic attack":(["class":2,"points":0,"level":3,]),"blunt attack":(["class":1,"points":0,"level":2,]),"knife attack":(["class":1,"points":0,"level":3,]),"blade attack":(["class":2,"points":0,"level":1,]),])
+Morality 0
+Class "explorer"
+Clan 0
+SkillModifiers ([])
+Religion ({0,0,})
+Wimpy 0
+Dead 0
+WimpyCommand "go out"
+Currency (["silver":95,])
+Bank ([])
+SpellBook ([])
+QuestPoints 0
+QuestBook ([])
+isPK 0
+Attackable 1
+NoCondition 0
+Titles ({})
+Muffed ({})
+Deaths 0
+TrainingPoints 0
+TitleLength 1
+telopt_ip 0
+showgrid 0
+wizvision 0
+CreatorAge 2156579
+CreatorBirth 1403738852
+LivingShort 0

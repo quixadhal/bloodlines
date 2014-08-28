@@ -39,7 +39,7 @@ LC_ALL=en_US
 
 export LANG LANGUAGE LC_ALL MUDHOME
 
-umask 007
+umask 0002
 
 ulimit -a 
 ulimit -n 2048
@@ -61,5 +61,6 @@ while [ true ]; do
             break
         fi
     fi
+    sleep 30
 
 done

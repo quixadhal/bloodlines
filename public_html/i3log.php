@@ -1,8 +1,33 @@
 <?
 $time_start = microtime(true);
 $now = date('g:ia \o\n l, \t\h\e jS \o\f F, Y');
+$mini_now = date('Y-m-d H:i:s');
 
 require_once "i3config.php";
+
+function numbered_source($filename)
+{
+    $lines = implode(range(1, count(file($filename))), '<br />');
+    $content = highlight_file($filename, true);
+    $style = '
+    <style type="text/css"> 
+        .num { 
+        float: left; 
+        color: gray; 
+        font-size: 13px;    
+        font-family: monospace; 
+        text-align: right; 
+        margin-right: 6pt; 
+        padding-right: 6pt; 
+        border-right: 1px solid gray;} 
+
+        body {margin: 0px; margin-left: 5px;} 
+        td {vertical-align: top;} 
+        code {white-space: nowrap;} 
+    </style>
+    '; 
+    return "$style\n<table><tr><td class=\"num\">\n$lines\n</td><td>\n$content\n</td></tr></table>"; 
+}
 
 function get_pinkfish_map() {
     $colors = array(
@@ -254,6 +279,7 @@ $graphics['text']               = $isLocal ? "gfx/text.png"                 : "h
 $graphics['textMouseOver']      = $isLocal ? "gfx/textMouseOver.png"        : "https://lh6.googleusercontent.com/-E1nAZZA-iLg/UdoojWYO0-I/AAAAAAAAAPw/jyqADyzswe4/s800/textMouseOver.png";
 $graphics['server_icon']        = $isLocal ? "gfx/server_icon.png"          : "https://lh4.googleusercontent.com/-LZ9ek46iToA/UdoojFEhuOI/AAAAAAAAAPQ/y_rRyL_1tR8/s800/server_icon.png";
 $graphics['help_icon']          = $isLocal ? "gfx/help.png"                 : "https://lh6.googleusercontent.com/-t_GKXvLrh7g/UdooayFUZKI/AAAAAAAAALg/TdVjBKVeluQ/s800/help.png";
+$graphics['sql_icon']           = $isLocal ? "gfx/sql.png"                  : "https://lh6.googleusercontent.com/-Ms6hgsVLGac/UkQPgYis_YI/AAAAAAAAAjE/6nn2j-DIg6I/s144/sql.png";
 
 //$graphics['background'] = $isLocal ? "gfx/dark_wood.jpg" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg";
 //$graphics['bloodlines'] = $isLocal ? "gfx/bloodlines.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png";
@@ -369,6 +395,19 @@ if( isset($_REQUEST) && isset($_REQUEST["sd"]) ) {
     }
 }
 
+// Anti-Channel Filter (do NOT display these channels)
+// Accept a comma-seperated list of names
+
+$antichanSql = '';
+if( isset($_REQUEST) && isset($_REQUEST["af"]) ) {
+    $antichannelFilter = $_REQUEST["af"];
+    $words = array();
+    foreach (explode(",", $antichannelFilter) as $word) {
+        $words[] = $dbh->quote(strtolower($word));
+    }
+    $antichanSql = "AND lower(channel) NOT IN ( " . implode(",", $words) . " )";
+}
+ 
 // Channel Filter (only display these channels)
 // Accept a comma-seperated list of names
 
@@ -492,7 +531,7 @@ if( isset($anchorID) ) {
 }
 
 $totalRows = 0;
-$countSql = "SELECT COUNT(*) FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $startDateSql $anchorSql";
+$countSql = "SELECT COUNT(*) FROM chanlogs $botSql $linkSql $chanSql $antichanSql $mudSql $speakerSql $searchSql $startDateSql $anchorSql";
 $countSql = preg_replace('/chanlogs\s+AND/', 'chanlogs WHERE', $countSql);
 //echo "SQL: $countSql\n";
 
@@ -529,7 +568,7 @@ if( $pageNumber < ($totalPages / 2) ) {
 $limitSql = "LIMIT $pageSize";
 $offsetSql = "OFFSET $offset";
 
-$pageSql = "SELECT id, msg_date, date_part('epoch', msg_date) AS unix_date, to_char(msg_date, 'YYYY-MM-DD') AS the_date, to_char(msg_date, 'HH24:MI') AS the_time, to_char(msg_date, 'HH24') AS the_hour, channel, speaker, mud, message FROM chanlogs $botSql $linkSql $chanSql $mudSql $speakerSql $searchSql $startDateSql $anchorSql $sortSql $offsetSql $limitSql";
+$pageSql = "SELECT id, msg_date, date_part('epoch', msg_date) AS unix_date, to_char(msg_date, 'YYYY-MM-DD') AS the_date, to_char(msg_date, 'HH24:MI') AS the_time, to_char(msg_date, 'HH24') AS the_hour, channel, speaker, mud, message FROM chanlogs $botSql $linkSql $chanSql $antichanSql $mudSql $speakerSql $searchSql $startDateSql $anchorSql $sortSql $offsetSql $limitSql";
 $pageSql = preg_replace('/chanlogs\s+AND/', 'chanlogs WHERE', $pageSql);
 
 try {
@@ -608,6 +647,7 @@ function build_url() {
     global $format;
     global $defaultFormat;
     global $channelFilter;
+    global $antichannelFilter;
     global $speakerFilter;
     global $mudFilter;
     global $sortOrder;
@@ -623,6 +663,7 @@ function build_url() {
         . (isset($showBots) ? "&sb" : "")
         . ($format != $defaultFormat ? "&fm=" . urlencode($format) : "")
         . (isset($channelFilter) ? "&cf=" . urlencode($channelFilter) : "")
+        . (isset($antichannelFilter) ? "&af=" . urlencode($antichannelFilter) : "")
         . (isset($speakerFilter) ? "&sf=" . urlencode($speakerFilter) : "")
         . (isset($mudFilter) ? "&mf=" . urlencode($mudFilter) : "")
         . (isset($startDate) ? "&sd=" . urlencode($startDate) : "")
@@ -761,25 +802,34 @@ if($format == 'html') {
         <!-- <script src="jq/js/jquery-1.9.1.js"></script>
         <script src="jq/js/jquery-ui-1.10.1.custom.js"></script> -->
         <script type="text/javascript" src="popup.js"></script>
+        <script language="javascript">
+            function toggleDiv(divID) {
+                if(document.getElementById(divID).style.display == 'none') {
+                    document.getElementById(divID).style.display = 'block';
+                } else {
+                    document.getElementById(divID).style.display = 'none';
+                }
+            }
+        </script>
     </head>
     <body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
         <table id="header" border=0 cellspacing=0 cellpadding=0 width=80% align="center">
             <tr>
                 <!-- Header logos -->
                 <td align="right" valign="bottom"
-                    style="opacity: 0.7; filter: alpha(opacity=70);"
+                    style="vertical-align: bottom; opacity: 0.7; filter: alpha(opacity=70);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.7'; this.style.filter='alpha(opacity=70';"
                 >
                     <table id="logo" border=0 cellspacing=0 cellpadding=0 width=100% align="center">
                         <tr>
-                            <td align="right" valign="top">
+                            <td align="right" valign="top" style="vertical-align: top">
                                 <!-- <a href="/anyterm/anyterm.shtml?rows=40&cols=100"> -->
                                 <a href="/~bloodlines">
                                     <img src="<? echo $graphics['bloodlines']; ?>" border=0 width=234 height=80>
                                 </a>
                             </td>
-                            <td align="left" valign="bottom">
+                            <td align="left" valign="bottom" style="vertical-align: bottom">
                                 <!-- <a href="/anyterm/anyterm.shtml?rows=40&cols=100"> -->
                                 <a href="/~bloodlines">
                                     <img src="<? echo $graphics['wileymud4']; ?>" border=0 width=177 height=40">
@@ -790,11 +840,11 @@ if($format == 'html') {
                 </td>
                 <!-- Header logos END -->
                 <!-- Search form -->
-                <td align="left" valign="bottom">
+                <td align="left" valign="bottom" style="vertical-align: bottom">
                     <form action="" method="get">
                         <table id="searchform" border=0 cellspacing=0 cellpadding=0 width=100% align="center">
                             <tr>
-                                <td align="right" valign="bottom">
+                                <td align="right" valign="bottom" style="vertical-align: bottom">
                                     <span style="color: #1F1F1F;">
                                         <label id="srlabel" for="sr"
                                             onmouseover="srinput.style.color='#FFFF00'; srinput.style.backgroundColor='#1F1F1F'; srlabel.style.color='#FFFFFF';"
@@ -804,7 +854,7 @@ if($format == 'html') {
                                         > Search:&nbsp; </label>
                                     </span>
                                 </td>
-                                <td bgcolor="#000000" width="200" align="left" valign="bottom">
+                                <td bgcolor="#000000" width="200" align="left" valign="bottom" style="vertical-align: bottom">
                                     <input id="srinput" type="text" style="background-color: #000000; color: #4F4F00; border: 1px; border-color: #000000; border-style: solid; width: 200px;"
                                         onmouseover="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; srlabel.style.color='#FFFFFF';"
                                         onfocus="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; srlabel.style.color='#FFFFFF'; if(!this._haschanged){this.value=''};this._haschanged=true;"
@@ -828,6 +878,9 @@ if($format == 'html') {
                                     <? } ?>
                                     <? if(isset($channelFilter)) { ?>
                                         <input type="hidden" name="cf" value="<? echo $channelFilter; ?>">
+                                    <? } ?>
+                                    <? if(isset($antichannelFilter)) { ?>
+                                        <input type="hidden" name="af" value="<? echo $antichannelFilter; ?>">
                                     <? } ?>
                                     <? if(isset($speakerFilter)) { ?>
                                         <input type="hidden" name="sf" value="<? echo $speakerFilter; ?>">
@@ -856,11 +909,11 @@ if($format == 'html') {
             <tr>
                 <td id="navbegin" align="left" valign="center" width="50"
                     <? if( $pageNumber < $beginningPage) { ?>
-                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                     <? } else { ?>
-                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
                     <? } ?>
                 >
                     <span style="color: #555555">
@@ -875,11 +928,11 @@ if($format == 'html') {
                 </td>
                 <td id="navbackmany" align="left" valign="center" width="50"
                     <? if( $pageNumber < $backManyPage && $backManyPage <= $beginningPage) { ?>
-                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                     <? } else { ?>
-                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
                     <? } ?>
                 >
                     <span style="color: #555555">
@@ -894,11 +947,11 @@ if($format == 'html') {
                 </td>
                 <td id="navbackfew" align="left" valign="center" width="50"
                     <? if( $pageNumber < $backFewPage && $backFewPage <= $beginningPage) { ?>
-                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                     <? } else { ?>
-                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
                     <? } ?>
                 >
                     <span style="color: #555555">
@@ -913,11 +966,11 @@ if($format == 'html') {
                 </td>
                 <td id="navprev" align="left" valign="center" width="50"
                     <? if( $pageNumber < $backOnePage && $backOnePage <= $beginningPage) { ?>
-                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                     <? } else { ?>
-                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
                     <? } ?>
                 >
                     <span style="color: #555555">
@@ -933,14 +986,14 @@ if($format == 'html') {
                 <td>
                 &nbsp;
                 </td>
-                <td id="fakepagenumber" align="center" valign="center" width="150">
+                <td id="fakepagenumber" align="center" valign="center" width="150" style="vertical-align: middle;">
                 &nbsp;
                 </td>
                 <td>
                     &nbsp;
                 </td>
                 <td id="navhelp" align="center" valign="center" width="50"
-                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
                 >
@@ -950,11 +1003,11 @@ if($format == 'html') {
                 </td>
                 <td id="navbot" align="center" valign="center" width="50"
                     <? if( isset($showBots) ) { ?>
-                    style="opacity: 1.0; filter: alpha(opacity=100);"
+                    style="vertical-align: middle; opacity: 1.0; filter: alpha(opacity=100);"
                     onmouseover="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
                     onmouseout="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     <? } else { ?>
-                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
                     <? } ?>
@@ -971,11 +1024,11 @@ if($format == 'html') {
                 </td>
                 <td id="navlinks" align="center" valign="center" width="50"
                     <? if( isset($linksOnly) ) { ?>
-                    style="opacity: 1.0; filter: alpha(opacity=100);"
+                    style="vertical-align: middle; opacity: 1.0; filter: alpha(opacity=100);"
                     onmouseover="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
                     onmouseout="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     <? } else { ?>
-                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
                     <? } ?>
@@ -992,11 +1045,11 @@ if($format == 'html') {
                 </td>
                 <td id="navhome" align="center" valign="center" width="50"
                     <? if( count( $_GET  ) > 0 ) { ?>
-                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                     <? } else { ?>
-                    style="opacity: 1.0; filter: alpha(opacity=100);"
+                    style="vertical-align: middle; opacity: 1.0; filter: alpha(opacity=100);"
                     <? } ?>
                 >
                     <a title="HOME!" href="<? echo $_SERVER['PHP_SELF']; ?>">
@@ -1005,7 +1058,7 @@ if($format == 'html') {
                 </td>
                 <td>
                 <td id="navpie" align="center" valign="center" width="50"
-                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                 >
@@ -1014,7 +1067,7 @@ if($format == 'html') {
                     </a>
                 </td>
                 <td id="navchart" align="center" valign="center" width="50"
-                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                 >
@@ -1025,12 +1078,12 @@ if($format == 'html') {
                 <td>
                 &nbsp;
                 </td>
-                <td id="pagenumber" align="center" valign="center" width="150">
+                <td id="pagenumber" align="center" valign="center" width="150" style="vertical-align: middle;">
 <!-- &nbsp; Page <? echo $pageNumberDisplay; ?> of <? echo $totalPages; ?> &nbsp; -->
                     <form action="" method="get">
-                        <table id="pageform" border=0 cellspacing=0 cellpadding=0 width=100% align="center">
+                        <table id="pageform" border=0 cellspacing=0 cellpadding=0 width=100% align="center" style="vertical-align: middle;">
                             <tr>
-                                <td align="right" valign="bottom" width="40">
+                                <td align="right" valign="bottom" width="40" style="vertical-align: bottom;">
                                     <span style="color: #1F1F1F;">
                                         <label id="pnlabel" for="pd"
                                             onmouseover="pninput.style.color='#FFFF00'; pninput.style.backgroundColor='#1F1F1F'; this.style.color='#FFFFFF'; pnoflabel.style.color='#FFFFFF';"
@@ -1040,7 +1093,7 @@ if($format == 'html') {
                                         > Page:&nbsp; </label>
                                     </span>
                                 </td>
-                                <td bgcolor="#000000" width="50" align="left" valign="bottom">
+                                <td bgcolor="#000000" width="50" align="left" valign="bottom" style="vertical-align: bottom;">
                                     <input id="pninput" type="text" style="background-color: #000000; color: #4F4F00; border: 1px; border-color: #000000; border-style: solid; width: 50px;"
                                         onmouseover="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; pnlabel.style.color='#FFFFFF'; pnoflabel.style.color='#FFFFFF';"
                                         onfocus="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; pnlabel.style.color='#FFFFFF';  pnoflabel.style.color='#FFFFFF'; /* if(!this._haschanged){this.value=''};this._haschanged=true; */"
@@ -1062,6 +1115,9 @@ if($format == 'html') {
                                     <? if(isset($channelFilter)) { ?>
                                         <input type="hidden" name="cf" value="<? echo $channelFilter; ?>">
                                     <? } ?>
+                                    <? if(isset($antichannelFilter)) { ?>
+                                        <input type="hidden" name="af" value="<? echo $antichannelFilter; ?>">
+                                    <? } ?>
                                     <? if(isset($speakerFilter)) { ?>
                                         <input type="hidden" name="sf" value="<? echo $speakerFilter; ?>">
                                     <? } ?>
@@ -1081,7 +1137,7 @@ if($format == 'html') {
                                         <input type="hidden" name="an" value="<? echo $anchorID; ?>">
                                     <? } ?>
                                 </td>
-                                <td align="right" valign="bottom" width="50">
+                                <td align="right" valign="bottom" width="50" style="vertical-align: bottom;">
                                     <span style="color: #1F1F1F;">
                                         <label id="pnoflabel" for="pn"
                                             onmouseover="pninput.style.color='#FFFF00'; pninput.style.backgroundColor='#1F1F1F'; this.style.color='#FFFFFF'; pnlabel.style.color='#FFFFFF';"
@@ -1100,11 +1156,11 @@ if($format == 'html') {
                 </td>
                 <td id="navnext" align="right" valign="center" width="50"
                     <? if( $pageNumber > $forwardOnePage && $forwardOnePage >= $endPage) { ?>
-                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                     <? } else { ?>
-                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
                     <? } ?>
                 >
                     <? if( $pageNumber > $forwardOnePage && $forwardOnePage >= $endPage) { ?>
@@ -1117,11 +1173,11 @@ if($format == 'html') {
                 </td>
                 <td id="navforwardfew" align="right" valign="center" width="50"
                     <? if( $pageNumber > $forwardFewPage && $forwardFewPage >= $endPage) { ?>
-                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                     <? } else { ?>
-                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
                     <? } ?>
                 >
                     <? if( $pageNumber > $forwardFewPage && $forwardFewPage >= $endPage) { ?>
@@ -1134,11 +1190,11 @@ if($format == 'html') {
                 </td>
                 <td id="navforwardmany" align="right" valign="center" width="50"
                     <? if( $pageNumber > $forwardManyPage && $forwardManyPage >= $endPage) { ?>
-                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                     <? } else { ?>
-                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
                     <? } ?>
                 >
                     <? if( $pageNumber > $forwardManyPage && $forwardManyPage >= $endPage) { ?>
@@ -1151,11 +1207,11 @@ if($format == 'html') {
                 </td>
                 <td id="navend" align="right" valign="center" width="50"
                     <? if( $pageNumber > $endPage) { ?>
-                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                     <? } else { ?>
-                    style="opacity: 0.2; filter: alpha(opacity=20);"
+                    style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
                     <? } ?>
                 >
                     <? if( $pageNumber > $endPage) { ?>
@@ -1275,17 +1331,26 @@ if($format == 'html') {
         </table>
         <table width="100%">
             <tr>
-                <td align="left" width="50%" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
-                    <span id="lastrefresh" style="color: #1F1F1F">Last refreshed at <? echo $now; ?>.&nbsp;</span>
+                <td align="left" width="30%" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
+                    <span id="lastrefresh" style="color: #1F1F1F">Last refreshed at <? echo $mini_now; ?>.&nbsp;</span>
                 </td>
                 <td>&nbsp;</td>
                 <td id="server" align="center" valign="center" width="80"
-                    style="opacity: 0.4; filter: alpha(opacity=40);"
+                    style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                 >
                     <span style="color: #1F1F1F"><a href="/~bloodlines/server.php" title="Server Stats">
                         <img src="<? echo $graphics['server_icon']; ?>" border=0 width=78 height=78 alt="(server)" />
+                    </a></span>
+                </td>
+                <td id="sql" align="center" valign="center" width="80"
+                    style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
+                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                >
+                    <span style="color: #1F1F1F"><a href="/~bloodlines/i3log_dump.sql.bz2" title="SQL Dump (LARGE)">
+                        <img src="<? echo $graphics['sql_icon']; ?>" border=0 width=78 height=78 alt="(sql)" />
                     </a></span>
                 </td>
                 <td align="center" width="71" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
@@ -1305,13 +1370,16 @@ if($format == 'html') {
                 </td>
                 <td>&nbsp;</td>
                 <td align="right" width="30%" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
+                    <a href="javascript:;" onmousedown="toggleDiv('source');">
                     <span id="pagegen" style="color: #1F1F1F">&nbsp;Page generated in <span id="timespent" style="color: #1F1F1F"><? $time_end = microtime(true); $time_spent = $time_end - $time_start; printf( "%7.3f", $time_spent); ?></span> seconds.</span>
+                    </a>
                 </td>
             </tr>
         </table>
 <? if($showSQL) { ?>
         <span id="sql" style="color: #1F1F1F"><?echo $pageSql;?></span>
 <? } ?>
+        <div id="source" style="display: none; vertical-align: bottom; background-color: white;"> <? echo numbered_source(__FILE__); ?> </div>
     </body>
     </head>
 </html>
@@ -1362,7 +1430,7 @@ if($format == 'html') {
     }
     $time_end = microtime(true);
     $time_spent = $time_end - $time_start;
-    echo "\n" . str_pad("Last refreshed at $now", 79) . " " . str_pad( sprintf( "Page generated in %7.3f seconds.", $time_spent), 40, " ", STR_PAD_LEFT);
+    echo "\n" . str_pad("Last refreshed at $mini_now", 79) . " " . str_pad( sprintf( "Page generated in %7.3f seconds.", $time_spent), 40, " ", STR_PAD_LEFT);
 ?>
 <? } ?>
 

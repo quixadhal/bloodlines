@@ -87,3 +87,20 @@
 2012.12.30-00.38,32 /realms/quixadhal/cmds/chatcolors.c line 7: Undefined variable 'TERMINAL_D'
 2012.12.30-00.38,32 /realms/quixadhal/cmds/chatcolors.c line 7: Undefined variable 'TERMINAL_D'
 2013.02.27-23.41,58 /realms/quixadhal/mosquito.c line 26: Undefined function evantForce
+2013.11.10-22.10,58 /realms/quixadhal/cmds/base64.c line 15: Undefined variable 'word'
+2013.11.10-22.11,36 /realms/quixadhal/cmds/base64.c line 16: Undefined variable 'word'
+2013.11.10-22.11,36 /realms/quixadhal/cmds/base64.c line 16: Undefined variable 'word'
+2013.11.10-22.11,50 /realms/quixadhal/cmds/base64.c line 12: Undefined variable 'words'
+2013.11.10-22.11,50 /realms/quixadhal/cmds/base64.c line 12: Undefined variable 'words'
+2013.11.10-22.15,05 /realms/quixadhal/cmds/base64.c line 20: Undefined function rimplode
+2013.11.10-22.15,07 /realms/quixadhal/cmds/base64.c line 20: Undefined function rimplode
+2013.11.10-22.15,07 /realms/quixadhal/cmds/base64.c line 20: Undefined function rimplode
+2013.11.10-22.15,57 /realms/quixadhal/cmds/base64.c line 20: Bad argument 1 to efun implode()
+2013.11.10-22.15,57 /realms/quixadhal/cmds/base64.c line 20: Bad argument 1 to efun implode()
+2013.11.10-22.17,03 /realms/quixadhal/cmds/base64.c line 20: Bad argument 1 to efun implode()
+2013.11.10-22.17,03 /realms/quixadhal/cmds/base64.c line 20: Bad argument 1 to efun implode()
+2013.11.10-22.36,14 /realms/quixadhal/cmds/base64.c line 59: Bad argument number 1 to '-': "string "
+2013.11.10-23.33,40 /realms/quixadhal/cmds/base64.c line 53: Undefined variable 'base64chars'
+2013.11.10-23.33,40 /realms/quixadhal/cmds/base64.c line 61: Undefined variable 'r'
+2013.11.10-23.33,40 /realms/quixadhal/cmds/base64.c line 61: Illegal lvalue
+2013.11.10-23.33,40 /realms/quixadhal/cmds/base64.c line 69: Illegal to redeclare local name 'i'

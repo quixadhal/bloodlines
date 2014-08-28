@@ -1,0 +1,12 @@
+-----
+2014.08.08-20.11,31: Polatrite
+*String index out of bounds.
+Object: /secure/save/players/p/polatrite (/lib/talk.c) at line 259
+
+#0: '<fake>' at /cmds/players/converse (/<driver>) at /(fake):0
+#1: 'eventChat' at /cmds/players/converse at line 31
+#2: 'eventSpeak' at /secure/save/players/p/polatrite (/lib/talk.c) at line 259
+
+object:OBJECT (/secure/save/players/p/polatrite), error:*String index out of bounds.
+, trace:ARRAY (), program:/lib/talk.c, file:/lib/talk.c, line:259
+-----

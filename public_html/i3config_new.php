@@ -1,5 +1,5 @@
 <?php
-$DB_DSN                 = "pgsql:host=localhost;port=5432;dbname=i3logs";
+$DB_DSN                 = "pgsql:host=localhost;port=5432;dbname=i3log2";
 $DB_USER                = "quixadhal";
 $DB_PWD                 = "tardis69";
 $MUD_NAME               = "WileyMUD IV: Bloodlines";

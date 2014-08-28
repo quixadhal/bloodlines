@@ -37,6 +37,8 @@ int CheckOK(){
                     "Intermud connection is %^BOLD%^GREEN%^ONLINE%^BOLD%^CYAN%^.%^RESET%^\"");
             LogIt(timestamp()+"\t"+"intermud"+"\t"+"SYSTEM@"+mud_name()+"\t"+"Intermud connection is ONLINE."+"\n", "/secure/log/allchan.log", "intermud");
             load_object(ROOM_ARCH)->SetImud(1);
+            // SERVICES_D->eventSendChannel(name, rc, str, emote, convert_name(targetkey), target_msg);;
+            SERVICES_D->eventSendChannel("SYSTEM", "ds", "The Arch Room loudspeaker announces: %^BOLD%^CYAN%^Intermud connection is back %^BOLD%^GREEN%^ONLINE%^BOLD%^CYAN%^.%^RESET%^", 0);
         }
 
         Retries = 0;

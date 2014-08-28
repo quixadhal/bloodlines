@@ -10,7 +10,7 @@
 #define AUTO_WIZ                 0
 #define RESTRICTED_INTERMUD      0
 #define DISABLE_INTERMUD         0
-#define DISABLE_IMC2             0
+#define DISABLE_IMC2             1
 #define MINUTES_REBOOT_WARNING   20
 #define TIME_TO_RESET            3600
 #define RESET_ALL                0

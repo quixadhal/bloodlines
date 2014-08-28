@@ -1,0 +1,11 @@
+Ahti Fri Jun 27 11:50:03 2014 
+0:OBJ(/secure/sefun/sefun)[49;49m[0;10m, file: /secure/sefun/sefun.c[49;49m[0;10m, fun: get_stack[49;49m[0;10m, origin: simul[49;49m[0;10m
+1:OBJ(ahti /secure/save/players/a/ahti)[49;49m[0;10m, file: /lib/interactive.c[49;49m[0;10m, fun: eventDestruct[49;49m[0;10m, origin: call_other[49;49m[0;10m
+2:OBJ(/secure/daemon/players)[49;49m[0;10m, file: /secure/daemon/players.c[49;49m[0;10m, fun: RemoveUser[49;49m[0;10m, origin: call_other[49;49m[0;10m
+3:OBJ(/secure/cmds/players/suicide)[49;49m[0;10m, file: /secure/cmds/players/suicide.c[49;49m[0;10m, fun: EndSuicide[49;49m[0;10m, origin: local[49;49m[0;10m
+4:OBJ(/secure/cmds/players/suicide)[49;49m[0;10m, file: /<driver>[49;49m[0;10m, fun: <function>[49;49m[0;10m, origin: function pointer[49;49m[0;10m
+5:OBJ(ahti /secure/save/players/a/ahti)[49;49m[0;10m, file: /lib/editor.c[49;49m[0;10m, fun: process_input[49;49m[0;10m, origin: local[49;49m[0;10m
+6:OBJ(ahti /secure/save/players/a/ahti)[49;49m[0;10m, file: /lib/interface.c[49;49m[0;10m, fun: process_input[49;49m[0;10m, origin: local[49;49m[0;10m
+7:OBJ(ahti /secure/save/players/a/ahti)[49;49m[0;10m, file: /lib/interactive.c[49;49m[0;10m, fun: process_input[49;49m[0;10m, origin: driver[49;49m[0;10m
+---
+

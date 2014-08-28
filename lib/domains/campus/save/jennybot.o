@@ -1,7 +1,7 @@
 #/domains/campus/npc/jennybot.c
 RestrictedChannels ({})
 NoChanColors 0
-GagMutes (["remote_gag":0,"remote_mute":0,"local_mute":0,"local_gag":0,])
+GagMutes (["remote_mute":0,"remote_gag":0,"local_mute":0,"local_gag":0,])
 Paused 0
 localcmds ({"",})
 parsed_command ""
@@ -19,7 +19,7 @@ Riders ({})
 BodyMass 0
 SaveRecurse 1
 Saved ({"Properties",})
-HealthPoints 750
+HealthPoints 730
 MagicPoints 1050
 ExperiencePoints 50
 melee 1
@@ -31,12 +31,12 @@ Drink 100
 Poison 0
 Sleeping 0
 DeathEvents 0
-StaminaPoints 801.000000
+StaminaPoints 769.000000
 Torso "torso"
 Biter 0
 keepalive 0
 Fingers (["right hand":5,"left hand":5,])
-Limbs (["left leg":(["children":({"left foot",}),"armors":1049761,"health":360,"class":2,"parent":"torso",]),"torso":(["children":({"neck","right leg","left leg","right arm","left arm",}),"armors":1538049,"health":710,"class":1,"parent":0,]),"right foot":(["children":({}),"armors":241,"health":180,"class":4,"parent":"right leg",]),"right leg":(["children":({"right foot",}),"armors":1049761,"health":360,"class":2,"parent":"torso",]),"head":(["children":({}),"armors":262913,"health":710,"class":1,"parent":"neck",]),"right hand":(["children":({}),"armors":98319,"health":180,"class":4,"parent":"right arm",]),"neck":(["children":({"head",}),"armors":786433,"health":710,"class":1,"parent":"torso",]),"left arm":(["children":({"left hand",}),"armors":1253385,"health":360,"class":2,"parent":"torso",]),"left foot":(["children":({}),"armors":241,"health":180,"class":4,"parent":"left leg",]),"left hand":(["children":({}),"armors":98319,"health":180,"class":4,"parent":"left arm",]),"right arm":(["children":({"right hand",}),"armors":1253385,"health":360,"class":2,"parent":"torso",]),])
+Limbs (["left leg":(["children":({"left foot",}),"armors":1049761,"health":350,"class":2,"parent":"torso",]),"torso":(["children":({"neck","right leg","left leg","right arm","left arm",}),"armors":1538049,"health":690,"class":1,"parent":0,]),"right foot":(["children":({}),"armors":241,"health":180,"class":4,"parent":"right leg",]),"right leg":(["children":({"right foot",}),"armors":1049761,"health":350,"class":2,"parent":"torso",]),"head":(["children":({}),"armors":262913,"health":690,"class":1,"parent":"neck",]),"right hand":(["children":({}),"armors":98319,"health":180,"class":4,"parent":"right arm",]),"neck":(["children":({"head",}),"armors":786433,"health":690,"class":1,"parent":"torso",]),"left arm":(["children":({"left hand",}),"armors":1253385,"health":350,"class":2,"parent":"torso",]),"left foot":(["children":({}),"armors":241,"health":180,"class":4,"parent":"left leg",]),"left hand":(["children":({}),"armors":98319,"health":180,"class":4,"parent":"left arm",]),"right arm":(["children":({"right hand",}),"armors":1253385,"health":350,"class":2,"parent":"torso",]),])
 MissingLimbs ([])
 firearms_wounds 0
 ExtraChannels ({})
@@ -45,7 +45,7 @@ Blind 0
 Custom (["stats":15,"deviations":4,"deviating":0,])
 LightSensitivity ({25,7500,})
 Resistance (["low":0,"high":0,"immune":0,"medium":0,"none":134217726,])
-Stats (["agility":(["class":3,"points":0,"level":87,]),"wisdom":(["class":3,"points":0,"level":91,]),"speed":(["class":3,"points":0,"level":85,]),"coordination":(["class":2,"points":0,"level":90,]),"intelligence":(["class":1,"points":0,"level":100,]),"strength":(["class":4,"points":0,"level":72,]),"luck":(["class":3,"points":0,"level":51,]),"durability":(["class":4,"points":0,"level":70,]),"charisma":(["class":2,"points":0,"level":93,]),])
+Stats (["wisdom":(["class":3,"points":0,"level":93,]),"agility":(["class":3,"points":0,"level":81,]),"speed":(["class":3,"points":0,"level":81,]),"strength":(["class":4,"points":0,"level":77,]),"intelligence":(["class":1,"points":0,"level":100,]),"durability":(["class":4,"points":0,"level":68,]),"charisma":(["class":2,"points":0,"level":96,]),"coordination":(["class":2,"points":0,"level":100,]),"luck":(["class":3,"points":0,"level":47,]),])
 Polyglot 1
 Languages (["english":(["native":1,"name":"English","points":0,"level":100,]),"common":(["native":0,"name":"common","points":0,"level":100,]),])
 DefaultLanguage "Common"
@@ -72,7 +72,7 @@ QuestBook ([])
 isPK 1
 Attackable 1
 NoCondition 0
-Messages (["telin":"$N teleports in.","telout":"$N teleports away.","leave":"$N leaves $D.","vis":"$N appears.","invis":"$N disappears.","home":"$N goes home.","dest":"$N dests $O.","come":"$N enters.","clone":"$N clones $O.",])
+Messages (["telin":"$N teleports in.","leave":"$N leaves $D.","telout":"$N teleports away.","vis":"$N appears.","home":"$N goes home.","invis":"$N disappears.","come":"$N enters.","dest":"$N dests $O.","clone":"$N clones $O.",])
 anchored 0
 PersistentInventory 0
 PersistentInventoryEnabled 0
@@ -99,7 +99,7 @@ EnemyNames ({})
 VisibleRiders 1
 actions_enabled 1
 Equipped ([])
-CommandResponses (["shut up":,"go away":,"shut down":,"shutdown":,])
+CommandResponses (["shut up":,"go away":,"shutdown":,"shut down":,])
 EmoteResponses ([])
 RequestResponses ([])
 TalkResponses (["sup":,"hey":,"hi":,"hello":,])
@@ -113,4 +113,4 @@ player
 bot 0
 ob 
 noobster 0
-watchlist ({"blarghy",})
+watchlist ({"ahti","blarghy",})

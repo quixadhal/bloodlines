@@ -26,4 +26,4 @@
 #include <message_class.h>
 inherit LIB_ITEM;
 #include "/realms/quixadhal/evaldefs.h"
-mixed eval() { return "/www/cgi/mudlist"->gateway();; }
+mixed eval() { return to_int((pow((1+2),3)-pow((1+2),2))/2); }

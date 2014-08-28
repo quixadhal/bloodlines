@@ -1,6 +1,6 @@
 HTTP/1.1 200 OK
-Date: Sat, 27 Jul 2013 04:37:03 GMT
-Server: Apache/2.2.9 (Ubuntu) PHP/5.2.6-2ubuntu4.6 with Suhosin-Patch proxy_html/3.0.0 mod_ssl/2.2.9 OpenSSL/0.9.8g
+Date: Sat, 28 Jun 2014 06:16:57 GMT
+Server: Apache/2.2.9 (Ubuntu) PHP/5.2.6-2ubuntu4.6 with Suhosin-Patch proxy_html/3.0.0
 Last-Modified: Sun, 21 Jul 2013 14:55:40 GMT
 ETag: "d928d-1e77c-4e206c0d97300"
 Accept-Ranges: bytes

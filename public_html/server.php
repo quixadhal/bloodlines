@@ -51,7 +51,7 @@
 <html>
     <head>
         <title>
-            stalin.shadowlord.org
+            lenin.awasteoftime.net
         </title>
     <script language="javascript">
         function toggleDiv(divID) {
@@ -67,20 +67,21 @@
         <table style="table-layout:fixed; width:100%; border:0px; white-space:normal;  word-wrap:break-word;">
             <tr>
                 <td width="75%" align="left">
-                    <h1>stalin.shadowlord.org</h1>
+                    <h1>lenin.awasteoftime.net</h1>
                     <hr />
                     <h3>Hardware purchased:</h3>
-54.99                    <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16813157335">ASRock B75M-DGS LGA 1155 Intel B75 Micro ATX Intel Motherboard</a><br />
-49.99                    <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16811147153">Rosewill CHALLENGER Black Gaming ATX Mid Tower Case</a><br />
-36.99                    <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16817139026">Corsair CX430 ATX Active PFC Power Supply</a><br />
-49.99                    <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16820231489">G.Skill Ripjaw X Series 16GB (2 x 8GB) DDR3 SDRAM (PC3 12800)</a><br />
-15.99                    <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16827106289">Lite-On SATA DVD Burner</a> (A burner was cheaper than a non-burner!)<br />
-64.99                    <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16819116406">Intel Pentium G630 Sandy Bridge 2.7GHz Dual Core CPU (LGA 1155)</a><br />
+ 54.99                   <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16813157335">ASRock B75M-DGS LGA 1155 Intel B75 Micro ATX Intel Motherboard</a><br />
+ 49.99                   <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16811147153">Rosewill CHALLENGER Black Gaming ATX Mid Tower Case</a><br />
+ 36.99                   <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16817139026">Corsair CX430 ATX Active PFC Power Supply</a><br />
+ 49.99                   <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16820231489">G.Skill Ripjaw X Series 16GB (2 x 8GB) DDR3 SDRAM (PC3 12800)</a><br />
+ 15.99                   <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16827106289">Lite-On SATA DVD Burner</a> (A burner was cheaper than a non-burner!)<br />
+ 64.99                   <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16819116406">Intel Pentium G630 Sandy Bridge 2.7GHz Dual Core CPU (LGA 1155)</a><br />
                     <br />
                     <h3>Total purchase price (with discounts): $269.71 on November 21, 2012</h3>
                     <hr />
                     <h3>Hardware recycled:</h3>
-74.99                    <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16822236070">WD Cavier Green 1TB SATA hard drive</a><br />
+ 74.99                   <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16822236070">WD Cavier Green 1TB SATA hard drive</a><br />
+119.99                   <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16822136749">WD My Book 3TB Desktop USB 3.0 External Hard Drive</a> (now internal)<br />
                 </td>
                 <td align="left" >
                     <img src="<? echo $graphics['server_case']; ?>" border="0" width="300" height="304" />

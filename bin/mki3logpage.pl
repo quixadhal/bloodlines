@@ -11,7 +11,7 @@ use Lingua::EN::Numbers::Ordinate;
 use HTML::Entities;
 use DBI;
 
-my $dbc = DBI->connect('DBI:Pg:dbname=i3logs;host=localhost;port=5432;sslmode=prefer', 'bloodlines', 'tardis69', { AutoCommit => 0, PrintError => 0, });
+my $dbc = DBI->connect('DBI:Pg:dbname=i3log2;host=localhost;port=5432;sslmode=prefer', 'bloodlines', 'tardis69', { AutoCommit => 0, PrintError => 0, });
 
 sub get_quote {
     my $res = $dbc->selectrow_hashref(qq!

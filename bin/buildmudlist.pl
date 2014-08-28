@@ -22,6 +22,7 @@ use MIME::Base64;
 use Image::ANSI;
 use Encode;
 use Parallel::ForkManager 0.7.6;
+use JSON qw(decode_json);
 
 if(scalar @ARGV != 1) {
     print "Usage:  $0 < build | verify >\n";
@@ -207,10 +208,12 @@ sub do_verify {
     $dbc = undef;
 }
 
-my @global_tmp;
+my @global_tmp = ();
+my @result_set = ();
 
-sub do_build {
-    $dbc = undef;
+sub get_tmc {
+    my $pm = shift;
+
     my $timeout = 90;
     my $lwp = LWP::UserAgent->new();
        $lwp->timeout($timeout/2);
@@ -244,12 +247,6 @@ sub do_build {
         http://mudconnect.com/cgi-bin/mud_list.cgi?letter=z
     );
 
-#    @url_list = qw(
-#        http://mudconnect.com/cgi-bin/mud_list.cgi?letter=DIGIT
-#    );
-
-    my @result_set;
-
     foreach my $url (@url_list) {
         print STDERR "\nFetching $url ...";
         my $page = get_url( $url );
@@ -263,21 +260,6 @@ sub do_build {
     print STDERR "\n";
 
     # Now, we need to fork so this doesn't take so long...
-
-    my $pm = Parallel::ForkManager->new(20);
-
-    $pm->run_on_finish(
-        sub {
-            my ($pid, $exit_code, $ident, $exit_signal, $core_dump, $data_reference) = @_;
-            print STDERR "PID $pid, EXIT $exit_code, IDENT $ident, SIG $exit_signal, CORE $core_dump\n";
-            if( defined $data_reference ) {
-                my $result = ${ $data_reference };
-                push @global_tmp, $result;
-            } else {
-                print STDERR "NO DATA\n";
-            }
-        }
-    );
 
     my $set_size = scalar @result_set;
     for(my $i = 0; $i < $set_size; $i++) {
@@ -297,14 +279,21 @@ sub do_build {
     }
     $pm->wait_all_children;
 
+    # Now, grab the I3 mudlist from my own MUD
+
     @result_set = @global_tmp;
     @global_tmp = ();
+}
+
+sub get_i3 {
+    my $pm = shift;
 
     my $url = "http://192.168.1.11:5001/cgi/mudlist.c";
     print STDERR "\nFetching $url ...";
     my $page = get_url( $url );
     print STDERR "done, processing ...";
     if(defined $page) {
+        my $set_size = scalar @result_set;
         my @mudlist_results = process_mudlist_page($page, \@result_set);
         my $mudlist_set_size = scalar @mudlist_results;
         for(my $i = 0; $i < $mudlist_set_size; $i++) {
@@ -322,9 +311,100 @@ sub do_build {
         push @result_set, @global_tmp;
         @global_tmp = ();
     }
+}
 
-    sql_update(@result_set);
-    #print "\nFINAL:\n" . Dumper(\@result_set);
+sub get_json {
+    my $pm = shift;
+
+    my $url = "http://tintin.sourceforge.net/mssp/mudlist.json";
+    print STDERR "\nFetching $url ...";
+    my $page = get_url( $url );
+    print STDERR "done, processing ...";
+    if(defined $page) {
+        my $set_size = scalar @result_set;
+        my @mudlist_results = process_json_page($page, \@result_set);
+        my $mudlist_set_size = scalar @mudlist_results;
+
+        push @result_set, @mudlist_results;
+        return;
+
+        for(my $i = 0; $i < $mudlist_set_size; $i++) {
+            $pm->start($i) and next;
+
+            my $result = $mudlist_results[$i];
+            $result->{'index'} = $i + $set_size;
+            process_login($result) if defined $result->{'site'} and defined $result->{'port'};
+            printf STDERR "Got login screen from %s (%03d to go)\n", $result->{'url'}, $mudlist_set_size - $i;
+
+            $pm->finish(0, \$result);
+        }
+        $pm->wait_all_children;
+
+        push @result_set, @global_tmp;
+        @global_tmp = ();
+    }
+}
+
+sub do_build {
+    $dbc = undef;
+
+    my $pm = Parallel::ForkManager->new(20);
+
+    $pm->run_on_finish(
+        sub {
+            my ($pid, $exit_code, $ident, $exit_signal, $core_dump, $data_reference) = @_;
+            print STDERR "PID $pid, EXIT $exit_code, IDENT $ident, SIG $exit_signal, CORE $core_dump\n";
+            if( defined $data_reference ) {
+                my $result = ${ $data_reference };
+                push @global_tmp, $result;
+            } else {
+                print STDERR "NO DATA\n";
+            }
+        }
+    );
+
+    #get_tmc($pm);
+    #get_i3($pm);
+    get_json($pm);
+
+    #sql_update(@result_set);
+    print "\nFINAL:\n" . Dumper(\@result_set);
+}
+
+sub process_json_page {
+    my $page = shift;
+    my $result_set = shift;
+    my @results;
+
+    return undef if !defined $page;
+    my $json = decode_json($page);
+
+    foreach my $mud (sort keys %$json) {
+        my @bits = split /:/, $mud;
+
+        my $host = (exists $json->{$mud}->{'LAST HOST'}) ? $json->{$mud}->{'LAST HOST'} : $bits[0];
+        my $port = (exists $json->{$mud}->{'LAST PORT'}) ? $json->{$mud}->{'LAST PORT'} : $bits[1];
+        my $name = (exists $json->{$mud}->{'NAME'}) ? $json->{$mud}->{'NAME'} : $mud;
+        my $ipaddr = (exists $json->{$mud}->{'IP'}) ? $json->{$mud}->{'IP'} : undef;
+        my $type = (exists $json->{$mud}->{'CODEBASE'}) ? $json->{$mud}->{'CODEBASE'} : undef;
+        my $url = (exists $json->{$mud}->{'WEBSITE'}) ? $json->{$mud}->{'WEBSITE'} : undef;
+
+        my %data = (
+            'site'      => $host,
+            'port'      => $port,
+            'ipaddr'    => $ipaddr,
+            'url'       => $url,
+            'name'      => $name,
+            'type'      => $type,
+            'updated'   => strftime("%B %e, %Y", localtime(time)),
+        );
+
+        push @results, \%data if !(grep {$_->{'name'} eq $name} @$result_set);
+    }
+
+    print STDERR "Got " . (scalar @results) . " results...\n";
+    #print STDERR "\nMUDLIST:\n" . Dumper(\@results);
+    return @results;
 }
 
 sub process_mudlist_page {
