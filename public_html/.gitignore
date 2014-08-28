@@ -6,3 +6,5 @@ i3log_nosql.php
 i3log_test.php
 i3log_working.php
 mki3logpage.pl.txt
+i3log_dump.sql.bz2
+i3log_dump_tricky.sql.bz2

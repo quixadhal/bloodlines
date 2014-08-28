@@ -1,4 +1,4 @@
-2014.08.28-11.07,13
+2014.08.28-11.46,09
 Bloodlines recognizes eighty-eight muds matching your query: 
 
 7thplane        n/a    IMC2 client     IMC2 Freedom CL-2. 50.116.28.114 8888
@@ -13,7 +13,6 @@ Bloodlines      LPMud  FluffOS v2.27   Dead Souls 3.6     71.89.162.105 5000
 BreakingLP      LPMud  FluffOS v2.18-d Dead Souls 3.7a7   69.164.194.158 8329
 Cactus          LPMud  Amylaar 3.2.14  LPMud Custom       150.101.162.226 2010
 CoffeeMud       Coffee CoffeeMud v5.8. CoffeeMud v5.8.2   104.9.130.178 23
-Core MUD        LPMud  MudOS v22.2b14  Colony 1.3         174.133.80.138 4000
 Crat's Agony    LPMud  FluffOS v2.23-d Dead Souls 3.8.1   138.91.79.81 6666
 Cult Wars       Coffee CoffeeMud v5.8. CoffeeMud v5.8.2   162.209.73.61 5555
 DOGL            WebMud DGD 1.5.1       DOGL Development   137.147.77.193 0
@@ -81,6 +80,7 @@ Txt Based MUD   Coffee CoffeeMud v5.8. CoffeeMud v5.8.2   66.85.147.85 1776
 UOSSMUD         LP     MudOS v22.2b12  Lima 1.0a6         69.9.32.139 9000
 UOSSMUD-Dev     LP     MudOS v22.2b12  Lima 1.0a6         69.9.32.139 9010
 Unnamed_CoffeeM Coffee CoffeeMud v5.8. CoffeeMud v5.8.2   79.37.128.133 5555
+Unnamed_CoffeeM Coffee CoffeeMud v5.8. CoffeeMud v5.8.2   97.127.71.25 5555
 Untitled        LPMud  FluffOS v2.23-d Dead Souls 3.8.1   199.74.141.8 1100
 War of Legend   Diku   AFKMud I3 Drive WoL                178.79.173.99 4200
 Way of the Forc LPMud  DGD 1.2.157-WOT WOTFlib 0.90       195.242.99.94 23
