@@ -8,3 +8,13 @@ call chain: ({ /* sizeof() == 2 */
   /secure/daemon/players,
   /secure/save/players/x/xkcdboajefndgm
 })
+Guest received 2 training points at Fri Sep 19 14:26:06 2014
+call chain: ({ /* sizeof() == 2 */
+  /secure/daemon/players,
+  /secure/save/players/g/guest
+})
+Guest received 3 training points at Fri Sep 19 14:28:08 2014
+call chain: ({ /* sizeof() == 2 */
+  /secure/daemon/players,
+  /secure/save/players/g/guest
+})

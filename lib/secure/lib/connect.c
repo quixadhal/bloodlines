@@ -219,6 +219,12 @@ static void InputName(string namen, string kill_me) {
         }
     }
     if( !user_exists(Name) ) {
+        if ( !ALLOW_NEW_PLAYERS ) {
+            receive("\nSorry, new players are not allowed at this time.\n");
+            flush_messages();
+            Destruct();
+            return;
+        }
         eventCreatePlayer(name);
         return;
     }

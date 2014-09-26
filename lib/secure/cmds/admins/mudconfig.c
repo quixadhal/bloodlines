@@ -27,7 +27,7 @@ string array modals = antimodals + ({ "channelpipes", "fastcombat",
         "compat", "exitsbare", "nmexits", "grid", "minimap", "wizmap",
         "cgi", "dirlist", "creweb", "selectclass", "severable",
         "retain", "defaultparse", "disablereboot", "loglocal", "logremote",
-        "questrequired", "autoadvance" });
+        "questrequired", "autoadvance", "newplayers" });
 string array inet_services = ({ "oob", "hftp", "ftp", "http", "rcp", "inet" });
 
 static int NotImplemented(string which);
@@ -480,7 +480,11 @@ static int ProcessOther(string which, string arg){
                 return 1;
         }
     if(which == "PING_INTERVAL") reload (PING_D,1,1);
-        return 1;
+    if(which == "ALLOW_NEW_PLAYERS") {
+        reload ("/secure/cmds/admins/mudconfig.c",1,1);
+        reload ("/secure/lib/connect.c",1,1);
+    }
+    return 1;
 }
 
 static int ProcessString(string which, string arg){
@@ -574,6 +578,7 @@ static int ProcessModal(string which, string arg){
                 case "minimap" : which = "MINIMAP";break;
                 case "wizmap" : which = "WIZMAP";break;
                 case "grid" : which = "GRID";break;
+                case "newplayers" : which = "ALLOW_NEW_PLAYERS";break;
             default : break;
         }
     foreach(string element in config){
@@ -1000,6 +1005,7 @@ string MyGetHelp(){
             "\nmudconfig minimap         [" + ( MINIMAP == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( MINIMAP == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]  (Whether players get a minimap.)"
             "\nmudconfig wizmap          [" + ( WIZMAP == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( WIZMAP == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]  (Whether cres get an area map.)"
             "\nmudconfig grid            [" + ( GRID == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( GRID == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]  (Enable or disable the room grid system.)"
+            "\nmudconfig newplayers      [" + ( ALLOW_NEW_PLAYERS == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( ALLOW_NEW_PLAYERS == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]  (Enable or disable new player creation.)"
             "\nmudconfig compat          [" + ( COMPAT_MODE == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( COMPAT_MODE == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]"
             "\nmudconfig retain          [" + ( RETAIN_ON_QUIT == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( RETAIN_ON_QUIT == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]  (Whether items are retained on quit.)"
             "\nmudconfig defaultparse    [" + ( DEFAULT_PARSING == 1 ? "%^B_GREEN%^" : "" ) + " yes %^RESET%^|" + ( DEFAULT_PARSING == 0 ? "%^B_RED%^" : "" ) + " no %^RESET%^]"
@@ -1118,6 +1124,7 @@ string GetHelp(){
         output += ({ sprintf( "  %-=15s %-=*s %=36s", "localtime",      width-2-15-1+(LOCAL_TIME ? ena_width : dis_width)-1-36-2,         (LOCAL_TIME ? enabled : disabled),         "use local system time") });
 
         output += ({ sprintf( "%%^BOLD%%^%%^CYAN%%^%|*'='s%%^RESET%%^", width, "[ CHARACTER OPTIONS ]") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "newplayers",     width-2-15-1+(ALLOW_NEW_PLAYERS ? ena_width : dis_width)-1-36-2,  (ALLOW_NEW_PLAYERS ? enabled : disabled),  "allow new player creation") });
         output += ({ sprintf( "  %-=15s %-=*s %=36s", "autowiz",        width-2-15-1+(AUTO_WIZ ? ena_width : dis_width)-1-36-2,           (AUTO_WIZ ? enabled : disabled),           "all users are wizards") });
         output += ({ sprintf( "  %-=15s %-=*s %=36s", "justhumans",     width-2-15-1+(HUMANS_ONLY ? ena_width : dis_width)-1-36-2,        (HUMANS_ONLY ? enabled : disabled),        "restrict to a single race") });
         output += ({ sprintf( "  %-=15s %-=*s %=36s", "justenglish",    width-2-15-1+(ENGLISH_ONLY ? ena_width : dis_width)-1-36-2,       (ENGLISH_ONLY ? enabled : disabled),       "restrict to a single language") });

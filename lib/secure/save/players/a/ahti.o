@@ -10,26 +10,26 @@ CapName "Ahti"
 ExternalDesc "$N is nondescript."
 Invisible 0
 Items ([])
-Properties (["minimapping":1,"brand_spanking_new":0,"LastLocation":"/domains/default/room/start",])
-Inventory ({"([\"Wielded\":0,\"Value\":0,\"Class\":1,\"Worn\":0,\"Deterioration\":0,\"Broken\":0,\"Poison\":0,\"Mass\":3,\"#base_name#\":\"/domains/default/obj/handbook\",\"Cost\":1000,\"Properties\":([\"no steal\":1,]),])","([\"Value\":0,\"Mass\":5,\"Worn\":({\"torso\",}),\"#base_name#\":\"/domains/default/armor/shirt\",\"Deterioration\":0,\"Broken\":0,\"Cost\":1,\"Properties\":([]),\"Poison\":0,])","([\"Value\":0,\"Mass\":5,\"Worn\":({\"right leg\",\"left leg\",}),\"#base_name#\":\"/domains/default/armor/jeans\",\"Deterioration\":0,\"Broken\":0,\"Cost\":1,\"Properties\":([]),\"Poison\":0,])",})
+Properties (["minimapping":1,"brand_spanking_new":0,"LastLocation":"/domains/town/room/south_road1",])
+Inventory ({"([\"Value\":0,\"Mass\":5,\"Worn\":({\"right leg\",\"left leg\",}),\"#base_name#\":\"/domains/default/armor/jeans\",\"Deterioration\":0,\"Broken\":0,\"Cost\":1,\"Properties\":([]),\"Poison\":0,])","([\"Value\":0,\"Mass\":5,\"Worn\":({\"torso\",}),\"#base_name#\":\"/domains/default/armor/shirt\",\"Deterioration\":0,\"Broken\":0,\"Cost\":1,\"Properties\":([]),\"Poison\":0,])","([\"Wielded\":0,\"Value\":0,\"Class\":1,\"Worn\":0,\"Deterioration\":0,\"Broken\":0,\"Poison\":0,\"Mass\":3,\"#base_name#\":\"/domains/default/obj/handbook\",\"Cost\":1000,\"Properties\":([\"no steal\":1,]),])",})
 anchored 0
-Messages (["telin":"$N teleports in.","telout":"$N teleports away.","leave":"$N leaves $D.","vis":"$N appears.","invis":"$N disappears.","home":"$N goes home.","dest":"$N dests $O.","come":"$N enters.","clone":"$N clones $O.",])
+Messages (["telin":"$N teleports in.","leave":"$N leaves $D.","telout":"$N teleports away.","vis":"$N appears.","home":"$N goes home.","invis":"$N disappears.","come":"$N enters.","dest":"$N dests $O.","clone":"$N clones $O.",])
 RestrictedChannels ({})
 NoChanColors 0
-GagMutes (["remote_gag":0,"remote_mute":0,"local_mute":0,"local_gag":0,])
+GagMutes (["remote_mute":0,"remote_gag":0,"local_mute":0,"local_gag":0,])
 Paused 0
-localcmds ({"next","parserefresh","quit","nickname","unalias","alias","",})
+localcmds ({"appraise","price","show","list","parserefresh","quit","nickname","unalias","alias","",})
 parsed_command "quit"
 HistorySize 50
-History ([7:"quit",6:"go north",5:"n",4:"go down",3:"d",2:"who",1:"wear shirt",0:"wear jeans",])
+History ([35:"tell quixadhal dread quixadhal i beseech you, wake up from your archeage induced slumber and do away with infidel defilers hax0rring your mud.",34:"quixadhal test",33:"quixadhal",32:"look",31:"who",30:"go west",29:"go north",28:"map",27:"look at",26:"x",25:"wield corpse",24:"eat wim",23:"eat wi",22:"eat all",21:"get corpse",20:"get all from corpse",19:"go south",18:"s",17:"look podium",16:"l podium",15:"e",14:"open door",13:"open n",12:"open door n",11:"qw",10:"read index in handbook",9:"read book",8:"say waaaaaagghh",7:"\"waaaaaagghh",6:"go out",5:"exit",4:"exits",3:"go up",2:"u",1:"wear shirt",0:"wear jeans",])
 Nicknames ([])
-Aliases (["east":"go east","mwhere":"findobj $*","southeast":"go southeast","northeast":"go northeast","prac":"skills","sco":"score","x":"look at $*","w":"go west","u":"go up","t":"tell $*","out":"go out","practice":"skills","s":"go south","vnum":"help find","p":"people","south":"go south","north":"go north","n":"go north","bio":"biography","l":"look $*","k":"kill $*","west":"go west","zlist":"domains","southwest":"go southwest","northwest":"go northwest","i":"inventory","owhere":"findobj $*","e":"go east","d":"go down","c":"cre $*","alist":"ls /domains","inv":"inventory","nw":"go northwest","examine":"look at $*","trophy":"kills","up":"go up","chat":"newbie $*","dc":"dchat $*","exa":"look at $*","sw":"go southwest","ig":"intergossip $*","loot":"get all from $*","ic":"intercre $*","peace":"quell","inf":"score","lp":"lpuni $*","down":"go down","ne":"go northeast","exit":"go out","eq":"equipment","se":"go southeast","sc":"status",])
-Xverbs (["'":"say $*","]":"] $*","\"":"say $*",":":"emote $*",])
+Aliases (["east":"go east","northeast":"go northeast","southeast":"go southeast","mwhere":"findobj $*","prac":"skills","sco":"score","x":"look at $*","w":"go west","u":"go up","out":"go out","t":"tell $*","s":"go south","practice":"skills","vnum":"help find","p":"people","north":"go north","south":"go south","bio":"biography","n":"go north","l":"look $*","west":"go west","k":"kill $*","northwest":"go northwest","southwest":"go southwest","zlist":"domains","i":"inventory","owhere":"findobj $*","e":"go east","d":"go down","c":"cre $*","alist":"ls /domains","nw":"go northwest","inv":"inventory","examine":"look at $*","trophy":"kills","up":"go up","chat":"newbie $*","dc":"dchat $*","sw":"go southwest","exa":"look at $*","ig":"intergossip $*","loot":"get all from $*","ic":"intercre $*","peace":"quell","inf":"score","down":"go down","lp":"lpuni $*","ne":"go northeast","eq":"equipment","exit":"go out","se":"go southeast","sc":"status",])
+Xverbs (["'":"say $*","]":"] $*",":":"emote $*","\"":"say $*",])
 Directories (["current":"/","home":0,"previous":"/",])
 Prompt "status"
 Terminal "ansi"
 Blocked ([])
-Screen ({79,39,})
+Screen ({79,38,})
 MessageQueue 0
 PauseMessages 0
 annoyblock 0
@@ -38,15 +38,15 @@ BlockAnnoying 0
 Age 0
 WhereBlock 0
 Brief 0
-LoginTime 1406660424
+LoginTime 1411151274
 BirthTime 1406660408
 RescueBit 0
 Password "camgielg!haknacckfiemlgiocchgmchgghonfeci"
 Email "no@mail"
 RealName "Unknown"
 Rank "citizen"
-LoginSite "/domains/campus/room/start"
-HostSite "92.44.100.114"
+LoginSite "/domains/town/room/magic_shop"
+HostSite "213.153.193.101"
 WebPage 0
 News (["general":1233549750,])
 Marriages ({})
@@ -70,17 +70,17 @@ melee 0
 godmode 0
 Alcohol 0
 Caffeine 0
-Food 99
-Drink 99
+Food 85
+Drink 85
 Poison 0
 Sleeping 0
 DeathEvents 0
-StaminaPoints 463.900000
+StaminaPoints 464.000000
 Torso "torso"
 Biter 0
 keepalive 0
 Fingers (["right hand":5,"left hand":5,])
-Limbs (["left leg":(["children":({"left foot",}),"armors":1049761,"health":200,"class":2,"parent":"torso",]),"torso":(["children":({"neck","right leg","left leg","right arm","left arm",}),"armors":1538049,"health":400,"class":1,"parent":0,]),"right foot":(["children":({}),"armors":241,"health":100,"class":4,"parent":"right leg",]),"right leg":(["children":({"right foot",}),"armors":1049761,"health":200,"class":2,"parent":"torso",]),"head":(["children":({}),"armors":262913,"health":400,"class":1,"parent":"neck",]),"right hand":(["children":({}),"armors":98319,"health":100,"class":4,"parent":"right arm",]),"neck":(["children":({"head",}),"armors":786433,"health":400,"class":1,"parent":"torso",]),"left arm":(["children":({"left hand",}),"armors":1253385,"health":200,"class":2,"parent":"torso",]),"left foot":(["children":({}),"armors":241,"health":100,"class":4,"parent":"left leg",]),"left hand":(["children":({}),"armors":98319,"health":100,"class":4,"parent":"left arm",]),"right arm":(["children":({"right hand",}),"armors":1253385,"health":200,"class":2,"parent":"torso",]),])
+Limbs (["head":(["children":({}),"armors":262913,"parent":"neck","class":1,"health":400,]),"right leg":(["children":({"right foot",}),"armors":1049761,"parent":"torso","class":2,"health":200,]),"right foot":(["children":({}),"armors":241,"parent":"right leg","class":4,"health":100,]),"neck":(["children":({"head",}),"armors":786433,"parent":"torso","class":1,"health":400,]),"left foot":(["children":({}),"armors":241,"parent":"left leg","class":4,"health":100,]),"left arm":(["children":({"left hand",}),"armors":1253385,"parent":"torso","class":2,"health":200,]),"torso":(["children":({"neck","right leg","left leg","right arm","left arm",}),"armors":1538049,"parent":0,"class":1,"health":400,]),"left leg":(["children":({"left foot",}),"armors":1049761,"parent":"torso","class":2,"health":200,]),"right hand":(["children":({}),"armors":98319,"parent":"right arm","class":4,"health":100,]),"right arm":(["children":({"right hand",}),"armors":1253385,"parent":"torso","class":2,"health":200,]),"left hand":(["children":({}),"armors":98319,"parent":"left arm","class":4,"health":100,]),])
 MissingLimbs ([])
 firearms_wounds 0
 ExtraChannels ({"explorer","gossip","newbie",})
@@ -89,17 +89,17 @@ Blind 0
 Custom (["stats":15,"deviations":4,"deviating":0,])
 LightSensitivity ({25,7500,})
 Resistance (["low":0,"high":0,"immune":0,"medium":0,"none":134217726,])
-Stats (["agility":(["class":3,"points":0,"level":47,]),"wisdom":(["class":3,"points":0,"level":52,]),"speed":(["class":3,"points":0,"level":48,]),"coordination":(["class":2,"points":0,"level":39,]),"intelligence":(["class":1,"points":0,"level":61,]),"strength":(["class":3,"points":0,"level":36,]),"luck":(["class":3,"points":0,"level":28,]),"durability":(["class":4,"points":0,"level":39,]),"charisma":(["class":2,"points":0,"level":33,]),])
+Stats (["wisdom":(["class":3,"points":0,"level":52,]),"agility":(["class":3,"points":0,"level":47,]),"speed":(["class":3,"points":0,"level":48,]),"strength":(["class":3,"points":0,"level":36,]),"intelligence":(["class":1,"points":0,"level":61,]),"durability":(["class":4,"points":0,"level":39,]),"charisma":(["class":2,"points":0,"level":33,]),"coordination":(["class":2,"points":0,"level":39,]),"luck":(["class":3,"points":0,"level":28,]),])
 Polyglot 0
 Languages (["english":(["native":1,"name":"English","points":0,"level":100,]),"common":(["native":0,"name":"Common","points":0,"level":100,]),])
 DefaultLanguage "Common"
-TalkHist ([])
+TalkHist (["tell":({"2014.09.19-14.34,07 %^BOLD%^RED%^You tell Quixadhal,%^RESET%^ \"Dread quixadhal i beseech you, wake up from your archeage induced slumber and do away with infidel defilers hax0rring your mud.%^RESET%^\"",}),"say":({"2014.09.19-14.28,34 You say in Common, \"%^BOLD%^CYAN%^Waaaaaagghh.%^RESET%^\"",}),])
 SpeakColor "CYAN%^"
 Town "Town"
 Race "human"
 Gender "male"
 Level 1
-Skills (["psionic defense":(["class":3,"points":0,"level":2,]),"magic defense":(["class":2,"points":0,"level":3,]),"melee defense":(["class":2,"points":0,"level":2,]),"projectile attack":(["class":1,"points":0,"level":1,]),"knife defense":(["class":1,"points":0,"level":2,]),"blunt defense":(["class":1,"points":0,"level":2,]),"melee attack":(["class":2,"points":0,"level":1,]),"projectile defense":(["class":2,"points":0,"level":1,]),"bargaining":(["class":2,"points":0,"level":4,]),"blade defense":(["class":2,"points":0,"level":1,]),"magic attack":(["class":2,"points":0,"level":3,]),"knife attack":(["class":1,"points":0,"level":3,]),"blunt attack":(["class":1,"points":0,"level":2,]),"blade attack":(["class":2,"points":0,"level":1,]),])
+Skills (["magic defense":(["class":2,"points":0,"level":3,]),"psionic defense":(["class":3,"points":0,"level":2,]),"melee defense":(["class":2,"points":0,"level":2,]),"projectile attack":(["class":1,"points":0,"level":1,]),"blunt defense":(["class":1,"points":0,"level":2,]),"knife defense":(["class":1,"points":0,"level":2,]),"melee attack":(["class":2,"points":0,"level":1,]),"projectile defense":(["class":2,"points":0,"level":1,]),"blade defense":(["class":2,"points":0,"level":1,]),"bargaining":(["class":2,"points":0,"level":4,]),"magic attack":(["class":2,"points":0,"level":3,]),"blunt attack":(["class":1,"points":0,"level":2,]),"knife attack":(["class":1,"points":0,"level":3,]),"blade attack":(["class":2,"points":0,"level":1,]),])
 Morality 0
 Class "explorer"
 Clan 0

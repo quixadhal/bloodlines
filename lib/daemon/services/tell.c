@@ -64,6 +64,14 @@ void eventSendTell(string who, string where, string msg) {
     pl = this_player(1)->GetName();
     plc = this_player(1)->GetCapName();
     where = INTERMUD_D->GetMudName(where);
+
+    if(RESTRICTED_INTERMUD) {
+        if(!imud_privp(lower_case(pl))) {
+            this_player(1)->eventPrint("You lack the power to send tells to other worlds.", MSG_CONV);
+            return;
+        }
+    }
+
     INTERMUD_D->eventWrite(({ "tell", 5, mud_name(), pl, where, 
                 convert_name(who), plc, msg }));
     ret = "%^BOLD%^RED%^You tell " + capitalize(who) +

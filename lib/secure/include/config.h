@@ -8,7 +8,7 @@
 #define LOCAL_NEWS_PREFIX        "nm"
 #define MUD_IS_LOCKED            0
 #define AUTO_WIZ                 0
-#define RESTRICTED_INTERMUD      0
+#define RESTRICTED_INTERMUD      1
 #define DISABLE_INTERMUD         0
 #define DISABLE_IMC2             1
 #define MINUTES_REBOOT_WARNING   20
@@ -92,6 +92,7 @@
 #define MINIMAP                  1
 #define WIZMAP                   1
 #define GRID                     1
+#define ALLOW_NEW_PLAYERS        0
 #define ENABLE_INSTANCES         0
 #define CED_DISABLED             1
 #define CHANNEL_PIPES            1

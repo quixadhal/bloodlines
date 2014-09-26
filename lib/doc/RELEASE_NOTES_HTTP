@@ -1,12 +1,11 @@
 HTTP/1.1 200 OK
-Date: Sat, 28 Jun 2014 06:16:57 GMT
-Server: Apache/2.2.9 (Ubuntu) PHP/5.2.6-2ubuntu4.6 with Suhosin-Patch proxy_html/3.0.0
+Date: Fri, 26 Sep 2014 16:34:12 GMT
+Server: Apache/2.4.7 (Ubuntu)
 Last-Modified: Sun, 21 Jul 2013 14:55:40 GMT
-ETag: "d928d-1e77c-4e206c0d97300"
+ETag: "1e77c-4e206c0d97300"
 Accept-Ranges: bytes
 Content-Length: 124796
 Connection: close
-Content-Type: text/plain
 
 ---- 3.8 ---
 - Released 2013-07-20

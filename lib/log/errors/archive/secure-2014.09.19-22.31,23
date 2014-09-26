@@ -1,0 +1,590 @@
+2011.03.15-10.13,59 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Too few arguments to explode
+2011.03.15-10.21,47 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.03.15-10.22,39 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function identity
+2011.03.15-10.55,19 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Invalid simulated efunction override
+2011.03.21-13.38,29 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'this_player'
+2011.03.21-13.41,44 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad argument 1 to efun min()
+2011.03.26-23.41,48 /secure/daemon/ping.c line 27: Undefined variable 'ch'
+2011.03.26-23.41,48 /secure/daemon/ping.c line 27: Undefined function LogIt
+2011.03.26-23.42,14 /secure/daemon/ping.c line 27: Undefined variable 'ch'
+2011.03.26-23.42,14 /secure/daemon/ping.c line 27: Undefined function LogIt
+2011.03.26-23.42,14 /secure/daemon/ping.c line 27: Undefined variable 'ch'
+2011.03.26-23.42,14 /secure/daemon/ping.c line 27: Undefined function LogIt
+2011.03.26-23.42,44 /secure/daemon/ping.c line 27: Undefined variable 'ch'
+2011.03.26-23.42,44 /secure/daemon/ping.c line 27: Undefined function LogIt
+2011.03.26-23.42,44 /secure/daemon/ping.c line 27: Undefined variable 'ch'
+2011.03.26-23.42,44 /secure/daemon/ping.c line 27: Undefined function LogIt
+2011.03.26-23.43,14 /secure/daemon/ping.c line 36: Undefined variable 'ch'
+2011.03.26-23.43,14 /secure/daemon/ping.c line 36: Undefined variable 'ch'
+2011.03.26-23.43,23 /secure/daemon/ping.c line 38: Undefined variable 'ch'
+2011.03.26-23.43,23 /secure/daemon/ping.c line 38: Undefined variable 'ch'
+2011.03.26-23.43,44 /secure/daemon/ping.c line 38: Undefined variable 'ch'
+2011.03.26-23.43,44 /secure/daemon/ping.c line 38: Undefined variable 'ch'
+2011.03.26-23.44,14 /secure/daemon/ping.c line 38: Undefined variable 'ch'
+2011.03.26-23.44,14 /secure/daemon/ping.c line 38: Undefined variable 'ch'
+2011.03.26-23.44,29 /secure/daemon/ping.c line 47: Undefined variable 'ch'
+2011.03.26-23.44,29 /secure/daemon/ping.c line 47: Undefined variable 'ch'
+2011.03.26-23.44,34 /secure/daemon/ping.c line 47: Undefined variable 'ch'
+2011.03.26-23.44,34 /secure/daemon/ping.c line 47: Undefined variable 'ch'
+2011.03.26-23.44,34 /secure/daemon/ping.c line 47: Undefined variable 'ch'
+2011.03.26-23.44,44 /secure/daemon/ping.c line 47: Undefined variable 'ch'
+2011.03.26-23.44,44 /secure/daemon/ping.c line 47: Undefined variable 'ch'
+2011.04.08-18.33,36 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function identity
+2011.05.01-05.57,56 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'time'
+2011.05.01-05.57,56 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.05.01-06.53,52 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function fabs
+2011.05.01-07.11,25 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'r'
+2011.05.01-07.11,25 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2011.05.01-07.11,25 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'g'
+2011.05.01-07.11,25 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2011.05.01-07.11,25 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'b'
+2011.05.01-07.11,25 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2011.05.01-07.33,05 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'val'
+2011.05.01-07.33,05 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2011.05.01-07.33,13 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'v'
+2011.05.01-07.33,13 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2011.05.01-07.33,13 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'val'
+2011.05.01-07.33,23 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'v'
+2011.05.01-07.33,23 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2011.05.02-07.00,56 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Left argument of -> is not a class
+2011.05.12-09.21,34 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.06.24-23.41,59 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function showSpeakerColors
+2011.06.24-23.41,59 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.06.24-23.42,09 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.06.24-23.42,15 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.06.24-23.42,36 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.07.09-09.45,19 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function size
+2011.07.09-11.43,01 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal to use local variable in functional.
+2011.07.09-11.43,20 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal to use local variable in functional.
+2011.07.19-02.59,46 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function substr
+2011.07.19-03.43,43 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'a'
+2011.07.19-03.43,43 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2011.07.19-22.33,19 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function sort
+2011.07.19-22.38,22 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.07.19-22.38,22 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal LHS
+2011.07.19-22.38,22 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'm'
+2011.07.19-22.38,22 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Too few arguments to sort_array
+2011.07.19-22.38,22 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.07.19-22.38,33 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.07.19-22.38,33 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal LHS
+2011.07.19-22.38,33 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'm'
+2011.07.19-22.38,33 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Too few arguments to sort_array
+2011.07.19-22.38,33 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.07.19-22.38,53 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Too few arguments to sort_array
+2011.07.19-22.38,53 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.07.20-00.10,57 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Too few arguments to localtime
+2011.07.20-02.10,49 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'a'
+2011.07.20-02.10,49 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2011.07.20-02.10,49 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'b'
+2011.07.20-02.10,49 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2011.07.21-05.52,13 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.07.21-05.57,29 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Invalid types to '*' ( string vs int )
+2011.07.21-06.00,35 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'rows'
+2011.07.21-06.00,52 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'rows'
+2011.07.21-06.00,52 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2011.07.21-19.07,33 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.07.27-14.42,33 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.07.27-14.42,33 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.07.27-14.42,43 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.07.29-02.03,30 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function no_colours
+2011.09.10-07.18,45 /secure/cmds/admins/mudconfig.c line 971: Undefined variable 'ROOM_START'
+2011.09.10-07.18,45 /secure/cmds/admins/mudconfig.c line 971: Undefined variable 'ROOM_START'
+2011.09.10-07.22,49 /secure/cmds/admins/mudconfig.c line 971: Undefined variable 'ROOM_START'
+2011.09.10-07.22,49 /secure/cmds/admins/mudconfig.c line 971: Undefined variable 'ROOM_START'
+2011.09.10-07.27,41 /secure/cmds/admins/mudconfig.c line 1035: Undefined variable 'MSG_SYSTEM'
+2011.09.10-07.27,41 /secure/cmds/admins/mudconfig.c line 1035: Undefined variable 'MSG_NOCOLOUR'
+2011.09.28-13.04,02 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Too few arguments to random
+2011.09.28-13.05,38 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Reserved type name unexpected.
+2011.09.28-13.05,38 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.09.28-13.05,38 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal LHS
+2011.09.28-13.05,38 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'a'
+2011.10.04-06.19,55 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'ROOM_D'
+2011.10.16-02.55,06 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.10.23-05.19,59 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function exists
+2011.10.23-05.20,10 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function defined
+2011.10.27-22.48,09 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'TERM_D'
+2011.10.29-00.54,51 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'm'
+2011.10.29-00.54,51 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2011.10.29-00.54,57 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: 't' is not a local or a global variable.
+2011.10.29-00.54,57 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 't'
+2011.10.29-00.55,11 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 't'
+2011.11.02-21.35,55 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function lower
+2011.11.02-21.35,59 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function lowercase
+2011.11.02-21.54,41 /secure/daemon/chat.c line 480: Reserved type name unexpected.
+2011.11.02-21.54,41 /secure/daemon/chat.c line 480: syntax error
+2011.11.02-21.54,41 /secure/daemon/chat.c line 484: Illegal LHS
+2011.11.02-21.54,41 /secure/daemon/chat.c line 485: Reserved type name unexpected.
+2011.11.02-21.54,41 /secure/daemon/chat.c line 485: syntax error
+2011.11.02-21.54,41 /secure/daemon/chat.c line 492: Undefined variable 'str'
+2011.11.02-21.54,45 /secure/daemon/chat.c line 480: Reserved type name unexpected.
+2011.11.02-21.54,45 /secure/daemon/chat.c line 480: syntax error
+2011.11.02-21.54,45 /secure/daemon/chat.c line 484: Illegal LHS
+2011.11.02-21.54,45 /secure/daemon/chat.c line 485: Reserved type name unexpected.
+2011.11.02-21.54,45 /secure/daemon/chat.c line 485: syntax error
+2011.11.02-21.54,45 /secure/daemon/chat.c line 492: Undefined variable 'str'
+2011.11.02-21.54,45 /secure/daemon/chat.c line 480: Reserved type name unexpected.
+2011.11.02-21.54,45 /secure/daemon/chat.c line 480: syntax error
+2011.11.02-21.54,45 /secure/daemon/chat.c line 484: Illegal LHS
+2011.11.02-21.54,45 /secure/daemon/chat.c line 485: Reserved type name unexpected.
+2011.11.02-21.54,45 /secure/daemon/chat.c line 485: syntax error
+2011.11.02-21.54,45 /secure/daemon/chat.c line 492: Undefined variable 'str'
+2011.11.02-21.55,15 /secure/daemon/chat.c line 480: Reserved type name unexpected.
+2011.11.02-21.55,15 /secure/daemon/chat.c line 480: syntax error
+2011.11.02-21.55,15 /secure/daemon/chat.c line 484: Illegal LHS
+2011.11.02-21.55,15 /secure/daemon/chat.c line 485: Reserved type name unexpected.
+2011.11.02-21.55,15 /secure/daemon/chat.c line 485: syntax error
+2011.11.02-21.55,15 /secure/daemon/chat.c line 492: Undefined variable 'str'
+2011.11.02-21.55,15 /secure/daemon/chat.c line 480: Reserved type name unexpected.
+2011.11.02-21.55,15 /secure/daemon/chat.c line 480: syntax error
+2011.11.02-21.55,15 /secure/daemon/chat.c line 484: Illegal LHS
+2011.11.02-21.55,15 /secure/daemon/chat.c line 485: Reserved type name unexpected.
+2011.11.02-21.55,15 /secure/daemon/chat.c line 485: syntax error
+2011.11.02-21.55,15 /secure/daemon/chat.c line 492: Undefined variable 'str'
+2011.11.02-21.57,17 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.11.02-21.57,31 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.11.02-21.57,34 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.11.02-22.10,39 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.11.02-22.10,50 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.11.02-22.30,33 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad argument 1 to efun min()
+2011.11.03-02.31,21 /secure/daemon/chat.c line 508: Bad argument 1 to efun min()
+2011.11.03-02.31,45 /secure/daemon/chat.c line 508: Bad argument 1 to efun min()
+2011.11.03-02.31,45 /secure/daemon/chat.c line 508: Bad argument 1 to efun min()
+2011.11.09-10.44,51 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal to declare local variable of type void.
+2011.11.09-10.44,51 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.11.09-10.44,51 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal LHS
+2011.11.09-10.44,51 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'i'
+2011.11.09-10.44,51 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.11.09-10.45,13 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal to declare local variable of type void.
+2011.11.09-10.45,13 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.11.09-10.45,13 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal LHS
+2011.11.09-10.45,13 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'i'
+2011.11.09-10.45,13 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2011.11.09-19.37,37 /secure/daemon/chat.c line 480: Reserved type name unexpected.
+2011.11.09-19.37,37 /secure/daemon/chat.c line 480: syntax error
+2011.11.09-19.37,37 /secure/daemon/chat.c line 480: Illegal LHS
+2011.11.09-19.37,37 /secure/daemon/chat.c line 481: Undefined variable 'str'
+2011.11.09-19.37,37 /secure/daemon/chat.c line 482: Undefined variable 'counter'
+2011.11.09-19.37,37 /secure/daemon/chat.c line 483: Undefined variable 'ret'
+2011.11.09-19.37,45 /secure/daemon/chat.c line 480: Reserved type name unexpected.
+2011.11.09-19.37,45 /secure/daemon/chat.c line 480: syntax error
+2011.11.09-19.37,45 /secure/daemon/chat.c line 480: Illegal LHS
+2011.11.09-19.37,45 /secure/daemon/chat.c line 481: Undefined variable 'str'
+2011.11.09-19.37,45 /secure/daemon/chat.c line 482: Undefined variable 'counter'
+2011.11.09-19.37,45 /secure/daemon/chat.c line 483: Undefined variable 'ret'
+2011.11.09-19.37,45 /secure/daemon/chat.c line 480: Reserved type name unexpected.
+2011.11.09-19.37,45 /secure/daemon/chat.c line 480: syntax error
+2011.11.09-19.37,45 /secure/daemon/chat.c line 480: Illegal LHS
+2011.11.09-19.37,45 /secure/daemon/chat.c line 481: Undefined variable 'str'
+2011.11.09-19.37,45 /secure/daemon/chat.c line 482: Undefined variable 'counter'
+2011.11.09-19.37,45 /secure/daemon/chat.c line 483: Undefined variable 'ret'
+2011.11.12-21.26,34 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Type mismatch ( string array vs string ) when initializing fff
+2011.11.12-22.16,49 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'undef'
+2011.11.12-22.16,53 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'nil'
+2011.11.12-22.16,57 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'NULL'
+2011.11.13-20.06,37 /secure/cmds/admins/mudconfig.c line 1083: Undefined variable 'ROOM_START'
+2011.11.13-20.06,37 /secure/cmds/admins/mudconfig.c line 1109: Illegal lvalue
+2011.11.13-20.06,37 /secure/cmds/admins/mudconfig.c line 1109: Illegal character constant
+2011.11.13-20.06,37 /secure/cmds/admins/mudconfig.c line 1109: syntax error
+2011.11.13-20.06,37 /secure/cmds/admins/mudconfig.c line 1110: Illegal LHS
+2011.11.13-20.06,37 /secure/cmds/admins/mudconfig.c line 1110: Illegal LHS
+2011.11.13-20.08,34 /secure/cmds/admins/mudconfig.c line 1113: Illegal lvalue
+2011.11.13-20.08,34 /secure/cmds/admins/mudconfig.c line 1113: Illegal character constant
+2011.11.13-20.08,34 /secure/cmds/admins/mudconfig.c line 1113: syntax error
+2011.11.13-20.08,34 /secure/cmds/admins/mudconfig.c line 1114: Illegal LHS
+2011.11.13-20.08,34 /secure/cmds/admins/mudconfig.c line 1114: Illegal LHS
+2011.11.13-20.08,34 /secure/cmds/admins/mudconfig.c line 1115: Illegal LHS
+2011.11.13-20.08,34 /secure/cmds/admins/mudconfig.c line 1113: Illegal lvalue
+2011.11.13-20.08,34 /secure/cmds/admins/mudconfig.c line 1113: Illegal character constant
+2011.11.13-20.08,34 /secure/cmds/admins/mudconfig.c line 1113: syntax error
+2011.11.13-20.08,34 /secure/cmds/admins/mudconfig.c line 1114: Illegal LHS
+2011.11.13-20.08,34 /secure/cmds/admins/mudconfig.c line 1114: Illegal LHS
+2011.11.13-20.08,34 /secure/cmds/admins/mudconfig.c line 1115: Illegal LHS
+2011.11.13-20.09,14 /secure/cmds/admins/mudconfig.c line 1166: Undefined variable 'enc'
+2011.11.13-20.09,14 /secure/cmds/admins/mudconfig.c line 1166: Undefined function box
+2011.11.13-20.09,14 /secure/cmds/admins/mudconfig.c line 1166: Undefined variable 'enc'
+2011.11.13-20.09,14 /secure/cmds/admins/mudconfig.c line 1166: Undefined function box
+2011.11.14-00.50,34 /secure/cmds/admins/mudconfig.c line 1057: syntax error
+2011.11.14-00.50,34 /secure/cmds/admins/mudconfig.c line 1059: syntax error
+2011.11.14-00.50,34 /secure/cmds/admins/mudconfig.c line 1060: syntax error
+2011.11.14-00.50,34 /secure/cmds/admins/mudconfig.c line 1061: syntax error
+2011.11.14-00.50,34 /secure/cmds/admins/mudconfig.c line 1066: syntax error
+2011.11.14-00.50,34 /secure/cmds/admins/mudconfig.c line 1068: syntax error
+2011.11.14-00.50,49 /secure/cmds/admins/mudconfig.c line 1059: syntax error
+2011.11.14-00.50,49 /secure/cmds/admins/mudconfig.c line 1060: syntax error
+2011.11.14-00.50,49 /secure/cmds/admins/mudconfig.c line 1061: syntax error
+2011.11.14-00.50,49 /secure/cmds/admins/mudconfig.c line 1066: syntax error
+2011.11.14-00.50,49 /secure/cmds/admins/mudconfig.c line 1068: syntax error
+2011.11.14-00.50,49 /secure/cmds/admins/mudconfig.c line 1069: syntax error
+2011.11.14-00.50,49 /secure/cmds/admins/mudconfig.c line 1059: syntax error
+2011.11.14-00.50,49 /secure/cmds/admins/mudconfig.c line 1060: syntax error
+2011.11.14-00.50,49 /secure/cmds/admins/mudconfig.c line 1061: syntax error
+2011.11.14-00.50,49 /secure/cmds/admins/mudconfig.c line 1066: syntax error
+2011.11.14-00.50,49 /secure/cmds/admins/mudconfig.c line 1068: syntax error
+2011.11.14-00.50,49 /secure/cmds/admins/mudconfig.c line 1069: syntax error
+2011.11.14-00.51,13 /secure/cmds/admins/mudconfig.c line 1070: syntax error
+2011.11.14-00.51,13 /secure/cmds/admins/mudconfig.c line 1071: syntax error
+2011.11.14-00.51,13 /secure/cmds/admins/mudconfig.c line 1072: syntax error
+2011.11.14-00.51,13 /secure/cmds/admins/mudconfig.c line 1073: syntax error
+2011.11.14-00.51,13 /secure/cmds/admins/mudconfig.c line 1074: syntax error
+2011.11.14-00.51,13 /secure/cmds/admins/mudconfig.c line 1075: syntax error
+2011.11.14-00.51,13 /secure/cmds/admins/mudconfig.c line 1070: syntax error
+2011.11.14-00.51,13 /secure/cmds/admins/mudconfig.c line 1071: syntax error
+2011.11.14-00.51,13 /secure/cmds/admins/mudconfig.c line 1072: syntax error
+2011.11.14-00.51,13 /secure/cmds/admins/mudconfig.c line 1073: syntax error
+2011.11.14-00.51,13 /secure/cmds/admins/mudconfig.c line 1074: syntax error
+2011.11.14-00.51,13 /secure/cmds/admins/mudconfig.c line 1075: syntax error
+2011.11.14-00.52,15 /secure/cmds/admins/mudconfig.c line 1121: syntax error
+2011.11.14-00.52,15 /secure/cmds/admins/mudconfig.c line 1124: Illegal LHS
+2011.11.14-00.52,15 /secure/cmds/admins/mudconfig.c line 1124: syntax error
+2011.11.14-00.52,15 /secure/cmds/admins/mudconfig.c line 1127: Illegal LHS
+2011.11.14-00.52,15 /secure/cmds/admins/mudconfig.c line 1127: syntax error
+2011.11.14-00.52,15 /secure/cmds/admins/mudconfig.c line 1128: Illegal LHS
+2011.11.14-00.52,15 /secure/cmds/admins/mudconfig.c line 1121: syntax error
+2011.11.14-00.52,15 /secure/cmds/admins/mudconfig.c line 1124: Illegal LHS
+2011.11.14-00.52,15 /secure/cmds/admins/mudconfig.c line 1124: syntax error
+2011.11.14-00.52,15 /secure/cmds/admins/mudconfig.c line 1127: Illegal LHS
+2011.11.14-00.52,15 /secure/cmds/admins/mudconfig.c line 1127: syntax error
+2011.11.14-00.52,15 /secure/cmds/admins/mudconfig.c line 1128: Illegal LHS
+2011.11.14-01.25,05 /secure/cmds/admins/mudconfig.c line 1064: syntax error
+2011.11.14-01.25,05 /secure/cmds/admins/mudconfig.c line 1069: Illegal LHS
+2011.11.14-01.25,05 /secure/cmds/admins/mudconfig.c line 1069: syntax error
+2011.11.14-01.25,05 /secure/cmds/admins/mudconfig.c line 1071: Illegal LHS
+2011.11.14-01.25,05 /secure/cmds/admins/mudconfig.c line 1071: syntax error
+2011.11.14-01.25,05 /secure/cmds/admins/mudconfig.c line 1072: Illegal LHS
+2011.11.14-01.26,54 /secure/cmds/admins/mudconfig.c line 1061: Invalid types to '-' ( string vs int )
+2011.11.14-03.41,36 /secure/cmds/admins/mudconfig.c line 1069: Type mismatch ( int vs object ) when initializing router_here
+2012.01.05-04.07,36 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'reutrn'
+2012.01.05-04.07,36 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.01.05-04.08,01 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Divide by zero in constant
+2012.01.05-04.13,53 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'Are'
+2012.01.05-04.13,53 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.01.07-21.19,40 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad argument 1 to efun implode()
+2012.01.07-21.19,40 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad argument 2 to efun implode()
+2012.01.07-21.26,55 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.01.07-21.26,55 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'x'
+2012.01.07-21.26,55 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal LHS
+2012.01.07-21.26,55 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.01.07-21.27,12 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.01.07-21.27,12 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'x'
+2012.01.07-21.27,12 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal LHS
+2012.01.07-21.27,12 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.01.17-01.22,12 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad left argument to '|' : "mapping "
+2012.01.17-01.22,12 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad right argument to '|' : "mapping "
+2012.01.17-01.22,18 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad left argument to '&' : "mapping "
+2012.01.17-01.22,18 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad right argument to '&' : "mapping "
+2012.01.20-02.33,55 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function definedp
+2012.01.20-03.15,14 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.01.20-03.15,14 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.01.20-03.15,36 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.01.20-03.15,36 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.01.20-03.19,18 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.01.20-03.19,18 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.01.20-20.30,09 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.01.25-03.30,42 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.02.05-10.48,46 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 30: End of file in string
+2012.02.05-10.48,46 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 30: syntax error
+2012.02.05-10.52,02 /secure/sefun/english.c line 495: Undefined variable 'match'
+2012.02.05-10.52,02 /secure/sefun/english.c line 495: Illegal lvalue
+2012.02.05-10.52,02 /secure/sefun/english.c line 495: Undefined variable 'match'
+2012.02.05-10.52,02 /secure/sefun/english.c line 495: Illegal lvalue
+2012.02.05-10.52,07 /secure/sefun/english.c line 495: Undefined variable 'match'
+2012.02.05-10.52,07 /secure/sefun/english.c line 495: Illegal lvalue
+2012.02.05-10.52,07 /secure/sefun/english.c line 495: Undefined variable 'match'
+2012.02.05-10.52,07 /secure/sefun/english.c line 495: Illegal lvalue
+2012.02.05-11.07,20 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad argument 1 to efun eval_cost()
+2012.02.14-00.39,35 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable '__REVERSIBLE_EXPLODE_STRING__'
+2012.03.08-19.32,39 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Too few arguments to random
+2012.03.10-00.41,06 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function reverse_map
+2012.03.10-00.41,12 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function reverse_mapping
+2012.03.10-00.45,52 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.03.10-00.45,57 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.03.10-00.46,08 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.03.12-18.49,48 /secure/daemon/chat.c line 576: Wrong number of arguments to bruise
+    Expected: 1  Got: 2
+2012.03.12-18.50,00 /secure/daemon/chat.c line 576: Wrong number of arguments to bruise
+    Expected: 1  Got: 2
+2012.03.12-18.50,07 /secure/daemon/chat.c line 576: Wrong number of arguments to bruise
+    Expected: 1  Got: 2
+2012.03.12-18.50,07 /secure/daemon/chat.c line 576: Wrong number of arguments to bruise
+    Expected: 1  Got: 2
+2012.03.28-14.48,39 /secure/daemon/players.c line 764: Undefined variable 'output'
+2012.03.28-14.48,39 /secure/daemon/players.c line 764: Illegal lvalue
+2012.03.28-14.48,39 /secure/daemon/players.c line 766: Bad type of index: "string "
+2012.03.28-14.48,41 /secure/daemon/players.c line 764: Undefined variable 'output'
+2012.03.28-14.48,41 /secure/daemon/players.c line 764: Illegal lvalue
+2012.03.28-14.48,41 /secure/daemon/players.c line 766: Bad type of index: "string "
+2012.03.28-14.48,45 /secure/daemon/players.c line 764: Undefined variable 'output'
+2012.03.28-14.48,45 /secure/daemon/players.c line 764: Illegal lvalue
+2012.03.28-14.48,45 /secure/daemon/players.c line 766: Bad type of index: "string "
+2012.03.28-14.48,49 /secure/daemon/players.c line 764: Undefined variable 'output'
+2012.03.28-14.48,49 /secure/daemon/players.c line 764: Illegal lvalue
+2012.03.28-14.48,49 /secure/daemon/players.c line 766: Bad type of index: "string "
+2012.03.28-14.48,53 /secure/daemon/players.c line 764: Undefined variable 'output'
+2012.03.28-14.48,53 /secure/daemon/players.c line 764: Illegal lvalue
+2012.03.28-14.48,53 /secure/daemon/players.c line 766: Bad type of index: "string "
+2012.03.28-14.48,57 /secure/daemon/players.c line 764: Undefined variable 'output'
+2012.03.28-14.48,57 /secure/daemon/players.c line 764: Illegal lvalue
+2012.03.28-14.48,57 /secure/daemon/players.c line 766: Bad type of index: "string "
+2012.03.28-14.49,01 /secure/daemon/players.c line 764: Undefined variable 'output'
+2012.03.28-14.49,01 /secure/daemon/players.c line 764: Illegal lvalue
+2012.03.28-14.49,01 /secure/daemon/players.c line 766: Bad type of index: "string "
+2012.03.28-14.49,05 /secure/daemon/players.c line 764: Undefined variable 'output'
+2012.03.28-14.49,05 /secure/daemon/players.c line 764: Illegal lvalue
+2012.03.28-14.49,05 /secure/daemon/players.c line 766: Bad type of index: "string "
+2012.03.28-14.49,07 /secure/daemon/players.c line 764: Undefined variable 'output'
+2012.03.28-14.49,07 /secure/daemon/players.c line 764: Illegal lvalue
+2012.03.28-14.49,07 /secure/daemon/players.c line 766: Bad type of index: "string "
+2012.03.28-14.49,07 /secure/daemon/players.c line 764: Undefined variable 'output'
+2012.03.28-14.49,07 /secure/daemon/players.c line 764: Illegal lvalue
+2012.03.28-14.49,07 /secure/daemon/players.c line 766: Bad type of index: "string "
+2012.03.28-14.49,09 /secure/daemon/players.c line 764: Undefined variable 'output'
+2012.03.28-14.49,09 /secure/daemon/players.c line 764: Illegal lvalue
+2012.03.28-14.49,09 /secure/daemon/players.c line 766: Bad type of index: "string "
+2012.03.28-14.49,13 /secure/daemon/players.c line 764: Undefined variable 'output'
+2012.03.28-14.49,13 /secure/daemon/players.c line 764: Illegal lvalue
+2012.03.28-14.49,13 /secure/daemon/players.c line 766: Bad type of index: "string "
+2012.03.28-14.49,17 /secure/daemon/players.c line 764: Undefined variable 'output'
+2012.03.28-14.49,17 /secure/daemon/players.c line 764: Illegal lvalue
+2012.03.28-14.49,17 /secure/daemon/players.c line 766: Bad type of index: "string "
+2012.03.28-14.49,19 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.49,19 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.49,21 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.49,25 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.49,29 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.49,33 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.49,37 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.49,37 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.49,37 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.49,41 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.49,45 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.49,49 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.49,53 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.49,57 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,01 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,05 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,07 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,07 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,09 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,12 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,12 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,13 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,17 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,21 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,22 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,22 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,25 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,29 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,33 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,37 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,37 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,37 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,41 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,45 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,49 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,53 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.50,57 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.51,01 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.28-14.51,05 /secure/daemon/players.c line 768: Bad type of index: "string "
+2012.03.29-08.32,37 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function arcsin
+2012.03.29-08.39,33 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function atan2
+2012.03.29-09.07,06 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'PI'
+2012.03.29-09.07,10 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'pi'
+2012.03.29-09.10,10 /secure/sefun/english.c line 495: Undefined variable 'match'
+2012.03.29-09.10,10 /secure/sefun/english.c line 495: Illegal lvalue
+2012.03.29-09.10,10 /secure/sefun/english.c line 495: Undefined variable 'match'
+2012.03.29-09.10,10 /secure/sefun/english.c line 495: Illegal lvalue
+2012.03.29-09.10,15 /secure/sefun/english.c line 495: Undefined variable 'match'
+2012.03.29-09.10,15 /secure/sefun/english.c line 495: Illegal lvalue
+2012.03.29-09.10,15 /secure/sefun/english.c line 495: Undefined variable 'match'
+2012.03.29-09.10,15 /secure/sefun/english.c line 495: Illegal lvalue
+2012.03.29-09.11,31 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function atan2
+2012.03.29-09.12,53 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function heading
+2012.03.29-09.15,28 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function atan2
+2012.03.29-09.15,33 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: No such inherited function sefun::atan2
+2012.04.09-15.25,56 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal character constant
+2012.04.09-15.25,56 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.04.09-15.25,56 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal character constant
+2012.04.09-15.26,03 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function rot13
+2012.04.09-15.27,16 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad argument 1 to efun implode()
+2012.04.09-15.27,16 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad argument 2 to efun implode()
+2012.05.11-12.57,03 /secure/daemon/chat.c line 469: Bad assignment ( string vs function ).
+2012.05.11-12.57,05 /secure/daemon/chat.c line 469: Bad assignment ( string vs function ).
+2012.05.11-12.57,05 /secure/daemon/chat.c line 469: Bad assignment ( string vs function ).
+2012.05.11-12.57,06 /secure/daemon/chat.c line 469: Bad assignment ( string vs function ).
+2012.05.11-12.57,06 /secure/daemon/chat.c line 469: Bad assignment ( string vs function ).
+2012.05.11-12.57,27 /secure/daemon/chat.c line 469: Bad assignment ( string vs function ).
+2012.05.11-12.57,35 /secure/daemon/chat.c line 469: Bad assignment ( string vs function ).
+2012.05.11-12.57,35 /secure/daemon/chat.c line 469: Bad assignment ( string vs function ).
+2012.05.11-12.57,38 /secure/daemon/chat.c line 469: Bad assignment ( string vs function ).
+2012.05.11-12.57,52 /secure/daemon/chat.c line 469: Bad assignment ( string vs function ).
+2012.05.11-12.57,56 /secure/daemon/chat.c line 469: Bad assignment ( string vs function ).
+2012.05.11-12.58,03 /secure/daemon/chat.c line 469: Bad assignment ( string vs function ).
+2012.05.11-12.58,05 /secure/daemon/chat.c line 469: Bad assignment ( string vs function ).
+2012.05.11-12.58,05 /secure/daemon/chat.c line 469: Bad assignment ( string vs function ).
+2012.05.11-12.58,06 /secure/daemon/chat.c line 469: Bad assignment ( string vs function ).
+2012.05.11-13.38,07 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad argument 1 to efun implode()
+2012.05.11-13.38,07 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad argument 2 to efun implode()
+2012.05.25-17.07,15 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'NULL'
+2012.05.25-17.07,21 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'null'
+2012.06.11-17.05,53 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'UNDEFINED'
+2012.07.26-02.18,10 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function split
+2012.07.26-02.18,18 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function split
+2012.07.26-02.19,50 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad argument 2 to efun explode()
+2012.07.26-02.33,39 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad argument 2 to efun explode()
+2012.07.26-02.37,06 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.08.20-02.26,35 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 30: End of file in string
+2012.08.20-02.26,35 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 30: syntax error
+2012.08.20-02.31,03 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.08.20-03.15,42 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Invalid types to '*' ( string vs int )
+2012.08.20-03.15,47 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.08.20-03.38,21 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.09.07-16.48,21 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'undef'
+2012.09.07-16.48,27 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'undefined'
+2012.09.07-16.48,31 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'false'
+2012.09.07-16.48,47 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'length'
+2012.09.07-16.48,47 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.09.07-16.48,52 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'len'
+2012.09.07-16.48,52 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.09.07-16.48,59 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'sizeof'
+2012.09.07-16.48,59 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.09.07-16.49,06 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.09.07-16.49,19 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.09.07-16.50,05 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'a'
+2012.09.07-16.50,05 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2012.09.07-16.50,08 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'a'
+2012.09.07-16.50,08 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2012.09.07-16.50,08 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.09.07-16.57,23 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad argument 1 to efun function_profile()
+2012.09.07-16.57,35 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad argument 1 to efun function_profile()
+2012.09.07-16.58,16 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.09.07-16.58,29 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.09.07-17.03,03 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.09.07-17.03,09 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.09.07-22.17,13 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Bad argument number 1 to '*': "array "
+2012.09.07-22.21,21 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Too few arguments to unique_array
+2012.09.07-22.21,31 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Too few arguments to unique_array
+2012.09.07-22.22,16 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Too few arguments to unique_array
+2012.09.07-22.22,23 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Too few arguments to unique_array
+2012.09.07-22.31,09 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2012.12.04-10.10,00 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'INT_MAX'
+2013.01.11-03.40,07 /secure/cmds/creators/eval.c line 91: Reserved type name unexpected.
+2013.01.11-03.40,07 /secure/cmds/creators/eval.c line 91: syntax error
+2013.01.11-03.42,26 /secure/cmds/creators/eval.c line 91: Reserved type name unexpected.
+2013.01.11-03.42,26 /secure/cmds/creators/eval.c line 91: syntax error
+2013.01.11-03.42,26 /secure/cmds/creators/eval.c line 91: Reserved type name unexpected.
+2013.01.11-03.42,26 /secure/cmds/creators/eval.c line 91: syntax error
+2013.02.27-23.29,32 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function immortalp
+2013.03.18-21.54,44 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'VERSION'
+2013.03.18-21.57,29 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable '__MUDNAME__'
+2013.07.27-00.32,16 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2013.07.27-00.40,17 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2013.08.12-17.56,25 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Too few arguments to sort_array
+2013.08.13-21.59,13 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2013.08.13-21.59,13 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal character (hex 2e) '.'
+2013.08.13-21.59,13 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal character (hex 5c) '\'
+2013.08.13-21.59,46 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 30: End of file in string
+2013.08.13-21.59,46 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 30: syntax error
+2013.08.13-22.56,07 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'SERVICE_D'
+2013.08.13-22.56,16 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'SERVICE_D'
+2013.08.17-00.34,58 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'INT_MAX'
+2013.08.23-01.48,06 /secure/daemon/ping.c line 41: Undefined variable 'SERVICE_D'
+2013.08.23-01.48,29 /secure/daemon/ping.c line 41: Undefined variable 'SERVICE_D'
+2013.08.23-01.48,29 /secure/daemon/ping.c line 41: Undefined variable 'SERVICE_D'
+2013.08.23-01.48,59 /secure/daemon/ping.c line 41: Undefined variable 'SERVICE_D'
+2013.08.23-01.48,59 /secure/daemon/ping.c line 41: Undefined variable 'SERVICE_D'
+2013.08.23-01.49,29 /secure/daemon/ping.c line 41: Undefined variable 'SERVICE_D'
+2013.08.23-01.49,29 /secure/daemon/ping.c line 41: Undefined variable 'SERVICE_D'
+2013.08.23-01.49,59 /secure/daemon/ping.c line 41: Undefined variable 'SERVICE_D'
+2013.08.23-01.49,59 /secure/daemon/ping.c line 41: Undefined variable 'SERVICE_D'
+2013.08.23-01.50,10 /secure/daemon/ping.c line 41: Undefined variable 'SERVICE_D'
+2013.08.23-01.50,10 /secure/daemon/ping.c line 41: Undefined variable 'SERVICE_D'
+2013.08.23-01.50,29 /secure/daemon/ping.c line 41: Undefined variable 'SERVICE_D'
+2013.08.23-01.50,29 /secure/daemon/ping.c line 41: Undefined variable 'SERVICE_D'
+2013.10.08-02.54,36 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Left argument of -> is not a class
+2013.10.08-03.26,07 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2013.10.08-03.26,11 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2013.10.08-03.26,45 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function length
+2013.10.08-03.48,09 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2013.10.08-03.48,16 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2013.10.08-03.48,46 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2013.11.10-22.21,14 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 's'
+2013.11.10-22.21,14 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2013.11.10-22.21,27 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 's'
+2013.11.10-22.21,27 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2013.11.10-22.24,33 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function chr
+2013.11.10-22.56,26 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'x'
+2013.11.10-22.56,26 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2013.12.18-03.44,09 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'TERM_D'
+2014.02.05-12.25,55 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Too few arguments to random
+2014.02.05-18.35,55 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.02.07-11.58,19 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.02.07-11.58,19 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal character (hex 5c) '\'
+2014.02.07-11.58,48 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.02.07-11.58,48 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal character (hex 5c) '\'
+2014.02.15-05.28,49 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'VERB_D'
+2014.02.21-23.45,29 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'i'
+2014.02.21-23.45,29 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal lvalue
+2014.02.21-23.45,29 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 30: syntax error
+2014.02.21-23.45,40 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 30: syntax error
+2014.02.21-23.46,12 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.02.21-23.46,29 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.03.27-02.23,18 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.03.28-18.18,09 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function foobar
+2014.04.09-00.04,06 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.06.07-15.09,40 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'foo'
+2014.06.08-10.20,50 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'map'
+2014.06.08-10.20,50 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.06.08-10.20,50 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: $var illegal outside of function pointer.
+2014.06.08-10.23,46 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function sha1
+2014.06.13-23.40,24 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Invalid argument types to '+' ( array vs int )
+2014.06.27-22.19,48 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'write'
+2014.06.27-22.19,48 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.07.23-17.04,01 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined variable 'here'
+2014.08.04-02.25,02 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal character constant
+2014.08.04-02.25,02 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.08.04-02.25,02 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal character constant
+2014.08.04-02.25,11 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.08.08-20.52,18 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal character constant
+2014.08.08-20.52,18 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.08.08-20.52,18 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal character constant
+2014.08.25-22.14,14 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Left argument of -> is not a class
+2014.08.25-22.42,16 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.08.25-22.42,36 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.08.25-22.42,38 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.08.25-22.42,44 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.08.25-22.43,08 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Reserved type name unexpected.
+2014.08.25-22.43,08 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Missing type for argument
+2014.08.25-22.43,08 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.09.14-19.28,50 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.09.19-21.41,45 /secure/daemon/imc2.c line 900: Undefined variable 'who'
+2014.09.19-21.41,45 /secure/daemon/imc2.c line 906: Reserved type name unexpected.
+2014.09.19-21.41,45 /secure/daemon/imc2.c line 906: syntax error
+2014.09.19-21.41,45 /secure/daemon/imc2.c line 906: Undefined variable 'targname'
+2014.09.19-21.41,45 /secure/daemon/imc2.c line 907: Undefined variable 'targmud'
+2014.09.19-21.41,45 /secure/daemon/imc2.c line 907: Undefined variable 'msg'
+2014.09.19-21.41,45 /secure/daemon/imc2.c line 900: Undefined variable 'who'
+2014.09.19-21.41,45 /secure/daemon/imc2.c line 906: Reserved type name unexpected.
+2014.09.19-21.41,45 /secure/daemon/imc2.c line 906: syntax error
+2014.09.19-21.41,45 /secure/daemon/imc2.c line 906: Undefined variable 'targname'
+2014.09.19-21.41,45 /secure/daemon/imc2.c line 907: Undefined variable 'targmud'
+2014.09.19-21.41,45 /secure/daemon/imc2.c line 907: Undefined variable 'msg'
+2014.09.19-21.42,28 /secure/daemon/imc2.c line 906: Reserved type name unexpected.
+2014.09.19-21.42,28 /secure/daemon/imc2.c line 906: syntax error
+2014.09.19-21.42,28 /secure/daemon/imc2.c line 906: Undefined variable 'targname'
+2014.09.19-21.42,28 /secure/daemon/imc2.c line 907: Undefined variable 'targmud'
+2014.09.19-21.42,28 /secure/daemon/imc2.c line 907: Undefined variable 'msg'
+2014.09.19-21.42,28 /secure/daemon/imc2.c line 907: Illegal LHS
+2014.09.19-21.42,28 /secure/daemon/imc2.c line 906: Reserved type name unexpected.
+2014.09.19-21.42,28 /secure/daemon/imc2.c line 906: syntax error
+2014.09.19-21.42,28 /secure/daemon/imc2.c line 906: Undefined variable 'targname'
+2014.09.19-21.42,28 /secure/daemon/imc2.c line 907: Undefined variable 'targmud'
+2014.09.19-21.42,28 /secure/daemon/imc2.c line 907: Undefined variable 'msg'
+2014.09.19-21.42,28 /secure/daemon/imc2.c line 907: Illegal LHS
+2014.09.19-21.48,16 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal character constant
+2014.09.19-21.48,16 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: syntax error
+2014.09.19-21.48,16 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Illegal character constant
+2014.09.19-21.49,06 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function to_lower
+2014.09.19-21.49,09 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function lower
+2014.09.19-21.49,12 /secure/tmp/quixadhal_CMD_EVAL_TMP_FILE.c line 29: Undefined function lowercase
+
+END-OF-LOG

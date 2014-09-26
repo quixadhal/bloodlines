@@ -899,6 +899,13 @@ void start_logon(){
         string ret = "%^BOLD%^RED%^You tell " + capitalize(targname) +
           "@" + targmud + ":%^RESET%^ " + msg;
         // Send outgoing tell.
+        if(RESTRICTED_INTERMUD) {
+            if(!imud_privp(lower_case(from->GetKeyName()))) {
+                this_player(1)->eventPrint("You lack the power to send tells to other worlds.", MSG_CONV);
+                return;
+            }
+        }
+
         if(!reply) reply=0;
         send_packet(capitalize(from->GetKeyName()),"tell",targname,targmud,
           "text="+escape(msg));

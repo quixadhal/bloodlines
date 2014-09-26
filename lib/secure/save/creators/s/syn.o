@@ -19,9 +19,9 @@ NoChanColors 0
 GagMutes (["remote_gag":0,"remote_mute":0,"local_mute":0,"local_gag":0,])
 Paused 0
 localcmds ({"parserefresh","quit","work","pwd","cwd","popd","pushd","nmsh","cd","nickname","unalias","alias","",})
-parsed_command "quit"
+parsed_command ""
 HistorySize 50
-History ([50:"quit",49:"pp huh no shit, i just tried my old ubuntu vm which was failing from vmware player before and now works again.. ",48:"pp stupid history",47:"pp it looks like by itself that will try to remove the whole repo",46:"pp oh wait",45:"pp yeah it looks like git rm (whatever) might work",44:"pp git rm",43:"pp well in theory rm should remove them from the current tree and from its internal index",42:"pp oh hm",41:"pp ive never run into that issue myself so im not sure",40:"pp ignore doesnt wouldnt help with that?",39:"pp haha",38:"pp and jesus christ, qt (pyqt) takes forever to uninstall",37:"pp shouldnt be to hard to find out",36:"pp yep!",35:"pp thats informative, thx",34:"pp oh nice, install successful! - popup after finish button - FATAL ERROR INSTALLATION FAILED! ok/cancel",33:"pp or not",32:"pp hang on installing vbox, lose my connection for a min",31:"pp that sucks",30:"pp that sucked",29:"pp the last time it went i was stuck on my kitchen floor for a few hours until the lady got home :(",28:"pp ill have to ask about that the next time it re-tears",27:"pp huh nice",26:"pp oh i didnt realize thats what tramadol was",25:"pp 2 220mg ibuprofins, and 2 500mg tylenol is what i take if its getting to a.. ill tear it again if i dont get it less inflamed and to rest a while",24:"pp it worked better than loading up on either of those two, or aleve and whatnot",23:"pp my doc recommended taking 2 ibuprofin and 2 tylenol if my back is particularly bothering me, and surprisingly it actually works quite well, and i found i didnt need to take as much ibuprofin overall",22:"pp good",21:"pp lower back muscle tears = like indescribable pain :(",20:"pp thats no good, ill be careful i tore a muscle in my lower back, years ago now, so every little while it goes out and i have to get on the super buffed ibuprofin and stuff",19:"pp oh gees",18:"pp hm i should get that VB running",17:"pp yeah looks like the most recent changes are from a year ago that i can find hehe",16:"pp okies",15:"pp haha nice",14:"pp sure you piqued my curiosity",13:"pp hey in your code, it looks like your forcibly trying to literally replace images, between the old and the new 'updated' one, is that what its trying to do?",12:"pp lol",11:"pp not a fan of the new faux internal tabs of websites that is superimposed blurb, they always seem to be problematic in some way",10:"pp yeah i have issues with it sometimes when im on there for the fios-y stuff",9:"pp :(",8:"pp looks similar, but maybe theres some trick in its general composure that does the trick",7:"pp did you see this stacko approach: setInterval(function(){    $(\"#myimg\").attr(\"src\", \"/myimg.jpg?\"+new Date().getTime()); },2000)",6:"dchat i didnt much like js when i had to try to learn it, but jquery was pretty neat",5:"dchat oh the horror, depressed and angry nerds who cant have weapons",4:"dchat whats wrong with that",3:"dhcat whats wrong with that",2:"ig cool thanks",1:"ig hm ill have to check it out",0:"ig thats a cool premise",])
+History ([50:"ig Gamera v Babymetal!",49:"ig ig lol thats hawt",48:"ig i mean i was born dead so theres that anyway",47:"ig i think crat was more-so saying becareful where you wear your heart",46:"ig all you know is an inaccurate test took place and is likely inaccurate",45:"ig dont jump the gun buddy, youll just drive you and the wife nuts",44:"ig yeah so, 20-30 years",43:"ig just tell them to stfu and stop talking about it :P",42:"ig salius",41:"ig who doesnt love lebanese lesbians",40:"ig doublewin",39:"ig then its funny, and useful!",38:"ig bazinga!",37:"ig yea to your mom",36:"ig im sure its all good, the blood one was like.. well this is just a super general should we dig deeper thing",35:"ig yeah my wifes blood had some anomolies as well, and we had the follow on testing, but all was clear",34:"ig no, no dominion soldiers here",33:"ig in which case the first test is pretty inaccurate, the second one is more-so accurate",32:"ig i would assume its near the neck fluid level testing",31:"ig we had a similar situation salius",30:"ig Duron, ha havent seen one of those in a long time",29:"ig heh that mb came out around the time i graduated high school",28:"ig i mean i guess it depends on the use case, is reglar DDR more expensive now?",27:"ig oh wow thats an old board",26:"ig ugh TB",25:"ig what sound card do you have that has some kind of vga port?",24:"ig that doesnt make any sense",23:"ig and how the pole is 1.7m square miles larger than 2 years ago",22:"ig sounds like the place where they touched my naughty :(",21:"ig so much hate",20:"ig he could he just sounded like lou farigno heh",19:"ig that was such a great film, so ludicrous heh",18:"ig indeed",17:"ig then there was everyones favorite ebony warrior",16:"ig to infinity and beyond!",15:"ig true enough",14:"ig that little blonde tart was annoying though",13:"ig seriously though, vulcans kinda suck, how can a race so intelligent and 'logical' continually fall into logic traps and not realize logic can rationalize anything, stupid plot devices",12:"ig yeah i think it was Spock dont do this! Please! Youll kill him! Oh shit, you totally killed your only real friend, because your kind of a douche. oops.",11:"ig somtimes you just got to put a dog down =/",10:"ig haha nice",9:"ig heh i was watching some like, 60 minutes type interview one evening and they were talking about that show, and i remember watching the reruns on nick at night, i felt bad after that",8:"ig thankfully i wasnt alive yet",7:"ig dudes hand up its butt",6:"ig more low tech",5:"ig well you couldnt see it on the show either, it was done off camera..",4:"ig i dont miss what they had to do to make him 'talk'",3:"ig i miss Mr. Wizard, that was a fun show",2:"ig yawns",1:"ig smart",0:"ig my friends old company, the sales guys were beyond idiots, uptime 99.99%/yr!",])
 Nicknames ([])
 Aliases (["east":"go east","mwhere":"findobj $*","southeast":"go southeast","northeast":"go northeast","prac":"skills","sco":"score","x":"look at $*","w":"go west","u":"go up","t":"tell $*","out":"go out","practice":"skills","s":"go south","vnum":"help find","p":"people","south":"go south","north":"go north","n":"go north","bio":"biography","l":"look $*","k":"kill $*","west":"go west","ww":"wileymud $*","zlist":"domains","southwest":"go southwest","northwest":"go northwest","i":"inventory","owhere":"findobj $*","e":"go east","d":"go down","c":"cre $*","alist":"ls /domains","pp":"pyom $*","inv":"inventory","nw":"go northwest","examine":"look at $*","trophy":"kills","up":"go up","chat":"newbie $*","dc":"dchat $*","exa":"look at $*","sw":"go southwest","ig":"intergossip $*","loot":"get all from $*","ic":"intercre $*","peace":"quell","inf":"score","lp":"lpuni $*","down":"go down","ne":"go northeast","exit":"go out","eq":"equipment","se":"go southeast","sc":"status",])
 Xverbs (["'":"say $*","]":"] $*","\"":"say $*",":":"emote $*",])
@@ -29,16 +29,16 @@ Directories (["current":"/realms/syn","home":0,"previous":"/",])
 Prompt "cwd"
 Terminal "xterm-256color"
 Blocked (["intergossip":0,"wileymud":0,"imud_gossip":0,"pyom":0,"free_speech":1,"intercre":0,"intermud":0,])
-Screen ({152,20,})
+Screen ({154,55,})
 MessageQueue 0
 PauseMessages 0
 annoyblock 0
 MessageExceptions 0
 BlockAnnoying 0
-Age 4812519
+Age 5604313
 WhereBlock 0
 Brief 0
-LoginTime 1407592881
+LoginTime 1410007223
 BirthTime 1403738548
 RescueBit 0
 Password "`el`fjnd!kbgohcmghecijfhecanagoajfabbhedk"
@@ -124,6 +124,6 @@ TitleLength 1
 telopt_ip 0
 showgrid 0
 wizvision 0
-CreatorAge 2156579
+CreatorAge 2447143
 CreatorBirth 1403738852
 LivingShort 0

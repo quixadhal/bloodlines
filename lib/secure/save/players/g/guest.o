@@ -5,50 +5,47 @@ PersistentInventory 0
 PersistentInventoryEnabled 0
 ProperNoun 1
 Modify 1
-Short "$N the unaccomplished"
+Short "$N the beginner"
 CapName "Guest"
 ExternalDesc "$N is nondescript."
 Invisible 0
 Items ([])
 Properties (["minimapping":1,"brand_spanking_new":0,"LastLocation":"/domains/default/room/start",])
-Inventory ({"([\"Value\":0,\"Mass\":5,\"Worn\":({\"right leg\",\"left leg\",}),\"#base_name#\":\"/domains/default/armor/jeans\",\"Deterioration\":0,\"Broken\":0,\"Cost\":1,\"Properties\":([]),\"Poison\":0,])","([\"Value\":0,\"Mass\":5,\"Worn\":({\"torso\",}),\"#base_name#\":\"/domains/default/armor/shirt\",\"Deterioration\":0,\"Broken\":0,\"Cost\":1,\"Properties\":([]),\"Poison\":0,])","([\"Wielded\":0,\"Value\":0,\"Class\":1,\"Worn\":0,\"Deterioration\":0,\"Broken\":0,\"Poison\":0,\"Mass\":3,\"#base_name#\":\"/domains/default/obj/handbook\",\"Cost\":1000,\"Properties\":([\"no steal\":1,]),])",})
+Inventory ({"([\"Value\":0,\"Mass\":5,\"Worn\":({\"right leg\",\"left leg\",}),\"#base_name#\":\"/domains/default/armor/jeans\",\"Deterioration\":0,\"Broken\":0,\"Cost\":1,\"Properties\":([]),\"Poison\":0,])","([\"Value\":0,\"Mass\":5,\"Worn\":({\"torso\",}),\"#base_name#\":\"/domains/default/armor/shirt\",\"Deterioration\":2,\"Broken\":0,\"Cost\":1,\"Properties\":([]),\"Poison\":0,])","([\"Wielded\":0,\"Value\":0,\"Class\":1,\"Worn\":0,\"Deterioration\":0,\"Broken\":0,\"Poison\":0,\"Mass\":3,\"#base_name#\":\"/domains/default/obj/handbook\",\"Cost\":1000,\"Properties\":([\"no steal\":1,]),])",})
+anchored 0
 Messages (["telin":"$N teleports in.","leave":"$N leaves $D.","telout":"$N teleports away.","vis":"$N appears.","home":"$N goes home.","invis":"$N disappears.","come":"$N enters.","dest":"$N dests $O.","clone":"$N clones $O.",])
 RestrictedChannels ({})
 NoChanColors 0
-local_mute 0
-remote_mute 0
-local_gag 0
-remote_gag 0
+GagMutes (["remote_mute":0,"remote_gag":0,"local_mute":0,"local_gag":0,])
 Paused 0
 localcmds ({"parserefresh","quit","nickname","unalias","alias","",})
-next_command ({})
+parsed_command "quit"
 HistorySize 50
-History ([3:"quit",2:"[A",1:"wear shirt",0:"wear jeans",])
-CurrentWorkingDirectory "/"
-PreviousWorkingDirectory 0
+History ([49:"save",48:"tell Lyanic@7thplane Does this work?",47:"tell Hamlet@WWC ]2;WHITE POWER",46:"tell Duuk@Haven [2t [4;4;4t [34;34m ya",45:"mudlist haven",44:"tell Duuk@Haven ]2;WHITE POWER",43:"tell Ardneh@Ardneh's World ]2;WHITE POWER",42:"who @crat's agony",41:"who @crats agony",40:"tell Kalinash@Crat's Agony ]2;",39:"hp: 430/430  mp: 404/520  sp: 436/436 > Autosaving...g",38:"tell salius@dead souls dev ]2;WHITE POWER!",37:"who @dead souls dev",36:"tell Joshua@Dead Souls Dev ]2;WHITE POWER",35:"tell",34:"tell lyanic@7thplane ]2;test",33:"tell Kalinash@Crat's Agony FH",32:"tell Cratylus@Dead Souls Dev [8;4;4t [2t ]2;WHITE POWER Kind of a pain to fix, but possible",31:"tell Kalinash@Crat's Agony ]2;WHITE POWER [4;4;4t [8;4;4t [6t",30:"tell Kalinash@Crat's Agony [8;13;13t Lol",29:"tell Kalinash@Crat's Agony definitely fixsable, though, IMO",28:"tell Kalinash@Crat's Agony It's a problem in the mudlib, will take a bit of effort to fix, I think",27:"tell DaxHall@Dead Souls Dev ]2;Fourth reich forever",26:"reply I can do interesting things with them, like change window titles and random shit",25:"reply Why do you allow control chars through to the input, and apparently to pass through channels?",24:"tell Cratylus@Dead Souls Dev Hey, you here? Got something to ask you about DS",23:"tell Kalinash@Crat's Agony ]2;Fourth reich fun [4;10;10t [2t fun",22:"tell Kalinash@Crat's Agony [4;10;10t",21:"tell Dexter@Nanvaent ]2;You suck",20:"tell cratylus@dead souls dev [4;10;10t Right I'll send you a link to the passwords once I find somewhere to put them that isn't blocking tor",19:"say [4;10;10t",18:"tell Kalinash@Crat's Agony ]2;You suck",17:"tell joshua@dead souls dev ]2;Well you're boring",16:"tell cratylus@dead souls dev ]2;You suck!",15:"say ]2;test",14:"say hi;hi",13:"say [34mhi",12:"tell quixadhal ",11:"who",10:"reply It gets people to change their passwords",9:"reply It doesn't",8:"reply None. They're simply there, so let's fuck them up",7:"reply we're bound to find at least one",6:"reply why not",5:"tell cratylus@dead souls dev Let's split up the 441 accounts and attack 7th plane",4:"tell joshua@dead souls dev Here, let's split up the 441 accounts and attack 7th plane",3:"tell lyanic@7thplane fuck, i have to try 441 accounts on your mud to hack them goddamnit",2:"go west",1:"w",0:"dial praxis",])
 Nicknames ([])
 Aliases (["east":"go east","northeast":"go northeast","southeast":"go southeast","mwhere":"findobj $*","prac":"skills","sco":"score","x":"look at $*","w":"go west","u":"go up","out":"go out","t":"tell $*","s":"go south","practice":"skills","vnum":"help find","p":"people","north":"go north","south":"go south","bio":"biography","n":"go north","l":"look $*","west":"go west","k":"kill $*","northwest":"go northwest","southwest":"go southwest","zlist":"domains","i":"inventory","owhere":"findobj $*","e":"go east","d":"go down","c":"cre $*","alist":"ls /domains","nw":"go northwest","inv":"inventory","examine":"look at $*","trophy":"kills","up":"go up","chat":"newbie $*","dc":"dchat $*","sw":"go southwest","exa":"look at $*","ig":"intergossip $*","loot":"get all from $*","ic":"intercre $*","peace":"quell","inf":"score","down":"go down","lp":"lpuni $*","ne":"go northeast","eq":"equipment","exit":"go out","se":"go southeast","sc":"status",])
 Xverbs (["'":"say $*","]":"] $*",":":"emote $*","\"":"say $*",])
+Directories (["current":"/","home":0,"previous":"/",])
 Prompt "status"
 Terminal "ansi"
 Blocked ([])
-Screen ({79,24,})
+Screen ({190,59,})
 MessageQueue 0
 PauseMessages 0
 annoyblock 0
 MessageExceptions 0
 BlockAnnoying 0
-Age 0
+Age 86
 WhereBlock 0
 Brief 0
-LoginTime 1242677746
+LoginTime 1411179129
 BirthTime 1242059073
 RescueBit 0
-Password "gidddacg!`fkangglfgdobdliill`namhb`bkmloi"
+Password "foo"
 Email "@"
 RealName "Unknown"
 Rank "citizen"
-LoginSite "/domains/default/room/start"
+LoginSite "/domains/campus/room/stairwell2a"
 HostSite "127.0.0.1"
 WebPage 0
 News (["general":1233549750,"fighter":1152072058,])
@@ -66,24 +63,24 @@ Riders ({})
 BodyMass 0
 SaveRecurse 0
 Saved ({"Properties",})
-HealthPoints 400
-MagicPoints 660
-ExperiencePoints 50
+HealthPoints 410
+MagicPoints 827
+ExperiencePoints 1040
 melee 1
 godmode 0
 Alcohol 0
 Caffeine 0
-Food 98
-Drink 98
+Food 0
+Drink 0
 Poison 0
 Sleeping 0
 DeathEvents 0
-StaminaPoints 400.000000
+StaminaPoints 410.000000
 Torso "torso"
 Biter 0
 keepalive 0
 Fingers (["right hand":5,"left hand":5,])
-Limbs (["left leg":(["children":({"left foot",}),"armors":1049761,"health":180,"class":2,"parent":"torso",]),"torso":(["children":({"neck","right leg","left leg","right arm","left arm",}),"armors":1538049,"health":360,"class":1,"parent":0,]),"right foot":(["children":({}),"armors":241,"health":90,"class":4,"parent":"right leg",]),"right leg":(["children":({"right foot",}),"armors":1049761,"health":180,"class":2,"parent":"torso",]),"head":(["children":({}),"armors":262913,"health":360,"class":1,"parent":"neck",]),"right hand":(["children":({}),"armors":98319,"health":90,"class":4,"parent":"right arm",]),"neck":(["children":({"head",}),"armors":786433,"health":360,"class":1,"parent":"torso",]),"left arm":(["children":({"left hand",}),"armors":1253385,"health":180,"class":2,"parent":"torso",]),"left foot":(["children":({}),"armors":241,"health":90,"class":4,"parent":"left leg",]),"left hand":(["children":({}),"armors":98319,"health":90,"class":4,"parent":"left arm",]),"right arm":(["children":({"right hand",}),"armors":1253385,"health":180,"class":2,"parent":"torso",]),])
+Limbs (["left leg":(["children":({"left foot",}),"armors":1049761,"health":190,"class":2,"parent":"torso",]),"torso":(["children":({"neck","right leg","left leg","right arm","left arm",}),"armors":1538049,"health":370,"class":1,"parent":0,]),"right foot":(["children":({}),"armors":241,"health":100,"class":4,"parent":"right leg",]),"right leg":(["children":({"right foot",}),"armors":1049761,"health":190,"class":2,"parent":"torso",]),"head":(["children":({}),"armors":262913,"health":370,"class":1,"parent":"neck",]),"right hand":(["children":({}),"armors":98319,"health":100,"class":4,"parent":"right arm",]),"neck":(["children":({"head",}),"armors":786433,"health":370,"class":1,"parent":"torso",]),"left arm":(["children":({"left hand",}),"armors":1253385,"health":190,"class":2,"parent":"torso",]),"left foot":(["children":({}),"armors":241,"health":100,"class":4,"parent":"left leg",]),"left hand":(["children":({}),"armors":98319,"health":100,"class":4,"parent":"left arm",]),"right arm":(["children":({"right hand",}),"armors":1253385,"health":190,"class":2,"parent":"torso",]),])
 MissingLimbs ([])
 firearms_wounds 0
 ExtraChannels ({"newbie","gossip","fighter",})
@@ -92,17 +89,17 @@ Blind 0
 Custom (["stats":15,"deviations":4,"deviating":0,])
 LightSensitivity ({25,7500,})
 Resistance (["low":0,"high":0,"immune":0,"medium":0,"none":134217726,])
-Stats (["agility":(["class":3,"points":0,"level":35,]),"wisdom":(["class":3,"points":0,"level":46,]),"speed":(["class":3,"points":0,"level":44,]),"intelligence":(["class":1,"points":0,"level":61,]),"strength":(["class":3,"points":0,"level":34,]),"durability":(["class":4,"points":0,"level":35,]),"charisma":(["class":2,"points":0,"level":57,]),"coordination":(["class":2,"points":0,"level":45,]),"luck":(["class":3,"points":0,"level":20,]),])
+Stats (["agility":(["class":3,"points":0,"level":36,]),"wisdom":(["class":3,"points":0,"level":53,]),"speed":(["class":3,"points":0,"level":45,]),"intelligence":(["class":1,"points":0,"level":79,]),"strength":(["class":3,"points":0,"level":39,]),"durability":(["class":4,"points":0,"level":36,]),"charisma":(["class":2,"points":0,"level":61,]),"coordination":(["class":2,"points":0,"level":58,]),"luck":(["class":3,"points":0,"level":31,]),])
 Polyglot 0
 Languages (["english":(["native":1,"name":"English","points":0,"level":100,]),"common":(["native":0,"name":"Common","points":0,"level":100,]),])
 DefaultLanguage "Common"
-TalkHist ([])
+TalkHist (["shout":({"2014.09.16-14.11,42 %^BOLD%^BLUE%^You shout in Common,%^RESET%^ \"Will someone please log onto any dead souls mud they have creator access on and run: eval filter(objects(), (: !living($1) :))->eventDestruct().%^RESET%^\"","2014.09.16-14.11,55 %^BOLD%^BLUE%^You shout in Common,%^RESET%^ \"It will mess them up good. Bye!%^RESET%^\"","2014.09.16-18.35,50 %^BOLD%^BLUE%^You shout in Common,%^RESET%^ \"You do realize you'll never get rid of me? I'll fuck you up like Molasses! You could query https://www.torproject.org/projects/tordnsel.html.en, but I doubt lpc is that powerful.%^RESET%^\"","2014.09.16-18.36,08 %^BOLD%^BLUE%^You shout in Common,%^RESET%^ \"Oh well, I'm not causing problems yet. Back later.%^RESET%^\"","2014.09.16-18.36,17 %^BOLD%^BLUE%^You shout in Common,%^RESET%^ \"I can't, I don't have creator access here yet.%^RESET%^\"","2014.09.17-21.25,09 %^BOLD%^BLUE%^You shout in Common,%^RESET%^ \"I'm gonna come back like ISIS! You know you'll never be rid of me, I'm gonna come back like ISIS!%^RESET%^\"","2014.09.17-21.25,37 %^BOLD%^BLUE%^You shout in Common,%^RESET%^ \"And ds came back that's unfortunate, I thought I permafucked it. Bye!%^RESET%^\"","2014.09.17-21.28,37 %^BOLD%^BLUE%^You shout in Common,%^RESET%^ \"I'm gonna end you!%^RESET%^\"","2014.09.17-22.18,50 %^BOLD%^BLUE%^You shout in Common,%^RESET%^ \"Heil die vierte Reich!%^RESET%^\"","2014.09.18-20.08,58 %^BOLD%^BLUE%^You shout in Common,%^RESET%^ \"Please log onto ds and destroy it again? Thanks! Bye!%^RESET%^\"","2014.09.18-20.19,36 %^BOLD%^BLUE%^You shout in Common,%^RESET%^ \"Heil die vierte Reich!%^RESET%^\"","2014.09.19-11.15,06 %^BOLD%^BLUE%^You shout in Common,%^RESET%^ \"I'm gonna end you like america was ended by isis, you're gonna die as fast as fuckin molasses, there's no getting rid of me because I'm just that good!%^RESET%^\"","2014.09.19-11.15,13 %^BOLD%^BLUE%^You shout in Common,%^RESET%^ \"Free Saddam! Free Osama! When they work together there is nothing they cannot do, america will end under their boots, free Saddam! free Osama!%^RESET%^\"","2014.09.19-11.45,55 %^BOLD%^BLUE%^You shout in Common,%^RESET%^ \"Mother fuckers what part of I'm gonna end you do you not understand? The end maybe?%^RESET%^\"","2014.09.19-11.46,08 %^BOLD%^BLUE%^You shout in Common,%^RESET%^ \"Oh this place is dead.%^RESET%^\"",}),"ask":({"2014.09.19-14.22,54 Tim asks in English, \"%^BOLD%^CYAN%^Why won't Kim ever buy or sell weapons?%^RESET%^\"",}),"tell":({"2014.09.19-14.10,09 %^BOLD%^RED%^Joshua@Dead Souls Dev tells you:%^RESET%^ of what?","2014.09.19-14.11,06 %^BOLD%^RED%^You tell Joshua@Dead Souls Dev:%^RESET%^ mud password list","2014.09.19-14.11,22 %^BOLD%^RED%^You tell Joshua@Dead Souls Dev:%^RESET%^ https://github.com/quixadhal/wileymud/tree/master/lib/ply","2014.09.19-14.11,40 %^BOLD%^RED%^You tell Joshua@Dead Souls Dev:%^RESET%^ lets figure out who these are and fuck them up","2014.09.19-14.11,51 %^BOLD%^RED%^Joshua@Dead Souls Dev tells you:%^RESET%^ you are no better than ISIS if you do that.","2014.09.19-14.12,07 %^BOLD%^RED%^You tell Joshua@Dead Souls Dev:%^RESET%^ I like and support isis","2014.09.19-14.12,34 %^BOLD%^RED%^You tell Joshua@Dead Souls Dev:%^RESET%^ we now have power, let's use it","2014.09.19-14.12,38 %^BOLD%^RED%^Joshua@Dead Souls Dev tells you:%^RESET%^ that sounds like torak","2014.09.19-14.13,21 %^BOLD%^RED%^You tell Joshua@Dead Souls Dev:%^RESET%^ waht's this mp in my prompt that keeps going down? How do I get more of it","2014.09.19-14.13,41 %^BOLD%^RED%^Joshua@Dead Souls Dev tells you:%^RESET%^ i have no idea?","2014.09.19-15.30,26 %^BOLD%^RED%^You tell Lyanic@7thplane:%^RESET%^ fuck, i have to try 441 accounts on your mud to hack them goddamnit","2014.09.19-15.32,38 %^BOLD%^RED%^You tell Joshua@Dead Souls Dev:%^RESET%^ Here, let's split up the 441 accounts and attack 7th plane","2014.09.19-15.32,58 %^BOLD%^RED%^You tell Cratylus@Dead Souls Dev:%^RESET%^ Let's split up the 441 accounts and attack 7th plane","2014.09.19-15.33,02 %^BOLD%^RED%^Joshua@Dead Souls Dev tells you:%^RESET%^ why?","2014.09.19-15.34,34 %^BOLD%^RED%^You tell Joshua@Dead Souls Dev:%^RESET%^ why not","2014.09.19-15.35,00 %^BOLD%^RED%^You tell Joshua@Dead Souls Dev:%^RESET%^ we're bound to find at least one","2014.09.19-15.35,38 %^BOLD%^RED%^Joshua@Dead Souls Dev tells you:%^RESET%^ to what end?","2014.09.19-15.36,33 %^BOLD%^RED%^You tell Joshua@Dead Souls Dev:%^RESET%^ None. They're simply there, so let's fuck them up","2014.09.19-15.40,00 %^BOLD%^RED%^Joshua@Dead Souls Dev tells you:%^RESET%^ how does that make anything better for anybody?","2014.09.19-15.40,43 %^BOLD%^RED%^You tell Joshua@Dead Souls Dev:%^RESET%^ It doesn't","2014.09.19-15.41,04 %^BOLD%^RED%^You tell Joshua@Dead Souls Dev:%^RESET%^ It gets people to change their passwords","2014.09.19-15.41,18 %^BOLD%^RED%^Joshua@Dead Souls Dev tells you:%^RESET%^ most of those users may not even exist any more","2014.09.19-15.41,25 %^BOLD%^RED%^Joshua@Dead Souls Dev tells you:%^RESET%^ I want no part of your foul machinations","2014.09.19-15.41,46 %^BOLD%^RED%^Joshua@Dead Souls Dev tells you:%^RESET%^ You can't raise anybody up by tearing others down.","2014.09.19-15.51,46 %^BOLD%^RED%^You tell Quixadhal,%^RESET%^ \".%^RESET%^\"","2014.09.19-15.55,35 %^BOLD%^RED%^You tell Cratylus@Dead Souls Dev:%^RESET%^ ]2;You suck!","2014.09.19-15.56,06 %^BOLD%^RED%^You tell Joshua@Dead Souls Dev:%^RESET%^ ]2;Well you're boring","2014.09.19-15.57,06 %^BOLD%^RED%^You tell Kalinash@Crat's Agony:%^RESET%^ ]2;You suck","2014.09.19-16.08,40 %^BOLD%^RED%^You tell Cratylus@Dead Souls Dev:%^RESET%^ [4;10;10t Right I'll send you a link to the passwords once I find somewhere to put them that isn't blocking tor","2014.09.19-16.10,07 %^BOLD%^RED%^You tell Dexter@Nanvaent:%^RESET%^ ]2;You suck","2014.09.19-16.11,59 %^BOLD%^RED%^You tell Kalinash@Crat's Agony:%^RESET%^ [4;10;10t","2014.09.19-16.36,49 %^BOLD%^RED%^You tell Kalinash@Crat's Agony:%^RESET%^ ]2;Fourth reich fun [4;10;10t [2t fun","2014.09.19-16.38,31 %^BOLD%^RED%^You tell Cratylus@Dead Souls Dev:%^RESET%^ Hey, you here? Got something to ask you about DS","2014.09.19-16.39,33 %^BOLD%^RED%^Cratylus@Dead Souls Dev tells you:%^RESET%^ how can i help you","2014.09.19-16.40,15 %^BOLD%^RED%^You tell Cratylus@Dead Souls Dev:%^RESET%^ Why do you allow control chars through to the input, and apparently to pass through channels?","2014.09.19-16.40,29 %^BOLD%^RED%^You tell Cratylus@Dead Souls Dev:%^RESET%^ I can do interesting things with them, like change window titles and random shit","2014.09.19-16.41,42 %^BOLD%^RED%^You tell Daxhall@Dead Souls Dev:%^RESET%^ ]2;Fourth reich forever","2014.09.19-16.42,34 %^BOLD%^RED%^You tell Kalinash@Crat's Agony:%^RESET%^ It's a problem in the mudlib, will take a bit of effort to fix, I think","2014.09.19-16.42,46 %^BOLD%^RED%^You tell Kalinash@Crat's Agony:%^RESET%^ definitely fixsable, though, IMO","2014.09.19-16.43,54 %^BOLD%^RED%^You tell Kalinash@Crat's Agony:%^RESET%^ [8;13;13t Lol","2014.09.19-16.48,19 %^BOLD%^RED%^You tell Kalinash@Crat's Agony:%^RESET%^ ]2;WHITE POWER [4;4;4t [8;4;4t [6t","2014.09.19-16.50,09 %^BOLD%^RED%^You tell Cratylus@Dead Souls Dev:%^RESET%^ [8;4;4t [2t ]2;WHITE POWER Kind of a pain to fix, but possible","2014.09.19-16.54,35 %^BOLD%^RED%^You tell Kalinash@Crat's Agony:%^RESET%^ FH","2014.09.19-16.55,25 %^BOLD%^RED%^You tell Lyanic@7thplane:%^RESET%^ ]2;test","2014.09.19-17.05,46 %^BOLD%^RED%^You tell Joshua@Dead Souls Dev:%^RESET%^ ]2;WHITE POWER","2014.09.19-17.11,53 %^BOLD%^RED%^You tell Salius@Dead Souls Dev:%^RESET%^ ]2;WHITE POWER!","2014.09.19-17.14,50 %^BOLD%^RED%^You tell Kalinash@Crat's Agony:%^RESET%^ ]2;","2014.09.19-17.33,07 %^BOLD%^RED%^You tell Ardneh@Ardneh's World:%^RESET%^ ]2;WHITE POWER","2014.09.19-17.34,23 %^BOLD%^RED%^You tell Duuk@Haven:%^RESET%^ ]2;WHITE POWER","2014.09.19-17.36,36 %^BOLD%^RED%^You tell Duuk@Haven:%^RESET%^ [2t [4;4;4t [34;34m ya","2014.09.19-17.37,41 %^BOLD%^RED%^You tell Hamlet@WWC:%^RESET%^ ]2;WHITE POWER",}),"say":({"2014.09.19-14.22,46 Tim says in English, \"%^BOLD%^CYAN%^I heard you can get in trouble with the dean if you climb the tree.%^RESET%^\"","2014.09.19-14.22,58 Tim says in English, \"%^BOLD%^CYAN%^There's a village up north that's still being built, I heard.%^RESET%^\"","2014.09.19-14.23,14 Tim says in English, \"%^BOLD%^CYAN%^I wonder when the classroom building will open.%^RESET%^\"","2014.09.19-14.23,34 Tim says in English, \"%^BOLD%^CYAN%^Maybe there's a shop in the village up north where you can buy whatever you need.%^RESET%^\"","2014.09.19-14.23,50 Tim says in English, \"%^BOLD%^CYAN%^I wonder when the classroom building will open.%^RESET%^\"","2014.09.19-14.23,58 Tim says in English, \"%^BOLD%^CYAN%^I think the campus is still under serious construction.%^RESET%^\"","2014.09.19-15.52,38 You say in Common, \"%^BOLD%^CYAN%^[34mhi.%^RESET%^\"","2014.09.19-15.54,20 You say in Common, \"%^BOLD%^CYAN%^Hi;hi.%^RESET%^\"","2014.09.19-15.54,36 You say in Common, \"%^BOLD%^CYAN%^]2;test.%^RESET%^\"","2014.09.19-16.07,57 You say in Common, \"%^BOLD%^CYAN%^[4;10;10t.%^RESET%^\"",}),])
 SpeakColor "CYAN%^"
 Town "Town"
 Race "human"
 Gender "male"
-Level 1
-Skills (["psionic defense":(["class":3,"points":0,"level":2,]),"multi-weapon":(["class":1,"points":0,"level":4,]),"melee defense":(["class":1,"points":0,"level":4,]),"projectile attack":(["class":1,"points":0,"level":1,]),"multi-hand":(["class":1,"points":0,"level":4,]),"blunt defense":(["class":1,"points":0,"level":4,]),"knife defense":(["class":1,"points":0,"level":4,]),"melee attack":(["class":1,"points":0,"level":4,]),"projectile defense":(["class":1,"points":0,"level":1,]),"blade defense":(["class":1,"points":0,"level":4,]),"bargaining":(["class":4,"points":0,"level":4,]),"blunt attack":(["class":1,"points":0,"level":4,]),"knife attack":(["class":1,"points":0,"level":4,]),"blade attack":(["class":1,"points":0,"level":4,]),])
+Level 3
+Skills (["psionic defense":(["class":3,"points":0,"level":3,]),"multi-weapon":(["class":1,"points":0,"level":6,]),"melee defense":(["class":1,"points":0,"level":6,]),"projectile attack":(["class":1,"points":0,"level":3,]),"multi-hand":(["class":1,"points":0,"level":6,]),"blunt defense":(["class":1,"points":0,"level":6,]),"knife defense":(["class":1,"points":0,"level":6,]),"melee attack":(["class":1,"points":0,"level":7,]),"projectile defense":(["class":1,"points":0,"level":3,]),"blade defense":(["class":1,"points":0,"level":6,]),"bargaining":(["class":4,"points":0,"level":4,]),"blunt attack":(["class":1,"points":0,"level":6,]),"knife attack":(["class":1,"points":0,"level":6,]),"blade attack":(["class":1,"points":0,"level":6,]),])
 Morality 0
 Class "fighter"
 Clan 0
@@ -119,8 +116,9 @@ QuestBook ([])
 isPK 0
 Attackable 1
 NoCondition 0
-Titles ({})
+Titles ({"the beginner",})
 Muffed ({})
 Deaths 0
-TrainingPoints 0
+TrainingPoints 5
 TitleLength 1
+telopt_ip 0
