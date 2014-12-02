@@ -438,6 +438,8 @@ string *GetMatch(string mud){
 
 string GetNameserver(){ return Nameservers[0][0]; }
 
+string GetNameserverIP(){ return Nameservers[0][1]; }
+
 mixed *GetNameservers(){ return copy(Nameservers); }
 
 int AddBanned(string mud, string reason){

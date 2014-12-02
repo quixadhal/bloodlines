@@ -1076,6 +1076,8 @@ string GetHelp(){
         int rcp_enabled = INET_D->GetService("rcp");
         int oob_enabled = INET_D->GetService("oob");
         int http_enabled = INET_D->GetService("http");
+        string I3_server_name = INTERMUD_D->GetNameserver();
+        string I3_server_ip = INTERMUD_D->GetNameserverIP();
 
         string *output = ({ });
         output += ({ "Syntax:  '%^B_WHITE%^%^BLACK%^mudconfig %^MAGENTA%^<parameter> <value>%^RESET%^'" });
@@ -1100,6 +1102,8 @@ string GetHelp(){
 #endif
         output += ({ sprintf( "  %-=15s %-=*s %=36s", "defaultdomain",  width-2-15-1+y_width-1-36-2, Y + DIR_STANDARD_DOMAIN + X,          "default domain path") });
         output += ({ sprintf( "  %-=15s %-=*s %=36s", "hostip",         width-2-15-1+y_width-1-36-2, Y + HOST_IP + X,                      "host computer IP address") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "i3servername",   width-2-15-1+y_width-1-36-2, Y + I3_server_name + X,               "I3 server Name") });
+        output += ({ sprintf( "  %-=15s %-=*s %=36s", "i3serverip",     width-2-15-1+y_width-1-36-2, Y + I3_server_ip + X,                 "I3 server IP address") });
         output += ({ sprintf( "  %-=15s %-=*s %=36s", "websourceip",    width-2-15-1+y_width-1-36-2, Y + WEB_SOURCE_IP + X,                "liveupgrade server IP address") });
         output += ({ sprintf( "  %-=15s %-=*s %=36s", "websourcename",  width-2-15-1+y_width-1-36-2, Y + WEB_SOURCE_NAME + X,              "liveupgrade server domain name") });
         output += ({ sprintf( "  %-=15s %-=*s %=36s", "liveupgrade",    width-2-15-1+y_width-1-36-2, Y + LIVEUPGRADE_SERVER + X,           "default liveupgrade MUD name") });
