@@ -1409,7 +1409,8 @@ if($format == 'html') {
         <table width="100%">
             <tr>
                 <td align="left" width="30%" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
-                    <span id="lastrefresh" style="color: #1F1F1F">Last refreshed at <? echo $mini_now; ?>.&nbsp;</span>
+                    <span id="lastrefresh" style="color: #1F1F1F">Last refreshed at <? echo $mini_now; ?>.<br /></span>
+                    <span id="youtube" style="color: #1F1F1F">Current&nbsp;<a href="https://www.youtube.com/watch?v=<? echo $video_pick; ?>">youtube</a>&nbsp;video.&nbsp;</span>
                 </td>
                 <td>&nbsp;</td>
                 <td id="server" align="center" valign="center" width="80"
