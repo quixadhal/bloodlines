@@ -1435,6 +1435,11 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
     string prev = base_name(previous_object());
     string pchan,pmsg;
     string *whobits;
+    string *msgbits;
+    string bit;
+    string tstamp;
+    string output;
+    int i;
 
     //tn("CHAT_D->eventSendChannel: "+identify(who)+", "+identify(ch)+", "+identify(msg), "green");
 
@@ -1552,7 +1557,17 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
         whobits += ({ mud_name() });
     }
     who = implode(whobits, "@");
-    LogIt(timestamp()+"\t"+ch+"\t"+who+"\t"+pmsg+"\n", "/secure/log/allchan.log", ch);
+    msgbits = rexplode(pmsg, "\n");
+    tstamp = timestamp();
+
+    i = 0;
+    foreach(bit in msgbits) {
+        output = sprintf("%s%03d\t%s\t%s\t%s\n", tstamp, i, ch, who, bit);
+        i++;
+        LogIt(output, "/secure/log/allchan.log", ch);
+    }
+    
+    //LogIt(timestamp()+"\t"+ch+"\t"+who+"\t"+pmsg+"\n", "/secure/log/allchan.log", ch);
     //tn("CHAT_D->eventSendChannel: return?", "green");
 }
 

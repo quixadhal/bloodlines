@@ -10,6 +10,8 @@ use HTML::Entities;
 use DBI;
 use Net::Twitter;
 use Digest::SHA qw(sha256_base64);
+#use MIME::Base64 qw(encode_base64 decode_base64);
+use Encode;
 
 my $TEXT_FILE = '/home/bloodlines/lib/secure/log/allchan.log';
 my $ARCHIVE = '/home/bloodlines/lib/secure/log/archive/allchan.log-*';
@@ -43,17 +45,20 @@ CREATE TABLE chanlogs (
     twat        BOOLEAN DEFAULT false,
     is_bot      BOOLEAN DEFAULT false,
     id          SERIAL NOT NULL,
-    checksum    TEXT
+    checksum    TEXT,
+    subseq      INTEGER DEFAULT 0
 );
 
 CREATE INDEX ix_msg_date ON chanlogs (msg_date);
 CREATE INDEX ix_channel ON chanlogs (channel);
 CREATE INDEX ix_speaker ON chanlogs (speaker);
 CREATE INDEX ix_mud ON chanlogs (mud);
-CREATE UNIQUE INDEX ix_chanlogs ON chanlogs (msg_date, network, channel, speaker, mud, is_emote, message); 
+CREATE UNIQUE INDEX ix_chanlogs ON chanlogs (msg_date, subseq, network, channel, speaker, mud, is_emote, message); 
 CREATE INDEX ix_twat ON chanlogs (twat);
 CREATE INDEX ix_bot ON chanlogs (is_bot);
 CREATE INDEX ix_checksum ON chanlogs (checksum);
+CREATE INDEX ix_id ON chanlogs (id);
+CREATE INDEX ix_subseq ON chanlogs (subseq);
 
 CREATE VIEW today AS
     SELECT to_char(chanlogs.msg_date, 'MM/DD HH24:MI'::text) AS "time", chanlogs.channel, (chanlogs.speaker || '@'::text) || chanlogs.mud AS speaker, chanlogs.message
@@ -110,7 +115,7 @@ ALTER FUNCTION fn_sha256(text) OWNER TO bloodlines;
 
 CREATE OR REPLACE FUNCTION fn_update_checksum() RETURNS trigger AS $fn_update_checksum$
 BEGIN
-  new.checksum := fn_sha256(to_char(new.msg_date, 'YYYY-MM-DD HH:MI:SS')||new.channel||new.speaker||new.mud||new.message);
+  new.checksum := fn_sha256(to_char(new.msg_date, 'YYYY-MM-DD HH:MI:SS')||to_char(new.subseq, '000')||new.channel||new.speaker||new.mud||new.message);
   RETURN new;
 END;
 $fn_update_checksum$ LANGUAGE plpgsql;
@@ -135,8 +140,8 @@ if( $BE_A_TWIT ) {
 }
 
 my $add_entry_sql = $dbc->prepare( qq!
-    INSERT INTO chanlogs (msg_date, network, channel, speaker, mud, message, is_url, is_bot)
-    VALUES (?,trim(?),trim(?),trim(?),trim(?),trim(?),?,?)
+    INSERT INTO chanlogs (msg_date, subseq, network, channel, speaker, mud, message, is_url, is_bot)
+    VALUES (?,?,trim(?),trim(?),trim(?),trim(?),?,?,?)
     !);
 
 my $botlist = bot_list();
@@ -167,7 +172,7 @@ sub is_already_there {
     my $checksum = shift;
     my $res = $dbc->selectrow_hashref(qq!
 
-        SELECT id, checksum
+        SELECT checksum
           FROM chanlogs
          WHERE checksum = '$checksum'
          LIMIT 1
@@ -204,8 +209,10 @@ sub parse_log_line {
     my $datestamp = substr($parts[0], 0, 10);
     substr($datestamp, 4, 1) = '-';
     substr($datestamp, 7, 1) = '-';
+    my $subseq = substr($parts[0], 19, 3) || 0;
 
     $log_entry{'msg_date'} = "$datestamp $timestamp";       # Timestamp YYYY-MM-DD HH:MM:SS
+    $log_entry{'subseq'} = 0 + $subseq;                     # 3 digit sequence for multi-line emotes
     $log_entry{'network'} = $network;                       # Network is always i3
 
     my $channel = $parts[1];                                # Channel
@@ -221,7 +228,9 @@ sub parse_log_line {
     $log_entry{'mud'} = $mudname;                           # Mud
 
     my $message = $parts[3];
+    #$message =~ s/\e\[\d+(;\d+)*m//gmix;                      # Remove annoying ESC[49;49mESC[0;10m nonsense.
     $log_entry{'message'} = $message;                       # Message body
+    #$log_entry{'b64'} = encode_base64(encode_utf8($message));            # Encoded version to preserve weird characters
 
     $log_entry{'is_emote'} = undef;                         # Can't tell from the logs without more parsing...
     $log_entry{'is_url'} = 0;                               # Default false, but may be set if matched below
@@ -266,7 +275,7 @@ sub load_logs {
         #print "$file is NEWER than SQL\n" if $oldest_date >= $recent_date;
         last if $is_old;
     }
-    @lines = sort @lines;
+### @lines = sort @lines;
     my $total = scalar @lines;
     print "Collected $total lines to insert\n";
     my $done = 0;
@@ -327,11 +336,11 @@ sub add_entry {
                         &&  $data->{'mud'} eq $_->{'mud'} 
                         } @$botlist;
 
-    my $string = $data->{'msg_date'} . $data->{'channel'} . $data->{'speaker'} . $data->{'mud'} . $data->{'message'};
+    my $string = $data->{'msg_date'} . sprintf("%03d", $data->{'subseq'}) . $data->{'channel'} . $data->{'speaker'} . $data->{'mud'} . $data->{'message'};
     my $checksum = sha256($string);
     return 0 if is_already_there($checksum);
     
-    my $rv = $add_entry_sql->execute($data->{'msg_date'}, $data->{'network'}, $data->{'channel'}, $data->{'speaker'}, $data->{'mud'}, $data->{'message'}, $data->{'is_url'}, $is_bot);
+    my $rv = $add_entry_sql->execute($data->{'msg_date'}, $data->{'subseq'}, $data->{'network'}, $data->{'channel'}, $data->{'speaker'}, $data->{'mud'}, $data->{'message'}, $data->{'is_url'}, $is_bot); #, $data->{'b64'});
     if($rv) {
         $dbc->commit;
         return 1;

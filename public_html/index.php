@@ -90,6 +90,7 @@ $urls = array();
 $urls['email']                  = $isLocal ? "http://gmail.com"                 : "mailto:quixadhal@gmail.com";
 $urls['facebook']               = $isLocal ? "http://facebook.com"              : "http://www.facebook.com/groups/1470783289801007/";
 $urls['tomato']                 = $isLocal ? "http://192.168.1.1/"              : "http://www.shadowandy.net/2012/03/asus-rt-n66u-tomatousb-firmware-flashing-guide.htm";
+$urls['photos']                 = $isLocal ? "https://picasaweb.google.com/home": "http://plus.google.com/photos/101991567866995168256/albums";
 
 $weather_url   = "http://www.wunderground.com/cgi-bin/findweather/getForecast?query=zmw:49004.2.99999&bannertypeclick=wu_blueglass";
 $weather_image = "http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_blueglass&airportcode=KAZO&ForcedCity=Kalamazoo&ForcedState=MI&zipcode=49004&language=EN";
@@ -106,7 +107,7 @@ header('Cache-control: max-age=0, must-revalidate');
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <!-- <meta http-equiv="refresh" content="600"> -->
+        <meta http-equiv="refresh" content="600">
         <!-- <script type='text/javascript' src='clock/jquery.js'></script> -->
         <!-- <link href="http://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet" type="text/css"> -->
         <!-- <link href="clock/clock.css" rel="stylesheet" type="text/css"> -->
@@ -247,6 +248,7 @@ header('Cache-control: max-age=0, must-revalidate');
             Countdown_DisplayFormat = "%%D%% Days, %%H%% Hours, %%M%% Minutes, %%S%% Seconds.";
             Countdown_FinishMessage = "PLAY!";
         </script>
+        <!-- <script src="//www.archeagestatus.com/widget.js?server=Tahyang" id="aas" ></script> -->
         <title>
             Bloodlines:  WileyMUD IV
         </title>
@@ -290,6 +292,38 @@ header('Cache-control: max-age=0, must-revalidate');
                 font-size: 16px;
                 background-color: rgba(0,0,0,0.1);
                 color: #00FF00;
+                float: left;
+                margin-right: 20px;
+            }
+            .wow {
+                display: inline-block;
+                border: none;
+                padding: 0px;
+                margin: 0px;
+                text-align: center;
+                vertical-align: middle;
+                min-height: 44px;
+                height: 44px;
+                line-height: 44px;
+                font-size: 16px;
+                background-color: rgba(0,0,0,0.1);
+                color: #FFFFFF;
+                float: left;
+                margin-right: 20px;
+            }
+            .archeage {
+                display: inline-block;
+                border: none;
+                padding: 0px;
+                margin: 0px;
+                text-align: center;
+                vertical-align: middle;
+                min-height: 44px;
+                height: 44px;
+                line-height: 44px;
+                font-size: 16px;
+                background-color: rgba(0,0,0,0.1);
+                color: #FFFFFF;
                 float: left;
                 margin-right: 20px;
             }
@@ -371,6 +405,15 @@ header('Cache-control: max-age=0, must-revalidate');
     </head>
     <!-- <body background="<? echo $graphics['background']; ?>" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" onload="startClock()"> -->
     <body background="<? echo $graphics['background']; ?>" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" style="overflow-x: hidden;" onload="refreshBits(0,0)">
+<!--
+        <div style="position: fixed; z-index: -99; width: 100%; height: 100%">
+            <iframe frameborder="0" height="100%" width="100%"
+                    src="https://youtube.com/embed/Uvl3ef7D5rg?autoplay=1&controls=0&showinfo=0&autohide=1"> -->
+                    <!-- version=3&enablejsapi=1 -->
+                    <!-- playlist=fCPzLNqYe1U,P1Bf_fRNq9g, -->
+<!--            </iframe>
+        </div>
+-->
         <div id="newsdiv" class="news">
             &nbsp;
         </div>
@@ -426,7 +469,7 @@ header('Cache-control: max-age=0, must-revalidate');
                     </div>
 -->
                     <!-- <div id="olddate" align="center" style="color: #d0d000;"><?php echo date('F j, Y'); ?></div> -->
-                    <span style="color: #1F1F1F"><a href="https://plus.google.com/photos/101991567866995168256/albums" title="Pictures">
+                    <span style="color: #1F1F1F"><a href="<? echo $urls['photos']; ?>" title="Photos">
                         <img src="<? echo $graphics['picasa_web']; ?>" 
                              border="0" width="64" height="64" alt="(dynmap)"
                              style="opacity: 0.4; filter: alpha(opacity=40);"
@@ -709,7 +752,40 @@ header('Cache-control: max-age=0, must-revalidate');
             </tr>
             <tr>
                 <td colspan="7" align="center">
-                    <a name="wildstar">
+                    <!--
+                    <a name="wow">
+                        <a href="http://us.battle.net/wow/en/forum/1181914/">Kul Tiras</a> &nbsp;<a href="http://us.battle.net/wow/en/status">Status</a>:&nbsp;&nbsp;
+                        <? 
+                           //$cmd = "fping -i20 -c1 -q  12.129.209.68 12.129.255.20 12.129.209.68 12.129.254.230 12.129.254.238 12.129.255.20 12.129.254.230 12.129.254.238 12.129.254.238 12.129.254.230 12.129.255.33 12.129.254.238 12.129.255.48 12.129.254.230 12.129.254.230 12.129.255.29 12.129.255.16 12.129.255.20 12.129.255.36 12.129.255.40 12.129.254.238 12.129.255.40 12.129.255.36 12.129.255.52 12.129.255.33 12.129.254.238 12.129.255.52 2>&1 | cut -d\" \" -f5,8 | cut -d/ -f3 | perl -ne 'BEGIN{ \$count = 0; \$total = 0;} (\$loss, \$lag) = /(\d)\%,\s+(\d+\.\d+)/; \$count++; \$avg += \$lag; \$total += \$loss; END { \$avg = \$avg / \$count; printf \"ip: 208.94.25.44, loss: %d, ping: %5.1fms\\n\", \$total, \$avg;}'";
+                           //$ping = shell_exec($cmd);
+                        ?>
+                           <span style="color: #00FF00"><? echo $server["name"]; ?> &nbsp; <? echo $ping; ?></span>
+                    </a>
+                    -->
+                    <!-- <div id="aaswidget"></div> -->
+                    <!--
+                    <a name="archeage">
+                        <a href="http://forums.archeagegame.com/">ArcheAge</a> &nbsp;<a href="https://twitter.com/ArcheAge/">Status</a>:&nbsp;&nbsp;
+                        <a href="http://www.reddit.com/r/archeage/">
+                        <? 
+                           //$server_status = file_get_contents("http://www.archeagestatus.com/api/status?server=Tahyang");
+                           //$cmd = "fping -i20 -c1 -q  208.94.25.44 208.94.25.44 208.94.25.44 208.94.25.44 208.94.25.44 208.94.25.44 2>&1 | cut -d\" \" -f5,8 | cut -d/ -f3 | perl -ne 'BEGIN{ \$count = 0; \$total = 0;} (\$loss, \$lag) = /(\d)\%,\s+(\d+\.\d+)/; \$count++; \$avg += \$lag; \$total += \$loss; END { \$avg = \$avg / \$count; printf \"ip: 208.94.25.44, loss: %d, ping: %5.1fms\\n\", \$total, \$avg;}'";
+                           //if ($server_status) {
+                           //    $json = json_decode($server_status, true);
+                           //    foreach($json as $server) {
+                           //        if( $server["status"] === "UP" ) {
+                           //            $ping = shell_exec($cmd); ?>
+                                       <span style="color: #00FF00"><? echo $server["name"]; ?> &nbsp; <? echo $ping; ?></span>
+                        <? //        } else { ?>
+                                       <span style="color: #FF0000"><? echo $server["name"]; ?> &nbsp; </span>
+                        <? //        }
+                           //    }
+                           //}
+                        ?>
+                        </a>
+                    </a>
+                    -->
+                    <!-- <a name="wildstar"> -->
                     <!-- <fieldset class="countdown">
                         <legend>&raquo;&nbsp;Wildstar Launch!&nbsp;&laquo;</legend>
                         <div id="countdown" class="countdown">
@@ -718,39 +794,41 @@ header('Cache-control: max-age=0, must-revalidate');
                         </span>
                         </div>
                     -->
+                    <!--
                     <div id="wildstar" class="wildstar">
                         Wildstar&nbsp;Status:&nbsp;&nbsp;
                         <? 
-                           $auth_status = file_get_contents("http://wsstatus.com/embed/json.php?serverId=1");
-                           $region_status = file_get_contents("http://wsstatus.com/embed/json.php?region=1");
-                           if ($auth_status) {
-                               $json = json_decode($auth_status, true);
-                               foreach($json as $server) {
-                                   if( $server["Name"] === "Auth Server" ) {
-                                       if( $server["Status"] === "online" ) { ?>
-                                           <span style="color: #00FF00"><? echo $server["Name"]; ?> &nbsp; </span>
-                        <?             } else { ?>
-                                           <span style="color: #FF0000"><? echo $server["Name"]; ?> &nbsp; </span>
-                        <?             }
-                                       break;
-                                   }
-                               }
-                           }
-                           if ($region_status) {
-                               $json = json_decode($region_status, true);
-                               foreach($json as $server) {
-                                   if( $server["Status"] === "online" ) { ?>
-                                       <span style="color: #00FF00"><? echo $server["Name"]; ?> &nbsp; </span>
-                        <?         } else { ?>
-                                       <span style="color: #FF0000"><? echo $server["Name"]; ?> &nbsp; </span>
-                        <?         }
-                               }
-                           }
+                           //$auth_status = file_get_contents("http://wsstatus.com/embed/json.php?serverId=1");
+                           //$region_status = file_get_contents("http://wsstatus.com/embed/json.php?region=1");
+                           //if ($auth_status) {
+                           //    $json = json_decode($auth_status, true);
+                           //    foreach($json as $server) {
+                           //        if( $server["Name"] === "Auth Server" ) {
+                           //            if( $server["Status"] === "online" ) { ?>
+                                           <span style="color: #00FF00"><? //echo $server["Name"]; ?> &nbsp; </span>
+                        <? //            } else { ?>
+                                           <span style="color: #FF0000"><? //echo $server["Name"]; ?> &nbsp; </span>
+                        <? //            }
+                           //            break;
+                           //        }
+                           //    }
+                           //}
+                           //if ($region_status) {
+                           //    $json = json_decode($region_status, true);
+                           //    foreach($json as $server) {
+                           //        if( $server["Status"] === "online" ) { ?>
+                                       <span style="color: #00FF00"><? //echo $server["Name"]; ?> &nbsp; </span>
+                        <? //        } else { ?>
+                                       <span style="color: #FF0000"><? //echo $server["Name"]; ?> &nbsp; </span>
+                        <? //        }
+                           //    }
+                           //}
                         ?>
                         &nbsp;
                     </div>
+                    -->
                     <!-- </fieldset> -->
-                    </a>
+                    <!-- </a> -->
                 </td>
             </tr>
 <!--

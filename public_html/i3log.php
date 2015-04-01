@@ -255,6 +255,54 @@ function is_local_ip() {
 
 $isLocal = is_local_ip();
 
+$video_list = array();
+
+$video_list['KGG0t-psqNo'] = 291;
+$video_list['tfuKc066Hao'] = 301;
+$video_list['vTIIMJ9tUc8'] = 253;
+$video_list['tzW2ybYFboQ'] = 70;
+$video_list['4E9TGlDxE48'] = 44;
+$video_list['TrcT7sseLZI'] = 91;
+$video_list['EP1gNYU27Tk'] = 101;
+$video_list['Knw_rUP64wM'] = 358;
+$video_list['zq7Eki5EZ8o'] = 176;
+$video_list['Vz-zcW2CsLE'] = 463;
+$video_list['gMAbNFptzAA'] = 235;
+$video_list['HlDPAnoyOFo'] = 174;
+$video_list['duuRAomjxNI'] = 341;
+$video_list['eETHc8LpY2M'] = 357;
+$video_list['WIKqgE4BwAY'] = 244;
+$video_list['EjQsayrmMoU'] = 351;
+$video_list['5cpmLWC7tW0'] = 427;
+$video_list['47y5bo8wtqM'] = 234;
+$video_list['eWM2joNb9NE'] = 121;
+$video_list['TfoQj9kVnLU'] = 209;
+$video_list['z-D91e71iFY'] = 465;
+$video_list['TnOdAT6H94s'] = 330;
+$video_list['bu85Cp__vJ4'] = 117;
+$video_list['Ew1WBwh3zgo'] = 151;
+$video_list['6M4_Ommfvv0'] = 335;
+$video_list['SJr2uRIROnA'] = 506;
+$video_list['qORYO0atB6g'] = 275;
+$video_list['RijB8wnJCN0'] = 206;
+$video_list['DxSfQeCoFUM'] = 381;
+$video_list['lPlGshbbjG4'] = 271;
+$video_list['x8H2-YZUw40'] = 257;
+$video_list['EBLNYuKLYD0'] = 603;
+$video_list['jJ3cWWNXBHg'] = 209;
+$video_list['7x3CCKaOlfU'] = 222;
+$video_list['k85mRPqvMbE'] = 174;
+$video_list['god7hAPv8f0'] = 293;
+$video_list['RovF1zsDoeM'] = 230;
+$video_list['UIa3r12oCo8'] = 660;
+$video_list['w9gOQgfPW4Y'] = 250;
+$video_list['U2R2KXNQR1M'] = 302;
+$video_list['p6S9oqJRclo'] = 626;
+$video_list['zzUYWS0mBzs'] = 283;
+$video_list['egBlgVlimP0'] = 422;
+$video_list['wZ09HcvYQTY'] = 317;
+
+
 $graphics = array();
 
 $graphics['background']         = $isLocal ? "gfx/dark_wood.jpg"            : "https://lh5.googleusercontent.com/-zvnNrcuqbco/UdooZZelxoI/AAAAAAAAALA/9u5S92UySEA/s800/dark_wood.jpg";
@@ -727,8 +775,17 @@ foreach ($data['rows'] as $row) {
     $speaker = "$speakerColor" . $row->speaker . "@" . $row->mud . "</SPAN>";
 
     $filtered_message = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '_', $row->message);
-    $message = htmlentities($filtered_message);
+    //$filtered_message = $row->message;
+    $tmp_msg = preg_replace("/\x1b\[[0-9]+(;[0-9]+)*m/", "", $row->message);
+    $message = htmlentities($tmp_msg,0,'UTF-8');
+    $message = preg_replace('/ /', '&#x2004;', $message); // replace spaces with unicode THREE-PER-EM SPACE
+    //$message = preg_replace('/-/', '&#x8209;', $filtered_message); // replace hyphen with unicode NON-BREAKING HYPHEN
     $message = preg_replace( '/((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)/', '<a href="$1" target="I3-link">$1</a>', $message);
+
+    //$b64 = $row->b64;
+    //if(!is_null($b64)) {
+    //    $b64 = utf8_decode(base64_decode($b64));
+    //}
 
     $html[] = array(
         "row"           => $row,
@@ -743,6 +800,7 @@ foreach ($data['rows'] as $row) {
         "raw_channel"   => $row->channel,
         "raw_speaker"   => $row->speaker,
         "raw_mud"       => $row->mud,
+        //"b64"           => $b64,
     );
     $text[] = array(
         "row"           => $row,
@@ -788,13 +846,16 @@ echo "totalPages: $totalPages\n";
 echo json_encode($data);
  */
 
+$video_pick = array_rand($video_list, 1);
+$refresh_secs = $video_list[$video_pick];
+
 if($format == 'html') {
-    header('Content-type: text/html');
+    header('Content-type: text/html; charset=utf-8')
 ?>
 <html>
     <head>
         <title> Intermud-3 network traffic, as seen by <? echo $MUD_NAME; ?>. </title>
-        <meta http-equiv="refresh" content="60">
+        <meta http-equiv="refresh" content="<? echo $refresh_secs; ?>">
         <style>
             a { text-decoration:none; }
             a:hover { text-decoration:underline; }
@@ -813,6 +874,15 @@ if($format == 'html') {
         </script>
     </head>
     <body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
+        <div style="position: fixed; z-index: -99; width: 100%; height: 100%">
+            <iframe frameborder="0" height="100%" width="100%"
+                    src="https://youtube.com/embed/<? echo $video_pick; ?>?autoplay=1&controls=0&showinfo=0&autohide=1">
+                    <!-- version=3&enablejsapi=1 -->
+                    <!-- playlist=fCPzLNqYe1U,P1Bf_fRNq9g, -->
+                    <!-- Uvl3ef7D5rg -->
+                    <!-- KGG0t-psqNo -->
+            </iframe>
+        </div>
         <table id="header" border=0 cellspacing=0 cellpadding=0 width=80% align="center">
             <tr>
                 <!-- Header logos -->
@@ -1227,34 +1297,34 @@ if($format == 'html') {
         <table id="content" width="100%">
             <tr>
                 <? if(isset($startDate)) { ?>
-                <th id="dateheader" align="left" width="10%" style="color: #FFFF00;">
+                <th id="dateheader" align="left" width="80px" style="color: #FFFF00; min-width: 80px;">
                     <a href="<? $old = $startDate; $startDate = null; echo build_url(); $startDate = $old; build_url(); ?>">Date</a>
                 </th>
                 <? } else { ?>
-                <th id="dateheader" align="left" width="10%" style="color: #DDDDDD;">Date</th>
+                <th id="dateheader" align="left" width="80px" style="color: #DDDDDD; min-width: 80px;">Date</th>
                 <? } ?>
                 <? if(isset($startDate)) { ?>
-                <th id="timeheader" align="left" width="10%" style="color: #FFFF00;">
+                <th id="timeheader" align="left" width="40px" style="color: #FFFF00; min-width: 40px;">
                     <a href="<? $old = $startDate; $startDate = null; echo build_url(); $startDate = $old; build_url(); ?>">Time</a>
                 </th>
                 <? } else { ?>
-                <th id="timeheader" align="left" width="10%" style="color: #DDDDDD;">Time</th>
+                <th id="timeheader" align="left" width="40px" style="color: #DDDDDD; min-width: 40px;">Time</th>
                 <? } ?>
                 <? if(isset($channelFilter)) { ?>
-                <th id="channelheader" align="left" width="10%" style="color: #FFFF00;">
+                <th id="channelheader" align="left" width="100px" style="color: #FFFF00; min-width: 100px;">
                     <a href="<? $old = $channelFilter; $channelFilter = null; echo build_url(); $channelFilter = $old; build_url(); ?>">Channel</a>
                 </th>
                 <? } else { ?>
-                <th id="channelheader" align="left" width="10%" style="color: #DDDDDD;">Channel</th>
+                <th id="channelheader" align="left" width="100px" style="color: #DDDDDD; min-width: 100px;">Channel</th>
                 <? } ?>
                 <? if(isset($speakerFilter)) { ?>
-                <th id="speakerheader" align="left" width="20%" style="color: #FFFF00;">
+                <th id="speakerheader" align="left" width="200px" style="color: #FFFF00; min-width: 200px;">
                     <a href="<? $old = $speakerFilter; $old2 = $mudFilter; $speakerFilter = null; $mudFilter = null; echo build_url(); $speakerFilter = $old; $mudFilter = $old2; build_url(); ?>">Speaker</a>
                 </th>
                 <? } else { ?>
-                <th id="speakerheader" align="left" width="20%" style="color: #DDDDDD;">Speaker</th>
+                <th id="speakerheader" align="left" width="200px" style="color: #DDDDDD; min-width: 200px;">Speaker</th>
                 <? } ?>
-                <th align="left" width="60%">&nbsp;</th>
+                <th align="left">&nbsp;</th>
             </tr>
             <?  foreach ($html as $row) {
                     if(isset($startDate)) {
@@ -1324,8 +1394,15 @@ if($format == 'html') {
                         onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
                         onclick="document.location.href='<? echo $speakerUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['speaker']; ?></td>
                 <? } ?>
+                <?
+                    $msg = $row['message'];
+                    //if(!is_null($row['b64'])) {
+                    //    $msg = $row['b64'];
+                    //}
+                    //$msg = preg_replace('/ /', '&#x2004;', $row['message']);
+                ?>
 
-                    <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['message']; ?></td>
+                    <td bgcolor="<? echo $row['bgcolor']; ?>"><font face="monospace"><? echo $msg; ?></font></td>
             </tr>
             <? } ?>
         </table>
@@ -1414,11 +1491,13 @@ if($format == 'html') {
     header('Content-type: text/plain');
 
     echo str_pad("--=)) This is the Intermud-3 network traffic feed, as seen by " . $MUD_NAME . ". ((=--", 120, " ", STR_PAD_BOTH) . "\n\n";
-    echo "Date  Time  ";
+    echo str_pad("Date", 10) . " ";
+    echo str_pad("Time", 5) . " ";
     echo str_pad("Channel", 16) . " ";
     echo str_pad("Speaker", 24) . " ";
     echo "Message\n";
-    echo "----- ----- ";
+    echo str_repeat("-", 10) . " ";
+    echo str_repeat("-", 5) . " ";
     echo str_repeat("-", 16) . " ";
     echo str_repeat("-", 24) . " ";
     echo str_repeat("-", 65) . "\n";
@@ -1426,7 +1505,7 @@ if($format == 'html') {
         echo $row["datestamp"] . " " . $row["timestamp"] . " ";
         echo substr(str_pad("(" . $row["channel"] . ")", 16), 0, 16) . " ";
         echo substr(str_pad($row["speaker"]."@".$row["mud"], 24), 0, 24) . " ";
-        echo wordwrap($row['message'], 65, "\n" . str_repeat(" ", 54)) . "\n";
+        echo wordwrap($row['message'], 65, "\n" . str_repeat(" ", 59)) . "\n";
     }
     $time_end = microtime(true);
     $time_spent = $time_end - $time_start;
