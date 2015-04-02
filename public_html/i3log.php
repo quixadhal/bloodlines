@@ -259,7 +259,8 @@ $isLocal = is_local_ip();
 function get_video_list($dbh) {
     $list = array();
 
-    $vSql = "SELECT video_id, video_len, description FROM videos";
+    //$vSql = "SELECT video_id, video_len, description FROM videos";
+    $vSql = "SELECT v.video_id, v.video_len, v.description, v.plays from videos v inner join ( select min(plays) as plays from videos ) q on v.plays = q.plays";
     try {
         $sth = $dbh->query($vSql);
     }
@@ -641,6 +642,16 @@ $video_pick = array_rand($video_list, 1);
 //$refresh_secs = $video_list[$video_pick];
 $refresh_secs = $video_list[$video_pick]->video_len;
 $video_desc = $video_list[$video_pick]->description;
+$play_count =  $video_list[$video_pick]->plays;
+try {
+    $upSql = "UPDATE videos SET plays = plays + 1 WHERE video_id = ?";
+    $upQ = $dbh->prepare($upSql);
+    $upQ->execute(array($video_pick));
+}
+catch(PDOException $e) {
+    echo $e->getMessage();
+}
+
 //echo "len == $refresh_secs ---- desc == $video_desc";
 if(!$video_desc) {
     $video_desc = "&nbsp;video";
