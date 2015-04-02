@@ -259,7 +259,7 @@ $isLocal = is_local_ip();
 function get_video_list($dbh) {
     $list = array();
 
-    $vSql = "SELECT video_id, video_len FROM videos";
+    $vSql = "SELECT video_id, video_len, description FROM videos";
     try {
         $sth = $dbh->query($vSql);
     }
@@ -267,15 +267,23 @@ function get_video_list($dbh) {
         echo $e->getMessage();
     }
 
-    $sth->setFetchMode(PDO::FETCH_ASSOC);
+    $sth->setFetchMode(PDO::FETCH_OBJ);
+    //$sth->setFetchMode(PDO::FETCH_ASSOC);
     while($row = $sth->fetch()) {
-        $list[$row["video_id"]] = $row["video_len"];
+        //$list[$row["video_id"]] = $row["video_len"];
+        $list[$row->video_id] = $row;
     }
 
+    /*
     if(count($list) < 1) {
         // Gotta have at least one.
-        $list['KGG0t-psqNo'] = 291;
+        $entry = array();
+        $entry['video_id'] = 'KGG0t-psqNo';
+        $entry['video_len'] = 291;
+        $entry['description'] = 'Mini-Patissier: Miracle Patiful Humberger';
+        $list[$entry['video_id']] = $entry;
     }
+     */
 
     return $list;
 }
@@ -630,7 +638,15 @@ while($row = $sth->fetch()) {
 
 $video_list = get_video_list($dbh);
 $video_pick = array_rand($video_list, 1);
-$refresh_secs = $video_list[$video_pick];
+//$refresh_secs = $video_list[$video_pick];
+$refresh_secs = $video_list[$video_pick]->video_len;
+$video_desc = $video_list[$video_pick]->description;
+//echo "len == $refresh_secs ---- desc == $video_desc";
+if(!$video_desc) {
+    $video_desc = "&nbsp;video";
+} else {
+    $video_desc = '&nbsp;-&nbsp;' . preg_replace('/\s/', '&nbsp;', $video_desc);
+}
 
 $dbh = null;
 
@@ -1388,7 +1404,7 @@ if($format == 'html') {
             <tr>
                 <td align="left" width="30%" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
                     <span id="lastrefresh" style="color: #1F1F1F">Last refreshed at <? echo $mini_now; ?>.<br /></span>
-                    <span id="youtube" style="color: #1F1F1F">Current&nbsp;<a href="https://www.youtube.com/watch?v=<? echo $video_pick; ?>">youtube</a>&nbsp;video.&nbsp;</span>
+                    <span id="youtube" style="color: #1F1F1F"><a href="https://www.youtube.com/watch?v=<? echo $video_pick; ?>">youtube<? echo $video_desc; ?></a></span>
                 </td>
                 <td>&nbsp;</td>
                 <td id="server" align="center" valign="center" width="80"
