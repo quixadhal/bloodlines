@@ -243,6 +243,7 @@ function get_cache($fileName, $sql, $column) {
         file_put_contents($fileName, implode("\n", $list));
     }
 
+    return $list;
 }
 
 function is_local_ip() {
@@ -255,53 +256,29 @@ function is_local_ip() {
 
 $isLocal = is_local_ip();
 
-$video_list = array();
+function get_video_list($dbh) {
+    $list = array();
 
-$video_list['KGG0t-psqNo'] = 291;
-$video_list['tfuKc066Hao'] = 301;
-$video_list['vTIIMJ9tUc8'] = 253;
-$video_list['tzW2ybYFboQ'] = 70;
-$video_list['4E9TGlDxE48'] = 44;
-$video_list['TrcT7sseLZI'] = 91;
-$video_list['EP1gNYU27Tk'] = 101;
-$video_list['Knw_rUP64wM'] = 358;
-$video_list['zq7Eki5EZ8o'] = 176;
-$video_list['Vz-zcW2CsLE'] = 463;
-$video_list['gMAbNFptzAA'] = 235;
-$video_list['HlDPAnoyOFo'] = 174;
-$video_list['duuRAomjxNI'] = 341;
-$video_list['eETHc8LpY2M'] = 357;
-$video_list['WIKqgE4BwAY'] = 244;
-$video_list['EjQsayrmMoU'] = 351;
-$video_list['5cpmLWC7tW0'] = 427;
-$video_list['47y5bo8wtqM'] = 234;
-$video_list['eWM2joNb9NE'] = 121;
-$video_list['TfoQj9kVnLU'] = 209;
-$video_list['z-D91e71iFY'] = 465;
-$video_list['TnOdAT6H94s'] = 330;
-$video_list['bu85Cp__vJ4'] = 117;
-$video_list['Ew1WBwh3zgo'] = 151;
-$video_list['6M4_Ommfvv0'] = 335;
-$video_list['SJr2uRIROnA'] = 506;
-$video_list['qORYO0atB6g'] = 275;
-$video_list['RijB8wnJCN0'] = 206;
-$video_list['DxSfQeCoFUM'] = 381;
-$video_list['lPlGshbbjG4'] = 271;
-$video_list['x8H2-YZUw40'] = 257;
-$video_list['EBLNYuKLYD0'] = 603;
-$video_list['jJ3cWWNXBHg'] = 209;
-$video_list['7x3CCKaOlfU'] = 222;
-$video_list['k85mRPqvMbE'] = 174;
-$video_list['god7hAPv8f0'] = 293;
-$video_list['RovF1zsDoeM'] = 230;
-$video_list['UIa3r12oCo8'] = 660;
-$video_list['w9gOQgfPW4Y'] = 250;
-$video_list['U2R2KXNQR1M'] = 302;
-$video_list['p6S9oqJRclo'] = 626;
-$video_list['zzUYWS0mBzs'] = 283;
-$video_list['egBlgVlimP0'] = 422;
-$video_list['wZ09HcvYQTY'] = 317;
+    $vSql = "SELECT video_id, video_len FROM videos";
+    try {
+        $sth = $dbh->query($vSql);
+    }
+    catch(PDOException $e) {
+        echo $e->getMessage();
+    }
 
+    $sth->setFetchMode(PDO::FETCH_ASSOC);
+    while($row = $sth->fetch()) {
+        $list[$row["video_id"]] = $row["video_len"];
+    }
+
+    if(count($list) < 1) {
+        // Gotta have at least one.
+        $list['KGG0t-psqNo'] = 291;
+    }
+
+    return $list;
+}
 
 $graphics = array();
 
@@ -651,6 +628,10 @@ while($row = $sth->fetch()) {
     $data['rows'][] = $row;
 }
 
+$video_list = get_video_list($dbh);
+$video_pick = array_rand($video_list, 1);
+$refresh_secs = $video_list[$video_pick];
+
 $dbh = null;
 
 if( !isset($anchorID) ) {
@@ -845,9 +826,6 @@ echo "totalPages: $totalPages\n";
 
 echo json_encode($data);
  */
-
-$video_pick = array_rand($video_list, 1);
-$refresh_secs = $video_list[$video_pick];
 
 if($format == 'html') {
     header('Content-type: text/html; charset=utf-8')
