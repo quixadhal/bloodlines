@@ -379,6 +379,10 @@ $youtube = 1;
 if( isset($_REQUEST) && isset($_REQUEST["notube"]) ) {
     $youtube = 0;
 }
+$youtube_visible = 1;
+if( isset($_REQUEST) && isset($_REQUEST["hidetube"]) ) {
+    $youtube_visible = 0;
+}
 
 if( isset($_REQUEST) && isset($_REQUEST["showsql"]) ) {
     $showSQL = 1;
@@ -733,6 +737,7 @@ function build_url() {
         . (isset($searchFilter) ? "&sr=" . urlencode($searchFilter) : "")
         . ((isset($anchorID) && isset($pageNumber) && $pageNumber != 0) ? "&an=" . urlencode($anchorID) : "")
         . (isset($showSQL) ? "&showsql" : "")
+        . ($youtube_visible ? "" : "&hidetube")
         . ($youtube ? "" : "&notube");
 
     $urlParams = preg_replace('/&/', '?', $urlParams, 1);
@@ -754,7 +759,8 @@ $old = $format; $format = "text"; $textUrl = build_url(); $format = $old; build_
 $old = $format; $format = "rss"; $rssUrl = build_url(); $format = $old; build_url();
 $old = $format; $format = "json"; $jsonUrl = build_url(); $format = $old; build_url();
 
-$old = $youtube; $youtube = Null; $notubeUrl = build_url(); $youtube = $old; build_url();
+$old = $youtube; $youtube = 0; $notubeUrl = build_url(); $youtube = $old; build_url();
+$old = $youtube_visible; $youtube_visible = 0; $hidetubeUrl = build_url(); $youtube_visible = $old; build_url();
 $old = $youtube; $youtube = 1; $youtubeUrl = build_url(); $youtube = $old; build_url();
 
 /*
@@ -892,7 +898,11 @@ if($format == 'html') {
     <body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
 <? if($youtube) { ?>
         <div style="position: fixed; z-index: -99; width: 100%; height: 100%">
+<?     if($youtube_visible) { ?>
             <iframe frameborder="0" height="100%" width="100%"
+<?     } else { ?>
+            <iframe frameborder="0" height="1px" width="1px"
+<?     } ?>
                     src="https://youtube.com/embed/<? echo $video_pick; ?>?autoplay=1&controls=0&showinfo=0&autohide=1">
                     <!-- version=3&enablejsapi=1 -->
                     <!-- playlist=fCPzLNqYe1U,P1Bf_fRNq9g, -->
@@ -1430,7 +1440,13 @@ if($format == 'html') {
                     <span id="lastrefresh" style="color: #1F1F1F">Last refreshed at <? echo $mini_now; ?>.<br /></span>
 <? if($youtube) { ?>
                     <span id="youtube" style="color: #1F1F1F"><a href="https://www.youtube.com/watch?v=<? echo $video_pick; ?>">youtube<? echo $video_desc; ?></a></span>
+<?     if($youtube_visible) { ?>
+                    <span id="youtube" style="color: #1F1F1F"><br /><a href="<? echo $hidetubeUrl; ?>">Hide&nbsp;Youtube</a></span>
                     <span id="youtube" style="color: #1F1F1F"><br /><a href="<? echo $notubeUrl; ?>">Disable&nbsp;Youtube</a></span>
+<?     } else { ?>
+                    <span id="youtube" style="color: #1F1F1F"><br /><a href="<? echo $youtubeUrl; ?>">Show&nbsp;Youtube</a></span>
+                    <span id="youtube" style="color: #1F1F1F"><br /><a href="<? echo $notubeUrl; ?>">Disable&nbsp;Youtube</a></span>
+<?     } ?>
 <? } else { ?>
                     <span id="youtube" style="color: #1F1F1F"><a href="<? echo $youtubeUrl; ?>">Enable&nbsp;Youtube</a></span>
 <? } ?>
