@@ -375,6 +375,11 @@ catch(PDOException $e) {
     echo $e->getMessage();
 }
 
+$youtube = 1;
+if( isset($_REQUEST) && isset($_REQUEST["notube"]) ) {
+    $youtube = 0;
+}
+
 if( isset($_REQUEST) && isset($_REQUEST["showsql"]) ) {
     $showSQL = 1;
 }
@@ -712,6 +717,7 @@ function build_url() {
     global $urlParams;
     global $startDate;
     global $showSQL;
+    global $youtube;
 
     $urlParams = ((isset($pageNumber) && $pageNumber != 0) ? "&pn=" . urlencode($pageNumber) : "")
         . ($pageSize != $defaultPageSize ? "&ps=" . urlencode($pageSize) : "")
@@ -726,7 +732,8 @@ function build_url() {
         . (isset($sortOrder) ? "&so=" . urlencode($sortOrder) : "")
         . (isset($searchFilter) ? "&sr=" . urlencode($searchFilter) : "")
         . ((isset($anchorID) && isset($pageNumber) && $pageNumber != 0) ? "&an=" . urlencode($anchorID) : "")
-        . (isset($showSQL) ? "&showsql" : "");
+        . (isset($showSQL) ? "&showsql" : "")
+        . ($youtube ? "" : "&notube");
 
     $urlParams = preg_replace('/&/', '?', $urlParams, 1);
     return $_SERVER["PHP_SELF"] . $urlParams;
@@ -746,6 +753,10 @@ $old = $pageNumber; $pageNumber = $endPage; $endUrl = build_url(); $pageNumber =
 $old = $format; $format = "text"; $textUrl = build_url(); $format = $old; build_url();
 $old = $format; $format = "rss"; $rssUrl = build_url(); $format = $old; build_url();
 $old = $format; $format = "json"; $jsonUrl = build_url(); $format = $old; build_url();
+
+$old = $youtube; $youtube = Null; $notubeUrl = build_url(); $youtube = $old; build_url();
+$old = $youtube; $youtube = 1; $youtubeUrl = build_url(); $youtube = $old; build_url();
+
 /*
 echo "<br>SQL: $pageSql<br>\n";
 echo "anchorID == $anchorID<br>\n";
@@ -879,6 +890,7 @@ if($format == 'html') {
         </script>
     </head>
     <body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
+<? if($youtube) { ?>
         <div style="position: fixed; z-index: -99; width: 100%; height: 100%">
             <iframe frameborder="0" height="100%" width="100%"
                     src="https://youtube.com/embed/<? echo $video_pick; ?>?autoplay=1&controls=0&showinfo=0&autohide=1">
@@ -888,6 +900,7 @@ if($format == 'html') {
                     <!-- KGG0t-psqNo -->
             </iframe>
         </div>
+<? } ?>
         <table id="header" border=0 cellspacing=0 cellpadding=0 width=80% align="center">
             <tr>
                 <!-- Header logos -->
@@ -1415,7 +1428,12 @@ if($format == 'html') {
             <tr>
                 <td align="left" width="30%" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
                     <span id="lastrefresh" style="color: #1F1F1F">Last refreshed at <? echo $mini_now; ?>.<br /></span>
+<? if($youtube) { ?>
                     <span id="youtube" style="color: #1F1F1F"><a href="https://www.youtube.com/watch?v=<? echo $video_pick; ?>">youtube<? echo $video_desc; ?></a></span>
+                    <span id="youtube" style="color: #1F1F1F"><a href="<? echo $notubeUrl; ?>">Disable&nbsp;Youtube</a></span>
+<? } else { ?>
+                    <span id="youtube" style="color: #1F1F1F"><a href="<? echo $youtubeUrl; ?>">Enable&nbsp;Youtube</a></span>
+<? } ?>
                 </td>
                 <td>&nbsp;</td>
                 <td id="server" align="center" valign="center" width="80"
