@@ -1430,7 +1430,7 @@ if($format == 'html') {
                     <span id="lastrefresh" style="color: #1F1F1F">Last refreshed at <? echo $mini_now; ?>.<br /></span>
 <? if($youtube) { ?>
                     <span id="youtube" style="color: #1F1F1F"><a href="https://www.youtube.com/watch?v=<? echo $video_pick; ?>">youtube<? echo $video_desc; ?></a></span>
-                    <span id="youtube" style="color: #1F1F1F"><a href="<? echo $notubeUrl; ?>">Disable&nbsp;Youtube</a></span>
+                    <span id="youtube" style="color: #1F1F1F"><br /><a href="<? echo $notubeUrl; ?>">Disable&nbsp;Youtube</a></span>
 <? } else { ?>
                     <span id="youtube" style="color: #1F1F1F"><a href="<? echo $youtubeUrl; ?>">Enable&nbsp;Youtube</a></span>
 <? } ?>
