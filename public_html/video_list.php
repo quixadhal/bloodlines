@@ -24,7 +24,7 @@ function get_play_list($dbh) {
 function get_video_list($dbh) {
     $list = array();
 
-    $vSql = "SELECT video_id, video_len, description, plays from videos order by plays asc, video_id";
+    $vSql = "SELECT video_id, video_len, description, plays from videos order by plays asc, description";
     try {
         $sth = $dbh->query($vSql);
     }
@@ -98,7 +98,7 @@ $i = 0;
             var foo = zeroPad(hh,2) + ':' + zeroPad(mm,2) + ':' + zeroPad(ss,2);
             document.getElementById('len_<?echo $video_pick;?>').innerHTML=foo;
             counter--;
-            if( counter % 10 == 0) {
+            if( counter >= <?echo $refresh_secs;?> - 5 ) {
                 element_to_scroll_to = document.getElementById('<?echo $video_pick;?>');
                 element_to_scroll_to.scrollIntoView(true);
             }
