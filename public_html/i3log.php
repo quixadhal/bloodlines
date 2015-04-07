@@ -666,7 +666,8 @@ catch(PDOException $e) {
 if(!$video_desc) {
     $video_desc = "&nbsp;video";
 } else {
-    $video_desc = '&nbsp;-&nbsp;' . preg_replace('/\s/', '&nbsp;', $video_desc);
+    //$video_desc = '&nbsp;-&nbsp;' . preg_replace('/\s/', '&nbsp;', $video_desc);
+    $video_desc = '&nbsp;-&nbsp;' . $video_desc;
 }
 
 $dbh = null;
@@ -903,15 +904,30 @@ if($format == 'html') {
                 }
             }
         </script>
+        <script language="javascript">
+            function beginsWith(needle, haystack) {
+                return (haystack.substr(0, needle.length) == needle);
+            }
+        </script>
+        <script language="javascript">
+            function toggleShow(urlId, divID) {
+                if(document.getElementById(divID).style.display == 'none') {
+                    document.getElementById(divID).style.display = 'block';
+                } else {
+                    document.getElementById(divID).style.display = 'none';
+                }
+                if(beginsWith('Show', document.getElementById(urlID).innerHTML)) {
+                    document.getElementById(urlID).innerHTML.replace('Show', 'Hide');
+                } else {
+                    document.getElementById(urlID).innerHTML.replace('Hide', 'Show');
+                }
+            }
+        </script>
     </head>
     <body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
 <? if(!$notube) { ?>
-        <div id="youtube" style="position: fixed; z-index: -99; width: 100%; height: 100%">
-<?     if($youtube_visible) { ?>
+        <div id="youtube" style="display: none; position: fixed; z-index: -99; width: 100%; height: 100%">
             <iframe frameborder="0" height="100%" width="100%"
-<?     } else { ?>
-            <iframe frameborder="0" height="1px" width="1px"
-<?     } ?>
                     src="https://youtube.com/embed/<? echo $video_pick; ?>?autoplay=1&controls=0&showinfo=0&autohide=1">
                     <!-- version=3&enablejsapi=1 -->
                     <!-- playlist=fCPzLNqYe1U,P1Bf_fRNq9g, -->
@@ -1448,16 +1464,20 @@ if($format == 'html') {
                 <td align="left" width="30%" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
                     <span id="lastrefresh" style="color: #1F1F1F">Last refreshed at <? echo $mini_now; ?>.<br /></span>
 <? if(!$notube) { ?>
-                    <span id="youtube" style="color: #1F1F1F"><a href="https://www.youtube.com/watch?v=<? echo $video_pick; ?>">youtube<? echo $video_desc; ?></a></span>
-<?     if($youtube_visible) { ?>
-                    <span id="youtube" style="color: #1F1F1F"><br /><a href="<? echo $hidetubeUrl; ?>">Hide&nbsp;Youtube</a></span>
-                    <span id="youtube" style="color: #1F1F1F"><br /><a href="<? echo $notubeUrl; ?>">Disable&nbsp;Youtube</a></span>
-<?     } else { ?>
-                    <span id="youtube" style="color: #1F1F1F"><br /><a href="<? echo $showtubeUrl; ?>">Show&nbsp;Youtube</a></span>
-                    <span id="youtube" style="color: #1F1F1F"><br /><a href="<? echo $notubeUrl; ?>">Disable&nbsp;Youtube</a></span>
-<?     } ?>
+                    <span style="color: #1F1F1F"><a href="https://www.youtube.com/watch?v=<? echo $video_pick; ?>">youtube<? echo $video_desc; ?></a></span>
+                    <br />
+
+                    <span id="visible_span" style="display: none; color: #1F1F1F">
+                        <a href="javascript:;" onmousedown="toggleDiv('visible_span');toggleDiv('hide_span');toggleDiv('youtube');">Hide&nbsp;Youtube</a>
+                    </span>
+                    <span id="hide_span" style="display: block; color: #1F1F1F">
+                        <a href="javascript:;" onmousedown="toggleDiv('visible_span');toggleDiv('hide_span');toggleDiv('youtube');">Show&nbsp;Youtube</a>
+                    </span>
+
+                    <br />
+                    <span style="color: #1F1F1F"><a href="<? echo $notubeUrl; ?>">Disable&nbsp;Youtube</a></span>
 <? } else { ?>
-                    <span id="youtube" style="color: #1F1F1F"><a href="<? echo $hidetubeUrl; ?>">Enable&nbsp;Youtube</a></span>
+                    <span style="color: #1F1F1F"><a href="<? echo $hidetubeUrl; ?>">Enable&nbsp;Youtube</a></span>
 <? } ?>
                 </td>
                 <td>&nbsp;</td>
