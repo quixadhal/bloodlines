@@ -366,6 +366,8 @@ $searchFilter = null;
 $anchorID = null;
 $oldPageNumber = null;
 $showSQL = null;
+$youtube_visible = null;
+$notube = null;
 
 // Connect to PoOstgreSQL database
 try {
@@ -375,13 +377,12 @@ catch(PDOException $e) {
     echo $e->getMessage();
 }
 
-$youtube = 1;
 if( isset($_REQUEST) && isset($_REQUEST["notube"]) ) {
-    $youtube = 0;
+    $notube = 1;
 }
-$youtube_visible = 1;
-if( isset($_REQUEST) && isset($_REQUEST["hidetube"]) ) {
-    $youtube_visible = 0;
+
+if( isset($_REQUEST) && isset($_REQUEST["showtube"]) ) {
+    $youtube_visible = 1;
 }
 
 if( isset($_REQUEST) && isset($_REQUEST["showsql"]) ) {
@@ -721,7 +722,8 @@ function build_url() {
     global $urlParams;
     global $startDate;
     global $showSQL;
-    global $youtube;
+    global $notube;
+    global $youtube_visible;
 
     $urlParams = ((isset($pageNumber) && $pageNumber != 0) ? "&pn=" . urlencode($pageNumber) : "")
         . ($pageSize != $defaultPageSize ? "&ps=" . urlencode($pageSize) : "")
@@ -737,8 +739,9 @@ function build_url() {
         . (isset($searchFilter) ? "&sr=" . urlencode($searchFilter) : "")
         . ((isset($anchorID) && isset($pageNumber) && $pageNumber != 0) ? "&an=" . urlencode($anchorID) : "")
         . (isset($showSQL) ? "&showsql" : "")
-        . ($youtube_visible ? "" : "&hidetube")
-        . ($youtube ? "" : "&notube");
+        . (isset($youtube_visible) ? "&showtube" : "")
+        . (isset($notube) ? "&notube" : "")
+        ;
 
     $urlParams = preg_replace('/&/', '?', $urlParams, 1);
     return $_SERVER["PHP_SELF"] . $urlParams;
@@ -759,9 +762,15 @@ $old = $format; $format = "text"; $textUrl = build_url(); $format = $old; build_
 $old = $format; $format = "rss"; $rssUrl = build_url(); $format = $old; build_url();
 $old = $format; $format = "json"; $jsonUrl = build_url(); $format = $old; build_url();
 
-$old = $youtube; $youtube = 0; $notubeUrl = build_url(); $youtube = $old; build_url();
-$old = $youtube_visible; $youtube_visible = 0; $hidetubeUrl = build_url(); $youtube_visible = $old; build_url();
-$old = $youtube; $youtube = 1; $youtubeUrl = build_url(); $youtube = $old; build_url();
+$old = $notube; $notube = 1; $notubeUrl = build_url(); $notube = $old; build_url();
+$old = $youtube_visible; $youtube_visible = 1; $showtubeUrl = build_url(); $youtube_visible = $old; build_url();
+$old = $youtube_visible; $youtube_visible = Null; $hidetubeUrl = build_url(); $youtube_visible = $old; build_url();
+
+/*
+echo "<br>notube: $youtube_visible $notubeUrl<br>\n";
+echo "<br>showtube: $youtube_visible $showtubeUrl<br>\n";
+echo "<br>hidetube: $youtube_visible $hidetubeUrl<br>\n";
+ */
 
 /*
 echo "<br>SQL: $pageSql<br>\n";
@@ -896,8 +905,8 @@ if($format == 'html') {
         </script>
     </head>
     <body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
-<? if($youtube) { ?>
-        <div style="position: fixed; z-index: -99; width: 100%; height: 100%">
+<? if(!$notube) { ?>
+        <div id="youtube" style="position: fixed; z-index: -99; width: 100%; height: 100%">
 <?     if($youtube_visible) { ?>
             <iframe frameborder="0" height="100%" width="100%"
 <?     } else { ?>
@@ -1438,17 +1447,17 @@ if($format == 'html') {
             <tr>
                 <td align="left" width="30%" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
                     <span id="lastrefresh" style="color: #1F1F1F">Last refreshed at <? echo $mini_now; ?>.<br /></span>
-<? if($youtube) { ?>
+<? if(!$notube) { ?>
                     <span id="youtube" style="color: #1F1F1F"><a href="https://www.youtube.com/watch?v=<? echo $video_pick; ?>">youtube<? echo $video_desc; ?></a></span>
 <?     if($youtube_visible) { ?>
                     <span id="youtube" style="color: #1F1F1F"><br /><a href="<? echo $hidetubeUrl; ?>">Hide&nbsp;Youtube</a></span>
                     <span id="youtube" style="color: #1F1F1F"><br /><a href="<? echo $notubeUrl; ?>">Disable&nbsp;Youtube</a></span>
 <?     } else { ?>
-                    <span id="youtube" style="color: #1F1F1F"><br /><a href="<? echo $youtubeUrl; ?>">Show&nbsp;Youtube</a></span>
+                    <span id="youtube" style="color: #1F1F1F"><br /><a href="<? echo $showtubeUrl; ?>">Show&nbsp;Youtube</a></span>
                     <span id="youtube" style="color: #1F1F1F"><br /><a href="<? echo $notubeUrl; ?>">Disable&nbsp;Youtube</a></span>
 <?     } ?>
 <? } else { ?>
-                    <span id="youtube" style="color: #1F1F1F"><a href="<? echo $youtubeUrl; ?>">Enable&nbsp;Youtube</a></span>
+                    <span id="youtube" style="color: #1F1F1F"><a href="<? echo $hidetubeUrl; ?>">Enable&nbsp;Youtube</a></span>
 <? } ?>
                 </td>
                 <td>&nbsp;</td>
