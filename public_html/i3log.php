@@ -367,7 +367,7 @@ $anchorID = null;
 $oldPageNumber = null;
 $showSQL = null;
 $youtube_visible = null;
-$notube = null;
+$yestube = null;
 
 // Connect to PoOstgreSQL database
 try {
@@ -377,8 +377,8 @@ catch(PDOException $e) {
     echo $e->getMessage();
 }
 
-if( isset($_REQUEST) && isset($_REQUEST["notube"]) ) {
-    $notube = 1;
+if( isset($_REQUEST) && isset($_REQUEST["yestube"]) ) {
+    $yestube = 1;
 }
 
 if( isset($_REQUEST) && isset($_REQUEST["showtube"]) ) {
@@ -647,27 +647,31 @@ while($row = $sth->fetch()) {
     $data['rows'][] = $row;
 }
 
-$video_list = get_video_list($dbh);
-$video_pick = array_rand($video_list, 1);
-//$refresh_secs = $video_list[$video_pick];
-$refresh_secs = $video_list[$video_pick]->video_len;
-$video_desc = $video_list[$video_pick]->description;
-$play_count =  $video_list[$video_pick]->plays;
-try {
-    $upSql = "UPDATE videos SET plays = plays + 1 WHERE video_id = ?";
-    $upQ = $dbh->prepare($upSql);
-    $upQ->execute(array($video_pick));
-}
-catch(PDOException $e) {
-    echo $e->getMessage();
-}
+$refresh_secs = 120;
 
-//echo "len == $refresh_secs ---- desc == $video_desc";
-if(!$video_desc) {
-    $video_desc = "&nbsp;video";
-} else {
-    //$video_desc = '&nbsp;-&nbsp;' . preg_replace('/\s/', '&nbsp;', $video_desc);
-    $video_desc = '&nbsp;-&nbsp;' . $video_desc;
+if($yestube) {
+    $video_list = get_video_list($dbh);
+    $video_pick = array_rand($video_list, 1);
+    //$refresh_secs = $video_list[$video_pick];
+    $refresh_secs = $video_list[$video_pick]->video_len;
+    $video_desc = $video_list[$video_pick]->description;
+    $play_count =  $video_list[$video_pick]->plays;
+    try {
+        $upSql = "UPDATE videos SET plays = plays + 1 WHERE video_id = ?";
+        $upQ = $dbh->prepare($upSql);
+        $upQ->execute(array($video_pick));
+    }
+    catch(PDOException $e) {
+        echo $e->getMessage();
+    }
+
+    //echo "len == $refresh_secs ---- desc == $video_desc";
+    if(!$video_desc) {
+        $video_desc = "&nbsp;video";
+    } else {
+        //$video_desc = '&nbsp;-&nbsp;' . preg_replace('/\s/', '&nbsp;', $video_desc);
+        $video_desc = '&nbsp;-&nbsp;' . $video_desc;
+    }
 }
 
 $dbh = null;
@@ -723,7 +727,7 @@ function build_url() {
     global $urlParams;
     global $startDate;
     global $showSQL;
-    global $notube;
+    global $yestube;
     global $youtube_visible;
 
     $urlParams = ((isset($pageNumber) && $pageNumber != 0) ? "&pn=" . urlencode($pageNumber) : "")
@@ -741,7 +745,7 @@ function build_url() {
         . ((isset($anchorID) && isset($pageNumber) && $pageNumber != 0) ? "&an=" . urlencode($anchorID) : "")
         . (isset($showSQL) ? "&showsql" : "")
         . (isset($youtube_visible) ? "&showtube" : "")
-        . (isset($notube) ? "&notube" : "")
+        . (isset($yestube) ? "&yestube" : "")
         ;
 
     $urlParams = preg_replace('/&/', '?', $urlParams, 1);
@@ -763,12 +767,12 @@ $old = $format; $format = "text"; $textUrl = build_url(); $format = $old; build_
 $old = $format; $format = "rss"; $rssUrl = build_url(); $format = $old; build_url();
 $old = $format; $format = "json"; $jsonUrl = build_url(); $format = $old; build_url();
 
-$old = $notube; $notube = 1; $notubeUrl = build_url(); $notube = $old; build_url();
-$old = $youtube_visible; $youtube_visible = 1; $showtubeUrl = build_url(); $youtube_visible = $old; build_url();
-$old = $youtube_visible; $youtube_visible = Null; $hidetubeUrl = build_url(); $youtube_visible = $old; build_url();
+$old = $yestube; $yestube = null; $notubeUrl = build_url(); $yestube = $old; build_url();
+$old = $youtube_visible; $old2 = $yestube; $youtube_visible = 1; $yestube = 1; $showtubeUrl = build_url(); $youtube_visible = $old; $yestube = $old2; build_url();
+$old = $youtube_visible; $old2 = $yestube; $youtube_visible = Null; $yestube = 1; $hidetubeUrl = build_url(); $youtube_visible = $old; $yestube = $old2; build_url();
 
 /*
-echo "<br>notube: $youtube_visible $notubeUrl<br>\n";
+echo "<br>yestube: $youtube_visible $yestubeUrl<br>\n";
 echo "<br>showtube: $youtube_visible $showtubeUrl<br>\n";
 echo "<br>hidetube: $youtube_visible $hidetubeUrl<br>\n";
  */
@@ -925,7 +929,7 @@ if($format == 'html') {
         </script>
     </head>
     <body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
-<? if(!$notube) { ?>
+<? if($yestube) { ?>
         <div id="youtube" style="display: none; position: fixed; z-index: -99; width: 100%; height: 100%">
             <iframe frameborder="0" height="100%" width="100%"
                     src="https://youtube.com/embed/<? echo $video_pick; ?>?autoplay=1&controls=0&showinfo=0&autohide=1">
@@ -1463,7 +1467,7 @@ if($format == 'html') {
             <tr>
                 <td align="left" width="30%" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
                     <span id="lastrefresh" style="color: #1F1F1F">Last refreshed at <? echo $mini_now; ?>.<br /></span>
-<? if(!$notube) { ?>
+<? if($yestube) { ?>
                     <span style="color: #1F1F1F"><a href="https://www.youtube.com/watch?v=<? echo $video_pick; ?>">youtube<? echo $video_desc; ?></a></span>
                     <br />
 
