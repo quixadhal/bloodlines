@@ -62,6 +62,8 @@ $video_list = get_video_list($dbh);
 $play_list = get_play_list($dbh);
 $video_pick = array_rand($play_list, 1);
 $refresh_secs = $video_list[$video_pick]->video_len;
+$video_count = count($video_list);
+$play_count = count($play_list);
 
 try {
     $upSql = "UPDATE videos SET plays = plays + 1 WHERE video_id = ?";
@@ -112,12 +114,17 @@ $i = 0;
         </script>
     </head>
     <body bgcolor="white" text="#303030" link="#00003f" vlink="#0080c0">
+<!--
         <div id="youtube" style="display: none; position: fixed; z-index: -99; width: 100%; height: 100%">
             <iframe frameborder="0" height="100%" width="100%"
                     src="https://youtube.com/embed/<? echo $video_pick; ?>?autoplay=1&controls=0&showinfo=0&autohide=1">
             </iframe>
         </div>
-        <table id="header" border=1 cellspacing=0 cellpadding=3 width=80% align="center">
+-->
+        <div align="center">
+            <h3> Playing one of <? echo $play_count; ?> picks from <? echo $video_count; ?> total videos.</h3>
+        </div>
+        <table id="content" border=1 cellspacing=0 cellpadding=3 width=80% align="center">
             <tr>
                 <th width="120px" align="left"> video_id </td>
                 <th width="80px" align="center"> video_len </td>
@@ -145,12 +152,25 @@ $i = 0;
         }
 ?>
             <tr id="<?echo $row->video_id;?>"bgcolor="<?echo $bg;?>">
-                <td bgcolor="<?echo $bg;?>" width="120px" align="left"> <a href="https://www.youtube.com/watch?v=<?echo $row->video_id;?>"><?echo $row->video_id;?></a></td>
-                <td id="len_<?echo $row->video_id;?>" bgcolor="<?echo $bg;?>" width="80px" align="center"> <?echo secs_to_hhmmss($row->video_len); ?> </td>
-                <td bgcolor="<?echo $bg;?>" width="40px" align="center"> <?echo $row->plays; ?> </td>
-                <td bgcolor="<?echo $bg;?>" align="left"> <?echo $row->description; ?> </td>
+                <td bgcolor="<?echo $bg;?>" width="120px" valign="top" align="left"> <a href="https://www.youtube.com/watch?v=<?echo $row->video_id;?>"><?echo $row->video_id;?></a></td>
+                <td id="len_<?echo $row->video_id;?>" bgcolor="<?echo $bg;?>" width="80px" valign="top" align="center"> <?echo secs_to_hhmmss($row->video_len); ?> </td>
+                <td bgcolor="<?echo $bg;?>" width="40px" valign="top" align="center"> <?echo $row->plays; ?> </td>
+                <td bgcolor="<?echo $bg;?>" valign="top" align="left">
+                    <?echo $row->description; ?>
+<?      if($video_pick == $row->video_id) { ?>
+                    <br />
+                    <div id="youtube" style="display: block; z-index: -99; overflow-x: hidden; min-width: 640px; max-width: 1280px; min-height: 360px; max-height: 720px">
+                        <iframe frameborder="0" scrolling="no" style="min-width: 640px; max-width: 1280px; min-height: 360px; max-height: 720px"
+                                src="https://youtube.com/embed/<? echo $video_pick; ?>?autoplay=1&controls=0&showinfo=0&autohide=1">
+                        </iframe>
+                    </div>
+<?      } ?>
+                </td>
             </tr>
 <? } ?>
         </table>
+        <div align="center">
+            <h3> Playing one of <? echo $play_count; ?> picks from <? echo $video_count; ?> total videos.</h3>
+        </div>
     </body>
 </html>
