@@ -6,7 +6,33 @@
 inherit LIB_DAEMON;
 string gfile;
 
-varargs string *Prettify(string *arr, string chan){
+// string null;
+// string time_stamp = "2015.05.14-06.04,01";
+// string time_stamp = "2015.05.14-06.12,2506:12";
+// CHAT_D->getColorDayTime(null, null, time_stamp);
+// CHAT_D->getColorSpeakerName(who);
+// CHAT_D->getColorChannelName(chan);
+//
+// CHAT_D->formChatString(channel, speaker, msg, time_stamp)
+// CHAT_D->formEmoteString(channel, speaker, msg, target, target_msg, this_time) {
+//
+// [2015.05.14-09.35,22] Salius@Dead Souls Dev <dchat> heh
+
+varargs string *Prettify(string *arr, string chan) {
+    string null, stamp, who, channel, msg, output;
+    string *result = ({ });
+
+    foreach(string line in arr) {
+        int i = sscanf(line,"[%s] %s <%s> %s", stamp, who, channel, msg);
+        if(i != 4) continue;
+        output = CHAT_D->formChatString(channel, who, msg, stamp);
+        result += ({ output });
+    }
+    result += ({ "----" });
+    return result;
+}
+
+varargs string *old_Prettify(string *arr, string chan){
     string *ret = ({});
     string colorchan = "", stamp, mess, junk, remotechan;
     chan = CHAT_D->GetLocalChannel(chan);

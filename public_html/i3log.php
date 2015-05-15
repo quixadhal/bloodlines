@@ -259,7 +259,25 @@ $isLocal = is_local_ip();
 function get_video_list($dbh) {
     $list = array();
 
-    //$vSql = "SELECT video_id, video_len, description FROM videos";
+    $vSql = "SELECT video_id, video_len, description, plays from videos order by plays asc, description";
+    try {
+        $sth = $dbh->query($vSql);
+    }
+    catch(PDOException $e) {
+        echo $e->getMessage();
+    }
+
+    $sth->setFetchMode(PDO::FETCH_OBJ);
+    while($row = $sth->fetch()) {
+        $list[$row->video_id] = $row;
+    }
+
+    return $list;
+}
+
+function get_play_list($dbh) {
+    $list = array();
+
     $vSql = "SELECT v.video_id, v.video_len, v.description, v.plays from videos v inner join ( select min(plays) as plays from videos ) q on v.plays = q.plays";
     try {
         $sth = $dbh->query($vSql);
@@ -269,24 +287,56 @@ function get_video_list($dbh) {
     }
 
     $sth->setFetchMode(PDO::FETCH_OBJ);
-    //$sth->setFetchMode(PDO::FETCH_ASSOC);
     while($row = $sth->fetch()) {
-        //$list[$row["video_id"]] = $row["video_len"];
         $list[$row->video_id] = $row;
     }
 
-    /*
-    if(count($list) < 1) {
-        // Gotta have at least one.
-        $entry = array();
-        $entry['video_id'] = 'KGG0t-psqNo';
-        $entry['video_len'] = 291;
-        $entry['description'] = 'Mini-Patissier: Miracle Patiful Humberger';
-        $list[$entry['video_id']] = $entry;
-    }
-     */
-
     return $list;
+}
+
+function get_quote($dbh) {
+    global $colormap;
+
+    $list = array();
+
+    $qSql = "SELECT speaker, mud, message
+         FROM chanlogs
+        WHERE msg_date >= now() - '3 days'::interval
+          AND is_url IS NOT TRUE
+          AND is_emote IS NOT TRUE
+          AND is_bot IS NOT TRUE
+          AND channel IN ('intergossip', 'dchat', 'intercre', 'discworld-chat')
+       OFFSET random() * (
+            SELECT COUNT(*)
+             FROM chanlogs
+            WHERE msg_date >= now() - '3 days'::interval
+              AND is_url IS NOT TRUE
+              AND is_emote IS NOT TRUE
+              AND is_bot IS NOT TRUE
+              AND channel IN ('intergossip', 'dchat', 'intercre', 'discworld-chat')
+          )
+       LIMIT  1";
+
+    try {
+        $sth = $dbh->query($qSql);
+    }
+    catch(PDOException $e) {
+        echo $e->getMessage();
+    }
+
+    $sth->setFetchMode(PDO::FETCH_OBJ);
+    while($row = $sth->fetch()) {
+        $speakerColor = $colormap[strtolower($row->speaker)];
+        $row->who = "$speakerColor" . $row->speaker . "@" . $row->mud . "</SPAN>";
+
+        $tmp_msg = preg_replace("/\x1b\[[0-9]+(;[0-9]+)*m/", "", $row->message);
+        $message = htmlentities($tmp_msg,0,'UTF-8');
+        $row->text = preg_replace('/ /', '&#x2004;', $message); // replace spaces with unicode THREE-PER-EM SPACE
+
+        $list[] = $row;
+    }
+
+    return $list[0];
 }
 
 $graphics = array();
@@ -314,31 +364,6 @@ $graphics['textMouseOver']      = $isLocal ? "gfx/textMouseOver.png"        : "h
 $graphics['server_icon']        = $isLocal ? "gfx/server_icon.png"          : "https://lh4.googleusercontent.com/-LZ9ek46iToA/UdoojFEhuOI/AAAAAAAAAPQ/y_rRyL_1tR8/s800/server_icon.png";
 $graphics['help_icon']          = $isLocal ? "gfx/help.png"                 : "https://lh6.googleusercontent.com/-t_GKXvLrh7g/UdooayFUZKI/AAAAAAAAALg/TdVjBKVeluQ/s800/help.png";
 $graphics['sql_icon']           = $isLocal ? "gfx/sql.png"                  : "https://lh6.googleusercontent.com/-Ms6hgsVLGac/UkQPgYis_YI/AAAAAAAAAjE/6nn2j-DIg6I/s144/sql.png";
-
-//$graphics['background'] = $isLocal ? "gfx/dark_wood.jpg" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/dark_wood.jpg";
-//$graphics['bloodlines'] = $isLocal ? "gfx/bloodlines.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/bloodlines.png";
-//$graphics['wileymud4'] = $isLocal ? "gfx/wileymud4.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/wileymud4.png";
-//$graphics['navbegin'] = $isLocal ? "gfx/navbegin.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navbegin.png";
-//$graphics['navback'] = $isLocal ? "gfx/navback.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navback.png";
-//$graphics['navprev'] = $isLocal ? "gfx/navprev.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navprev.png";
-//$graphics['navconfig'] = $isLocal ? "gfx/navconfig.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navconfig.png";
-//$graphics['navlinks'] = $isLocal ? "gfx/navlinks.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navlinks.png";
-//$graphics['navhome'] = $isLocal ? "gfx/navhome.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navhome.png";
-//$graphics['pie_chart'] = $isLocal ? "gfx/pie_chart.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/pie_chart_zps670773a1.png";
-//$graphics['bar_chart'] = $isLocal ? "gfx/bar_chart.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/i3bar_zps9d063211.png";
-//$graphics['navnext'] = $isLocal ? "gfx/navnext.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navnext.png";
-//$graphics['navforward'] = $isLocal ? "gfx/navforward.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navforward.png";
-//$graphics['navend'] = $isLocal ? "gfx/navend.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/navend.png";
-//$graphics['rss'] = $isLocal ? "gfx/rss.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/rss_zps6b73d7e2.png";
-//$graphics['rssMouseOver'] = $isLocal ? "gfx/rssMouseOver.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/rssMouseOver_zps52b86e27.png";
-//$graphics['json'] = $isLocal ? "gfx/json.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/json_zps34e3c065.png";
-//$graphics['jsonMouseOver'] = $isLocal ? "gfx/jsonMouseOver.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/jsonMouseOver_zps46d5148d.png";
-//$graphics['text'] = $isLocal ? "gfx/text.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/text_zps49ecc982.png";
-//$graphics['textMouseOver'] = $isLocal ? "gfx/textMouseOver.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/textMouseOver_zpsc7cbdd88.png";
-//$graphics['server_icon'] = $isLocal ? "gfx/server_icon.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/server_icon_zps624a919d.png";
-//$graphics['help_icon'] = $isLocal ? "gfx/help.png" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/help_zps181221b1.png";
-
-$serverUrl = 
 
 $pinkfish_map = get_pinkfish_map();
 $hourColors = get_hour_colors($pinkfish_map);
@@ -650,7 +675,7 @@ while($row = $sth->fetch()) {
 $refresh_secs = 120;
 
 if($yestube) {
-    $video_list = get_video_list($dbh);
+    $video_list = get_play_list($dbh);
     $video_pick = array_rand($video_list, 1);
     //$refresh_secs = $video_list[$video_pick];
     $refresh_secs = $video_list[$video_pick]->video_len;
@@ -673,6 +698,8 @@ if($yestube) {
         $video_desc = '&nbsp;-&nbsp;' . $video_desc;
     }
 }
+
+$i3quote = get_quote($dbh);
 
 $dbh = null;
 
@@ -1523,6 +1550,13 @@ if($format == 'html') {
                     <a href="javascript:;" onmousedown="toggleDiv('source');">
                     <span id="pagegen" style="color: #1F1F1F">&nbsp;Page generated in <span id="timespent" style="color: #1F1F1F"><? $time_end = microtime(true); $time_spent = $time_end - $time_start; printf( "%7.3f", $time_spent); ?></span> seconds.</span>
                     </a>
+                </td>
+            </tr>
+        </table>
+        <table id="quote" border=0 cellspacing=0 cellpadding=0 width=80% align="center">
+            <tr align="center">
+                <td align="center">
+                    <h3><? echo $i3quote->who; ?>&nbsp;said &quot;<font face="monospace"><i><? echo $i3quote->text; ?></i></font>&quot;</h3>
                 </td>
             </tr>
         </table>

@@ -20,7 +20,7 @@ sub get_quote {
           AND is_url IS NOT TRUE
           AND is_emote IS NOT TRUE
           AND is_bot IS NOT TRUE
-          AND channel IN ('intergossip', 'dchat', 'intercre')
+          AND channel IN ('intergossip', 'dchat', 'intercre', 'discworld-chat')
        OFFSET random() * (
             SELECT COUNT(*)
              FROM chanlogs
@@ -28,7 +28,7 @@ sub get_quote {
               AND is_url IS NOT TRUE
               AND is_emote IS NOT TRUE
               AND is_bot IS NOT TRUE
-              AND channel IN ('intergossip', 'dchat', 'intercre')
+              AND channel IN ('intergossip', 'dchat', 'intercre', 'discworld-chat')
           )
        LIMIT  1
 

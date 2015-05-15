@@ -1164,20 +1164,22 @@ int cmdChannel(string verb, string str){
 }
 
 // Get an hour::minute timestamp
-string getDayTime() {
+varargs string getDayTime(string this_time) {
     string the_time;
 
-    the_time = timestamp()[11..15];
+    if(undefinedp(this_time)) this_time = timestamp();
+    the_time = this_time[11..15];
     the_time[2] = ':';
 
     return the_time;
 }
 
 // Get an hour:minute timestamp with daytime color.
-varargs string getColorDayTime(string prefix, string suffix) {
+varargs string getColorDayTime(string prefix, string suffix, string this_time) {
     string the_time;
 
-    the_time = getDayTime();
+    if(undefinedp(this_time)) this_time = timestamp();
+    the_time = getDayTime(this_time);
 
     if(undefinedp(prefix)) prefix = "";
     if(undefinedp(suffix)) suffix = "";
@@ -1319,15 +1321,18 @@ varargs string getColorChannelName(string ch, string prefix, string suffix) {
     return chancolor + prefix + ch + suffix + "%^RESET%^";
 }
 
-string formChatString(string channel, string speaker, string msg) {
+varargs string formChatString(string channel, string speaker, string msg, string this_time) {
     string the_time;
     string the_chan;
     string the_fool;
+    string null;
 
     //string chatlayout = "%s %s<%s>%s %s";
     //string chatlayout = "%s says, %s(%s)%s '%s'";
     
-    the_time = getColorDayTime();
+    if(undefinedp(this_time)) this_time = timestamp();
+
+    the_time = getColorDayTime(null, null, this_time);
     the_chan = getColorChannelName(channel, "<", ">");
     the_fool = getColorSpeakerName(speaker, "", ":");
 
@@ -1335,7 +1340,7 @@ string formChatString(string channel, string speaker, string msg) {
     return implode( ({ the_time, the_chan, the_fool, "" }), " ") + msg;
 }
 
-varargs string * formEmoteString(string channel, string speaker, string msg, string target, string target_msg) {
+varargs string * formEmoteString(string channel, string speaker, string msg, string target, string target_msg, string this_time) {
     string the_time;
     string the_chan;
     string the_fool;
@@ -1343,6 +1348,9 @@ varargs string * formEmoteString(string channel, string speaker, string msg, str
     string main_msg;
     string tar_msg;
     string msg_body;
+    string null;
+
+    if(undefinedp(this_time)) this_time = timestamp();
 
     //string emotelayout = "%s<%s>%s %s";
     //string emotelayout = "%s(%s)%s %s";
@@ -1350,7 +1358,7 @@ varargs string * formEmoteString(string channel, string speaker, string msg, str
     //tn("CHAT_D->formEmoteString: "+identify(channel)+", "+identify(speaker)+", "+identify(msg)+
     //        ", "+identify(target)+", "+identify(target_msg), "green");
     main_msg = msg;
-    the_time = getColorDayTime();
+    the_time = getColorDayTime(null, null, this_time);
     the_chan = getColorChannelName(channel, "<", ">");
     the_fool = getColorSpeakerName(speaker);
 

@@ -85,6 +85,7 @@ $graphics['paypal']             = $isLocal ? "gfx/paypal.gif"                   
 
 $graphics['email']              = $isLocal ? "gfx/email-icon.png"               : "https://lh6.googleusercontent.com/-2uAB3NjSm_c/U-Vrk09YcUI/AAAAAAAAA4E/V3gT57XH4Y8/s128-no/email-icon.png";
 $graphics['facebook']           = $isLocal ? "gfx/facebook.png"                 : "https://lh6.googleusercontent.com/-3yq_pvhJoDw/U-YvfrV4qCI/AAAAAAAAA4g/eMSk8Dhz554/s128-no/facebook.png";
+$graphics['tv']                 = $isLocal ? "gfx/tv.png"                       : "https://lh3.googleusercontent.com/-6pMSA2WuYZM/VVQKn3ILC9I/AAAAAAAABdg/JvEgoxqprBU/s2048/tv.png";
 
 $urls = array();
 $urls['email']                  = $isLocal ? "http://gmail.com"                 : "mailto:quixadhal@gmail.com";
@@ -747,7 +748,15 @@ header('Cache-control: max-age=0, must-revalidate');
                     <!-- </span> -->
                 </td>
                 <td align="center" valign="bottom" width="12%" style="vertical-align: bottom">
-                    &nbsp;
+                        <span style="color: #1F1F1F"><a href="/~bloodlines/video_list.php" title="Server Stats">
+                            <img src="<? echo $graphics['tv']; ?>" 
+                                 border="0" width="96" height="96" alt="(tv)"
+                                 style="opacity: 0.4; filter: alpha(opacity=40);"
+                                 onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                                 onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                             />
+                        </a></span>
+                    <!-- </span> -->
                 </td>
             </tr>
             <tr>
