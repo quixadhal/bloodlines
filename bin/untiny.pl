@@ -16,16 +16,15 @@
 #
 # 00:45 <intergossip> Kalinash@Fire and Ice: http://www.youtube.com/watch?v=IleiqUDYpFQ
 #
-#/def -mregexp -p2 -t"<(\w+)>.*(https?://tinyurl.com/[^&\?\.]+)" check_tiny_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<(\w+)>.*(https?://bit.ly/[^&\?\.]+)" check_bitly_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<(\w+)>.*(https?://goo.gl/[^&\?\.]+)" check_googl_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<(\w+)>.*(https?://mcaf.ee/[^&\?\.]+)" check_mcafee_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<(\w+)>.*(https?://migre.me/[^&\?\.]+)" check_migreme_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<(\w+)>.*(https?://durl.me/[^&\?\.]+)" check_durlme_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<(\w+)>.*(https?://is.gd/[^&\?\.]+)" check_isgd_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<(\w+)>.*(https?://youtu.be/[^&\?\.]+)" check_yout_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<(\w+)>.*(https?://www.youtube.com/watch\?v=[^&\?\.]+)" check_youtube_chan = /if (%P1 !~ "url") /quote -0 url !~/bin/untiny.pl '%P2' '%P1'%; /endif
-#
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://tinyurl.com/[^&\?\.]+)" check_tiny_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://bit.ly/[^&\?\.]+)" check_bitly_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://goo.gl/[^&\?\.]+)" check_googl_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://mcaf.ee/[^&\?\.]+)" check_mcafee_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://migre.me/[^&\?\.]+)" check_migreme_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://durl.me/[^&\?\.]+)" check_durlme_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://is.gd/[^&\?\.]+)" check_isgd_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://youtu.be/[^&\?\.]+)" check_yout_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://www.youtube.com/watch\?v=[^&\?\.]+)" check_youtube_chan = /if (%P1 !~ "url") /quote -0 url !~/bin/untiny.pl '%P2' '%P1'%; /endif
 
 use strict;
 use English;
@@ -53,6 +52,8 @@ sub channel_color {
         "dchat"	      => "%^CYAN%^",
         "intergossip" => "%^GREEN%^",
         "intercre"    => "%^ORANGE%^",
+        "pyom"        => "%^FLASH%^%^BOLD%^%^GREEN%^",
+        "free_speech" => "%^PINK%^",
 
         "ibuild"      => "%^B_RED%^%^YELLOW%^",
         "ichat"       => "%^B_RED%^%^GREEN%^",

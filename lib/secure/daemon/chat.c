@@ -175,7 +175,8 @@ static private mapping tags = ([
         "dchat"	      : "%^CYAN%^",
         "intergossip" : "%^GREEN%^",
         "intercre"    : "%^ORANGE%^",
-        "pyom"        : "%^FLASH%^BOLD%^GREEN%^",
+        "pyom"        : "%^FLASH%^%^BOLD%^%^GREEN%^",
+        "free_speech" : "%^PINK%^",
 
         "ibuild2"      : "%^B_RED%^%^YELLOW%^",
         "mbchat"       : "%^B_RED%^%^GREEN%^",
@@ -1232,6 +1233,56 @@ mapping mapSpeakerColors() {
 }
 
 varargs string showSpeakerColors(string who) {
+    int i;
+    mapping m;
+    string s = "";
+    array k;
+    int t = 0;
+    int w;
+    string color;
+
+    if(!undefinedp(who)) {
+        string shortwho = lower_case(explode(who, "@")[0]);
+        if (member_array(shortwho,keys(chatters)) >= 0) {
+            color = chatters[shortwho];
+        }
+    }
+    w= this_player()->GetScreen()[0] || 80;
+    m= mapSpeakerColors();
+    k = sort_array(keys(m), 1);
+    for(i = 0; i < sizeof(k); i++) {
+        string nk;
+        int c;
+        string * lines;
+        int j;
+
+        if(!undefinedp(color)) {
+            if(k[i] != color) {
+                continue;
+            }
+        }
+        nk = replace_string(k[i], "%^", "");
+        c = sizeof(m[k[i]]);
+        if(undefinedp(color)) {
+            lines = explode(wrap(implode(sort_array(m[k[i]], 1), ", "), w - 30), "\n");
+            for(j = 1; j < sizeof(lines); j++) {
+                lines[j] = sprintf("%%^RESET%%^%29s%s%s", "", k[i], lines[j]);
+            }
+            s += sprintf("(%4d) %-20s: %s%s%s\n", c, nk, k[i], implode(lines, "\n"), "%^RESET%^");
+        } else {
+            s += sprintf("(%d) %s: %s%s%s\n", c, nk, k[i], implode(sort_array(m[k[i]], 1), ", "), "%^RESET%^");
+        }
+
+        t += c;
+    }
+    if(undefinedp(color)) {
+        s += sprintf("(%4d) Total\n", t);
+    }
+
+    return s;
+}
+
+varargs string htmlSpeakerColors(string who) {
     int i;
     mapping m;
     string s = "";

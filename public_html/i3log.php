@@ -140,6 +140,8 @@ function get_channel_colors(array $pinkfish) {
         "dchat"	      => "%^CYAN%^",
         "intergossip" => "%^GREEN%^",
         "intercre"    => "%^ORANGE%^",
+        "pyom"        => "%^FLASH%^%^BOLD%^%^GREEN%^",
+        "free_speech" => "%^PINK%^",
 
         "ibuild"      => "%^B_RED%^%^YELLOW%^",
         "ichat"       => "%^B_RED%^%^GREEN%^",
