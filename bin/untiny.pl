@@ -52,8 +52,9 @@ sub channel_color {
         "dchat"	      => "%^CYAN%^",
         "intergossip" => "%^GREEN%^",
         "intercre"    => "%^ORANGE%^",
-        "pyom"        => "%^FLASH%^%^BOLD%^%^GREEN%^",
+        "pyom"        => "%^FLASH%^%^LIGHTGREEN%^",
         "free_speech" => "%^PINK%^",
+        "url"         => "%^WHITE%^",
 
         "ibuild"      => "%^B_RED%^%^YELLOW%^",
         "ichat"       => "%^B_RED%^%^GREEN%^",
@@ -165,6 +166,14 @@ sub get_youtube_duration {
     return sprintf "%d:%02d", $minutes, $seconds;
 }
 
+sub get_page_title {
+    my $page = shift;
+
+    $page =~ /<title>\s+([^\<]*?)<\/title>/;
+    my ($funky) = ($1);
+    return $funky;
+}
+
 my $url = shift;
 my $given_uri = URI->new($url);
 my $given_host = $given_uri->host;
@@ -177,6 +186,7 @@ my $youtube_id = get_youtube_id($page) if defined $page;
 my $youtube_title = get_youtube_title($page) if defined $youtube_id;
 my $youtube_duration = get_youtube_duration($page) if defined $youtube_id;
 my $chan_color = channel_color($channel) if defined $channel;
+my $page_title = get_page_title($page) if defined $page;
 
 #my $youtube_desc = get_youtube_desc($page);
 #my $youtube_keywords = get_youtube_keywords($page);
@@ -193,7 +203,11 @@ if (defined $youtube_id and defined $youtube_title and defined $youtube_duration
 } elsif (defined $youtube_id and defined $youtube_title) {
     print "YouTube $youtube_id$channel is $youtube_title\n";
 } elsif (defined $origin) {
-    #print STDERR "DEBUG: " . Dumper($origin) . "\n";
-    print $given_host . " URL$channel goes to " . $origin->host . "\n";
+    if (defined $page_title) {
+        print $given_host . " URL$channel is %^YELLOW%^$page_title%^RESET%^ from " . $origin->host . "\n";
+    } else {
+        #print STDERR "DEBUG: " . Dumper($origin) . "\n";
+        print $given_host . " URL$channel goes to " . $origin->host . "\n";
+    }
 }
 

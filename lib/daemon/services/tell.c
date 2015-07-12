@@ -14,6 +14,11 @@ void eventReceiveTell(mixed *packet) {
     string who, ret;
     string adverb = "";
     string machine_message;
+    string the_time;
+    string the_fool;
+
+    the_time = CHAT_D->getColorDayTime();
+
     PING_D->SetOK();
     tn("eventReceiveTell: "+identify(packet),"yellow");
     if( file_name(previous_object()) != INTERMUD_D ) return;
@@ -43,8 +48,9 @@ void eventReceiveTell(mixed *packet) {
             return;
         }
     }
-    ret = "%^BOLD%^RED%^" + packet[6] + "@" + packet[2] +
-        adverb + " tells you:%^RESET%^ " + packet[7];
+    the_fool = CHAT_D->getColorSpeakerName(packet[6] + "@" + packet[2], "", "");
+    ret = the_time + " " + the_fool + adverb + " %^BOLD%^%^RED%^tells you:%^RESET%^ " + packet[7];
+    // ret = "%^BOLD%^RED%^" + packet[6] + "@" + packet[2] + adverb + " tells you:%^RESET%^ " + packet[7];
     if(member_array(lower_case(packet[6]),ob->GetMuffed()) == -1 &&
             member_array(lower_case(packet[2]),ob->GetMuffed()) == -1){
         if(!machine_message){
@@ -60,6 +66,10 @@ void eventReceiveTell(mixed *packet) {
 
 void eventSendTell(string who, string where, string msg) {
     string pl, plc, ret;
+    string the_time;
+    string the_fool;
+
+    the_time = CHAT_D->getColorDayTime();
 
     pl = this_player(1)->GetName();
     plc = this_player(1)->GetCapName();
@@ -72,10 +82,12 @@ void eventSendTell(string who, string where, string msg) {
         }
     }
 
+    the_fool = CHAT_D->getColorSpeakerName(who + "@" + where, "", "");
+
     INTERMUD_D->eventWrite(({ "tell", 5, mud_name(), pl, where, 
                 convert_name(who), plc, msg }));
-    ret = "%^BOLD%^RED%^You tell " + capitalize(who) +
-        "@" +  where + ":%^RESET%^ " + msg;
+    ret = the_time + " %^BOLD%^%^RED%^You tell%^RESET%^ " + the_fool + "%^BOLD%^%^RED%^:%^RESET%^ " + msg;
+    //ret = "%^BOLD%^RED%^You tell " + capitalize(who) + "@" +  where + ":%^RESET%^ " + msg;
     this_player(1)->eventPrint(ret, MSG_CONV);
     this_player(1)->eventTellHist(ret);
     tn("eventSendTell: "+identify( ({ "tell", 5, mud_name(), pl, where, convert_name(who), plc, msg }) ), "yellow");
