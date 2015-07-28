@@ -75,6 +75,9 @@ function get_pinkfish_map() {
         '%^B_YELLOW%^%^GREEN%^'     => '<SPAN style="background-color: #ffff55; color: #00bb00">',
         '%^B_WHITE%^%^GREEN%^'      => '<SPAN style="background-color: #ffffff; color: #00bb00">',
 
+        // Cheating...
+        '%^FLASH%^%^LIGHTGREEN%^'   => '<SPAN style="color: #55ff55">',
+
         // In this case, our web page background is black, so pretend there is none.
         // That's because on a terminal, it just resets the character cells and looks fine, but
         // in HTML, it makes the background stick out if the table cell isn't also black.
@@ -140,8 +143,9 @@ function get_channel_colors(array $pinkfish) {
         "dchat"	      => "%^CYAN%^",
         "intergossip" => "%^GREEN%^",
         "intercre"    => "%^ORANGE%^",
-        "pyom"        => "%^FLASH%^%^BOLD%^%^GREEN%^",
+        "pyom"        => "%^FLASH%^%^LIGHTGREEN%^",
         "free_speech" => "%^PINK%^",
+        "url"         => "%^WHITE%^",
 
         "ibuild"      => "%^B_RED%^%^YELLOW%^",
         "ichat"       => "%^B_RED%^%^GREEN%^",

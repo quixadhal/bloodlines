@@ -175,8 +175,9 @@ static private mapping tags = ([
         "dchat"	      : "%^CYAN%^",
         "intergossip" : "%^GREEN%^",
         "intercre"    : "%^ORANGE%^",
-        "pyom"        : "%^FLASH%^%^BOLD%^%^GREEN%^",
+        "pyom"        : "%^FLASH%^%^LIGHTGREEN%^",
         "free_speech" : "%^PINK%^",
+        "url"         : "%^WHITE%^",
 
         "ibuild2"      : "%^B_RED%^%^YELLOW%^",
         "mbchat"       : "%^B_RED%^%^GREEN%^",

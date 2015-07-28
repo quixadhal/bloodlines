@@ -5,7 +5,7 @@ require_once "i3config.php";
 function get_play_list($dbh) {
     $list = array();
 
-    $vSql = "SELECT v.video_id, v.video_len, v.description, v.plays from videos v inner join ( select min(plays) as plays from videos ) q on v.plays = q.plays";
+    $vSql = "SELECT v.video_id, v.video_len, v.description, v.plays from videos v inner join ( select min(plays) as plays from videos ) q on v.plays = q.plays where not disabled";
     try {
         $sth = $dbh->query($vSql);
     }
@@ -40,6 +40,25 @@ function get_video_list($dbh) {
     return $list;
 }
 
+function get_disabled_list($dbh) {
+    $list = array();
+
+    $vSql = "SELECT video_id, video_len, description, plays from videos where disabled order by plays asc, description";
+    try {
+        $sth = $dbh->query($vSql);
+    }
+    catch(PDOException $e) {
+        echo $e->getMessage();
+    }
+
+    $sth->setFetchMode(PDO::FETCH_OBJ);
+    while($row = $sth->fetch()) {
+        $list[$row->video_id] = $row;
+    }
+
+    return $list;
+}
+
 function secs_to_hhmmss($secs) {
     $ss = $secs % 60;
     $secs -= $ss;
@@ -51,6 +70,14 @@ function secs_to_hhmmss($secs) {
     return sprintf("%02d:%02d:%02d", $hh, $mm, $ss);
 }
 
+function is_local_ip() {
+    $visitor_ip = $_SERVER['REMOTE_ADDR'];
+    $varr = explode(".", $visitor_ip);
+    if($varr[0] == "192" && $varr[1] == "168")
+        return 1;
+    return 0;
+}
+
 try {
     $dbh = new PDO( $db_dsn, $db_user, $db_pwd, array( PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION ));
 }
@@ -60,15 +87,25 @@ catch(PDOException $e) {
 
 $video_list = get_video_list($dbh);
 $play_list = get_play_list($dbh);
+$disabled_list = get_disabled_list($dbh);
 $video_pick = array_rand($play_list, 1);
 $refresh_secs = $video_list[$video_pick]->video_len;
 $video_count = count($video_list);
 $play_count = count($play_list);
 
+$isLocal = is_local_ip();
+
 try {
-    $upSql = "UPDATE videos SET plays = plays + 1 WHERE video_id = ?";
-    $upQ = $dbh->prepare($upSql);
-    $upQ->execute(array($video_pick));
+    if( $isLocal ) {
+        $upSql = "UPDATE videos SET plays = plays + 1 WHERE video_id = ?";
+        $upQ = $dbh->prepare($upSql);
+        $upQ->execute(array($video_pick));
+    } else {
+        $remote_ip = $_SERVER['REMOTE_ADDR'];
+        $upSql = "UPDATE videos SET plays = plays + 1, last_viewer = ? WHERE video_id = ?";
+        $upQ = $dbh->prepare($upSql);
+        $upQ->execute(array($remote_ip, $video_pick));
+    }
 }
 catch(PDOException $e) {
     echo $e->getMessage();
@@ -76,6 +113,10 @@ catch(PDOException $e) {
 
 $dbh = null;
 $i = 0;
+
+$graphics['background']         = $isLocal ? "gfx/dark_wood.jpg"                : "https://lh5.googleusercontent.com/-zvnNrcuqbco/UdooZZelxoI/AAAAAAAAALA/9u5S92UySEA/s800/dark_wood.jpg";
+
+header('Content-Type:text/html; charset=UTF-8');
 
 ?>
 <html>
@@ -113,8 +154,10 @@ $i = 0;
         }, false);
         </script>
     </head>
-    <body bgcolor="white" text="#303030" link="#00003f" vlink="#0080c0">
+    <body background="<? echo $graphics['background']; ?>" bgcolor="#000000" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" style="overflow-x: hidden;">
 <!--
+    <body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
+    <body bgcolor="white" text="#303030" link="#00003f" vlink="#0080c0">
         <div id="youtube" style="display: none; position: fixed; z-index: -99; width: 100%; height: 100%">
             <iframe frameborder="0" height="100%" width="100%"
                     src="https://youtube.com/embed/<? echo $video_pick; ?>?autoplay=1&controls=0&showinfo=0&autohide=1">
@@ -122,33 +165,43 @@ $i = 0;
         </div>
 -->
         <div align="center">
-            <h3> Playing one of <? echo $play_count; ?> picks from <? echo $video_count; ?> total videos.</h3>
+            <font color="#ffff00">
+                <h3> Playing one of <? echo $play_count; ?> picks from <? echo $video_count; ?> total videos.</h3>
+            </font>
         </div>
         <table id="content" border=1 cellspacing=0 cellpadding=3 width=80% align="center">
-            <tr>
-                <th width="120px" align="left"> video_id </td>
-                <th width="80px" align="center"> video_len </td>
-                <th width="40px" align="center"> plays </td>
-                <th align="left"> description </td>
+            <tr bgcolor="#222222">
+                <th bgcolor="#222222" width="120px" align="left"> video_id </td>
+                <th bgcolor="#222222" width="80px" align="center"> video_len </td>
+                <th bgcolor="#222222" width="40px" align="center"> plays </td>
+                <th bgcolor="#222222" align="left"> description </td>
             </tr>
 <?  foreach ($video_list as $row) { ?>
 <?      
         if($i % 2)  {
-            if(isset($play_list[$row->video_id])) {
-                $bg = "#ffffff";
+            if(isset($disabled_list[$row->video_id])) {
+                $bg = "#FF0000";
+            } elseif(isset($play_list[$row->video_id])) {
+                $bg = "#222222";
+                //$bg = "#ffffff";
             } else {
-                $bg = "#aaaaaa";
+                $bg = "#000000";
+                //$bg = "#aaaaaa";
             }
         } else {
-            if(isset($play_list[$row->video_id])) {
-                $bg = "#bbffbb";
+            if(isset($disabled_list[$row->video_id])) {
+                $bg = "#FF0000";
+            } elseif(isset($play_list[$row->video_id])) {
+                $bg = "#224422";
+                //$bg = "#bbffbb";
             } else {
-                $bg = "#66aa66";
+                $bg = "#002200";
+                //$bg = "#66aa66";
             }
         }
         $i++;
         if($video_pick == $row->video_id) {
-            $bg = "#ffbbbb";
+            $bg = "#220000";
         }
 ?>
             <tr id="<?echo $row->video_id;?>"bgcolor="<?echo $bg;?>">
@@ -170,7 +223,9 @@ $i = 0;
 <? } ?>
         </table>
         <div align="center">
-            <h3> Playing one of <? echo $play_count; ?> picks from <? echo $video_count; ?> total videos.</h3>
+            <font color="#ffff00">
+                <h3> Playing one of <? echo $play_count; ?> picks from <? echo $video_count; ?> total videos.</h3>
+            </font>
         </div>
     </body>
 </html>

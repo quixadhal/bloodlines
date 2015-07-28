@@ -235,6 +235,7 @@ sub parse_log_line {
     $log_entry{'is_emote'} = undef;                         # Can't tell from the logs without more parsing...
     $log_entry{'is_url'} = 0;                               # Default false, but may be set if matched below
     $log_entry{'is_url'} = 1 if $message =~ /((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)+/;
+    $log_entry{'is_url'} = 1 if $channel eq 'url';
 
     #$message = encode_entities($message);
     #$message = s/((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)/<a href="$1" target="I3-link">$1<\/a>/;
