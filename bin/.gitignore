@@ -14,3 +14,4 @@ pgsql_handler.py
 portbind.x64
 portbind.x86
 test_sha.pl
+*.pid

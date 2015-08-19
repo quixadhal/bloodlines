@@ -1,0 +1,33 @@
+#!/bin/bash
+
+USERNAME=bloodlines
+APORT=4990
+MUDDIR=/home/bloodlines
+PATH=$MUDDIR/bin:/bin:/usr/bin:/sbin:/usr/sbin
+CONFIG=$MUDDIR/bin/mudos.cfg
+STARTDIR=$MUDDIR/bin
+LOGFILE=`/bin/date "+$MUDDIR/bin/driver_log.%y%m%d-%H%M%S"`
+
+DAEMON=$MUDDIR/bin/driver
+PIDFILE=$MUDDIR/bin/driver.pid
+SCRIPT=$MUDDIR/bin/start_driver
+
+ADAEMON=$MUDDIR/bin/addr_server
+APIDFILE=$MUDDIR/bin/addr_server.pid
+ASCRIPT=$MUDDIR/bin/start_addr_server
+
+test -x $DAEMON || exit 0
+test -x $ADAEMON || exit 0
+
+echo -n "    Starting addr_server..."
+if start-stop-daemon --quiet --stop --signal 0 --pidfile $APIDFILE --name addr_server --user $username
+then
+    echo " already running!"
+    exit 0
+else
+    /home/bloodlines/bin/addr_server $APORT >/dev/null 2>&1 &
+    ASTAT=$?
+    echo $! >/home/bloodlines/bin/addr_server.pid
+    echo " done."
+    exit $ASTAT
+fi

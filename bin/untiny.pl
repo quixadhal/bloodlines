@@ -23,8 +23,12 @@
 #/def -mregexp -p2 -t"<([\w-]+)>.*(https?://migre.me/[^&\?\.]+)" check_migreme_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
 #/def -mregexp -p2 -t"<([\w-]+)>.*(https?://durl.me/[^&\?\.]+)" check_durlme_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
 #/def -mregexp -p2 -t"<([\w-]+)>.*(https?://is.gd/[^&\?\.]+)" check_isgd_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://dailym.ai/[^&\?\.]+)" check_daily_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://ebay.to/[^&\?\.]+)" check_ebay_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
 #/def -mregexp -p2 -t"<([\w-]+)>.*(https?://youtu.be/[^&\?\.]+)" check_yout_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://onforb.es/[^&\?\.]+)" check_forbs_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
 #/def -mregexp -p2 -t"<([\w-]+)>.*(https?://www.youtube.com/watch\?v=[^&\?\.]+)" check_youtube_chan = /if (%P1 !~ "url") /quote -0 url !~/bin/untiny.pl '%P2' '%P1'%; /endif
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://imgur.com/[^&\>\.]+)" check_imgur_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
 
 use strict;
 use English;

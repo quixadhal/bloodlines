@@ -1,0 +1,85 @@
+#!/bin/sh
+#
+### BEGIN INIT INFO
+# Provides:          bloodlines
+# Required-Start:    $network $local_fs $remote_fs $syslog $named $time
+# Required-Stop:     $network $local_fs $remote_fs $syslog $named $time
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: init-Script for FluffOS MUD driver
+### END INIT INFO
+#
+
+USERNAME=bloodlines
+APORT=4990
+MUDDIR=/home/bloodlines
+PATH=$MUDDIR/bin:/bin:/usr/bin:/sbin:/usr/sbin
+CONFIG=$MUDDIR/bin/mudos.cfg
+STARTDIR=$MUDDIR/bin
+LOGFILE=`/bin/date "+$MUDDIR/bin/driver_log.%y%m%d-%H%M%S"`
+
+DAEMON=$MUDDIR/bin/driver
+PIDFILE=$MUDDIR/bin/driver.pid
+SCRIPT=$MUDDIR/bin/start.driver
+
+ADAEMON=$MUDDIR/bin/addr_server
+APIDFILE=$MUDDIR/bin/addr_server.pid
+ASCRIPT=$MUDDIR/bin/start.addr_server
+
+test -x $DAEMON || exit 0
+test -x $ADAEMON || exit 0
+
+case "$1" in
+    start)
+        echo "Starting MUD Server: Bloodlines"
+        /sbin/start-stop-daemon --start --quiet --chuid $USERNAME:users --chdir $STARTDIR --background --pidfile $PIDFILE --exec $ASCRIPT
+        # Small delay to ensure it's alive
+        sleep 2
+        /sbin/start-stop-daemon --start --quiet --chuid $USERNAME:users --chdir $STARTDIR --background --pidfile $PIDFILE --exec $SCRIPT
+        ;;
+    stop)
+        echo -n "Stopping MUD Server: Bloodlines, driver"
+        if start-stop-daemon --quiet --stop --signal 0 --pidfile $PIDFILE --name driver --user $USERNAME
+        then
+            PID=`cat $PIDFILE`
+            start-stop-daemon --quiet --stop --signal INT --user $USERNAME --exec $DAEMON --pidfile $PIDFILE --name driver
+            # Now we wait for it to die
+            while kill -0 $PID 2>/dev/null; do sleep 1; done
+            rm -f $PIDFILE
+            echo "."
+        else
+            echo " not running.";
+        fi
+        echo -n "Stopping MUD Server: Bloodlines, addr_server"
+        if start-stop-daemon --quiet --stop --signal 0 --pidfile $PIDFILE --name driver --user $USERNAME
+        then
+            APID=`cat $APIDFILE`
+            start-stop-daemon --quiet --stop --signal INT --user $USERNAME --exec $ADAEMON --pidfile $APIDFILE --name addr_server
+            # Now we wait for it to die
+            while kill -0 $APID 2>/dev/null; do sleep 1; done
+            rm -f $APIDFILE
+            echo "."
+        else
+            echo " not running.";
+        fi
+        ;;
+    restart)
+        $0 stop
+        $0 start
+        ;;
+    status)
+        if [ ! -f $PIDFILE ]; then
+            echo "No PID file, game may be down"
+            ps auxww | grep addr_server | grep -v grep
+            ps auxww | grep driver | grep -v grep
+        else
+            ps auxww | grep `cat $APIDFILE` | grep -v grep
+            ps auxww | grep `cat $PIDFILE` | grep -v grep
+        fi
+        ;;
+    *)
+        echo "Usage: /etc/init.d/bloodlines {start|stop|restart|status}"
+        exit 1
+esac
+
+exit 0

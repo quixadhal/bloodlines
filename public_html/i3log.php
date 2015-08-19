@@ -850,7 +850,7 @@ foreach ($data['rows'] as $row) {
     //$filtered_message = $row->message;
     $tmp_msg = preg_replace("/\x1b\[[0-9]+(;[0-9]+)*m/", "", $row->message);
     $message = htmlentities($tmp_msg,0,'UTF-8');
-    $message = preg_replace('/ /', '&#x2004;', $message); // replace spaces with unicode THREE-PER-EM SPACE
+    //$message = preg_replace('/ /', '&#x2004;', $message); // replace spaces with unicode THREE-PER-EM SPACE
     //$message = preg_replace('/-/', '&#x8209;', $filtered_message); // replace hyphen with unicode NON-BREAKING HYPHEN
     $message = preg_replace( '/((?:http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?\/?(?:[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*)/', '<a href="$1" target="I3-link">$1</a>', $message);
 
