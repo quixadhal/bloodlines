@@ -16,19 +16,20 @@
 #
 # 00:45 <intergossip> Kalinash@Fire and Ice: http://www.youtube.com/watch?v=IleiqUDYpFQ
 #
-#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://tinyurl.com/[^&\?\.]+)" check_tiny_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://bit.ly/[^&\?\.]+)" check_bitly_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://goo.gl/[^&\?\.]+)" check_googl_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://mcaf.ee/[^&\?\.]+)" check_mcafee_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://migre.me/[^&\?\.]+)" check_migreme_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://durl.me/[^&\?\.]+)" check_durlme_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://is.gd/[^&\?\.]+)" check_isgd_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://dailym.ai/[^&\?\.]+)" check_daily_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://ebay.to/[^&\?\.]+)" check_ebay_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://youtu.be/[^&\?\.]+)" check_yout_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://onforb.es/[^&\?\.]+)" check_forbs_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://www.youtube.com/watch\?v=[^&\?\.]+)" check_youtube_chan = /if (%P1 !~ "url") /quote -0 url !~/bin/untiny.pl '%P2' '%P1'%; /endif
-#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://imgur.com/[^&\>\.]+)" check_imgur_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://tinyurl.com/[^&\?\.\s]+)" check_tiny_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://bit.ly/[^&\?\.\s]+)" check_bitly_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://goo.gl/[^&\?\.\s]+)" check_googl_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://mcaf.ee/[^&\?\.\s]+)" check_mcafee_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://migre.me/[^&\?\.\s]+)" check_migreme_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://durl.me/[^&\?\.\s]+)" check_durlme_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://is.gd/[^&\?\.\s]+)" check_isgd_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://dailym.ai/[^&\?\.\s]+)" check_daily_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://ebay.to/[^&\?\.\s]+)" check_ebay_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://youtu.be/[^&\?\.\s]+)" check_yout_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://onforb.es/[^&\?\.\s]+)" check_forbs_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://www.youtube.com/watch\?v=[^&\?\.\s]+)" check_youtube_chan = /if (%P1 !~ "url") /quote -0 url !~/bin/untiny.pl '%P2' '%P1'%; /endif
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://imgur.com/[^&\>\.\s]+)" check_imgur_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://amzn.to/[^&\?\.\s]+)" check_amzon_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
 
 use strict;
 use English;
@@ -37,6 +38,7 @@ use HTTP::Request::Common qw(POST);
 use HTML::Entities;
 use LWP::UserAgent;
 use URI;
+use DBI;
 
 my $CHATTER = '/home/bloodlines/lib/secure/save/chat.o';
 
@@ -79,6 +81,40 @@ sub channel_color {
     return $colors{default} if !defined $channel;
     return $colors{$channel} if exists $colors{$channel};
     return $colors{default};
+}
+
+sub pinkfish_to_ansi {
+    my $string = shift;
+    my %conversion = (
+        '%^RESET%^'                 => "\033[0;0m",
+
+        '%^BOLD%^'                  => "\033[1m",
+        '%^FLASH%^'                 => "\033[5m",
+
+        '%^BLACK%^'                 => "\033[30m",
+        '%^RED%^'                   => "\033[31m",
+        '%^GREEN%^'                 => "\033[32m",
+        '%^ORANGE%^'                => "\033[33m",
+        '%^BLUE%^'                  => "\033[34m",
+        '%^MAGENTA%^'               => "\033[35m",
+        '%^CYAN%^'                  => "\033[36m",
+        #'%^WHITE%^'                 => "\033[37m",
+
+        '%^GREY%^'                  => "\033[1;30m",
+        '%^PINK%^'                  => "\033[1;31m",
+        '%^LIGHTRED%^'              => "\033[1;31m",
+        '%^LIGHTGREEN%^'            => "\033[1;32m",
+        '%^YELLOW%^'                => "\033[1;33m",
+        '%^LIGHTBLUE%^'             => "\033[1;34m",
+        '%^LIGHTMAGENTA%^'          => "\033[1;35m",
+        '%^LIGHTCYAN%^'             => "\033[1;36m",
+        '%^WHITE%^'                 => "\033[1;37m",
+    );
+    foreach my $k (keys(%conversion)) {
+        my $v = $conversion{$k};
+        $string =~ s/\Q$k\E/$v/gsmx;
+    }
+    return $string;
 }
 
 sub get_url {
@@ -170,6 +206,16 @@ sub get_youtube_duration {
     return sprintf "%d:%02d", $minutes, $seconds;
 }
 
+sub get_youtube_length {
+    my $page = shift;
+
+    $page =~ /<meta\s+itemprop=\"duration\"\s+content=\"([^\"]*)\">/;
+    my ($funky) = ($1);
+    $funky =~ /.*?(\d+)M(\d+)S/;
+    my ($minutes, $seconds) = ($1, $2);
+    return ($minutes, $seconds);
+}
+
 sub get_page_title {
     my $page = shift;
 
@@ -178,7 +224,34 @@ sub get_page_title {
     return $funky;
 }
 
+my $prog = $0;
+my $update_all = undef;
+my $is_for_db = undef;
 my $url = shift;
+
+$update_all = 1 if $url eq '--all';
+
+if ( $update_all ) {
+    my $dbc = DBI->connect('DBI:Pg:dbname=i3log2;host=localhost;port=5432;sslmode=prefer', 'bloodlines', 'tardis69', { AutoCommit => 0, PrintError => 0, });
+    my $video_list = $dbc->selectall_arrayref(qq!
+        SELECT * 
+          FROM videos
+      ORDER BY video_id ASC
+         !, { Slice => {} } );
+    print STDERR $DBI::errstr."\n" if defined $DBI::errstr and !defined $video_list;
+    $dbc->disconnect();
+    foreach (@$video_list) {
+        next if $_->{'disabled'};
+        my $id = $_->{'video_id'};
+        system "$prog --db https://www.youtube.com/watch?v=$id" if defined $id;
+        sleep 1;
+    }
+    exit 1;
+}
+
+$is_for_db = 1 if $url eq '--db';
+$url = shift if $is_for_db;
+
 my $given_uri = URI->new($url);
 my $given_host = $given_uri->host;
 
@@ -195,6 +268,82 @@ my $page_title = get_page_title($page) if defined $page;
 #my $youtube_desc = get_youtube_desc($page);
 #my $youtube_keywords = get_youtube_keywords($page);
 
+
+if( $is_for_db ) {
+=head1 SQL
+
+CREATE TABLE videos (
+    video_id    TEXT PRIMARY KEY NOT NULL,
+    video_len   INTEGER NOT NULL,
+    description TEXT,
+    plays       INTEGER DEFAULT 0,
+    disabled    BOOLEAN DEFAULT false,
+    last_viewer TEXT
+);
+
+=cut
+
+    if( defined $youtube_id and defined $youtube_duration and defined $youtube_title) {
+        my $dbc = DBI->connect('DBI:Pg:dbname=i3log2;host=localhost;port=5432;sslmode=prefer', 'bloodlines', 'tardis69', { AutoCommit => 0, PrintError => 0, });
+        my $add_entry_sql = $dbc->prepare( qq!
+            INSERT INTO videos (video_id, video_len, description, plays)
+            VALUES (trim(?),?,trim(?),?)
+            !);
+        my $update_entry_sql = $dbc->prepare( qq!
+            UPDATE videos
+               SET video_len = ?,
+                   description = trim(?),
+                   plays = ?,
+                   disabled = 'f',
+                   last_viewer = NULL
+             WHERE video_id = trim(?)
+            !);
+
+        my $min_count = 0;
+        my $res = $dbc->selectrow_hashref(qq!
+            SELECT MIN(plays) AS plays
+              FROM videos
+             !, undef);
+        print STDERR $DBI::errstr."\n" if defined $DBI::errstr and !defined $res;
+        if ( $res && defined $res->{'plays'} ) {
+            $min_count = $res->{'plays'};
+        }
+
+        $res = $dbc->selectrow_hashref(qq!
+            SELECT *
+              FROM videos
+             WHERE video_id = trim(?)
+             LIMIT 1
+             !, undef, ($youtube_id));
+        print STDERR $DBI::errstr."\n" if defined $DBI::errstr and !defined $res;
+        if ( $res && $res->{'video_id'} && $res->{'video_id'} eq $youtube_id ) {
+            # Already there, update to new values
+            my ($min, $sec) = get_youtube_length($page);
+            my $video_len = $min * 60 + $sec;
+            my $rv = $update_entry_sql->execute($video_len, $youtube_title, $min_count, $youtube_id);
+            if($rv) {
+                #print STDERR "Database updated.\n";
+                $dbc->commit;
+            } else {
+                print STDERR $DBI::errstr."\n";
+                $dbc->rollback;
+            }
+        } else {
+            my ($min, $sec) = get_youtube_length($page);
+            my $video_len = $min * 60 + $sec;
+            my $rv = $add_entry_sql->execute($youtube_id, $video_len, $youtube_title, $min_count);
+            if($rv) {
+                #print STDERR "Added to database.\n";
+                $dbc->commit;
+            } else {
+                print STDERR $DBI::errstr."\n";
+                $dbc->rollback;
+            }
+        }
+        $dbc->disconnect();
+    }
+}
+
 $channel = " from $chan_color<$channel>%^RESET%^" if defined $channel and defined $chan_color;
 $channel = " from <$channel>" if defined $channel and !defined $chan_color;
 $channel = "" if !defined $channel;
@@ -202,16 +351,24 @@ $channel = "" if !defined $channel;
 $youtube_id = "%^YELLOW%^[$youtube_id]%^RESET%^" if defined $youtube_id;
 $youtube_duration = " %^RED%^($youtube_duration)%^RESET%^" if defined $youtube_duration;
 
+my $output = "";
+
 if (defined $youtube_id and defined $youtube_title and defined $youtube_duration) {
-    print "YouTube $youtube_id$channel is $youtube_title$youtube_duration\n";
+    $output .= "YouTube $youtube_id$channel is $youtube_title$youtube_duration\n";
 } elsif (defined $youtube_id and defined $youtube_title) {
-    print "YouTube $youtube_id$channel is $youtube_title\n";
+    $output .= "YouTube $youtube_id$channel is $youtube_title\n";
 } elsif (defined $origin) {
     if (defined $page_title) {
-        print $given_host . " URL$channel is %^YELLOW%^$page_title%^RESET%^ from " . $origin->host . "\n";
+        $output .= $given_host . " URL$channel is %^YELLOW%^$page_title%^RESET%^ from " . $origin->host . "\n";
     } else {
         #print STDERR "DEBUG: " . Dumper($origin) . "\n";
-        print $given_host . " URL$channel goes to " . $origin->host . "\n";
+        $output .= $given_host . " URL$channel goes to " . $origin->host . "\n";
     }
+}
+
+if ( $is_for_db ) {
+    print pinkfish_to_ansi($output);
+} else {
+    print $output;
 }
 

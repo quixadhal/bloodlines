@@ -20,11 +20,9 @@ LOGFILE=`/bin/date "+$MUDDIR/bin/driver_log.%y%m%d-%H%M%S"`
 
 DAEMON=$MUDDIR/bin/driver
 PIDFILE=$MUDDIR/bin/driver.pid
-SCRIPT=$MUDDIR/bin/start.driver
 
 ADAEMON=$MUDDIR/bin/addr_server
 APIDFILE=$MUDDIR/bin/addr_server.pid
-ASCRIPT=$MUDDIR/bin/start.addr_server
 
 test -x $DAEMON || exit 0
 test -x $ADAEMON || exit 0
@@ -32,10 +30,32 @@ test -x $ADAEMON || exit 0
 case "$1" in
     start)
         echo "Starting MUD Server: Bloodlines"
-        /sbin/start-stop-daemon --start --quiet --chuid $USERNAME:users --chdir $STARTDIR --background --pidfile $PIDFILE --exec $ASCRIPT
+        if start-stop-daemon --quiet --stop --signal 0 --pidfile $APIDFILE --name addr_server --user $USERNAME
+        then
+            APID=`cat $APIDFILE`
+            echo "    addr_server [$APID] running."
+        else
+            echo -n "    Starting addr_server..."
+            $ADAEMON $APORT >/dev/null 2>&1 &
+            echo $! >$APIDFILE
+            echo " done."
+        fi
+        #
+        if start-stop-daemon --quiet --stop --signal 0 --pidfile $PIDFILE --name driver --user $USERNAME
+        then
+            PID=`cat $PIDFILE`
+            echo "    driver [$PID] running."
+        else
+            echo -n "    Starting driver..."
+            sleep 2
+            $DAEMON $CONFIG >$LOGFILE 2>&1 &
+            echo $! >$PIDFILE
+            echo " done."
+        fi
+        #/sbin/start-stop-daemon --start --quiet --chuid $USERNAME:users --chdir $STARTDIR --background --pidfile $PIDFILE --exec $ASCRIPT
         # Small delay to ensure it's alive
-        sleep 2
-        /sbin/start-stop-daemon --start --quiet --chuid $USERNAME:users --chdir $STARTDIR --background --pidfile $PIDFILE --exec $SCRIPT
+        #sleep 2
+        #/sbin/start-stop-daemon --start --quiet --chuid $USERNAME:users --chdir $STARTDIR --background --pidfile $PIDFILE --exec $SCRIPT
         ;;
     stop)
         echo -n "Stopping MUD Server: Bloodlines, driver"
@@ -51,7 +71,7 @@ case "$1" in
             echo " not running.";
         fi
         echo -n "Stopping MUD Server: Bloodlines, addr_server"
-        if start-stop-daemon --quiet --stop --signal 0 --pidfile $PIDFILE --name driver --user $USERNAME
+        if start-stop-daemon --quiet --stop --signal 0 --pidfile $APIDFILE --name addr_server --user $USERNAME
         then
             APID=`cat $APIDFILE`
             start-stop-daemon --quiet --stop --signal INT --user $USERNAME --exec $ADAEMON --pidfile $APIDFILE --name addr_server
