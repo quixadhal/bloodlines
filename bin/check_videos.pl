@@ -59,8 +59,10 @@ sub do_verify {
     my $url = "https://www.youtube.com/watch?v=$id";
     my $page = get_url( $url );
 
-    $failed = 1 if !defined $page or $page =~ /This video has been removed/ or $page =~ /This video is no longer available/;
-    #$failed = 1 if $page =~ /<\s*h1\s+id\s*=\s*\"unavailable-message\"\s+class\s*=\s*\"message\">/gsmix;
+    $failed = 1 if !defined $page or $page =~ /This video has been removed/;
+    $failed = 1 if !defined $page or $page =~ /This video is no longer available/;
+    $failed = 1 if !defined $page or $page =~ /The YouTube account associated with this video has been terminated/;
+    #$failed = 1 if !defined $page or $page =~ /<\s*h1\s+id\s*=\s*\"unavailable-message\"\s+class\s*=\s*\"message\">/gsmix;
 
     if($failed) {
         print "FAILED: $id, $desc\n";

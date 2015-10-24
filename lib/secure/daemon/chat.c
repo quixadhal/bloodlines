@@ -1496,6 +1496,8 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
     string pchan,pmsg;
     string *whobits;
     string *msgbits;
+    string *cmsgbits;
+    string cmsg;
     string bit;
     string tstamp;
     string output;
@@ -1601,6 +1603,7 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
     else
     {
         pmsg = msg;
+        cmsg = msg;
 
         msg = formChatString(ch, who, msg);
         //tn("CHAT_D->eventSendChannel: not emote?", "green");
@@ -1618,6 +1621,7 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
     }
     who = implode(whobits, "@");
     msgbits = rexplode(pmsg, "\n");
+    cmsgbits = rexplode(cmsg, "\n");
     tstamp = timestamp();
 
     i = 0;
@@ -1625,6 +1629,12 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
         output = sprintf("%s%03d\t%s\t%s\t%s\n", tstamp, i, ch, who, bit);
         i++;
         LogIt(output, "/secure/log/allchan.log", ch);
+    }
+    i = 0;
+    foreach(bit in cmsgbits) {
+        output = sprintf("%s%03d\t%s\t%s\t%s\n", tstamp, i, ch, who, bit);
+        i++;
+        LogIt(output, "/secure/log/allchan_color.log", ch);
     }
     
     //LogIt(timestamp()+"\t"+ch+"\t"+who+"\t"+pmsg+"\n", "/secure/log/allchan.log", ch);

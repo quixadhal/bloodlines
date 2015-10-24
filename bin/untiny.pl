@@ -27,7 +27,8 @@
 #/def -mregexp -p2 -t"<([\w-]+)>.*(https?://ebay.to/[^&\?\.\s]+)" check_ebay_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
 #/def -mregexp -p2 -t"<([\w-]+)>.*(https?://youtu.be/[^&\?\.\s]+)" check_yout_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
 #/def -mregexp -p2 -t"<([\w-]+)>.*(https?://onforb.es/[^&\?\.\s]+)" check_forbs_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
-#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://www.youtube.com/watch\?v=[^&\?\.\s]+)" check_youtube_chan = /if (%P1 !~ "url") /quote -0 url !~/bin/untiny.pl '%P2' '%P1'%; /endif
+##/def -mregexp -p2 -t"<([\w-]+)>.*(https?://www.youtube.com/watch\?v=[^&\?\.\s]+)" check_youtube_chan = /if (%P1 !~ "url") /quote -0 url !~/bin/untiny.pl '%P2' '%P1'%; /endif
+#/def -mregexp -p2 -t"<([\w-]+)>.*(https?://www.youtube.com/watch\?.*?v=[^&\?\.\s]+)" check_youtube_chan = /if (%P1 !~ "url") /quote -0 url !~/bin/untiny.pl '%P2' '%P1'%; /endif
 #/def -mregexp -p2 -t"<([\w-]+)>.*(https?://imgur.com/[^&\>\.\s]+)" check_imgur_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
 #/def -mregexp -p2 -t"<([\w-]+)>.*(https?://amzn.to/[^&\?\.\s]+)" check_amzon_chan = /quote -0 url !~/bin/untiny.pl '%P2' '%P1'
 
@@ -165,7 +166,7 @@ sub get_url {
 sub get_youtube_id {
     my $page = shift;
 
-    $page =~ /<link\s+rel=\"canonical\"\s+href=\".*?\/watch\?v=([^\"]*)\">/;
+    $page =~ /<link\s+rel=\"canonical\"\s+href=\".*?\/watch\?v=([^\"\&]*)\">/;
     my ($id) =  ($1);
     return $id;
 }
@@ -224,6 +225,7 @@ sub get_page_title {
     return $funky;
 }
 
+my $random_annoyance = 1;
 my $prog = $0;
 my $update_all = undef;
 my $is_for_db = undef;
@@ -352,19 +354,26 @@ $youtube_id = "%^YELLOW%^[$youtube_id]%^RESET%^" if defined $youtube_id;
 $youtube_duration = " %^RED%^($youtube_duration)%^RESET%^" if defined $youtube_duration;
 
 my $output = "";
+my $annoyed = "";
 
 if (defined $youtube_id and defined $youtube_title and defined $youtube_duration) {
     $output .= "YouTube $youtube_id$channel is $youtube_title$youtube_duration\n";
+    $annoyed .= "%^FLASH%^YouTube $youtube_id$channel%^FLASH%^ was $youtube_title%^FLASH%^$youtube_duration%^FLASH%^ but may have been taken down for POTENTIAL copyright infringement.%^RESET%^\n";
 } elsif (defined $youtube_id and defined $youtube_title) {
     $output .= "YouTube $youtube_id$channel is $youtube_title\n";
+    $annoyed .= "%^FLASH%^YouTube $youtube_id$channel%^FLASH%^ was $youtube_title%^FLASH%^ but may have been taken down for POTENTIAL copyright infringement.%^RESET%^\n";
 } elsif (defined $origin) {
     if (defined $page_title) {
         $output .= $given_host . " URL$channel is %^YELLOW%^$page_title%^RESET%^ from " . $origin->host . "\n";
+        $annoyed .= "%^FLASH%^" . $given_host . " URL$channel%^FLASH%^ was %^YELLOW%^$page_title%^RESET%^%^FLASH%^ from " . $origin->host . " but may have been taken down for POTENTIAL copyright infringement.%^RESET%^\n";
     } else {
         #print STDERR "DEBUG: " . Dumper($origin) . "\n";
         $output .= $given_host . " URL$channel goes to " . $origin->host . "\n";
+        $annoyed .= "%^FLASH%^" . $given_host . " URL$channel%^FLASH%^ used to go to " . $origin->host . " but may have been taken down for POTENTIAL copyright infringement.%^RESET%^\n";
     }
 }
+
+$output = $annoyed if $random_annoyance && rand(10) < 1;
 
 if ( $is_for_db ) {
     print pinkfish_to_ansi($output);
