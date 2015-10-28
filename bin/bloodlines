@@ -93,8 +93,9 @@ case "$1" in
             ps auxww | grep addr_server | grep -v grep
             ps auxww | grep driver | grep -v grep
         else
-            ps auxww | grep `cat $APIDFILE` | grep -v grep
-            ps auxww | grep `cat $PIDFILE` | grep -v grep
+            APID=`cat $APIDFILE`
+            PID=`cat $PIDFILE`
+            ps auxww | awk "{ if(\$2 == $APID || \$2 == $PID) { print \$0 } }"
         fi
         ;;
     *)

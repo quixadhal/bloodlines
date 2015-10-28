@@ -13,7 +13,7 @@
 #endif
 
 #ifndef LOG_LOCAL_CHANS
-#define LOG_LOCAL_CHANS 1
+#define LOG_LOCAL_CHANS 0
 #endif
 
 #ifndef CHANNEL_PIPES

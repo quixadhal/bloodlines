@@ -185,7 +185,7 @@ header('Cache-control: max-age=0, must-revalidate');
             if (image.complete) {
                 var new_image = new Image();
                 new_image.id = "weather_bit";
-                new_image.src = "<? echo $weather_image; ?>" + "#" + new Date().getTime();
+                new_image.src = "<?php echo $weather_image; ?>" + "#" + new Date().getTime();
                 new_image.className = image.className;
                 image.parentNode.insertBefore(new_image, image);
                 image.parentNode.removeChild(image);
@@ -404,8 +404,8 @@ header('Cache-control: max-age=0, must-revalidate');
             }
         </script>
     </head>
-    <!-- <body background="<? echo $graphics['background']; ?>" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" onload="startClock()"> -->
-    <body background="<? echo $graphics['background']; ?>" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" style="overflow-x: hidden;" onload="refreshBits(0,0)">
+    <!-- <body background="<?php echo $graphics['background']; ?>" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" onload="startClock()"> -->
+    <body background="<?php echo $graphics['background']; ?>" bgcolor="#505050" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" style="overflow-x: hidden;" onload="refreshBits(0,0)">
 <!--
         <div style="position: fixed; z-index: -99; width: 100%; height: 100%">
             <iframe frameborder="0" height="100%" width="100%"
@@ -423,7 +423,7 @@ header('Cache-control: max-age=0, must-revalidate');
             <tr>
                 <td align="right" valign="top" style="vertical-align: top">
                     <a href="/anyterm/anyterm.shtml?rows=40&cols=100" title="Play WileyMUD III">
-                        <img src="<? echo $graphics['bloodlines']; ?>"
+                        <img src="<?php echo $graphics['bloodlines']; ?>"
                              border=0 width=469 height=160
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -433,7 +433,7 @@ header('Cache-control: max-age=0, must-revalidate');
                 </td>
                 <td align="left" valign="bottom" style="vertical-align: bottom">
                     <a href="/anyterm/anyterm.shtml?rows=40&cols=100" title="Play WileyMUD III">
-                        <img src="<? echo $graphics['wileymud4']; ?>"
+                        <img src="<?php echo $graphics['wileymud4']; ?>"
                              border=0 width=354 height=81
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -470,8 +470,8 @@ header('Cache-control: max-age=0, must-revalidate');
                     </div>
 -->
                     <!-- <div id="olddate" align="center" style="color: #d0d000;"><?php echo date('F j, Y'); ?></div> -->
-                    <span style="color: #1F1F1F"><a href="<? echo $urls['photos']; ?>" title="Photos">
-                        <img src="<? echo $graphics['picasa_web']; ?>" 
+                    <span style="color: #1F1F1F"><a href="<?php echo $urls['photos']; ?>" title="Photos">
+                        <img src="<?php echo $graphics['picasa_web']; ?>" 
                              border="0" width="64" height="64" alt="(dynmap)"
                              style="opacity: 0.4; filter: alpha(opacity=40);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -480,16 +480,16 @@ header('Cache-control: max-age=0, must-revalidate');
                     </a></span>
                     <br />
                     <!-- <span style="color: #1F1F1F"><a href="https://picasaweb.google.com/home" title="Pictures"> -->
-                    <span style="color: #1F1F1F"><a href="<? echo $urls['email']; ?>" title="Email!">
-                        <img src="<? echo $graphics['email']; ?>"
+                    <span style="color: #1F1F1F"><a href="<?php echo $urls['email']; ?>" title="Email!">
+                        <img src="<?php echo $graphics['email']; ?>"
                              border=0 align="center" width=64 height=64
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                              onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
                          />
                     </a></span>
-                    <span style="color: #1F1F1F"><a href="<? echo $urls['facebook']; ?>" title="Facebutt">
-                        <img src="<? echo $graphics['facebook']; ?>"
+                    <span style="color: #1F1F1F"><a href="<?php echo $urls['facebook']; ?>" title="Facebutt">
+                        <img src="<?php echo $graphics['facebook']; ?>"
                              border=0 align="center" width=64 height=64
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -499,7 +499,7 @@ header('Cache-control: max-age=0, must-revalidate');
                     <br />
                     <br />
                     <a href="http://www.oldtimersguild.com/vb/forum.php" title="No Drama!">
-                        <img src="<? echo $graphics['otglogo']; ?>"
+                        <img src="<?php echo $graphics['otglogo']; ?>"
                              border=0 align="center" width=155 height=200
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -510,8 +510,8 @@ header('Cache-control: max-age=0, must-revalidate');
                     <br />
                     <!-- <div id="oldclock" align="center" style="color: #d0d000;"><?php echo date('g:i:s a'); ?></div> -->
                     <span style="display: block !important; width: 120px; text-align: center; font-family: sans-serif; font-size: 12px;">
-                        <a  href="<? echo $weather_url; ?>">
-                            <img    src="<? echo $weather_image; ?>"
+                        <a  href="<?php echo $weather_url; ?>">
+                            <img    src="<?php echo $weather_image; ?>"
                                     id="weather_bit" class="weather-image"
                             />
                         </a>
@@ -564,7 +564,7 @@ header('Cache-control: max-age=0, must-revalidate');
                 </td>
                 <td align="center" width="180" valign="bottom" style="vertical-align: bottom">
                     <a href="mudlist.php" title="MUD Listing">
-                        <img src="<? echo $graphics['mudlist']; ?>"
+                        <img src="<?php echo $graphics['mudlist']; ?>"
                              border=0 align="center" width=121 height=92
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -573,20 +573,20 @@ header('Cache-control: max-age=0, must-revalidate');
                     </a>
                     <br />
                     <br />
-                    <a href="http://www.mudbytes.net/index.php?a=recent" title="ALL about the DRAMA!">
-                        <img src="<? echo $graphics['mudbytes']; ?>"
+                    <a href="http://www.mudbytes.net/forum/" title="ALL about the DRAMA!">
+                        <img src="<?php echo $graphics['mudbytes']; ?>"
                              border=0 align="center" width=120 height=30
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                              onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
                         />
                         <!-- 
-                             onmouseover="this.src='<? echo $graphics['mudbytes_mo']; ?>';" 
-                             onmouseout="this.src='<? echo $graphics['mudbytes']; ?>';" -->
+                             onmouseover="this.src='<?php echo $graphics['mudbytes_mo']; ?>';" 
+                             onmouseout="this.src='<?php echo $graphics['mudbytes']; ?>';" -->
                     </a>
                     <br />
                     <a href="http://www.mudconnect.com/SMF/index.php" title="The NEW MUD Connector forums">
-                        <img src="<? echo $graphics['tmc']; ?>"
+                        <img src="<?php echo $graphics['tmc']; ?>"
                              border=0 align="center" width=120 height=30
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -595,7 +595,7 @@ header('Cache-control: max-age=0, must-revalidate');
                     </a>
                     <br />
                     <a href="http://lpmuds.net/forum/index.php" title="LPMUD faithful">
-                        <img src="<? echo $graphics['lpmuds']; ?>"
+                        <img src="<?php echo $graphics['lpmuds']; ?>"
                              border=0 align="center" width=120 height=30
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -604,7 +604,7 @@ header('Cache-control: max-age=0, must-revalidate');
                     </a>
                     <br />
                     <a href="http://www.smaugmuds.org/" title="The best Dikurivative codebase">
-                        <img src="<? echo $graphics['smaug']; ?>"
+                        <img src="<?php echo $graphics['smaug']; ?>"
                              border=0 align="center" width=120 height=30
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -614,7 +614,7 @@ header('Cache-control: max-age=0, must-revalidate');
                     <br />
                     <br />
                     <a href="i3log.php" title="I3 Chat Logs">
-                        <img src="<? echo $graphics['intermud']; ?>"
+                        <img src="<?php echo $graphics['intermud']; ?>"
                              border=0 align="center" width=154 height=200
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -663,7 +663,7 @@ header('Cache-control: max-age=0, must-revalidate');
                 <td align="center" valign="center" width="12%" style="vertical-align: middle">
                     <!-- <span style="display: block !important; width: 120px; text-align: center; font-family: sans-serif; font-size: 12px;"> -->
                         <a  href="http://www.wunderground.com/radar/radblast.asp?zoommode=pan&prevzoom=zoom&num=1&frame=0&delay=15&scale=1.000&noclutter=0&ID=GRR&type=N0R&showstorms=10&lat=42.29166794&lon=-85.58721924&label=Kalamazoo,%20MI&map.x=400&map.y=240&scale=1.000&centerx=400&centery=240&showlabels=1">
-                            <img    src="<? echo $graphics['radar']; ?>"
+                            <img    src="<?php echo $graphics['radar']; ?>"
                                     height="96" width="96" border="0"
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -673,8 +673,9 @@ header('Cache-control: max-age=0, must-revalidate');
                     <!-- </span> -->
                 </td>
                 <td align="center" valign="bottom" width="12%" style="vertical-align: bottom">
-                        <span style="color: #1F1F1F"><a href="/~minecraft/phpBB3/index.php" title="Minecraft!">
-                            <img src="<? echo $graphics['minecraft_icon']; ?>" 
+                        <!-- <span style="color: #1F1F1F"><a href="/~minecraft/phpBB3/index.php" title="Minecraft!"> -->
+                        <span style="color: #1F1F1F"><a href="/~minecraft/map.html" title="Local Dynmap">
+                            <img src="<?php echo $graphics['minecraft_icon']; ?>" 
                                  border="0" width="96" height="96" alt="(minecraft)"
                                  style="opacity: 0.4; filter: alpha(opacity=40);"
                                  onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -683,8 +684,8 @@ header('Cache-control: max-age=0, must-revalidate');
                         </a></span>
                 </td>
                 <td align="center" valign="bottom" width="12%" style="vertical-align: bottom">
-                        <span style="color: #1F1F1F"><a href="/~minecraft/map.html" title="Dynmap">
-                            <img src="<? echo $graphics['minecraft_map_icon']; ?>" 
+                        <span style="color: #1F1F1F"><a href="http://darkstar.pixelefx.net:8123/" title="Dynmap">
+                            <img src="<?php echo $graphics['minecraft_map_icon']; ?>" 
                                  border="0" width="96" height="96" alt="(dynmap)"
                                  style="opacity: 0.4; filter: alpha(opacity=40);"
                                  onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -694,7 +695,7 @@ header('Cache-control: max-age=0, must-revalidate');
                 </td>
                 <td align="center" valign="bottom" style="vertical-align: bottom">
                     <a href="https://github.com/quixadhal">
-                        <img src="<? echo $graphics['gitlogo']; ?>" title="My GitHub repositories"
+                        <img src="<?php echo $graphics['gitlogo']; ?>" title="My GitHub repositories"
                              border="0" align="center" width="72" height="27"
                              style="opacity: 0.6; filter: alpha(opacity=60); padding-bottom: 20;"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -703,7 +704,7 @@ header('Cache-control: max-age=0, must-revalidate');
                     </a>
                     &nbsp;
                     <a href="https://bitbucket.org/quixadhal">
-                        <img src="<? echo $graphics['bitbucketlogo']; ?>" title="My Bitbucket repositories"
+                        <img src="<?php echo $graphics['bitbucketlogo']; ?>" title="My Bitbucket repositories"
                              border="0" align="center" width="115" height="30"
                              style="opacity: 0.6; filter: alpha(opacity=60); padding-bottom: 20;"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -714,7 +715,7 @@ header('Cache-control: max-age=0, must-revalidate');
                     <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
                     <input type="hidden" name="cmd" value="_s-xclick">
                     <input type="hidden" name="hosted_button_id" value="RNV3EB7MLFRWA">
-                    <input type="image" src="<? echo $graphics['paypal']; ?>"
+                    <input type="image" src="<?php echo $graphics['paypal']; ?>"
                            id="paypal"
                            border="0" name="submit"
                            alt="PayPal - The safer, easier way to pay online!"
@@ -727,8 +728,8 @@ header('Cache-control: max-age=0, must-revalidate');
                 </td>
                 <td align="center" valign="bottom" width="12%" style="vertical-align: bottom">
                     <!-- <span style="display: block !important; width: 120px; text-align: center; font-family: sans-serif; font-size: 12px;"> -->
-                    <a href="<? echo $urls['tomato']; ?>">
-                        <img src="<? echo $graphics['tomato']; ?>" title="Router Page"
+                    <a href="<?php echo $urls['tomato']; ?>">
+                        <img src="<?php echo $graphics['tomato']; ?>" title="Router Page"
                              border="0" align="center" width="96" height="96"
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -738,7 +739,7 @@ header('Cache-control: max-age=0, must-revalidate');
                 </td>
                 <td align="center" valign="bottom" width="12%" style="vertical-align: bottom">
                         <span style="color: #1F1F1F"><a href="/~bloodlines/server.php" title="Server Stats">
-                            <img src="<? echo $graphics['server_icon']; ?>" 
+                            <img src="<?php echo $graphics['server_icon']; ?>" 
                                  border="0" width="96" height="96" alt="(server)"
                                  style="opacity: 0.4; filter: alpha(opacity=40);"
                                  onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -749,7 +750,7 @@ header('Cache-control: max-age=0, must-revalidate');
                 </td>
                 <td align="center" valign="bottom" width="12%" style="vertical-align: bottom">
                         <span style="color: #1F1F1F"><a href="/~bloodlines/video_list.php" title="Server Stats">
-                            <img src="<? echo $graphics['tv']; ?>" 
+                            <img src="<?php echo $graphics['tv']; ?>" 
                                  border="0" width="96" height="96" alt="(tv)"
                                  style="opacity: 0.4; filter: alpha(opacity=40);"
                                  onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
@@ -761,101 +762,9 @@ header('Cache-control: max-age=0, must-revalidate');
             </tr>
             <tr>
                 <td colspan="7" align="center">
-                    <!--
-                    <a name="wow">
-                        <a href="http://us.battle.net/wow/en/forum/1181914/">Kul Tiras</a> &nbsp;<a href="http://us.battle.net/wow/en/status">Status</a>:&nbsp;&nbsp;
-                        <? 
-                           //$cmd = "fping -i20 -c1 -q  12.129.209.68 12.129.255.20 12.129.209.68 12.129.254.230 12.129.254.238 12.129.255.20 12.129.254.230 12.129.254.238 12.129.254.238 12.129.254.230 12.129.255.33 12.129.254.238 12.129.255.48 12.129.254.230 12.129.254.230 12.129.255.29 12.129.255.16 12.129.255.20 12.129.255.36 12.129.255.40 12.129.254.238 12.129.255.40 12.129.255.36 12.129.255.52 12.129.255.33 12.129.254.238 12.129.255.52 2>&1 | cut -d\" \" -f5,8 | cut -d/ -f3 | perl -ne 'BEGIN{ \$count = 0; \$total = 0;} (\$loss, \$lag) = /(\d)\%,\s+(\d+\.\d+)/; \$count++; \$avg += \$lag; \$total += \$loss; END { \$avg = \$avg / \$count; printf \"ip: 208.94.25.44, loss: %d, ping: %5.1fms\\n\", \$total, \$avg;}'";
-                           //$ping = shell_exec($cmd);
-                        ?>
-                           <span style="color: #00FF00"><? echo $server["name"]; ?> &nbsp; <? echo $ping; ?></span>
-                    </a>
-                    -->
-                    <!-- <div id="aaswidget"></div> -->
-                    <!--
-                    <a name="archeage">
-                        <a href="http://forums.archeagegame.com/">ArcheAge</a> &nbsp;<a href="https://twitter.com/ArcheAge/">Status</a>:&nbsp;&nbsp;
-                        <a href="http://www.reddit.com/r/archeage/">
-                        <? 
-                           //$server_status = file_get_contents("http://www.archeagestatus.com/api/status?server=Tahyang");
-                           //$cmd = "fping -i20 -c1 -q  208.94.25.44 208.94.25.44 208.94.25.44 208.94.25.44 208.94.25.44 208.94.25.44 2>&1 | cut -d\" \" -f5,8 | cut -d/ -f3 | perl -ne 'BEGIN{ \$count = 0; \$total = 0;} (\$loss, \$lag) = /(\d)\%,\s+(\d+\.\d+)/; \$count++; \$avg += \$lag; \$total += \$loss; END { \$avg = \$avg / \$count; printf \"ip: 208.94.25.44, loss: %d, ping: %5.1fms\\n\", \$total, \$avg;}'";
-                           //if ($server_status) {
-                           //    $json = json_decode($server_status, true);
-                           //    foreach($json as $server) {
-                           //        if( $server["status"] === "UP" ) {
-                           //            $ping = shell_exec($cmd); ?>
-                                       <span style="color: #00FF00"><? echo $server["name"]; ?> &nbsp; <? echo $ping; ?></span>
-                        <? //        } else { ?>
-                                       <span style="color: #FF0000"><? echo $server["name"]; ?> &nbsp; </span>
-                        <? //        }
-                           //    }
-                           //}
-                        ?>
-                        </a>
-                    </a>
-                    -->
-                    <!-- <a name="wildstar"> -->
-                    <!-- <fieldset class="countdown">
-                        <legend>&raquo;&nbsp;Wildstar Launch!&nbsp;&laquo;</legend>
-                        <div id="countdown" class="countdown">
-                        <span style="display: block !important; text-align: center; font-family: sans-serif; font-size: 24px;">
-                            &nbsp;<script language="JavaScript" src="countdown.js"></script>&nbsp;
-                        </span>
-                        </div>
-                    -->
-                    <!--
-                    <div id="wildstar" class="wildstar">
-                        Wildstar&nbsp;Status:&nbsp;&nbsp;
-                        <? 
-                           //$auth_status = file_get_contents("http://wsstatus.com/embed/json.php?serverId=1");
-                           //$region_status = file_get_contents("http://wsstatus.com/embed/json.php?region=1");
-                           //if ($auth_status) {
-                           //    $json = json_decode($auth_status, true);
-                           //    foreach($json as $server) {
-                           //        if( $server["Name"] === "Auth Server" ) {
-                           //            if( $server["Status"] === "online" ) { ?>
-                                           <span style="color: #00FF00"><? //echo $server["Name"]; ?> &nbsp; </span>
-                        <? //            } else { ?>
-                                           <span style="color: #FF0000"><? //echo $server["Name"]; ?> &nbsp; </span>
-                        <? //            }
-                           //            break;
-                           //        }
-                           //    }
-                           //}
-                           //if ($region_status) {
-                           //    $json = json_decode($region_status, true);
-                           //    foreach($json as $server) {
-                           //        if( $server["Status"] === "online" ) { ?>
-                                       <span style="color: #00FF00"><? //echo $server["Name"]; ?> &nbsp; </span>
-                        <? //        } else { ?>
-                                       <span style="color: #FF0000"><? //echo $server["Name"]; ?> &nbsp; </span>
-                        <? //        }
-                           //    }
-                           //}
-                        ?>
-                        &nbsp;
-                    </div>
-                    -->
-                    <!-- </fieldset> -->
-                    <!-- </a> -->
+                    &nbsp;
                 </td>
             </tr>
-<!--
-            <tr>
-                <td align="left" colspan="7" style="background-color: rgba(0,0,0,0.1);">
-                    <div id="arr" class="arr"> FFXIV Status: </div>
-                    <div id="arr_lobby" class="arr" style="width: 180px;">
-                        <script id="arrstatus-widget" src="http://arrstatus.com/embed/arrstatus.loader.js?search=0" async ></script>
-                    </div>
-                    <div id="arr_excalibur" class="arr" style="width: 180px;">
-                        <script id="arrstatus-widget" src="http://arrstatus.com/embed/arrstatus.loader.js?search=32" async ></script>
-                    </div>
-                    <div id="arr_valefor" class="arr" style="width: 180px;">
-                        <script id="arrstatus-widget" src="http://arrstatus.com/embed/arrstatus.loader.js?search=45" async ></script>
-                    </div>
-                </td>
-            </tr>
--->
             <tr>
                 <td align="left" colspan="4"> &nbsp; </td>
                 <?php
@@ -864,11 +773,11 @@ header('Cache-control: max-age=0, must-revalidate');
                 ?>
                 <td align="right" colspan="3" style="vertical-align: bottom">
                     <a href="javascript:;" onmousedown="toggleDiv('source');">
-                    <span style="color: #333333">&nbsp;Page generated in <? printf( "%8.4f", $time_spent); ?> seconds.</span>
+                    <span style="color: #333333">&nbsp;Page generated in <?php printf( "%8.4f", $time_spent); ?> seconds.</span>
                     </a>
                 </td>
             </tr>
        </table>
-        <div id="source" style="display: none; vertical-align: bottom; background-color: white;"> <? echo numbered_source(__FILE__); ?> </div>
+        <div id="source" style="display: none; vertical-align: bottom; background-color: white;"> <?php echo numbered_source(__FILE__); ?> </div>
     </body>
 </html>

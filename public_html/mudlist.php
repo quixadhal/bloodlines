@@ -228,9 +228,9 @@ echo "row_count: $row_count<br>";
       <tr height="<?php echo $text_height; ?>">
           <td colspan="<?php echo $col_count * 2; ?>" align="center"> <?php echo $mud_count; ?> Living MUD's </td>
       </tr>
-      <? for( $i = 0; $i < $row_count; $i++ ) { ?>
+      <?php for( $i = 0; $i < $row_count; $i++ ) { ?>
       <tr height="<?php echo $pic_height + $text_height; ?>">
-        <? for( $j = 0; $j < $col_count && (($i * $col_count) + $j < $result_count); $j++ ) {
+        <?php for( $j = 0; $j < $col_count && (($i * $col_count) + $j < $result_count); $j++ ) {
              $mud_id = $muds[($i * $col_count) + $j]->mud_id;
              $mud_name = $muds[($i * $col_count) + $j]->name;
              $bgcolor = ( $i % 2 ) ? $dark_row : $light_row;
@@ -241,10 +241,10 @@ echo "row_count: $row_count<br>";
               <img border="0" src="<?php echo "png_login.php?mud_id=$mud_id&width=$pic_width&height=$pic_height&constrain"; ?>">
             </a>
           </td>
-        <? } ?>
+        <?php } ?>
       </tr>
       <tr height="<?php echo $text_height; ?>">
-        <? for( $j = 0; $j < $col_count && (($i * $col_count) + $j < $result_count); $j++ ) {
+        <?php for( $j = 0; $j < $col_count && (($i * $col_count) + $j < $result_count); $j++ ) {
              $mud_id = $muds[($i * $col_count) + $j]->mud_id;
              $mud_name = $muds[($i * $col_count) + $j]->name;
              $bgcolor = ( $i % 2 ) ? $dark_row : $light_row;
@@ -253,9 +253,9 @@ echo "row_count: $row_count<br>";
           <td align="center" width="70%"><font size="<?php echo $font_size; ?>"> <?php echo $mud_name; ?> </font></td>
           <!-- <td align="right" width="25%" bgcolor="<?php echo $bgcolor;?>"><font size="<?php echo $font_size; ?>"> #&nbsp;<?php printf( "%04d", $mud_id ); ?> </font></td> -->
           <td align="right" width="30%"><font size="<?php echo $font_size; ?>"> <?php printf( "%05d", $mud_id ); ?> &nbsp; </font></td>
-        <? } ?>
+        <?php } ?>
       </tr>
-      <? } ?>
+      <?php } ?>
     </table>
 
   </td>

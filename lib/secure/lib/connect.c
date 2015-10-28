@@ -447,6 +447,7 @@ static void ConfirmReconnect(string ans, string cap) {
 static int CanLogin() {
     string group;
 
+    if(!GUEST_ALLOWED) return 0;
     if( BANISH_D->GetGuest(Name) ) return 1;
     foreach(group in LOCKED_ACCESS_ALLOWED)
         if( member_group(Name, group) ) return 1;

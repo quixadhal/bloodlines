@@ -1,4 +1,4 @@
-<? 
+<?php 
     function pcmd($command) {
         $data = "";
         $fp = popen("$command", "r");
@@ -86,7 +86,7 @@
 119.99                   <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16822136749">WD My Book 3TB Desktop USB 3.0 External Hard Drive</a> (now internal)<br />
                 </td>
                 <td align="left" >
-                    <img src="<? echo $graphics['server_case']; ?>" border="0" width="300" height="304" />
+                    <img src="<?php echo $graphics['server_case']; ?>" border="0" width="300" height="304" />
                 </td>
             </tr>
             <tr>
@@ -94,8 +94,8 @@
                     <hr />
                     <h3>Internet Performance:</h3>
                     <center>
-                        Raw:&nbsp;<img src="<? echo $graphics['speedtest_raw']; ?>" border="0" width="300" height="135" />
-                        QoS:&nbsp;<img src="<? echo $graphics['speedtest_qos']; ?>" border="0" width="300" height="135" />
+                        Raw:&nbsp;<img src="<?php echo $graphics['speedtest_raw']; ?>" border="0" width="300" height="135" />
+                        QoS:&nbsp;<img src="<?php echo $graphics['speedtest_qos']; ?>" border="0" width="300" height="135" />
                     </center>
                 </td>
             </tr>
@@ -103,38 +103,38 @@
                 <td colspan="2" align="left">
                     <hr />
                     <h3>Uptime:</h3>
-                    <pre><? pcmd("/bin/cat /proc/version"); ?></pre>
-                    <pre><? pcmd("/usr/bin/uptime"); ?></pre>
+                    <pre><?php pcmd("/bin/cat /proc/version"); ?></pre>
+                    <pre><?php pcmd("/usr/bin/uptime"); ?></pre>
                     <hr />
                     <h3><a href="javascript:;" onmousedown="toggleDiv('mem');">Memory Information:</a></h3>
                     <div id="mem" style="display: none;">
-                        <pre><? pcmd("/usr/bin/free"); ?></pre>
+                        <pre><?php pcmd("/usr/bin/free"); ?></pre>
                     </div>
                     <hr />
                     <h3><a href="javascript:;" onmousedown="toggleDiv('disk');">Disk Information:</a></h3>
                     <div id="disk" style="display: none;">
-                        <pre><? pcmd("/bin/dmesg | /bin/grep 'WDC' | /bin/grep 'ata'"); ?></pre>
-                        <pre><? pcmd("/bin/df | /bin/grep -v 'udev' | /bin/grep -v 'tmpfs' | /bin/grep -v 'by-uuid'"); ?></pre>
+                        <pre><?php pcmd("/bin/dmesg | /bin/grep 'WDC' | /bin/grep 'ata'"); ?></pre>
+                        <pre><?php pcmd("/bin/df | /bin/grep -v 'udev' | /bin/grep -v 'tmpfs' | /bin/grep -v 'by-uuid'"); ?></pre>
                     </div>
                     <hr />
                     <h3><a href="javascript:;" onmousedown="toggleDiv('temp');">Temperature Sensor Output:</a></h3>
                     <div id="temp" style="display: none;">
-                        <pre><? pcmd("/usr/bin/sensors"); ?></pre>
+                        <pre><?php pcmd("/usr/bin/sensors"); ?></pre>
                     </div>
                     <hr />
                     <h3><a href="javascript:;" onmousedown="toggleDiv('cpuinfo');">CPU Information:</a></h3>
                     <div id="cpuinfo" style="display: none;">
-                        <pre><? pcmd("/bin/cat /proc/cpuinfo"); ?></pre>
+                        <pre><?php pcmd("/bin/cat /proc/cpuinfo"); ?></pre>
                     </div>
                     <hr />
                     <h3><a href="javascript:;" onmousedown="toggleDiv('hacklog');">HACKLOG:</a></h3>
                     <div id="hacklog" style="display: none;">
-                        <pre><? pcmd("/bin/cat /home/quixadhal/HACKLOG/HACKLOG.lenin"); ?></pre>
+                        <pre><?php pcmd("/bin/cat /home/quixadhal/HACKLOG/HACKLOG.lenin"); ?></pre>
                     </div>
                     <hr />
                     <h3><a href="javascript:;" onmousedown="toggleDiv('source');">Page Source:</a></h3>
                     <div id="source" style="display: none;">
-                        <? echo numbered_source(__FILE__); ?>
+                        <?php echo numbered_source(__FILE__); ?>
                     </div>
                 </td>
             </tr>

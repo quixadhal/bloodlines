@@ -96,4 +96,5 @@
 #define ENABLE_INSTANCES         0
 #define CED_DISABLED             1
 #define CHANNEL_PIPES            1
+#define GUEST_ALLOWED            0
 #endif /* s_config_h */

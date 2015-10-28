@@ -1,4 +1,4 @@
-<?
+<?php
 $time_start = microtime(true);
 $now = date('g:ia \o\n l, \t\h\e jS \o\f F, Y');
 $mini_now = date('Y-m-d H:i:s');
@@ -194,7 +194,9 @@ function get_chatter_colors($pinkfish, $chatFileName) {
         }
         $mapname = substr($map[0], 1, -1); // Strip quotes
         $mapcolor = substr($map[1], 1, -1); // Strip quotes
-        $colormap[$mapname] = $pinkfish[$mapcolor];
+        if(array_key_exists($mapcolor, $pinkfish)) {
+            $colormap[$mapname] = $pinkfish[$mapcolor];
+        }
         //echo "colormap[$mapname] = ".htmlentities($colormap[$mapname])."<br>";
     }
     return $colormap;
@@ -843,7 +845,11 @@ foreach ($data['rows'] as $row) {
     }
     $channel = "$channelColor" . $row->channel . "</SPAN>";
 
-    $speakerColor = $colormap[strtolower($row->speaker)];
+    if( array_key_exists(strtolower($row->speaker), $colormap)) {
+        $speakerColor = $colormap[strtolower($row->speaker)];
+    } else {
+        $speakerColor = '<SPAN style="color: #555555">';
+    }
     $speaker = "$speakerColor" . $row->speaker . "@" . $row->mud . "</SPAN>";
 
     $filtered_message = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '_', $row->message);
@@ -923,8 +929,8 @@ if($format == 'html') {
 ?>
 <html>
     <head>
-        <title> Intermud-3 network traffic, as seen by <? echo $MUD_NAME; ?>. </title>
-        <meta http-equiv="refresh" content="<? echo $refresh_secs; ?>">
+        <title> Intermud-3 network traffic, as seen by <?php echo $MUD_NAME; ?>. </title>
+        <meta http-equiv="refresh" content="<?php echo $refresh_secs; ?>">
         <style>
             a { text-decoration:none; }
             a:hover { text-decoration:underline; }
@@ -962,17 +968,17 @@ if($format == 'html') {
         </script>
     </head>
     <body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
-<? if($yestube) { ?>
+    <?php if($yestube) { ?>
         <div id="youtube" style="display: none; position: fixed; z-index: -99; width: 100%; height: 100%">
             <iframe frameborder="0" height="100%" width="100%"
-                    src="https://youtube.com/embed/<? echo $video_pick; ?>?autoplay=1&controls=0&showinfo=0&autohide=1">
+                    src="https://youtube.com/embed/<?php echo $video_pick; ?>?autoplay=1&controls=0&showinfo=0&autohide=1">
                     <!-- version=3&enablejsapi=1 -->
                     <!-- playlist=fCPzLNqYe1U,P1Bf_fRNq9g, -->
                     <!-- Uvl3ef7D5rg -->
                     <!-- KGG0t-psqNo -->
             </iframe>
         </div>
-<? } ?>
+    <?php } ?>
         <table id="header" border=0 cellspacing=0 cellpadding=0 width=80% align="center">
             <tr>
                 <!-- Header logos -->
@@ -986,13 +992,13 @@ if($format == 'html') {
                             <td align="right" valign="top" style="vertical-align: top">
                                 <!-- <a href="/anyterm/anyterm.shtml?rows=40&cols=100"> -->
                                 <a href="/~bloodlines">
-                                    <img src="<? echo $graphics['bloodlines']; ?>" border=0 width=234 height=80>
+                                    <img src="<?php echo $graphics['bloodlines']; ?>" border=0 width=234 height=80>
                                 </a>
                             </td>
                             <td align="left" valign="bottom" style="vertical-align: bottom">
                                 <!-- <a href="/anyterm/anyterm.shtml?rows=40&cols=100"> -->
                                 <a href="/~bloodlines">
-                                    <img src="<? echo $graphics['wileymud4']; ?>" border=0 width=177 height=40">
+                                    <img src="<?php echo $graphics['wileymud4']; ?>" border=0 width=177 height=40">
                                 </a>
                             </td>
                         </tr>
@@ -1020,43 +1026,43 @@ if($format == 'html') {
                                         onfocus="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; srlabel.style.color='#FFFFFF'; if(!this._haschanged){this.value=''};this._haschanged=true;"
                                         onblur="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; srlabel.style.color='#1F1F1F';"
                                         onmouseout="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; srlabel.style.color='#1F1F1F';"
-                                        maxlength="30" name="sr" value="<? if(isset($searchFilter)) echo $searchFilter; ?>" />
-                                    <? if(isset($pageSize)) { ?>
-                                        <input type="hidden" name="ps" value="<? echo $pageSize; ?>">
-                                    <? } ?>
-                                    <? if(isset($pageNumber)) { ?>
-                                        <input type="hidden" name="pn" value="<? echo $pageNumber; ?>">
-                                    <? } ?>
-                                    <? if(isset($linksOnly)) { ?>
-                                        <input type="hidden" name="lo" value="<? echo $linksOnly; ?>">
-                                    <? } ?>
-                                    <? if(isset($showBots)) { ?>
-                                        <input type="hidden" name="sb" value="<? echo $showBots; ?>">
-                                    <? } ?>
-                                    <? if(isset($format)) { ?>
-                                        <input type="hidden" name="fm" value="<? echo $format; ?>">
-                                    <? } ?>
-                                    <? if(isset($channelFilter)) { ?>
-                                        <input type="hidden" name="cf" value="<? echo $channelFilter; ?>">
-                                    <? } ?>
-                                    <? if(isset($antichannelFilter)) { ?>
-                                        <input type="hidden" name="af" value="<? echo $antichannelFilter; ?>">
-                                    <? } ?>
-                                    <? if(isset($speakerFilter)) { ?>
-                                        <input type="hidden" name="sf" value="<? echo $speakerFilter; ?>">
-                                    <? } ?>
-                                    <? if(isset($mudFilter)) { ?>
-                                        <input type="hidden" name="mf" value="<? echo $mudFilter; ?>">
-                                    <? } ?>
-                                    <? if(isset($sortOrder)) { ?>
-                                        <input type="hidden" name="so" value="<? echo $sortOrder; ?>">
-                                    <? } ?>
-                                    <? if(isset($startDate)) { ?>
-                                        <input type="hidden" name="sd" value="<? echo $startDate; ?>">
-                                    <? } ?>
-                                    <? if(isset($anchorID)) { ?>
-                                        <input type="hidden" name="an" value="<? echo $anchorID; ?>">
-                                    <? } ?>
+                                        maxlength="30" name="sr" value="<?php if(isset($searchFilter)) echo $searchFilter; ?>" />
+                                    <?php if(isset($pageSize)) { ?>
+                                        <input type="hidden" name="ps" value="<?php echo $pageSize; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($pageNumber)) { ?>
+                                        <input type="hidden" name="pn" value="<?php echo $pageNumber; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($linksOnly)) { ?>
+                                        <input type="hidden" name="lo" value="<?php echo $linksOnly; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($showBots)) { ?>
+                                        <input type="hidden" name="sb" value="<?php echo $showBots; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($format)) { ?>
+                                        <input type="hidden" name="fm" value="<?php echo $format; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($channelFilter)) { ?>
+                                        <input type="hidden" name="cf" value="<?php echo $channelFilter; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($antichannelFilter)) { ?>
+                                        <input type="hidden" name="af" value="<?php echo $antichannelFilter; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($speakerFilter)) { ?>
+                                        <input type="hidden" name="sf" value="<?php echo $speakerFilter; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($mudFilter)) { ?>
+                                        <input type="hidden" name="mf" value="<?php echo $mudFilter; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($sortOrder)) { ?>
+                                        <input type="hidden" name="so" value="<?php echo $sortOrder; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($startDate)) { ?>
+                                        <input type="hidden" name="sd" value="<?php echo $startDate; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($anchorID)) { ?>
+                                        <input type="hidden" name="an" value="<?php echo $anchorID; ?>">
+                                    <?php } ?>
                                 </td>
                             </tr>
                         </table>
@@ -1068,79 +1074,79 @@ if($format == 'html') {
         <table id="navbar" border=0 cellspacing=0 cellpadding=0 width=100% align="center">
             <tr>
                 <td id="navbegin" align="left" valign="center" width="50"
-                    <? if( $pageNumber < $beginningPage) { ?>
+                    <?php if( $pageNumber < $beginningPage) { ?>
                     style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
-                    <? } else { ?>
+                    <?php } else { ?>
                     style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
-                    <? } ?>
+                    <?php } ?>
                 >
                     <span style="color: #555555">
-                    <? if( $pageNumber < $beginningPage) { ?>
-                        <a href="<? echo $beginningUrl; ?>" title="The&nbsp;Beginning&nbsp;(<? echo $beginningPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="<? echo $graphics['navbegin']; ?>" border=0 width=48 height=48 />
+                    <?php if( $pageNumber < $beginningPage) { ?>
+                        <a href="<?php echo $beginningUrl; ?>" title="The&nbsp;Beginning&nbsp;(<?php echo $beginningPageDisplay; ?>&nbsp;of&nbsp;<?php echo $totalPages; ?>)">
+                            <img src="<?php echo $graphics['navbegin']; ?>" border=0 width=48 height=48 />
                         </a>
-                    <? } else { ?>
-                        <img src="<? echo $graphics['navbegin']; ?>" border=0 width=48 height=48 />
-                    <? } ?>
+                    <?php } else { ?>
+                        <img src="<?php echo $graphics['navbegin']; ?>" border=0 width=48 height=48 />
+                    <?php } ?>
                     </span>
                 </td>
                 <td id="navbackmany" align="left" valign="center" width="50"
-                    <? if( $pageNumber < $backManyPage && $backManyPage <= $beginningPage) { ?>
+                    <?php if( $pageNumber < $backManyPage && $backManyPage <= $beginningPage) { ?>
                     style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
-                    <? } else { ?>
+                    <?php } else { ?>
                     style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
-                    <? } ?>
+                    <?php } ?>
                 >
                     <span style="color: #555555">
-                    <? if( $pageNumber < $backManyPage && $backManyPage <= $beginningPage) { ?>
-                        <a href="<? echo $backManyUrl; ?>" title="Back&nbsp;<? echo $manyPages; ?>&nbsp;(<? echo $backManyPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="<? echo $graphics['navback']; ?>" border=0 width=48 height=48 />
+                    <?php if( $pageNumber < $backManyPage && $backManyPage <= $beginningPage) { ?>
+                        <a href="<?php echo $backManyUrl; ?>" title="Back&nbsp;<?php echo $manyPages; ?>&nbsp;(<?php echo $backManyPageDisplay; ?>&nbsp;of&nbsp;<?php echo $totalPages; ?>)">
+                            <img src="<?php echo $graphics['navback']; ?>" border=0 width=48 height=48 />
                         </a>
-                    <? } else { ?>
-                        <img src="<? echo $graphics['navback']; ?>" border=0 width=48 height=48 />
-                    <? } ?>
+                    <?php } else { ?>
+                        <img src="<?php echo $graphics['navback']; ?>" border=0 width=48 height=48 />
+                    <?php } ?>
                     </span>
                 </td>
                 <td id="navbackfew" align="left" valign="center" width="50"
-                    <? if( $pageNumber < $backFewPage && $backFewPage <= $beginningPage) { ?>
+                    <?php if( $pageNumber < $backFewPage && $backFewPage <= $beginningPage) { ?>
                     style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
-                    <? } else { ?>
+                    <?php } else { ?>
                     style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
-                    <? } ?>
+                    <?php } ?>
                 >
                     <span style="color: #555555">
-                    <? if( $pageNumber < $backFewPage && $backFewPage <= $beginningPage) { ?>
-                        <a href="<? echo $backFewUrl; ?>" title="Back&nbsp;<? echo $fewPages; ?>&nbsp;(<? echo $backFewPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="<? echo $graphics['navback']; ?>" border=0 width=48 height=48 />
+                    <?php if( $pageNumber < $backFewPage && $backFewPage <= $beginningPage) { ?>
+                        <a href="<?php echo $backFewUrl; ?>" title="Back&nbsp;<?php echo $fewPages; ?>&nbsp;(<?php echo $backFewPageDisplay; ?>&nbsp;of&nbsp;<?php echo $totalPages; ?>)">
+                            <img src="<?php echo $graphics['navback']; ?>" border=0 width=48 height=48 />
                         </a>
-                    <? } else { ?>
-                        <img src="<? echo $graphics['navback']; ?>" border=0 width=48 height=48 />
-                    <? } ?>
+                    <?php } else { ?>
+                        <img src="<?php echo $graphics['navback']; ?>" border=0 width=48 height=48 />
+                    <?php } ?>
                     </span>
                 </td>
                 <td id="navprev" align="left" valign="center" width="50"
-                    <? if( $pageNumber < $backOnePage && $backOnePage <= $beginningPage) { ?>
+                    <?php if( $pageNumber < $backOnePage && $backOnePage <= $beginningPage) { ?>
                     style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
-                    <? } else { ?>
+                    <?php } else { ?>
                     style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
-                    <? } ?>
+                    <?php } ?>
                 >
                     <span style="color: #555555">
-                    <? if( $pageNumber < $backOnePage && $backOnePage <= $beginningPage) { ?>
-                        <a href="<? echo $backOneUrl; ?>" title="Previous&nbsp;Page&nbsp;(<? echo $backOnePageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="<? echo $graphics['navprev']; ?>" border=0 width=48 height=48 />
+                    <?php if( $pageNumber < $backOnePage && $backOnePage <= $beginningPage) { ?>
+                        <a href="<?php echo $backOneUrl; ?>" title="Previous&nbsp;Page&nbsp;(<?php echo $backOnePageDisplay; ?>&nbsp;of&nbsp;<?php echo $totalPages; ?>)">
+                            <img src="<?php echo $graphics['navprev']; ?>" border=0 width=48 height=48 />
                         </a>
-                    <? } else { ?>
-                        <img src="<? echo $graphics['navprev']; ?>" border=0 width=48 height=48 />
-                    <? } ?>
+                    <?php } else { ?>
+                        <img src="<?php echo $graphics['navprev']; ?>" border=0 width=48 height=48 />
+                    <?php } ?>
                     </span>
                 </td>
                 <td>
@@ -1158,62 +1164,62 @@ if($format == 'html') {
                     onmouseout="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
                 >
                     <a title="HELP!" href="i3log_help.html" class="popup2">
-                        <img src="<? echo $graphics['help_icon']; ?>" border=0 width=48 height=48 />
+                        <img src="<?php echo $graphics['help_icon']; ?>" border=0 width=48 height=48 />
                     </a>
                 </td>
                 <td id="navbot" align="center" valign="center" width="50"
-                    <? if( isset($showBots) ) { ?>
+                    <?php if( isset($showBots) ) { ?>
                     style="vertical-align: middle; opacity: 1.0; filter: alpha(opacity=100);"
                     onmouseover="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
                     onmouseout="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
-                    <? } else { ?>
+                    <?php } else { ?>
                     style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
-                    <? } ?>
+                    <?php } ?>
                 >
-                    <? if( !isset($showBots) ) { ?>
-                    <a title='Include bot content' href="<? $showBots = 1; echo build_url(); $showBots = null; build_url(); ?>">
-                        <img src="<? echo $graphics['navconfig']; ?>" border=0 width=48 height=48 />
+                    <?php if( !isset($showBots) ) { ?>
+                    <a title='Include bot content' href="<?php $showBots = 1; echo build_url(); $showBots = null; build_url(); ?>">
+                        <img src="<?php echo $graphics['navconfig']; ?>" border=0 width=48 height=48 />
                     </a>
-                    <? } else { ?>
-                    <a title='Block messages from known bots' href="<? $showBots = null; echo build_url(); $showBots = 1; build_url(); ?>">
-                        <img src="<? echo $graphics['navconfig']; ?>" border=0 width=48 height=48 />
+                    <?php } else { ?>
+                    <a title='Block messages from known bots' href="<?php $showBots = null; echo build_url(); $showBots = 1; build_url(); ?>">
+                        <img src="<?php echo $graphics['navconfig']; ?>" border=0 width=48 height=48 />
                     </a>
-                    <? } ?>
+                    <?php } ?>
                 </td>
                 <td id="navlinks" align="center" valign="center" width="50"
-                    <? if( isset($linksOnly) ) { ?>
+                    <?php if( isset($linksOnly) ) { ?>
                     style="vertical-align: middle; opacity: 1.0; filter: alpha(opacity=100);"
                     onmouseover="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
                     onmouseout="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
-                    <? } else { ?>
+                    <?php } else { ?>
                     style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.2'; this.style.filter='alpha(opacity=20';"
-                    <? } ?>
+                    <?php } ?>
                 >
-                    <? if( isset($linksOnly) ) { ?>
-                    <a title='Include all content' href="<? $linksOnly = null; echo build_url(); $linksOnly = 1; build_url(); ?>">
-                        <img src="<? echo $graphics['navlinks']; ?>" border=0 width=48 height=48 />
+                    <?php if( isset($linksOnly) ) { ?>
+                    <a title='Include all content' href="<?php $linksOnly = null; echo build_url(); $linksOnly = 1; build_url(); ?>">
+                        <img src="<?php echo $graphics['navlinks']; ?>" border=0 width=48 height=48 />
                     </a>
-                    <? } else { ?>
-                    <a title='Include only messages with URLs' href="<? $linksOnly = 1; echo build_url(); $linksOnly = null; build_url(); ?>">
-                        <img src="<? echo $graphics['navlinks']; ?>" border=0 width=48 height=48 />
+                    <?php } else { ?>
+                    <a title='Include only messages with URLs' href="<?php $linksOnly = 1; echo build_url(); $linksOnly = null; build_url(); ?>">
+                        <img src="<?php echo $graphics['navlinks']; ?>" border=0 width=48 height=48 />
                     </a>
-                    <? } ?>
+                    <?php } ?>
                 </td>
                 <td id="navhome" align="center" valign="center" width="50"
-                    <? if( count( $_GET  ) > 0 ) { ?>
+                    <?php if( count( $_GET  ) > 0 ) { ?>
                     style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
-                    <? } else { ?>
+                    <?php } else { ?>
                     style="vertical-align: middle; opacity: 1.0; filter: alpha(opacity=100);"
-                    <? } ?>
+                    <?php } ?>
                 >
-                    <a title="HOME!" href="<? echo $_SERVER['PHP_SELF']; ?>">
-                        <img src="<? echo $graphics['navhome']; ?>" border=0 width=48 height=48 />
+                    <a title="HOME!" href="<?php echo $_SERVER['PHP_SELF']; ?>">
+                        <img src="<?php echo $graphics['navhome']; ?>" border=0 width=48 height=48 />
                     </a>
                 </td>
                 <td>
@@ -1223,7 +1229,7 @@ if($format == 'html') {
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                 >
                     <a title="Everyone loves PIE!" href="i3pie.html">
-                        <img src="<? echo $graphics['pie_chart']; ?>" border=0 width=48 height=48 />
+                        <img src="<?php echo $graphics['pie_chart']; ?>" border=0 width=48 height=48 />
                     </a>
                 </td>
                 <td id="navchart" align="center" valign="center" width="50"
@@ -1232,14 +1238,14 @@ if($format == 'html') {
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                 >
                     <a title="BAR chat" href="i3bar.html">
-                        <img src="<? echo $graphics['bar_chart']; ?>" border=0 width=48 height=48 />
+                        <img src="<?php echo $graphics['bar_chart']; ?>" border=0 width=48 height=48 />
                     </a>
                 </td>
                 <td>
                 &nbsp;
                 </td>
                 <td id="pagenumber" align="center" valign="center" width="150" style="vertical-align: middle;">
-<!-- &nbsp; Page <? echo $pageNumberDisplay; ?> of <? echo $totalPages; ?> &nbsp; -->
+    <!-- &nbsp; Page <?php echo $pageNumberDisplay; ?> of <?php echo $totalPages; ?> &nbsp; -->
                     <form action="" method="get">
                         <table id="pageform" border=0 cellspacing=0 cellpadding=0 width=100% align="center" style="vertical-align: middle;">
                             <tr>
@@ -1259,43 +1265,43 @@ if($format == 'html') {
                                         onfocus="this.style.color='#FFFF00'; this.style.backgroundColor='#1F1F1F'; pnlabel.style.color='#FFFFFF';  pnoflabel.style.color='#FFFFFF'; /* if(!this._haschanged){this.value=''};this._haschanged=true; */"
                                         onblur="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; pnlabel.style.color='#1F1F1F'; pnoflabel.style.color='#1F1F1F';"
                                         onmouseout="this.style.color='#4F4F00'; this.style.backgroundColor='#000000'; pnlabel.style.color='#1F1F1F'; pnoflabel.style.color='#1F1F1F';"
-                                        maxlength="6" name="pd" value="<? if(isset($pageNumberDisplay)) echo $pageNumberDisplay; ?>" />
-                                    <? if(isset($pageSize)) { ?>
-                                        <input type="hidden" name="ps" value="<? echo $pageSize; ?>">
-                                    <? } ?>
-                                    <? if(isset($linksOnly)) { ?>
-                                        <input type="hidden" name="lo" value="<? echo $linksOnly; ?>">
-                                    <? } ?>
-                                    <? if(isset($showBots)) { ?>
-                                        <input type="hidden" name="sb" value="<? echo $showBots; ?>">
-                                    <? } ?>
-                                    <? if(isset($format)) { ?>
-                                        <input type="hidden" name="fm" value="<? echo $format; ?>">
-                                    <? } ?>
-                                    <? if(isset($channelFilter)) { ?>
-                                        <input type="hidden" name="cf" value="<? echo $channelFilter; ?>">
-                                    <? } ?>
-                                    <? if(isset($antichannelFilter)) { ?>
-                                        <input type="hidden" name="af" value="<? echo $antichannelFilter; ?>">
-                                    <? } ?>
-                                    <? if(isset($speakerFilter)) { ?>
-                                        <input type="hidden" name="sf" value="<? echo $speakerFilter; ?>">
-                                    <? } ?>
-                                    <? if(isset($mudFilter)) { ?>
-                                        <input type="hidden" name="mf" value="<? echo $mudFilter; ?>">
-                                    <? } ?>
-                                    <? if(isset($searchFilter)) { ?>
-                                        <input type="hidden" name="sr" value="<? echo $searchFilter; ?>">
-                                    <? } ?>
-                                    <? if(isset($sortOrder)) { ?>
-                                        <input type="hidden" name="so" value="<? echo $sortOrder; ?>">
-                                    <? } ?>
-                                    <? if(isset($startDate)) { ?>
-                                        <input type="hidden" name="sd" value="<? echo $startDate; ?>">
-                                    <? } ?>
-                                    <? if(isset($anchorID)) { ?>
-                                        <input type="hidden" name="an" value="<? echo $anchorID; ?>">
-                                    <? } ?>
+                                        maxlength="6" name="pd" value="<?php if(isset($pageNumberDisplay)) echo $pageNumberDisplay; ?>" />
+                                    <?php if(isset($pageSize)) { ?>
+                                        <input type="hidden" name="ps" value="<?php echo $pageSize; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($linksOnly)) { ?>
+                                        <input type="hidden" name="lo" value="<?php echo $linksOnly; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($showBots)) { ?>
+                                        <input type="hidden" name="sb" value="<?php echo $showBots; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($format)) { ?>
+                                        <input type="hidden" name="fm" value="<?php echo $format; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($channelFilter)) { ?>
+                                        <input type="hidden" name="cf" value="<?php echo $channelFilter; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($antichannelFilter)) { ?>
+                                        <input type="hidden" name="af" value="<?php echo $antichannelFilter; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($speakerFilter)) { ?>
+                                        <input type="hidden" name="sf" value="<?php echo $speakerFilter; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($mudFilter)) { ?>
+                                        <input type="hidden" name="mf" value="<?php echo $mudFilter; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($searchFilter)) { ?>
+                                        <input type="hidden" name="sr" value="<?php echo $searchFilter; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($sortOrder)) { ?>
+                                        <input type="hidden" name="so" value="<?php echo $sortOrder; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($startDate)) { ?>
+                                        <input type="hidden" name="sd" value="<?php echo $startDate; ?>">
+                                    <?php } ?>
+                                    <?php if(isset($anchorID)) { ?>
+                                        <input type="hidden" name="an" value="<?php echo $anchorID; ?>">
+                                    <?php } ?>
                                 </td>
                                 <td align="right" valign="bottom" width="50" style="vertical-align: bottom;">
                                     <span style="color: #1F1F1F;">
@@ -1304,7 +1310,7 @@ if($format == 'html') {
                                             onmouseout="pninput.style.color='#4F4F00'; pninput.style.backgroundColor='#000000'; this.style.color='#1F1F1F'; pnlabel.style.color='#1F1F1F';"
                                             onfocus="pninput.focus();"
                                             onclick="pninput.focus();"
-                                            > of&nbsp;<? echo $totalPages; ?> </label>
+                                            > of&nbsp;<?php echo $totalPages; ?> </label>
                                     </span>
                                 </td>
                             </tr>
@@ -1315,108 +1321,108 @@ if($format == 'html') {
                 &nbsp;
                 </td>
                 <td id="navnext" align="right" valign="center" width="50"
-                    <? if( $pageNumber > $forwardOnePage && $forwardOnePage >= $endPage) { ?>
+                    <?php if( $pageNumber > $forwardOnePage && $forwardOnePage >= $endPage) { ?>
                     style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
-                    <? } else { ?>
+                    <?php } else { ?>
                     style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
-                    <? } ?>
+                    <?php } ?>
                 >
-                    <? if( $pageNumber > $forwardOnePage && $forwardOnePage >= $endPage) { ?>
-                        <a href="<? echo $forwardOneUrl; ?>" title="Next&nbsp;Page&nbsp;(<? echo $forwardOnePageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="<? echo $graphics['navnext']; ?>" border=0 width=48 height=48 />
+                    <?php if( $pageNumber > $forwardOnePage && $forwardOnePage >= $endPage) { ?>
+                        <a href="<?php echo $forwardOneUrl; ?>" title="Next&nbsp;Page&nbsp;(<?php echo $forwardOnePageDisplay; ?>&nbsp;of&nbsp;<?php echo $totalPages; ?>)">
+                            <img src="<?php echo $graphics['navnext']; ?>" border=0 width=48 height=48 />
                         </a>
-                    <? } else { ?>
-                        <img src="<? echo $graphics['navnext']; ?>" border=0 width=48 height=48 />
-                    <? } ?>
+                    <?php } else { ?>
+                        <img src="<?php echo $graphics['navnext']; ?>" border=0 width=48 height=48 />
+                    <?php } ?>
                 </td>
                 <td id="navforwardfew" align="right" valign="center" width="50"
-                    <? if( $pageNumber > $forwardFewPage && $forwardFewPage >= $endPage) { ?>
+                    <?php if( $pageNumber > $forwardFewPage && $forwardFewPage >= $endPage) { ?>
                     style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
-                    <? } else { ?>
+                    <?php } else { ?>
                     style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
-                    <? } ?>
+                    <?php } ?>
                 >
-                    <? if( $pageNumber > $forwardFewPage && $forwardFewPage >= $endPage) { ?>
-                        <a href="<? echo $forwardFewUrl; ?>" title="Next&nbsp;<? echo $fewPages; ?>&nbsp;(<? echo $forwardFewPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="<? echo $graphics['navforward']; ?>" border=0 width=48 height=48 />
+                    <?php if( $pageNumber > $forwardFewPage && $forwardFewPage >= $endPage) { ?>
+                        <a href="<?php echo $forwardFewUrl; ?>" title="Next&nbsp;<?php echo $fewPages; ?>&nbsp;(<?php echo $forwardFewPageDisplay; ?>&nbsp;of&nbsp;<?php echo $totalPages; ?>)">
+                            <img src="<?php echo $graphics['navforward']; ?>" border=0 width=48 height=48 />
                         </a>
-                    <? } else { ?>
-                        <img src="<? echo $graphics['navforward']; ?>" border=0 width=48 height=48 />
-                    <? } ?>
+                    <?php } else { ?>
+                        <img src="<?php echo $graphics['navforward']; ?>" border=0 width=48 height=48 />
+                    <?php } ?>
                 </td>
                 <td id="navforwardmany" align="right" valign="center" width="50"
-                    <? if( $pageNumber > $forwardManyPage && $forwardManyPage >= $endPage) { ?>
+                    <?php if( $pageNumber > $forwardManyPage && $forwardManyPage >= $endPage) { ?>
                     style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
-                    <? } else { ?>
+                    <?php } else { ?>
                     style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
-                    <? } ?>
+                    <?php } ?>
                 >
-                    <? if( $pageNumber > $forwardManyPage && $forwardManyPage >= $endPage) { ?>
-                        <a href="<? echo $forwardManyUrl; ?>" title="Next&nbsp;<? echo $manyPages; ?>&nbsp;(<? echo $forwardManyPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="<? echo $graphics['navforward']; ?>" border=0 width=48 height=48 />
+                    <?php if( $pageNumber > $forwardManyPage && $forwardManyPage >= $endPage) { ?>
+                        <a href="<?php echo $forwardManyUrl; ?>" title="Next&nbsp;<?php echo $manyPages; ?>&nbsp;(<?php echo $forwardManyPageDisplay; ?>&nbsp;of&nbsp;<?php echo $totalPages; ?>)">
+                            <img src="<?php echo $graphics['navforward']; ?>" border=0 width=48 height=48 />
                         </a>
-                    <? } else { ?>
-                        <img src="<? echo $graphics['navforward']; ?>" border=0 width=48 height=48 />
-                    <? } ?>
+                    <?php } else { ?>
+                        <img src="<?php echo $graphics['navforward']; ?>" border=0 width=48 height=48 />
+                    <?php } ?>
                 </td>
                 <td id="navend" align="right" valign="center" width="50"
-                    <? if( $pageNumber > $endPage) { ?>
+                    <?php if( $pageNumber > $endPage) { ?>
                     style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
                     onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
-                    <? } else { ?>
+                    <?php } else { ?>
                     style="vertical-align: middle; opacity: 0.2; filter: alpha(opacity=20);"
-                    <? } ?>
+                    <?php } ?>
                 >
-                    <? if( $pageNumber > $endPage) { ?>
-                        <a href="<? echo $endUrl; ?>" title="Current&nbsp;Time&nbsp;(<? echo $endPageDisplay; ?>&nbsp;of&nbsp;<? echo $totalPages; ?>)">
-                            <img src="<? echo $graphics['navend']; ?>" border=0 width=48 height=48 />
+                    <?php if( $pageNumber > $endPage) { ?>
+                        <a href="<?php echo $endUrl; ?>" title="Current&nbsp;Time&nbsp;(<?php echo $endPageDisplay; ?>&nbsp;of&nbsp;<?php echo $totalPages; ?>)">
+                            <img src="<?php echo $graphics['navend']; ?>" border=0 width=48 height=48 />
                         </a>
-                    <? } else { ?>
-                        <img src="<? echo $graphics['navend']; ?>" border=0 width=48 height=48 />
-                    <? } ?>
+                    <?php } else { ?>
+                        <img src="<?php echo $graphics['navend']; ?>" border=0 width=48 height=48 />
+                    <?php } ?>
                 </td>
             </tr>
         </table>
         <table id="content" width="100%">
             <tr>
-                <? if(isset($startDate)) { ?>
+                <?php if(isset($startDate)) { ?>
                 <th id="dateheader" align="left" width="80px" style="color: #FFFF00; min-width: 80px;">
-                    <a href="<? $old = $startDate; $startDate = null; echo build_url(); $startDate = $old; build_url(); ?>">Date</a>
+                    <a href="<?php $old = $startDate; $startDate = null; echo build_url(); $startDate = $old; build_url(); ?>">Date</a>
                 </th>
-                <? } else { ?>
+                <?php } else { ?>
                 <th id="dateheader" align="left" width="80px" style="color: #DDDDDD; min-width: 80px;">Date</th>
-                <? } ?>
-                <? if(isset($startDate)) { ?>
+                <?php } ?>
+                <?php if(isset($startDate)) { ?>
                 <th id="timeheader" align="left" width="40px" style="color: #FFFF00; min-width: 40px;">
-                    <a href="<? $old = $startDate; $startDate = null; echo build_url(); $startDate = $old; build_url(); ?>">Time</a>
+                    <a href="<?php $old = $startDate; $startDate = null; echo build_url(); $startDate = $old; build_url(); ?>">Time</a>
                 </th>
-                <? } else { ?>
+                <?php } else { ?>
                 <th id="timeheader" align="left" width="40px" style="color: #DDDDDD; min-width: 40px;">Time</th>
-                <? } ?>
-                <? if(isset($channelFilter)) { ?>
+                <?php } ?>
+                <?php if(isset($channelFilter)) { ?>
                 <th id="channelheader" align="left" width="100px" style="color: #FFFF00; min-width: 100px;">
-                    <a href="<? $old = $channelFilter; $channelFilter = null; echo build_url(); $channelFilter = $old; build_url(); ?>">Channel</a>
+                    <a href="<?php $old = $channelFilter; $channelFilter = null; echo build_url(); $channelFilter = $old; build_url(); ?>">Channel</a>
                 </th>
-                <? } else { ?>
+                <?php } else { ?>
                 <th id="channelheader" align="left" width="100px" style="color: #DDDDDD; min-width: 100px;">Channel</th>
-                <? } ?>
-                <? if(isset($speakerFilter)) { ?>
+                <?php } ?>
+                <?php if(isset($speakerFilter)) { ?>
                 <th id="speakerheader" align="left" width="200px" style="color: #FFFF00; min-width: 200px;">
-                    <a href="<? $old = $speakerFilter; $old2 = $mudFilter; $speakerFilter = null; $mudFilter = null; echo build_url(); $speakerFilter = $old; $mudFilter = $old2; build_url(); ?>">Speaker</a>
+                    <a href="<?php $old = $speakerFilter; $old2 = $mudFilter; $speakerFilter = null; $mudFilter = null; echo build_url(); $speakerFilter = $old; $mudFilter = $old2; build_url(); ?>">Speaker</a>
                 </th>
-                <? } else { ?>
+                <?php } else { ?>
                 <th id="speakerheader" align="left" width="200px" style="color: #DDDDDD; min-width: 200px;">Speaker</th>
-                <? } ?>
+                <?php } ?>
                 <th align="left">&nbsp;</th>
             </tr>
-            <?  foreach ($html as $row) {
+            <?php  foreach ($html as $row) {
                     if(isset($startDate)) {
                         $old = $startDate;
                         $startDate = null;
@@ -1457,34 +1463,34 @@ if($format == 'html') {
                     }
              ?>
             <tr>
-                <? if(isset($startDate)) { ?>
-                    <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['datestamp']; ?></td>
-                    <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['timestamp']; ?></td>
-                <? } else { ?>
-                    <td onmouseover="this.style.backgroundColor = '<? echo $row['bgbold']; ?>';"
-                        onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
-                        onclick="document.location.href='<? echo $dateUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['datestamp']; ?></td>
-                    <td onmouseover="this.style.backgroundColor = '<? echo $row['bgbold']; ?>';"
-                        onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
-                        onclick="document.location.href='<? echo $dateUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['timestamp']; ?></td>
-                <? } ?>
+                <?php if(isset($startDate)) { ?>
+                    <td bgcolor="<?php echo $row['bgcolor']; ?>"><?php echo $row['datestamp']; ?></td>
+                    <td bgcolor="<?php echo $row['bgcolor']; ?>"><?php echo $row['timestamp']; ?></td>
+                <?php } else { ?>
+                    <td onmouseover="this.style.backgroundColor = '<?php echo $row['bgbold']; ?>';"
+                        onmouseout="this.style.backgroundColor = '<?php echo $row['bgcolor']; ?>';"
+                        onclick="document.location.href='<?php echo $dateUrl; ?>';" bgcolor="<?php echo $row['bgcolor']; ?>"><?php echo $row['datestamp']; ?></td>
+                    <td onmouseover="this.style.backgroundColor = '<?php echo $row['bgbold']; ?>';"
+                        onmouseout="this.style.backgroundColor = '<?php echo $row['bgcolor']; ?>';"
+                        onclick="document.location.href='<?php echo $dateUrl; ?>';" bgcolor="<?php echo $row['bgcolor']; ?>"><?php echo $row['timestamp']; ?></td>
+                <?php } ?>
 
-                <? if(isset($channelFilter)) { ?>
-                    <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['channel']; ?></td>
-                <? } else { ?>
-                    <td onmouseover="this.style.backgroundColor = '<? echo $row['bgbold']; ?>';"
-                        onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
-                        onclick="document.location.href='<? echo $channelUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['channel']; ?></td>
-                <? } ?>
+                <?php if(isset($channelFilter)) { ?>
+                    <td bgcolor="<?php echo $row['bgcolor']; ?>"><?php echo $row['channel']; ?></td>
+                <?php } else { ?>
+                    <td onmouseover="this.style.backgroundColor = '<?php echo $row['bgbold']; ?>';"
+                        onmouseout="this.style.backgroundColor = '<?php echo $row['bgcolor']; ?>';"
+                        onclick="document.location.href='<?php echo $channelUrl; ?>';" bgcolor="<?php echo $row['bgcolor']; ?>"><?php echo $row['channel']; ?></td>
+                <?php } ?>
 
-                <? if(isset($speakerFilter)) { ?>
-                    <td bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['speaker']; ?></td>
-                <? } else { ?>
-                    <td onmouseover="this.style.backgroundColor = '<? echo $row['bgbold']; ?>';"
-                        onmouseout="this.style.backgroundColor = '<? echo $row['bgcolor']; ?>';"
-                        onclick="document.location.href='<? echo $speakerUrl; ?>';" bgcolor="<? echo $row['bgcolor']; ?>"><? echo $row['speaker']; ?></td>
-                <? } ?>
-                <?
+                <?php if(isset($speakerFilter)) { ?>
+                    <td bgcolor="<?php echo $row['bgcolor']; ?>"><?php echo $row['speaker']; ?></td>
+                <?php } else { ?>
+                    <td onmouseover="this.style.backgroundColor = '<?php echo $row['bgbold']; ?>';"
+                        onmouseout="this.style.backgroundColor = '<?php echo $row['bgcolor']; ?>';"
+                        onclick="document.location.href='<?php echo $speakerUrl; ?>';" bgcolor="<?php echo $row['bgcolor']; ?>"><?php echo $row['speaker']; ?></td>
+                <?php } ?>
+                <?php
                     $msg = $row['message'];
                     //if(!is_null($row['b64'])) {
                     //    $msg = $row['b64'];
@@ -1492,16 +1498,16 @@ if($format == 'html') {
                     //$msg = preg_replace('/ /', '&#x2004;', $row['message']);
                 ?>
 
-                    <td bgcolor="<? echo $row['bgcolor']; ?>"><font face="monospace"><? echo $msg; ?></font></td>
+                    <td bgcolor="<?php echo $row['bgcolor']; ?>"><font face="monospace"><?php echo $msg; ?></font></td>
             </tr>
-            <? } ?>
+            <?php } ?>
         </table>
         <table width="100%">
             <tr>
                 <td align="left" width="30%" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
-                    <span id="lastrefresh" style="color: #1F1F1F">Last refreshed at <? echo $mini_now; ?>.<br /></span>
-<? if($yestube) { ?>
-                    <span style="color: #1F1F1F"><a href="https://www.youtube.com/watch?v=<? echo $video_pick; ?>">youtube<? echo $video_desc; ?></a></span>
+                    <span id="lastrefresh" style="color: #1F1F1F">Last refreshed at <?php echo $mini_now; ?>.<br /></span>
+    <?php if($yestube) { ?>
+                    <span style="color: #1F1F1F"><a href="https://www.youtube.com/watch?v=<?php echo $video_pick; ?>">youtube<?php echo $video_desc; ?></a></span>
                     <br />
 
                     <span id="visible_span" style="display: none; color: #1F1F1F">
@@ -1512,10 +1518,10 @@ if($format == 'html') {
                     </span>
 
                     <br />
-                    <span style="color: #1F1F1F"><a href="<? echo $notubeUrl; ?>">Disable&nbsp;Youtube</a></span>
-<? } else { ?>
-                    <span style="color: #1F1F1F"><a href="<? echo $hidetubeUrl; ?>">Enable&nbsp;Youtube</a></span>
-<? } ?>
+                    <span style="color: #1F1F1F"><a href="<?php echo $notubeUrl; ?>">Disable&nbsp;Youtube</a></span>
+    <?php } else { ?>
+                    <span style="color: #1F1F1F"><a href="<?php echo $hidetubeUrl; ?>">Enable&nbsp;Youtube</a></span>
+    <?php } ?>
                 </td>
                 <td>&nbsp;</td>
                 <td id="server" align="center" valign="center" width="80"
@@ -1524,7 +1530,7 @@ if($format == 'html') {
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                 >
                     <span style="color: #1F1F1F"><a href="/~bloodlines/server.php" title="Server Stats">
-                        <img src="<? echo $graphics['server_icon']; ?>" border=0 width=78 height=78 alt="(server)" />
+                        <img src="<?php echo $graphics['server_icon']; ?>" border=0 width=78 height=78 alt="(server)" />
                     </a></span>
                 </td>
                 <td id="sql" align="center" valign="center" width="80"
@@ -1533,28 +1539,40 @@ if($format == 'html') {
                     onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                 >
                     <span style="color: #1F1F1F"><a href="/~bloodlines/i3log_dump.sql.bz2" title="SQL Dump (LARGE)">
-                        <img src="<? echo $graphics['sql_icon']; ?>" border=0 width=78 height=78 alt="(sql)" />
+                        <img src="<?php echo $graphics['sql_icon']; ?>" border=0 width=78 height=78 alt="(sql)" />
                     </a></span>
                 </td>
-                <td align="center" width="71" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
-                    <span style="color: #1F1F1F"><a href="<? echo $rssUrl; ?>" title="RSS Feed">
-                        <img onmouseover="this.src='<?echo $graphics['rssMouseOver'];?>';" onmouseout="this.src='<?echo $graphics['rss'];?>';" id="rssimg" src="<?echo $graphics['rss'];?>" border=0 width=71 height=55 alt="(RSS)" />
+                <td id="rss" align="center" valign="center" width="80"
+                    style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
+                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                >
+                    <span style="color: #1F1F1F"><a href="<?php echo $rssUrl; ?>" title="RSS Feed">
+                        <img src="<?php echo $graphics['rssMouseOver']; ?>" border=0 width=71 height=55 alt="(rss)" />
                     </a></span>
                 </td>
-                <td align="center" width="75" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000'; jsonimg.src='http://i302.photobucket.com/albums/nn96/quixadhal/json_zps34e3c065.png';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F'; jsonimg.src='http://i302.photobucket.com/albums/nn96/quixadhal/jsonMouseOver_zps46d5148d.png';">
-                    <span style="color: #1F1F1F"><a href="<? echo $jsonUrl; ?>" title="JSON output">
-                        <img onmouseover="this.src='<?echo $graphics['jsonMouseOver'];?>';" onmouseout="this.src='<?echo $graphics['json'];?>';" id="jsonimg" src="<?echo $graphics['json'];?>" border=0 width=75 height=51 alt="(JSON)" />
+                <td id="json" align="center" valign="center" width="80"
+                    style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
+                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                >
+                    <span style="color: #1F1F1F"><a href="<?php echo $jsonUrl; ?>" title="JSON output">
+                        <img src="<?php echo $graphics['jsonMouseOver']; ?>" border=0 width=75 height=51 alt="(json)" />
                     </a></span>
                 </td>
-                <td align="center" width="84" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
-                    <span style="color: #1F1F1F"><a href="<? echo $textUrl; ?>" title="Plain Text output">
-                        <img onmouseover="this.src='<?echo $graphics['textMouseOver'];?>';" onmouseout="this.src='<?echo $graphics['text'];?>';" id="textimg" src="<?echo $graphics['text'];?>" border=0 width=84 height=79 alt="(TEXT)" />
+                <td id="plaintext" align="center" valign="center" width="80"
+                    style="vertical-align: middle; opacity: 0.4; filter: alpha(opacity=40);"
+                    onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                    onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                >
+                    <span style="color: #1F1F1F"><a href="<?php echo $textUrl; ?>" title="Plain Text output">
+                        <img src="<?php echo $graphics['textMouseOver']; ?>" border=0 width=84 height=79 alt="(text)" />
                     </a></span>
                 </td>
                 <td>&nbsp;</td>
                 <td align="right" width="30%" onmouseover="lastrefresh.style.color='#FFFF00'; pagegen.style.color='#00FF00'; timespent.style.color='#FF0000';" onmouseout="lastrefresh.style.color='#1F1F1F'; pagegen.style.color='#1F1F1F'; timespent.style.color='#1F1F1F';">
                     <a href="javascript:;" onmousedown="toggleDiv('source');">
-                    <span id="pagegen" style="color: #1F1F1F">&nbsp;Page generated in <span id="timespent" style="color: #1F1F1F"><? $time_end = microtime(true); $time_spent = $time_end - $time_start; printf( "%7.3f", $time_spent); ?></span> seconds.</span>
+                    <span id="pagegen" style="color: #1F1F1F">&nbsp;Page generated in <span id="timespent" style="color: #1F1F1F"><?php $time_end = microtime(true); $time_spent = $time_end - $time_start; printf( "%7.3f", $time_spent); ?></span> seconds.</span>
                     </a>
                 </td>
             </tr>
@@ -1562,18 +1580,18 @@ if($format == 'html') {
         <table id="quote" border=0 cellspacing=0 cellpadding=0 width=80% align="center">
             <tr align="center">
                 <td align="center">
-                    <h3><? echo $i3quote->who; ?>&nbsp;said &quot;<font face="monospace"><i><? echo $i3quote->text; ?></i></font>&quot;</h3>
+                    <h3><?php echo $i3quote->who; ?>&nbsp;said &quot;<font face="monospace"><i><?php echo $i3quote->text; ?></i></font>&quot;</h3>
                 </td>
             </tr>
         </table>
-<? if($showSQL) { ?>
-        <span id="sql" style="color: #1F1F1F"><?echo $pageSql;?></span>
-<? } ?>
-        <div id="source" style="display: none; vertical-align: bottom; background-color: white;"> <? echo numbered_source(__FILE__); ?> </div>
+    <?php if($showSQL) { ?>
+        <span id="sql" style="color: #1F1F1F"><?php echo $pageSql;?></span>
+    <?php } ?>
+        <div id="source" style="display: none; vertical-align: bottom; background-color: white;"> <?php echo numbered_source(__FILE__); ?> </div>
     </body>
     </head>
 </html>
-<? } elseif ($format == 'rss') {
+<?php } elseif ($format == 'rss') {
     header('Content-type: application/rss+xml');
     echo "<?xml version=\"1.0\" ?>\n";
 ?>
@@ -1581,26 +1599,26 @@ if($format == 'html') {
     <channel>
         <title>I3 Feed</title>
         <description>
-            This is the Intermud-3 network traffic feed, as seen by <? echo $MUD_NAME; ?>.
+            This is the Intermud-3 network traffic feed, as seen by <?php echo $MUD_NAME; ?>.
         </description>
-        <link><? echo $RSS_FEED_URL; ?></link>
-        <atom:link href="<? echo $RSS_FEED_URL; ?>" rel="self" type="application/rss+xml" />
-        <?  foreach ($rss as $row) { ?>
+        <link><?php echo $RSS_FEED_URL; ?></link>
+        <atom:link href="<?php echo $RSS_FEED_URL; ?>" rel="self" type="application/rss+xml" />
+        <?php  foreach ($rss as $row) { ?>
             <item>
-                <title><? echo '<![CDATA[' . $row["title"] . ']]>'; ?></title>
-                <description><? echo '<![CDATA[' . $row["description"] . ']]>'; ?></description>
-                <link><? echo $row["link"]; ?></link>
-                <guid isPermaLink="false"><? echo $row["guid"]; ?></guid>
+                <title><?php echo '<![CDATA[' . $row["title"] . ']]>'; ?></title>
+                <description><?php echo '<![CDATA[' . $row["description"] . ']]>'; ?></description>
+                <link><?php echo $row["link"]; ?></link>
+                <guid isPermaLink="false"><?php echo $row["guid"]; ?></guid>
             </item>
-        <? } ?>
+        <?php } ?>
     </channel>
 </rss>
-<? } elseif ($format == 'json') {
+<?php } elseif ($format == 'json') {
     //header('Content-type: application/json');
     header('Content-type: text/plain');
     echo json_encode($json);
 ?>
-<? } else {
+<?php } else {
     header('Content-type: text/plain');
 
     echo str_pad("--=)) This is the Intermud-3 network traffic feed, as seen by " . $MUD_NAME . ". ((=--", 120, " ", STR_PAD_BOTH) . "\n\n";
@@ -1624,5 +1642,5 @@ if($format == 'html') {
     $time_spent = $time_end - $time_start;
     echo "\n" . str_pad("Last refreshed at $mini_now", 79) . " " . str_pad( sprintf( "Page generated in %7.3f seconds.", $time_spent), 40, " ", STR_PAD_LEFT);
 ?>
-<? } ?>
+<?php } ?>
 

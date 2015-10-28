@@ -122,7 +122,7 @@ header('Content-Type:text/html; charset=UTF-8');
 <html>
     <head>
         <title> I3 Video playlist </title>
-        <meta http-equiv="refresh" content="<? echo $refresh_secs; ?>">
+        <meta http-equiv="refresh" content="<?php echo $refresh_secs; ?>">
         <script type="text/javascript">
         function zeroPad(num, places) {
             var zero = places - num.toString().length + 1;
@@ -139,34 +139,34 @@ header('Content-Type:text/html; charset=UTF-8');
             secs /= 60;
             var hh = secs % 24;
             var foo = zeroPad(hh,2) + ':' + zeroPad(mm,2) + ':' + zeroPad(ss,2);
-            document.getElementById('len_<?echo $video_pick;?>').innerHTML=foo;
+            document.getElementById('len_<?php echo $video_pick;?>').innerHTML=foo;
             counter--;
-            if( counter >= <?echo $refresh_secs;?> - 5 ) {
-                element_to_scroll_to = document.getElementById('<?echo $video_pick;?>');
+            if( counter >= <?php echo $refresh_secs;?> - 5 ) {
+                element_to_scroll_to = document.getElementById('<?php echo $video_pick;?>');
                 element_to_scroll_to.scrollIntoView(true);
             }
             t=setTimeout(function() { refreshBits(counter); }, 1 * 1000);
         }
         document.addEventListener('DOMContentLoaded', function() {
-            element_to_scroll_to = document.getElementById('<?echo $video_pick;?>');
+            element_to_scroll_to = document.getElementById('<?php echo $video_pick;?>');
             element_to_scroll_to.scrollIntoView(true);
-            refreshBits(<?echo $refresh_secs;?>);
+            refreshBits(<?php echo $refresh_secs;?>);
         }, false);
         </script>
     </head>
-    <body background="<? echo $graphics['background']; ?>" bgcolor="#000000" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" style="overflow-x: hidden;">
+    <body background="<?php echo $graphics['background']; ?>" bgcolor="#000000" text="#d0d0d0" link="#ffffbf" vlink="#ffa040" style="overflow-x: hidden;">
 <!--
     <body bgcolor="black" text="#d0d0d0" link="#ffffbf" vlink="#ffa040">
     <body bgcolor="white" text="#303030" link="#00003f" vlink="#0080c0">
         <div id="youtube" style="display: none; position: fixed; z-index: -99; width: 100%; height: 100%">
             <iframe frameborder="0" height="100%" width="100%"
-                    src="https://youtube.com/embed/<? echo $video_pick; ?>?autoplay=1&controls=0&showinfo=0&autohide=1">
+                    src="https://youtube.com/embed/<?php echo $video_pick; ?>?autoplay=1&controls=0&showinfo=0&autohide=1">
             </iframe>
         </div>
 -->
         <div align="center">
             <font color="#ffff00">
-                <h3> Playing one of <? echo $play_count; ?> picks from <? echo $video_count; ?> total videos.</h3>
+                <h3> Playing one of <?php echo $play_count; ?> picks from <?php echo $video_count; ?> total videos.</h3>
             </font>
         </div>
         <table id="content" border=1 cellspacing=0 cellpadding=3 width=80% align="center">
@@ -176,8 +176,8 @@ header('Content-Type:text/html; charset=UTF-8');
                 <th bgcolor="#222222" width="40px" align="center"> plays </td>
                 <th bgcolor="#222222" align="left"> description </td>
             </tr>
-<?  foreach ($video_list as $row) { ?>
-<?      
+<?php  foreach ($video_list as $row) { ?>
+<?php      
         if($i % 2)  {
             if(isset($disabled_list[$row->video_id])) {
                 $bg = "#FF0000";
@@ -204,27 +204,27 @@ header('Content-Type:text/html; charset=UTF-8');
             $bg = "#220000";
         }
 ?>
-            <tr id="<?echo $row->video_id;?>"bgcolor="<?echo $bg;?>">
-                <td bgcolor="<?echo $bg;?>" width="120px" valign="top" align="left"> <a href="https://www.youtube.com/watch?v=<?echo $row->video_id;?>"><?echo $row->video_id;?></a></td>
-                <td id="len_<?echo $row->video_id;?>" bgcolor="<?echo $bg;?>" width="80px" valign="top" align="center"> <?echo secs_to_hhmmss($row->video_len); ?> </td>
-                <td bgcolor="<?echo $bg;?>" width="40px" valign="top" align="center"> <?echo $row->plays; ?> </td>
-                <td bgcolor="<?echo $bg;?>" valign="top" align="left">
-                    <?echo $row->description; ?>
-<?      if($video_pick == $row->video_id) { ?>
+            <tr id="<?php echo $row->video_id;?>"bgcolor="<?php echo $bg;?>">
+                <td bgcolor="<?php echo $bg;?>" width="120px" valign="top" align="left"> <a href="https://www.youtube.com/watch?v=<?php echo $row->video_id;?>"><?php echo $row->video_id;?></a></td>
+                <td id="len_<?php echo $row->video_id;?>" bgcolor="<?php echo $bg;?>" width="80px" valign="top" align="center"> <?php echo secs_to_hhmmss($row->video_len); ?> </td>
+                <td bgcolor="<?php echo $bg;?>" width="40px" valign="top" align="center"> <?php echo $row->plays; ?> </td>
+                <td bgcolor="<?php echo $bg;?>" valign="top" align="left">
+                    <?php echo $row->description; ?>
+<?php      if($video_pick == $row->video_id) { ?>
                     <br />
                     <div id="youtube" style="display: block; z-index: -99; overflow-x: hidden; min-width: 640px; max-width: 1280px; min-height: 360px; max-height: 720px">
                         <iframe frameborder="0" scrolling="no" style="min-width: 640px; max-width: 1280px; min-height: 360px; max-height: 720px"
-                                src="https://youtube.com/embed/<? echo $video_pick; ?>?autoplay=1&controls=0&showinfo=0&autohide=1">
+                                src="https://youtube.com/embed/<?php echo $video_pick; ?>?autoplay=1&controls=0&showinfo=0&autohide=1">
                         </iframe>
                     </div>
-<?      } ?>
+<?php      } ?>
                 </td>
             </tr>
-<? } ?>
+<?php } ?>
         </table>
         <div align="center">
             <font color="#ffff00">
-                <h3> Playing one of <? echo $play_count; ?> picks from <? echo $video_count; ?> total videos.</h3>
+                <h3> Playing one of <?php echo $play_count; ?> picks from <?php echo $video_count; ?> total videos.</h3>
             </font>
         </div>
     </body>
