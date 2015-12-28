@@ -225,7 +225,7 @@ sub get_page_title {
     return $funky;
 }
 
-my $random_annoyance = 1;
+my $random_annoyance = undef;
 my $prog = $0;
 my $update_all = undef;
 my $is_for_db = undef;

@@ -31,6 +31,7 @@
 
 inherit LIB_DAEMON;
 
+static private mapping url_callback_buffer = ([]);
 mapping chatters = ([]);
 int chat_counter = 0;
 static private mapping hour_colors = ([
@@ -1488,6 +1489,61 @@ varargs void eventChannelMsgToListeners(string who, string ch, string msg,
     }
 }
 
+void url_read_callback(int fd, mixed msg) {
+    if(member_array(fd, keys(url_callback_buffer)) < 0) {
+        url_callback_buffer[fd] = "";
+    }
+    url_callback_buffer[fd] += msg;
+}
+
+void url_write_callback(int fd) {
+    // This should never happen.
+}
+
+void url_close_callback(int fd) {
+    // Here, we should send off the result we got back.
+    SERVICES_D->eventSendChannel("CHAT_D", "url", newline_trim(url_callback_buffer[fd]), 0, "", "");
+    map_delete(url_callback_buffer, fd);
+}
+
+int check_for_url(string channel, string msg) {
+    mixed check_url;
+    int fd;
+    string check;
+    string *patterns = ({
+        "(https?://www.youtube.com/watch\?.*?v=[^&\?\.\ ]+)",
+        "(https?://tinyurl.com/[^&\?\.\ ]+)",
+        "(https?://bit.ly/[^&\?\.\ ]+)",
+        "(https?://goo.gl/[^&\?\.\ ]+)",
+        "(https?://mcaf.ee/[^&\?\.\ ]+)",
+        "(https?://migre.me/[^&\?\.\ ]+)",
+        "(https?://durl.me/[^&\?\.\ ]+)",
+        "(https?://is.gd/[^&\?\.\ ]+)",
+        "(https?://dailym.ai/[^&\?\.\ ]+)",
+        "(https?://ebay.to/[^&\?\.\ ]+)",
+        "(https?://youtu.be/[^&\?\.\ ]+)",
+        "(https?://onforb.es/[^&\?\.\ ]+)",
+        "(https?://imgur.com/[^&\>\.\ ]+)",
+        "(https?://amzn.to/[^&\?\.\ ]+)",
+    });
+
+    if(!channel || channel == "" || channel == "url") {
+        // tn("CHAT_D->check_for_url : channel " + channel, "red");
+        return 0;
+    }
+
+    foreach( check in patterns ) {
+        check_url = pcre_extract(msg, check);
+        if(check_url && sizeof(check_url) > 0) {
+            string command_string = check_url[0] + " " + channel;
+            tn("CHAT_D->check_for_url : pattern " + check + " match " + command_string,"green");
+            fd = external_start(1, command_string, "url_read_callback", "url_write_callback", "url_close_callback");
+            return 1;
+        }
+    }
+    return 0;
+}
+
 varargs void eventSendChannel(string who, string ch, string msg, int emote,
         string target, string targmsg) {
     object channeler = find_player(lower_case(who));
@@ -1599,6 +1655,14 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
         //pmsg = TERMINAL_D->no_colours(pmsg);
         eventAddLast(ch, msg, pchan, pmsg);
         eventChannelMsgToListeners(who, ch, msg, emote, target, targmsg);
+
+        if (check_for_url(ch, msg)) {
+            // got one!
+            // tn("CHAT_D->eventSendChannel: found emote url", "green");
+            // SERVICES_D->eventSendChannel(who, "wileymud", "Found url", 0, "", "");
+        } else {
+            // tn("CHAT_D->eventSendChannel: NOT found emote url", "red");
+        }
     }
     else
     {
@@ -1611,6 +1675,14 @@ varargs void eventSendChannel(string who, string ch, string msg, int emote,
         //pmsg = TERMINAL_D->no_colours(pmsg);
         eventAddLast(ch, msg, pchan, pmsg, who);
         eventChannelMsgToListeners(who, ch, msg, emote, target, targmsg);
+
+        if (check_for_url(ch, msg)) {
+            // got one!
+            // tn("CHAT_D->eventSendChannel: found url", "green");
+            // SERVICES_D->eventSendChannel("CHAT_D", "url", "Found url", 0, "", "");
+        } else {
+            // tn("CHAT_D->eventSendChannel: NOT found url", "red");
+        }
     }
     whobits = explode(who, "@");
     if(sizeof(whobits) < 2) {

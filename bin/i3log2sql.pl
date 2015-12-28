@@ -336,6 +336,7 @@ sub add_entry {
                         &&  ( !defined $_->{'speaker'} || $data->{'speaker'} eq $_->{'speaker'} )
                         &&  $data->{'mud'} eq $_->{'mud'} 
                         } @$botlist;
+    $is_bot = 1 if (defined $data->{'channel'}) && ($data->{'channel'} eq 'bsg');
 
     my $string = $data->{'msg_date'} . sprintf("%03d", $data->{'subseq'}) . $data->{'channel'} . $data->{'speaker'} . $data->{'mud'} . $data->{'message'};
     my $checksum = sha256($string);

@@ -56,6 +56,7 @@ function is_local_ip() {
 }
 
 $isLocal = is_local_ip();
+//$isLocal = 0;
 
 $graphics = array();
 $graphics['background']         = $isLocal ? "gfx/dark_wood.jpg"                : "https://lh5.googleusercontent.com/-zvnNrcuqbco/UdooZZelxoI/AAAAAAAAALA/9u5S92UySEA/s800/dark_wood.jpg";
@@ -87,11 +88,20 @@ $graphics['email']              = $isLocal ? "gfx/email-icon.png"               
 $graphics['facebook']           = $isLocal ? "gfx/facebook.png"                 : "https://lh6.googleusercontent.com/-3yq_pvhJoDw/U-YvfrV4qCI/AAAAAAAAA4g/eMSk8Dhz554/s128-no/facebook.png";
 $graphics['tv']                 = $isLocal ? "gfx/tv.png"                       : "https://lh3.googleusercontent.com/-6pMSA2WuYZM/VVQKn3ILC9I/AAAAAAAABdg/JvEgoxqprBU/s2048/tv.png";
 
+$graphics['mop']                = $isLocal ? "gfx/mop.png"                      : "https://lh3.googleusercontent.com/-FsV6Bgs0yEc/VkpFFIX1HbI/AAAAAAAAB-c/C_aruA_menU/s2048-Ic42/massively.png";
+$graphics['rps']                = $isLocal ? "gfx/rps.jpg"                      : "https://lh3.googleusercontent.com/-shDk6j6qlBo/VkpFD28KZaI/AAAAAAAAB-U/dCs8noc14x4/s2048-Ic42/RockPaperShotgun_logo.jpg";
+$graphics['instagram']          = $isLocal ? "gfx/instagram.png"                : "https://lh3.googleusercontent.com/-3Q_JJfUzAnE/VkpGFA5JCiI/AAAAAAAAB-s/1O3drC01SXg/s2048-Ic42/Instagram_button.png";
+$graphics['youtube']            = $isLocal ? "gfx/youtube.png"                  : "https://lh3.googleusercontent.com/-jzTkrUjKBuU/Vkp1QrRBzLI/AAAAAAAAB_0/wP5F6qf2ggs/s2048-Ic42/youtube-logo.png";
+
 $urls = array();
 $urls['email']                  = $isLocal ? "http://gmail.com"                 : "mailto:quixadhal@gmail.com";
 $urls['facebook']               = $isLocal ? "http://facebook.com"              : "http://www.facebook.com/groups/1470783289801007/";
 $urls['tomato']                 = $isLocal ? "http://192.168.1.1/"              : "http://www.shadowandy.net/2012/03/asus-rt-n66u-tomatousb-firmware-flashing-guide.htm";
 $urls['photos']                 = $isLocal ? "https://picasaweb.google.com/home": "http://plus.google.com/photos/101991567866995168256/albums";
+$urls['instagram']              = $isLocal ? "https://www.instagram.com/"       : "https://www.instagram.com/quixadhal/";
+$urls['mop']                    = $isLocal ? "http://massivelyop.com/"          : "http://massivelyop.com/";
+$urls['rps']                    = $isLocal ? "http://www.rockpapershotgun.com/" : "http://www.rockpapershotgun.com/";
+$urls['youtube']                = $isLocal ? "http://www.youtube.com/"          : "http://www.youtube.com/watch?v=H0imue5uHiw";
 
 $weather_url   = "http://www.wunderground.com/cgi-bin/findweather/getForecast?query=zmw:49004.2.99999&bannertypeclick=wu_blueglass";
 $weather_image = "http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_blueglass&airportcode=KAZO&ForcedCity=Kalamazoo&ForcedState=MI&zipcode=49004&language=EN";
@@ -470,16 +480,6 @@ header('Cache-control: max-age=0, must-revalidate');
                     </div>
 -->
                     <!-- <div id="olddate" align="center" style="color: #d0d000;"><?php echo date('F j, Y'); ?></div> -->
-                    <span style="color: #1F1F1F"><a href="<?php echo $urls['photos']; ?>" title="Photos">
-                        <img src="<?php echo $graphics['picasa_web']; ?>" 
-                             border="0" width="64" height="64" alt="(dynmap)"
-                             style="opacity: 0.4; filter: alpha(opacity=40);"
-                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
-                             onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
-                         />
-                    </a></span>
-                    <br />
-                    <!-- <span style="color: #1F1F1F"><a href="https://picasaweb.google.com/home" title="Pictures"> -->
                     <span style="color: #1F1F1F"><a href="<?php echo $urls['email']; ?>" title="Email!">
                         <img src="<?php echo $graphics['email']; ?>"
                              border=0 align="center" width=64 height=64
@@ -498,14 +498,53 @@ header('Cache-control: max-age=0, must-revalidate');
                     </a></span>
                     <br />
                     <br />
-                    <a href="http://www.oldtimersguild.com/vb/forum.php" title="No Drama!">
-                        <img src="<?php echo $graphics['otglogo']; ?>"
-                             border=0 align="center" width=155 height=200
+
+                    <span style="color: #1F1F1F"><a href="<?php echo $urls['photos']; ?>" title="Photos">
+                        <img src="<?php echo $graphics['picasa_web']; ?>" 
+                             border="0" width="64" height="64" alt="(dynmap)"
+                             style="opacity: 0.4; filter: alpha(opacity=40);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                         />
+                    </a></span>
+                    <span style="color: #1F1F1F"><a href="<?php echo $urls['instagram']; ?>" title="Instagram">
+                        <img src="<?php echo $graphics['instagram']; ?>" 
+                             border="0" width="64" height="64" alt="(dynmap)"
+                             style="opacity: 0.4; filter: alpha(opacity=40);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                         />
+                    </a></span>
+                    <br />
+                    <!-- <span style="color: #1F1F1F"><a href="https://picasaweb.google.com/home" title="Pictures"> -->
+
+                    <span style="color: #1F1F1F"><a href="<?php echo $urls['youtube']; ?>" title="YouTube">
+                        <img src="<?php echo $graphics['tv']; ?>" 
+                             border="0" width="64" height="64" alt="(youtube)"
+                             style="opacity: 0.4; filter: alpha(opacity=40);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                         />
+                    </a></span>
+                    <br />
+                    <br />
+                    <span style="color: #1F1F1F"><a href="<?php echo $urls['mop']; ?>" title="MassivelyOP">
+                        <img src="<?php echo $graphics['mop']; ?>"
+                             border=0 align="center" width=128 height=64
                              style="opacity: 0.6; filter: alpha(opacity=60);"
                              onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                              onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
                          />
-                    </a>
+                    </a></span>
+                    <br />
+                    <span style="color: #1F1F1F"><a href="<?php echo $urls['rps']; ?>" title="Rock,Paper,Shotgun">
+                        <img src="<?php echo $graphics['rps']; ?>"
+                             border=0 align="center" width=128 height=64
+                             style="opacity: 0.6; filter: alpha(opacity=60);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                         />
+                    </a></span>
                     <br />
                     <br />
                     <!-- <div id="oldclock" align="center" style="color: #d0d000;"><?php echo date('g:i:s a'); ?></div> -->
@@ -660,7 +699,7 @@ header('Cache-control: max-age=0, must-revalidate');
             </tr>
 -->
             <tr>
-                <td align="center" valign="center" width="12%" style="vertical-align: middle">
+                <td align="center" valign="center" width="10%" style="vertical-align: middle">
                     <!-- <span style="display: block !important; width: 120px; text-align: center; font-family: sans-serif; font-size: 12px;"> -->
                         <a  href="http://www.wunderground.com/radar/radblast.asp?zoommode=pan&prevzoom=zoom&num=1&frame=0&delay=15&scale=1.000&noclutter=0&ID=GRR&type=N0R&showstorms=10&lat=42.29166794&lon=-85.58721924&label=Kalamazoo,%20MI&map.x=400&map.y=240&scale=1.000&centerx=400&centery=240&showlabels=1">
                             <img    src="<?php echo $graphics['radar']; ?>"
@@ -672,7 +711,7 @@ header('Cache-control: max-age=0, must-revalidate');
                         </a>
                     <!-- </span> -->
                 </td>
-                <td align="center" valign="bottom" width="12%" style="vertical-align: bottom">
+                <td align="center" valign="bottom" width="10%" style="vertical-align: bottom">
                         <!-- <span style="color: #1F1F1F"><a href="/~minecraft/phpBB3/index.php" title="Minecraft!"> -->
                         <span style="color: #1F1F1F"><a href="/~minecraft/map.html" title="Local Dynmap">
                             <img src="<?php echo $graphics['minecraft_icon']; ?>" 
@@ -683,7 +722,7 @@ header('Cache-control: max-age=0, must-revalidate');
                              />
                         </a></span>
                 </td>
-                <td align="center" valign="bottom" width="12%" style="vertical-align: bottom">
+                <td align="center" valign="bottom" width="10%" style="vertical-align: bottom">
                         <span style="color: #1F1F1F"><a href="http://darkstar.pixelefx.net:8123/" title="Dynmap">
                             <img src="<?php echo $graphics['minecraft_map_icon']; ?>" 
                                  border="0" width="96" height="96" alt="(dynmap)"
@@ -692,6 +731,18 @@ header('Cache-control: max-age=0, must-revalidate');
                                  onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
                              />
                         </a></span>
+                </td>
+                <td align="center" valign="bottom" width="10%" style="vertical-align: bottom">
+                    <!-- 155, 200 -->
+                    <a href="http://www.oldtimersguild.com/vb/forum.php" title="No Drama!">
+                        <img src="<?php echo $graphics['otglogo']; ?>"
+                             border=0 align="center" width=110 height=150
+                             style="opacity: 0.6; filter: alpha(opacity=60);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
+                         />
+                    </a>
+                    <br />
                 </td>
                 <td align="center" valign="bottom" style="vertical-align: bottom">
                     <a href="https://github.com/quixadhal">
