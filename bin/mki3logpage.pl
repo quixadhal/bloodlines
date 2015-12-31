@@ -118,6 +118,7 @@ my $daily_chunk = pie_chart('1 day', 'fn_wordcount', 'left', 'drawDaily', 'Stuff
 my $weekly_chunk = pie_chart('1 week', 'fn_wordcount', 'right', 'drawWeekly', 'Stuff people said this week');
 my $monthly_chunk = pie_chart('1 month', 'fn_wordcount', 'left', 'drawMonthly', 'Stuff people said this month');
 my $yearly_chunk = pie_chart('1 year', 'fn_wordcount', 'right', 'drawYearly', 'Stuff people said this year');
+my $century_chunk = pie_chart('100 years', 'fn_wordcount', 'right', 'drawCentury', 'Stuff people said this century');
 my $quote = get_quote();
 my $quote_name = $quote->{'speaker'} . '@' . $quote->{'mud'};
 my $quote_text = $quote->{'message'};
@@ -155,6 +156,8 @@ my $page = <<EOM
 
       $yearly_chunk
 
+      $century_chunk
+
     </script>
   </head>
 
@@ -163,7 +166,12 @@ my $page = <<EOM
     <table id="piecharts" border=0 cellspacing=0 cellpadding=0 width=80% align="center">
       <tr>
         <td align="center" valign="bottom" colspan="2">
-          <h3>$current_time</h3>
+          <h5>$current_time</h5>
+        </td>
+      </tr>
+      <tr>
+        <td align="center" valign="center" colspan="2">
+          <h3><span style="color:blue">$quote_name</span>&nbsp;said &quot;<i>$quote_text</i>&quot;</h3>
         </td>
       </tr>
       <tr>
@@ -183,8 +191,8 @@ my $page = <<EOM
         </td>
       </tr>
       <tr>
-        <td align="center" valign="center" colspan="2">
-          <h3><span style="color:blue">$quote_name</span>&nbsp;said &quot;<i>$quote_text</i>&quot;</h3>
+        <td align="center" valign="bottom" colspan="2">
+          <div id="drawCentury_div"></div>
         </td>
       </tr>
     </table>
