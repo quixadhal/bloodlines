@@ -27,6 +27,7 @@ static private int Password;
 private mapping MudList, ChannelList;
 private mapping Banned;
 private mixed *Nameservers;
+private int CurrentNameserver;
 private static int Tries;
 private static int SocketStat = -1;
 private static int Online = 0;
@@ -38,41 +39,51 @@ void ConvertLists();
 int GetStatus(string mud);
 static mixed SetStatus(string mud, int status);
 
+void ForceNameservers() {
+    Nameservers = ({ 
+            ({ "*dalet", "97.107.133.86 8787" }),
+            ({ "*i4", "204.209.44.3 8080" }),
+    });
+    SaveObject(SaveFile);
+}
+
 static void create(){
     client::create();
-        Password = SECRETS_D->GetSecret("I3_SERVER_PW");
-        SaveFile = save_file(SAVE_INTERMUD);
-        tn("INTERMUD_D: prev: "+identify(previous_object(-1)),"red");
-        Tries = 0;
-        Banned = ([]);
-        MudList = ([]);
-        ChannelList = ([]);
-        MudList["ID"] = -1;
-        MudList["List"] = ([]);
-        ChannelList["ID"] = -1;
-        ChannelList["List"] = ([]);
-        if(file_exists(SaveFile)){
-            RestoreObject(SaveFile, 1);
-        }
-        ConvertLists();
-        //Nameservers = ({ ({ "*i4", "204.209.44.3 8080" }) });
-        Nameservers = ({ 
-                ({ "*i4", "204.209.44.3 8080" }),
-                ({ "*dalet", "97.107.133.86 8787" }),
-        });
-        // ({ "*dalet", "97.107.133.86 8787" })
-        // ({ "*i4", "204.209.44.3 8080" })
-        // ({ "*wpr", "195.242.99.94 8080" })
-        SetNoClean(1);
-        tn("INTERMUD_D reloaded.");
-        tn("Loading object stack: "+get_stack(),"red");
-        tn("Loading object trail: "+identify(previous_object(-1)),"red");
-        SetDestructOnClose(1);
-        SetSocketType(MUD);
-        if(DISABLE_INTERMUD == 1){
-            call_out( (: eventDestruct :), 2);
-        }
-        else call_out( (: Setup :), 2);
+    Password = SECRETS_D->GetSecret("I3_SERVER_PW");
+    SaveFile = save_file(SAVE_INTERMUD);
+    tn("INTERMUD_D: prev: "+identify(previous_object(-1)),"red");
+    Tries = 0;
+    Banned = ([]);
+    MudList = ([]);
+    ChannelList = ([]);
+    MudList["ID"] = -1;
+    MudList["List"] = ([]);
+    ChannelList["ID"] = -1;
+    ChannelList["List"] = ([]);
+    if(file_exists(SaveFile)){
+        RestoreObject(SaveFile, 1);
+    } else {
+        CurrentNameserver = 0;
+    }
+    ConvertLists();
+    //Nameservers = ({ ({ "*i4", "204.209.44.3 8080" }) });
+    Nameservers = ({ 
+            ({ "*dalet", "97.107.133.86 8787" }),
+            ({ "*i4", "204.209.44.3 8080" }),
+    });
+    // ({ "*dalet", "97.107.133.86 8787" })
+    // ({ "*i4", "204.209.44.3 8080" })
+    // ({ "*wpr", "195.242.99.94 8080" })
+    SetNoClean(1);
+    tn("INTERMUD_D reloaded.");
+    tn("Loading object stack: "+get_stack(),"red");
+    tn("Loading object trail: "+identify(previous_object(-1)),"red");
+    SetDestructOnClose(1);
+    SetSocketType(MUD);
+    if(DISABLE_INTERMUD == 1){
+        call_out( (: eventDestruct :), 2);
+    }
+    else call_out( (: Setup :), 2);
 }
 
 void FirstPing(){
@@ -81,28 +92,30 @@ void FirstPing(){
 
 static void Setup(){
     string ip;
-        int port;
+    int port;
         
-        if( !Nameservers || !sizeof(Nameservers) ) return;
-            sscanf(Nameservers[0][1], "%s %d", ip, port);
-                SocketStat = eventCreateSocket(ip, port);
-                if( SocketStat < 0 ) return;
-                    tn("INTERMUD_D: SocketStat: "+SocketStat);
-                        eventWrite( ({ "startup-req-3", 5, mud_name(), 0, Nameservers[0][0], 0,
-                                    Password, MudList["ID"], ChannelList["ID"], query_host_port(),
-                                    PORT_OOB, PORT_UDP, mudlib() + " " + mudlib_version(), 
-                                    mudlib() + " " + mudlib_version(), version(), "LPMud",
-                                    MUD_STATUS, ADMIN_EMAIL,
-                                    SERVICES_D->GetServices(), ExtraInfo() }) );
-                        tn("INTERMUD_D setup: "+identify( ({
-                                        "startup-req-3", 5, mud_name(), 0, Nameservers[0][0], 0,
-                                        Password, MudList["ID"], ChannelList["ID"], query_host_port(),
-                                        PORT_OOB, PORT_UDP, mudlib() + " " + mudlib_version(),
-                                        mudlib() + " " + mudlib_version(), version(), "LPMud",
-                                        MUD_STATUS, ADMIN_EMAIL,
-                                        SERVICES_D->GetServices(), ([]) }) ), "red");;
-                        call_out( (: FirstPing :), 5);
-                        call_out( (: load_object :), 5, IMC2_D);
+    if( !Nameservers || !sizeof(Nameservers) )
+        return;
+    sscanf(Nameservers[CurrentNameserver][1], "%s %d", ip, port);
+    SocketStat = eventCreateSocket(ip, port);
+    if( SocketStat < 0 )
+        return;
+    tn("INTERMUD_D: SocketStat: "+SocketStat);
+    eventWrite( ({ "startup-req-3", 5, mud_name(), 0, Nameservers[CurrentNameserver][0], 0,
+        Password, MudList["ID"], ChannelList["ID"], query_host_port(),
+        PORT_OOB, PORT_UDP, mudlib() + " " + mudlib_version(), 
+        mudlib() + " " + mudlib_version(), version(), "LPMud",
+        MUD_STATUS, ADMIN_EMAIL,
+        SERVICES_D->GetServices(), ExtraInfo() }) );
+    tn("INTERMUD_D setup: "+identify( ({
+        "startup-req-3", 5, mud_name(), 0, Nameservers[CurrentNameserver][0], 0,
+        Password, MudList["ID"], ChannelList["ID"], query_host_port(),
+        PORT_OOB, PORT_UDP, mudlib() + " " + mudlib_version(),
+        mudlib() + " " + mudlib_version(), version(), "LPMud",
+        MUD_STATUS, ADMIN_EMAIL,
+        SERVICES_D->GetServices(), ([]) }) ), "red");;
+    call_out( (: FirstPing :), 5);
+    call_out( (: load_object :), 5, IMC2_D);
 }
 
 int GetConnectedStatus(){
@@ -112,6 +125,7 @@ int GetConnectedStatus(){
 void eventClearVars(){
     if( !(master()->valid_apply(({ PRIV_ASSIST, INTERMUD_D }))) )
         error("Illegal attempt to reset intermud: "+get_stack()+" "+identify(previous_object(-1)));
+            CurrentNameserver = 0;
             Tries = 0;
             MudList = ([]);
             ChannelList = ([]);
@@ -151,20 +165,26 @@ static void eventRead(mixed *packet){
                 return;
             }
             /* Start of Tricky's patch */
-            if( packet[2] != Nameservers[0][0] ){
+            if( packet[2] != Nameservers[CurrentNameserver][0] ){
                 tn("Illegal startup-reply from mud " + packet[2], "red");
                     return;
             }
             /* End of Tricky's patch */ 
-            if( packet[6][0][0] == Nameservers[0][0] ){
-                Nameservers = packet[6];
-                    Password = packet[7];
-                    SECRETS_D->SetSecret("I3_SERVER_PW", Password);
-                    SaveObject(SaveFile);
+            if( packet[6][0][0] == Nameservers[CurrentNameserver][0] ){
+                if( sizeof(packet[6]) > sizeof(Nameservers) ) {
+                    Nameservers = packet[6];
+                }
+                tn("We believe we are speaking to "+packet[6][0][0]+" as intended.","green");
+                Password = packet[7];
+                SECRETS_D->SetSecret("I3_SERVER_PW", Password);
+                SaveObject(SaveFile);
             }
             else {
-                Nameservers = packet[6];
-                    Setup();
+                if( sizeof(packet[6]) > sizeof(Nameservers) ) {
+                    Nameservers = packet[6];
+                }
+                tn("We believe we are speaking to "+packet[6][0][0]+", but we wanted "+Nameservers[CurrentNameserver][0]+".","yellow");
+                Setup();
             }
             return;
         case "mudlist":
@@ -178,7 +198,7 @@ static void eventRead(mixed *packet){
                 //tn("We don't like packet element 6. It is: "+identify(packet[6]),"red");
                 //tn("We will continue anyway.","red");
             }
-            if( packet[2] != Nameservers[0][0] ){
+            if( packet[2] != Nameservers[CurrentNameserver][0] ){
                 //tn("We don't like packet element 2. It is: "+identify(packet[2]),"red");
                 return;
             }
@@ -216,7 +236,7 @@ static void eventRead(mixed *packet){
             return;
         case "chanlist-reply":
             tn("chanlist reply: "+identify(packet), "blue");
-            if( packet[2] != Nameservers[0][0] ) return;
+            if( packet[2] != Nameservers[CurrentNameserver][0] ) return;
             ChannelList["ID"] = packet[6];
             foreach(cle, val in packet[7]){
                 if( !val && ChannelList["List"] != 0 ){
@@ -354,17 +374,17 @@ static void eventSocketClose(){
 
 static void eventConnectionFailure(){
     Online = 0;
-        tn("INTERMUD_D: CONNECTION FAILED","red");
-        error("Failed to find a useful name server.\n");
+    tn("INTERMUD_D: CONNECTION FAILED","red");
+    error("Failed to find a useful name server.\n");
 }
 
 int SetDestructOnClose(int x){ return 0; }
 
 static void eventClose(mixed arg){
     SocketStat = -1;
-        Online = 0;
-        tn("INTERMUD_D: socket closing!");
-        ::eventClose(arg);
+    Online = 0;
+    tn("INTERMUD_D: socket closing!");
+    ::eventClose(arg);
 }
 
 int SetSocketType(int x){ return client::SetSocketType(MUD); }
@@ -439,9 +459,27 @@ string *GetMatch(string mud){
         return map(filter(regexp(lc, "^"+mud, 1), (: intp :)), (: $(uc)[$1] :));
 }
 
-string GetNameserver(){ return Nameservers[0][0]; }
+string NextNameserver(){ 
+    CurrentNameserver += 1;
+    if(CurrentNameserver >= sizeof(Nameservers)) {
+        CurrentNameserver = 0;
+    }
+    SaveObject(SaveFile);
+    // Do we need this?
+    // I suspect we need some way to force re-startup after switching servers.
+    if(sizeof(Nameservers) > 1) {
+        eventClose(SocketStat);
+        // Maybe also call Setup() explicitly?
+        // Only issue is.. we don't want duplicate callouts, right?
+        Setup();
+    }
 
-string GetNameserverIP(){ return Nameservers[0][1]; }
+    return GetNameserver();
+}
+
+string GetNameserver(){ return Nameservers[CurrentNameserver][0]; }
+
+string GetNameserverIP(){ return Nameservers[CurrentNameserver][1]; }
 
 mixed *GetNameservers(){ return copy(Nameservers); }
 

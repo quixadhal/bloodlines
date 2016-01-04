@@ -1525,6 +1525,8 @@ int check_for_url(string channel, string msg) {
         "(https?://onforb.es/[^&\?\.\ ]+)",
         "(https?://imgur.com/[^&\>\.\ ]+)",
         "(https?://amzn.to/[^&\?\.\ ]+)",
+        "(https?://on.fb.me/[^&\?\.\ ]+)",
+        "(https?://qr.ae/[^&\?\.\ ]+)",
     });
 
     if(!channel || channel == "" || channel == "url") {

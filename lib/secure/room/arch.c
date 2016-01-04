@@ -100,13 +100,18 @@ int GetImud(){
 
 string SignRead(){
     string ret = "";
+    string server = "";
 
     if(!INTERMUD_D->GetEnabled()){
         ret += "\"I3 connection: %^B_BLACK%^%^BOLD%^WHITE%^DISABLED%^RESET%^, ";
     }
-    else if(INTERMUD_D->GetConnectedStatus())
-        ret += "\"I3 connection: %^BOLD%^GREEN%^ONLINE%^RESET%^, ";
-    else ret +=  "\"I3 connection: %^BOLD%^RED%^OFFLINE%^RESET%^, ";
+    else if(INTERMUD_D->GetConnectedStatus()) {
+        server = INTERMUD_D->GetNameserver();
+        ret += "\"I3 connection to "+server+": %^BOLD%^GREEN%^ONLINE%^RESET%^, ";
+    } else {
+        server = INTERMUD_D->GetNameserver();
+        ret +=  "\"I3 connection to "+server+": %^BOLD%^RED%^OFFLINE%^RESET%^, ";
+    }
 
     switch (IMC2_D->getonline()) {
         case 1:
@@ -180,6 +185,7 @@ static void create() {
     SetExits( ([
                 "north" : "/domains/default/room/wiz_hall",
                 "down" : "/secure/room/network.c",
+                "south" : "/secure/room/idlenauts",
                 ]) );
     SetEnters( ([
                 ]) );

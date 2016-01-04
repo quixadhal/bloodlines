@@ -9,6 +9,7 @@ int OK = 0;
 int Retries = 0;
 int counter = 0;
 int last_time = time();
+string start_of_downtime = "";
 
 string *muds = PINGING_MUDS + ({ mud_name() });
 
@@ -25,28 +26,61 @@ static int LogIt(string what, string where, string canale){
 
 int CheckOK(){
     string list = load_object("/cmds/players/mudlist")->cmd("");
+    string logmsg = "";
+    string the_time = "";
+    string server = "";
     Pinging = 0;
     if(DISABLE_INTERMUD) return 1;
+    if(!(INTERMUD_D->GetConnectedStatus())){
+        OK = 0;
+    }
     if(!OK){
         Retries++;
+        if(Retries > 3) {
+            the_time = CHAT_D->getColorDayTime();
+            server = INTERMUD_D->GetNameserver();
+            if(start_of_downtime != "") {
+                tell_room(ROOM_ARCH,the_time+" The Arch Room loudspeaker announces: \""+server+" has been down since "+start_of_downtime+".\"");
+                logmsg = sprintf("%s%03d\t%s\t%s\t%s\n", timestamp(), 0, "intercre", "CHAT_D@" + mud_name(), server+" has been down since "+start_of_downtime+".");
+                LogIt(logmsg, "/secure/log/allchan.log", "intercre");
+            }
+            server = INTERMUD_D->NextNameserver();
+            tell_room(ROOM_ARCH,the_time+" The Arch Room loudspeaker continues: \"Switching Intermud to "+server+".\"");
+            logmsg = sprintf("%s%03d\t%s\t%s\t%s\n", timestamp(), 0, "intercre", "CHAT_D@" + mud_name(), "Switching Intermud to "+server+".");
+            LogIt(logmsg, "/secure/log/allchan.log", "intercre");
+            start_of_downtime = "";
+        }
         update(INTERMUD_D);
-    }
-    else {
+    } else {
         if(Retries > 0 && INTERMUD_D->GetConnectedStatus()){
-            tell_room(ROOM_ARCH,"The Arch Room loudspeaker announces: \"%^BOLD%^CYAN%^"
-                    "Intermud connection is %^BOLD%^GREEN%^ONLINE%^BOLD%^CYAN%^.%^RESET%^\"");
-            LogIt(timestamp()+"\t"+"intermud"+"\t"+"SYSTEM@"+mud_name()+"\t"+"Intermud connection is ONLINE."+"\n", "/secure/log/allchan.log", "intermud");
+            the_time = CHAT_D->getColorDayTime();
+            server = INTERMUD_D->GetNameserver();
+            tell_room(ROOM_ARCH,the_time+" The Arch Room loudspeaker announces: \"%^BOLD%^CYAN%^"
+                "Intermud connection is %^BOLD%^GREEN%^ONLINE%^BOLD%^CYAN%^.%^RESET%^\"");
+            if(start_of_downtime != "") {
+                tell_room(ROOM_ARCH,the_time+" The Arch Room loudspeaker continues: \""+server+" has been down since "+start_of_downtime+".\"");
+            }
+            logmsg = sprintf("%s%03d\t%s\t%s\t%s\n", timestamp(), 0, "intercre", "CHAT_D@" + mud_name(), "Intermud connection ("+server+") is ONLINE.");
+            LogIt(logmsg, "/secure/log/allchan.log", "intercre");
+            if(start_of_downtime != "") {
+                logmsg = sprintf("%s%03d\t%s\t%s\t%s\n", timestamp(), 0, "intercre", "CHAT_D@" + mud_name(), server+" has been down since "+start_of_downtime+".");
+                LogIt(logmsg, "/secure/log/allchan.log", "intercre");
+            }
+            start_of_downtime = "";
             load_object(ROOM_ARCH)->SetImud(1);
             // SERVICES_D->eventSendChannel(name, rc, str, emote, convert_name(targetkey), target_msg);;
-            SERVICES_D->eventSendChannel("SYSTEM", "ds", "The Arch Room loudspeaker announces: %^BOLD%^CYAN%^Intermud connection is back %^BOLD%^GREEN%^ONLINE%^BOLD%^CYAN%^.%^RESET%^", 0);
+            // SERVICES_D->eventSendChannel("CHAT_D", "intercre", "The Arch Room loudspeaker announces: %^BOLD%^CYAN%^Intermud connection is back %^BOLD%^GREEN%^ONLINE%^BOLD%^CYAN%^.%^RESET%^", 0);
         }
-
         Retries = 0;
     }
     if(Retries == 2 && !(INTERMUD_D->GetConnectedStatus())){
-        tell_room(ROOM_ARCH,"The Arch Room loudspeaker announces: \"%^BOLD%^CYAN%^"
-                "Intermud connection is %^BOLD%^RED%^OFFLINE%^BOLD%^CYAN%^.%^RESET%^\"");
-        LogIt(timestamp()+"\t"+"intermud"+"\t"+"SYSTEM@"+mud_name()+"\t"+"Intermud connection is OFFLINE."+"\n", "/secure/log/allchan.log", "intermud");
+        the_time = CHAT_D->getDayTime();
+        start_of_downtime = the_time;
+        server = INTERMUD_D->GetNameserver();
+        tell_room(ROOM_ARCH,the_time+" The Arch Room loudspeaker announces: \"%^BOLD%^CYAN%^"
+                "Intermud connection ("+server+") is %^BOLD%^RED%^OFFLINE%^BOLD%^CYAN%^.%^RESET%^\"");
+        logmsg = sprintf("%s%03d\t%s\t%s\t%s\n", timestamp(), 0, "intercre", "CHAT_D@" + mud_name(), "Intermud connection ("+server+") is OFFLINE.");
+        LogIt(logmsg, "/secure/log/allchan.log", "intercre");
         rm("/tmp/muds.txt");
         load_object(ROOM_ARCH)->SetImud(0);
     }
