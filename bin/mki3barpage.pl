@@ -166,6 +166,7 @@ my $daily_chunk = bar_chart('1 day', 'left', 'drawDaily', 'Stuff people said yes
 my $weekly_chunk = bar_chart('1 week', 'right', 'drawWeekly', 'Stuff people said this week');
 my $monthly_chunk = bar_chart('1 month', 'left', 'drawMonthly', 'Stuff people said this month');
 my $yearly_chunk = bar_chart('1 year', 'right', 'drawYearly', 'Stuff people said this year');
+my $century_chunk = bar_chart('100 years', 'right', 'drawCentury', 'Stuff people said this century');
 my $quote = get_quote();
 my $quote_name = $quote->{'speaker'} . '@' . $quote->{'mud'};
 my $quote_text = $quote->{'message'};
@@ -189,6 +190,8 @@ my $page = <<EOM
 
       $yearly_chunk
 
+      $century_chunk
+
     </script>
   </head>
 
@@ -209,6 +212,11 @@ my $page = <<EOM
         </td>
         <td align="center" valign="bottom">
           <div id="drawYearly_div"></div>
+        </td>
+      </tr>
+      <tr>
+        <td align="center" valign="bottom" colspan="2">
+          <div id="drawCentury_div"></div>
         </td>
       </tr>
       <tr>

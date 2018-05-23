@@ -20,16 +20,16 @@
         data.addColumn('string', 'Speaker');
         data.addColumn('number', 'Words');
         data.addRows([
-['Quixadhal', 729],
-['Kalinash', 361],
-['Marajin', 273],
-['Ninja', 263],
-['Salius', 206],
-['Joshua', 190],
-['Duuk', 186],
-['Dexter', 129],
-['Tim', 111],
-['Cratylus', 64]
+['Quixadhal', 58],
+['Kalinash', 30],
+['Ninja', 28],
+['Joshua', 25],
+['Gimlet', 18],
+['Lash', 12],
+['Zaphod', 12],
+['Salius', 11],
+['Aidil', 10],
+['Sinistrad', 3]
         ]);
 
         // Set chart options
@@ -62,16 +62,16 @@
         data.addColumn('string', 'Speaker');
         data.addColumn('number', 'Words');
         data.addRows([
-['Quixadhal', 9720],
-['Kalinash', 4261],
-['Aidil', 4174],
-['Dexter', 3271],
-['Cratylus', 2165],
-['Sinistrad', 2083],
-['Marajin', 1986],
-['Salius', 1535],
-['Ninja', 1514],
-['Sorressean', 747]
+['Quixadhal', 516],
+['Dexter', 402],
+['Kalinash', 272],
+['Cratylus', 246],
+['Aidil', 210],
+['Ninja', 178],
+['Gimlet', 173],
+['Joshua', 149],
+['Salius', 140],
+['Zaphod', 49]
         ]);
 
         // Set chart options
@@ -104,16 +104,16 @@
         data.addColumn('string', 'Speaker');
         data.addColumn('number', 'Words');
         data.addRows([
-['Quixadhal', 53108],
-['Kalinash', 18267],
-['Salius', 15705],
-['Ninja', 9819],
-['Dexter', 9606],
-['Aidil', 9286],
-['Sinistrad', 9026],
-['Cratylus', 8923],
-['Joshua', 8827],
-['Duuk', 4952]
+['Quixadhal', 2362],
+['Kalinash', 1803],
+['Salius', 1493],
+['Cratylus', 1424],
+['Joshua', 1158],
+['Dexter', 1109],
+['Sinistrad', 791],
+['Gimlet', 773],
+['Ninja', 497],
+['Aidil', 322]
         ]);
 
         // Set chart options
@@ -146,16 +146,16 @@
         data.addColumn('string', 'Speaker');
         data.addColumn('number', 'Words');
         data.addRows([
-['Quixadhal', 486454],
-['Salius', 225700],
-['Cratylus', 189912],
-['Kalinash', 171422],
-['Dexter', 131965],
-['Joshua', 115633],
-['Ninja', 108560],
-['Sinistrad', 94380],
-['Lyanic', 46914],
-['Syn', 43137]
+['Quixadhal', 36069],
+['Kalinash', 28715],
+['Salius', 28038],
+['Cratylus', 17033],
+['Dexter', 12477],
+['Sinistrad', 11000],
+['Joshua', 10772],
+['Ninja', 9839],
+['Torak', 4878],
+['Duuk', 3676]
         ]);
 
         // Set chart options
@@ -175,6 +175,48 @@
       }
 
 
+            // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawCentury);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawCentury() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Speaker');
+        data.addColumn('number', 'Words');
+        data.addRows([
+['Cratylus', 306778],
+['Kalinash', 181586],
+['Quixadhal', 160584],
+['Sinistrad', 128828],
+['Ninja', 75660],
+['Salius', 72958],
+['Duuk', 57344],
+['Joshua', 50069],
+['Hamlet', 44508],
+['Hellmonger', 42411]
+        ]);
+
+        // Set chart options
+        var options = {
+                       "title":'Stuff people said this century',
+                       "legend":'right',
+                       // "backgroundColor": { fill: "none" },
+                       // "backgroundColor": "#505050",
+                       "width":400,
+                       "height":300,
+                       "is3D":'true'
+                      };
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('drawCentury_div'));
+        chart.draw(data, options);
+      }
+
+
     </script>
   </head>
 
@@ -183,7 +225,12 @@
     <table id="piecharts" border=0 cellspacing=0 cellpadding=0 width=80% align="center">
       <tr>
         <td align="center" valign="bottom" colspan="2">
-          <h3>It was recently 12 o'clock, on Wednesday, the 19th of August, 2015.</h3>
+          <h5>It was recently quarter past 12, on Sunday, the 21st of February, 2016.</h5>
+        </td>
+      </tr>
+      <tr>
+        <td align="center" valign="center" colspan="2">
+          <h3><span style="color:blue">Joshua@Dead&nbsp;Souls&nbsp;Dev</span>&nbsp;said &quot;<i>you fucking people are so crazy</i>&quot;</h3>
         </td>
       </tr>
       <tr>
@@ -203,8 +250,8 @@
         </td>
       </tr>
       <tr>
-        <td align="center" valign="center" colspan="2">
-          <h3><span style="color:blue">Duuk@Haven</span>&nbsp;said &quot;<i>Think of the weight gain though.  He won't be able to only eat Subway.</i>&quot;</h3>
+        <td align="center" valign="bottom" colspan="2">
+          <div id="drawCentury_div"></div>
         </td>
       </tr>
     </table>

@@ -48,12 +48,13 @@
     //$graphics['server_case'] = $isLocal ? "gfx/server_case.jpg" : "http://i302.photobucket.com/albums/nn96/quixadhal/shadowlord/server_case_zpsdcdc0b79.jpg";
     $graphics['speedtest_raw'] = $isLocal ? "gfx/speedtest_raw_4478672602.png" : "http://www.speedtest.net/result/4478672602.png";
     $graphics['speedtest_qos'] = $isLocal ? "gfx/speedtest_qos_4478667111.png" : "http://www.speedtest.net/result/4478667111.png";
+    $graphics['speedtest_new'] = $isLocal ? "gfx/wave_g_test2.png" : "gfx/wave_g_test2.png";
 ?>
 
 <html>
     <head>
         <title>
-            lenin.awasteoftime.net
+            lenin inside quixadhal.ddns.net
         </title>
     <script language="javascript">
         function toggleDiv(divID) {
@@ -69,7 +70,7 @@
         <table style="table-layout:fixed; width:100%; border:0px; white-space:normal;  word-wrap:break-word;">
             <tr>
                 <td width="75%" align="left">
-                    <h1>lenin.awasteoftime.net</h1>
+                    <h1>lenin inside quixadhal.ddns.net</h1>
                     <hr />
                     <h3>Hardware purchased:</h3>
  54.99                   <a href="http://www.newegg.com/Product/Product.aspx?Item=N82E16813157335">ASRock B75M-DGS LGA 1155 Intel B75 Micro ATX Intel Motherboard</a><br />
@@ -94,6 +95,7 @@
                     <hr />
                     <h3>Internet Performance:</h3>
                     <center>
+                        NEW:&nbsp;<img src="<?php echo $graphics['speedtest_new']; ?>" border="0" width="300" height="135" />
                         Raw:&nbsp;<img src="<?php echo $graphics['speedtest_raw']; ?>" border="0" width="300" height="135" />
                         QoS:&nbsp;<img src="<?php echo $graphics['speedtest_qos']; ?>" border="0" width="300" height="135" />
                     </center>

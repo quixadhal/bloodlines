@@ -1,6 +1,10 @@
 <?php
 $time_start = microtime(true);
 
+//$URL_BASE = "http://wiley.the-firebird.net";
+$URL_BASE = "http://wileymud.i3.themud.org";
+//$URL_BASE = "http://wileymud.lpmud.org";
+
 function numbered_source($filename)
 {
     $lines = implode(range(1, count(file($filename))), '<br />');
@@ -52,6 +56,8 @@ function is_local_ip() {
     $varr = explode(".", $visitor_ip);
     if($varr[0] == "192" && $varr[1] == "168")
         return 1;
+    if($varr[0] == "127" && $varr[1] == "0")
+        return 1;
     return 0;
 }
 
@@ -92,19 +98,33 @@ $graphics['mop']                = $isLocal ? "gfx/mop.png"                      
 $graphics['rps']                = $isLocal ? "gfx/rps.jpg"                      : "https://lh3.googleusercontent.com/-shDk6j6qlBo/VkpFD28KZaI/AAAAAAAAB-U/dCs8noc14x4/s2048-Ic42/RockPaperShotgun_logo.jpg";
 $graphics['instagram']          = $isLocal ? "gfx/instagram.png"                : "https://lh3.googleusercontent.com/-3Q_JJfUzAnE/VkpGFA5JCiI/AAAAAAAAB-s/1O3drC01SXg/s2048-Ic42/Instagram_button.png";
 $graphics['youtube']            = $isLocal ? "gfx/youtube.png"                  : "https://lh3.googleusercontent.com/-jzTkrUjKBuU/Vkp1QrRBzLI/AAAAAAAAB_0/wP5F6qf2ggs/s2048-Ic42/youtube-logo.png";
+$graphics['blog']               = $isLocal ? "gfx/blog-icon.png"                : "http://icons.iconarchive.com/icons/emey87/social-button/256/blog-icon.png";
 
 $urls = array();
 $urls['email']                  = $isLocal ? "http://gmail.com"                 : "mailto:quixadhal@gmail.com";
 $urls['facebook']               = $isLocal ? "http://facebook.com"              : "http://www.facebook.com/groups/1470783289801007/";
 $urls['tomato']                 = $isLocal ? "http://192.168.1.1/"              : "http://www.shadowandy.net/2012/03/asus-rt-n66u-tomatousb-firmware-flashing-guide.htm";
-$urls['photos']                 = $isLocal ? "https://picasaweb.google.com/home": "http://plus.google.com/photos/101991567866995168256/albums";
+#$urls['photos']                 = $isLocal ? "https://picasaweb.google.com/home": "http://plus.google.com/photos/101991567866995168256/albums";
+$urls['photos']                 = $isLocal ? "https://photos.google.com/albums" : "http://plus.google.com/photos/101991567866995168256/albums";
 $urls['instagram']              = $isLocal ? "https://www.instagram.com/"       : "https://www.instagram.com/quixadhal/";
 $urls['mop']                    = $isLocal ? "http://massivelyop.com/"          : "http://massivelyop.com/";
 $urls['rps']                    = $isLocal ? "http://www.rockpapershotgun.com/" : "http://www.rockpapershotgun.com/";
 $urls['youtube']                = $isLocal ? "http://www.youtube.com/"          : "http://www.youtube.com/watch?v=H0imue5uHiw";
+$urls['blog']                   = $isLocal ? "https://www.blogger.com/blogger.g?blogID=876631636643481668#allposts" : "http://mmolunchclub.blogspot.com/";
 
+// $weather_url   = "http://www.wunderground.com/cgi-bin/findweather/getForecast?query=zmw:49004.2.99999&bannertypeclick=wu_blueglass";
+// $weather_image = "http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_blueglass&airportcode=KAZO&ForcedCity=Kalamazoo&ForcedState=MI&zipcode=49004&language=EN";
+
+// $weather_url   = "http://www.wunderground.com/cgi-bin/findweather/getForecast?query=zmw:49004.1.99999&bannertypeclick=wu_blueglass";
 $weather_url   = "http://www.wunderground.com/cgi-bin/findweather/getForecast?query=zmw:49004.2.99999&bannertypeclick=wu_blueglass";
-$weather_image = "http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_blueglass&airportcode=KAZO&ForcedCity=Kalamazoo&ForcedState=MI&zipcode=49004&language=EN";
+$weather_image = "http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_blueglass_metric&pwscode=KMIPARCH2&ForcedCity=Kalamazoo&ForcedState=MI&zip=49004&language=EN";
+//$weather_image                  = $isLocal ? "gfx/thunderstorm-98541_640.png"   : "https://lh3.googleusercontent.com/-JzOJy-BLUkc/VqetR3SGm4I/AAAAAAAACKo/ys2hWHDQ4Mo/s2048-Ic42/thunderstorm-98541_640.png";
+//
+//<object width="290" height="130">
+//  <param name="movie" value="http://www.wunderground.com/swf/pws_mini_rf_nc.swf?station=KMIPARCH2&freq=&units=metric&lang=EN" />
+//  <embed src="http://www.wunderground.com/swf/pws_mini_rf_nc.swf?station=KMIPARCH2&freq=&units=metric&lang=EN" type="application/x-shockwave-flash" width="290" height="130" />
+//</object>
+//
 
 // Thumbnail    https://lh5.googleusercontent.com/-zvnNrcuqbco/UdooZZelxoI/AAAAAAAAALA/9u5S92UySEA/s144/dark_wood.jpg
 // Small        https://lh5.googleusercontent.com/-zvnNrcuqbco/UdooZZelxoI/AAAAAAAAALA/9u5S92UySEA/s288/dark_wood.jpg
@@ -264,7 +284,7 @@ header('Cache-control: max-age=0, must-revalidate');
             Bloodlines:  WileyMUD IV
         </title>
         <link rel="shortcut icon" href="gfx/fire.ico" />
-        <link rev="made" href="mailto:quixadhal@awasteoftime.net">
+        <link rev="made" href="mailto:quixadhal@gmail.com">
         <style>
             a { text-decoration:none; }
             a:hover { text-decoration:underline; }
@@ -432,7 +452,7 @@ header('Cache-control: max-age=0, must-revalidate');
         <table border=0 cellspacing=0 cellpadding=0 width=80% align="center">
             <tr>
                 <td align="right" valign="top" style="vertical-align: top">
-                    <a href="/anyterm/anyterm.shtml?rows=40&cols=100" title="Play WileyMUD III">
+                    <a href="<?php echo $URL_BASE; ?>/~bloodlines/anyterm/anyterm.shtml?rows=40&cols=100" title="Play WileyMUD III">
                         <img src="<?php echo $graphics['bloodlines']; ?>"
                              border=0 width=469 height=160
                              style="opacity: 0.6; filter: alpha(opacity=60);"
@@ -442,7 +462,7 @@ header('Cache-control: max-age=0, must-revalidate');
                     </a>
                 </td>
                 <td align="left" valign="bottom" style="vertical-align: bottom">
-                    <a href="/anyterm/anyterm.shtml?rows=40&cols=100" title="Play WileyMUD III">
+                    <a href="<?php echo $URL_BASE; ?>/~bloodlines/anyterm/anyterm.shtml?rows=40&cols=100" title="Play WileyMUD III">
                         <img src="<?php echo $graphics['wileymud4']; ?>"
                              border=0 width=354 height=81
                              style="opacity: 0.6; filter: alpha(opacity=60);"
@@ -461,7 +481,7 @@ header('Cache-control: max-age=0, must-revalidate');
                                 onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
                                 onmouseout="this.style.opacity='0.6'; this.style.filter='alpha(opacity=60';"
                             > 
-                                <font size="-2" color="#FFFFBF"><a href="/~wiley/" title="OLD WileyMUD Homepage">Also visit WileyMUD III, for amusement!</a></font>
+                                <font size="-2" color="#FFFFBF"><a href="<?php echo $URL_BASE; ?>/~wiley/" title="OLD WileyMUD Homepage">Also visit WileyMUD III, for amusement!</a></font>
                             </td>
                             <td align="right" valign="bottom" width="5%" style="vertical-align: bottom">
                                 &nbsp;
@@ -516,9 +536,18 @@ header('Cache-control: max-age=0, must-revalidate');
                          />
                     </a></span>
                     <br />
+                    <br />
                     <!-- <span style="color: #1F1F1F"><a href="https://picasaweb.google.com/home" title="Pictures"> -->
 
-                    <span style="color: #1F1F1F"><a href="<?php echo $urls['youtube']; ?>" title="YouTube">
+                    <span style="color: #1F1F1F"><a href="<?php echo $urls['blog']; ?>" title="MMO Lunch Club">
+                        <img src="<?php echo $graphics['blog']; ?>" 
+                             border="0" width="64" height="64" alt="(blog)"
+                             style="opacity: 0.4; filter: alpha(opacity=40);"
+                             onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"
+                             onmouseout="this.style.opacity='0.4'; this.style.filter='alpha(opacity=40';"
+                         />
+                    </a></span>
+                    <span style="color: #1F1F1F"><a href="<?php echo $urls['youtube']; ?>" target="YouTube" title="YouTube">
                         <img src="<?php echo $graphics['tv']; ?>" 
                              border="0" width="64" height="64" alt="(youtube)"
                              style="opacity: 0.4; filter: alpha(opacity=40);"
@@ -602,7 +631,7 @@ header('Cache-control: max-age=0, must-revalidate');
                     </table>
                 </td>
                 <td align="center" width="180" valign="bottom" style="vertical-align: bottom">
-                    <a href="mudlist.php" title="MUD Listing">
+                    <a href="<?php echo $URL_BASE; ?>/~bloodlines/mudlist.php" title="MUD Listing">
                         <img src="<?php echo $graphics['mudlist']; ?>"
                              border=0 align="center" width=121 height=92
                              style="opacity: 0.6; filter: alpha(opacity=60);"
@@ -652,7 +681,8 @@ header('Cache-control: max-age=0, must-revalidate');
                     </a>
                     <br />
                     <br />
-                    <a href="i3log.php" title="I3 Chat Logs">
+                    <!-- <a href="http://71.89.162.105/~wiley/i3log.php" title="I3 Chat Logs"> -->
+                    <a href="<?php echo $URL_BASE; ?>/~wiley/i3log.php" title="I3 Chat Logs">
                         <img src="<?php echo $graphics['intermud']; ?>"
                              border=0 align="center" width=154 height=200
                              style="opacity: 0.6; filter: alpha(opacity=60);"
@@ -713,7 +743,7 @@ header('Cache-control: max-age=0, must-revalidate');
                 </td>
                 <td align="center" valign="bottom" width="10%" style="vertical-align: bottom">
                         <!-- <span style="color: #1F1F1F"><a href="/~minecraft/phpBB3/index.php" title="Minecraft!"> -->
-                        <span style="color: #1F1F1F"><a href="/~minecraft/map.html" title="Local Dynmap">
+                        <span style="color: #1F1F1F"><a href="<?php echo $URL_BASE; ?>/~minecraft/map.html" title="Local Dynmap">
                             <img src="<?php echo $graphics['minecraft_icon']; ?>" 
                                  border="0" width="96" height="96" alt="(minecraft)"
                                  style="opacity: 0.4; filter: alpha(opacity=40);"
@@ -734,7 +764,7 @@ header('Cache-control: max-age=0, must-revalidate');
                 </td>
                 <td align="center" valign="bottom" width="10%" style="vertical-align: bottom">
                     <!-- 155, 200 -->
-                    <a href="http://www.oldtimersguild.com/vb/forum.php" title="No Drama!">
+                    <a href="https://www.oldtimersguild.com/" title="No Drama!">
                         <img src="<?php echo $graphics['otglogo']; ?>"
                              border=0 align="center" width=110 height=150
                              style="opacity: 0.6; filter: alpha(opacity=60);"
@@ -789,7 +819,7 @@ header('Cache-control: max-age=0, must-revalidate');
                     </a>
                 </td>
                 <td align="center" valign="bottom" width="12%" style="vertical-align: bottom">
-                        <span style="color: #1F1F1F"><a href="/~bloodlines/server.php" title="Server Stats">
+                    <span style="color: #1F1F1F"><a href="<?php echo $URL_BASE; ?>/~bloodlines/server.php" title="Server Stats">
                             <img src="<?php echo $graphics['server_icon']; ?>" 
                                  border="0" width="96" height="96" alt="(server)"
                                  style="opacity: 0.4; filter: alpha(opacity=40);"
@@ -800,8 +830,8 @@ header('Cache-control: max-age=0, must-revalidate');
                     <!-- </span> -->
                 </td>
                 <td align="center" valign="bottom" width="12%" style="vertical-align: bottom">
-                        <span style="color: #1F1F1F"><a href="/~bloodlines/video_list.php" title="Server Stats">
-                            <img src="<?php echo $graphics['tv']; ?>" 
+                    <span style="color: #1F1F1F"><a href="<?php echo $URL_BASE;?>/~wiley/mudlist.html" title="I3 mudlist">
+                            <img src="<?php echo $graphics['mudlist']; ?>" 
                                  border="0" width="96" height="96" alt="(tv)"
                                  style="opacity: 0.4; filter: alpha(opacity=40);"
                                  onmouseover="this.style.opacity='1.0'; this.style.filter='alpha(opacity=100';"

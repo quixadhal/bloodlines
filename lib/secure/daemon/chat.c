@@ -196,6 +196,12 @@ static private mapping tags = ([
         "default-IMC2" : "%^BOLD%^WHITE%^%^B_BLUE%^",
         ]);
 
+mapping Non_Player_Chatters = ([
+        "salisdaemon"   : "Sali's Daemon",
+        "chat_d"        : "CHAT_D",
+        "喋る鬼" : "喋る鬼",
+        ]);
+
 static void Setup(){
     mixed rchan2 = ({});
     mixed rchan3 = ({});
@@ -1374,6 +1380,61 @@ varargs string getColorChannelName(string ch, string prefix, string suffix) {
     return chancolor + prefix + ch + suffix + "%^RESET%^";
 }
 
+int isNPCAllowed(string chatter) {
+    if(undefinedp(Non_Player_Chatters)) {
+        Non_Player_Chatters = ([]);
+        SaveObject(SaveFile);
+    }
+    if(member_array(chatter, keys(Non_Player_Chatters)) >= 0)
+        return 1;
+    return 0;
+}
+
+int allowNPC(string chatter, string pretty_name) {
+    if(undefinedp(Non_Player_Chatters)) {
+        Non_Player_Chatters = ([]);
+        SaveObject(SaveFile);
+    }
+    Non_Player_Chatters[chatter] = pretty_name;
+    SaveObject(SaveFile);
+    return 1;
+}
+
+int denyNPC(string chatter, string pretty_name) {
+    if(undefinedp(Non_Player_Chatters)) {
+        Non_Player_Chatters = ([]);
+        SaveObject(SaveFile);
+    }
+    if(member_array(chatter, keys(Non_Player_Chatters)) >= 0) {
+        map_delete(Non_Player_Chatters, chatter);
+        SaveObject(SaveFile);
+        return 1;
+    }
+    return 0;
+}
+
+string getNPC(string chatter) {
+    string result = "";
+    string pretty;
+
+    if(undefinedp(Non_Player_Chatters)) {
+        Non_Player_Chatters = ([]);
+        SaveObject(SaveFile);
+    }
+    if(!undefinedp(chatter)) {
+        if(member_array(chatter, keys(Non_Player_Chatters)) >= 0) {
+            pretty = Non_Player_Chatters[chatter];
+            result += chatter + " is known as " + getColorSpeakerName(pretty) + "\n";
+        }
+    } else {
+        foreach (string jerk in keys(Non_Player_Chatters)) {
+            pretty = Non_Player_Chatters[jerk];
+            result += jerk + " is known as " + getColorSpeakerName(pretty) + "\n";
+        }
+    }
+    return result;
+}
+
 varargs string formChatString(string channel, string speaker, string msg, string this_time) {
     string the_time;
     string the_chan;
@@ -1502,6 +1563,8 @@ void url_write_callback(int fd) {
 
 void url_close_callback(int fd) {
     // Here, we should send off the result we got back.
+    //SERVICES_D->eventSendChannel("Sali's Daemon", "url", newline_trim(url_callback_buffer[fd]), 0, "", "");
+    //SERVICES_D->eventSendChannel("喋る鬼", "url", newline_trim(url_callback_buffer[fd]), 0, "", "");
     SERVICES_D->eventSendChannel("CHAT_D", "url", newline_trim(url_callback_buffer[fd]), 0, "", "");
     map_delete(url_callback_buffer, fd);
 }

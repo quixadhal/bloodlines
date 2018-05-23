@@ -20,13 +20,9 @@
         data.addColumn('string', 'Channel');
         data.addColumn('number', 'Messages');
         data.addRows([
-['intergossip', 288],
-['free_speech', 16],
-['german', 7],
-['url', 7],
-['dchat', 6],
-['discworld-chat', 4],
-['ds', 2]
+['intergossip', 193],
+['dchat', 23],
+['url', 1]
         ]);
 
         // Set chart options
@@ -59,16 +55,13 @@
         data.addColumn('string', 'Channel');
         data.addColumn('number', 'Messages');
         data.addRows([
-['intergossip', 3038],
-['dgd', 375],
-['free_speech', 157],
-['dchat', 76],
-['ds', 53],
-['url', 52],
-['discworld-chat', 34],
-['german', 7],
-['igossip', 5],
-['crat', 1]
+['intergossip', 2394],
+['dchat', 107],
+['intercre', 33],
+['url', 24],
+['free_speech', 17],
+['coffeemud_universe', 4],
+['ds', 2]
         ]);
 
         // Set chart options
@@ -101,16 +94,15 @@
         data.addColumn('string', 'Channel');
         data.addColumn('number', 'Messages');
         data.addRows([
-['intergossip', 15416],
-['dchat', 1304],
-['dgd', 767],
-['free_speech', 459],
-['url', 224],
-['ds', 171],
-['discworld-chat', 151],
-['bsg', 21],
-['german', 11],
-['igossip', 5]
+['intergossip', 12058],
+['dchat', 627],
+['free_speech', 395],
+['url', 175],
+['coffeemud_universe', 119],
+['intercre', 74],
+['discworld-chat', 26],
+['dgd', 5],
+['ds', 2]
         ]);
 
         // Set chart options
@@ -143,16 +135,16 @@
         data.addColumn('string', 'Channel');
         data.addColumn('number', 'Messages');
         data.addRows([
-['intergossip', 172971],
-['dchat', 19284],
-['free_speech', 7861],
-['pyom', 6330],
-['bsg', 3891],
-['ds', 2404],
-['dgd', 1393],
-['discworld-chat', 1385],
-['url', 479],
-['intercre', 299]
+['intergossip', 165323],
+['dchat', 15844],
+['free_speech', 10343],
+['url', 1718],
+['discworld-chat', 1582],
+['ds', 1308],
+['dgd', 1188],
+['intercre', 565],
+['wileymud', 223],
+['pyom', 162]
         ]);
 
         // Set chart options
@@ -168,6 +160,48 @@
 
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.BarChart(document.getElementById('drawYearly_div'));
+        chart.draw(data, options);
+      }
+
+
+            // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawCentury);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawCentury() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Channel');
+        data.addColumn('number', 'Messages');
+        data.addRows([
+['intergossip', 845797],
+['imud_gossip', 462753],
+['dchat', 446238],
+['dead_souls', 82539],
+['free_speech', 47887],
+['dgd', 35314],
+['discworld-chat', 27921],
+['ds', 27651],
+['pyom', 24893],
+['intercre', 22054]
+        ]);
+
+        // Set chart options
+        var options = {
+                       "title":'Stuff people said this century',
+                       "legend":'none',
+                       // "backgroundColor": { fill: "none" },
+                       // "backgroundColor": "#505050",
+                       "width":400,
+                       "height":300,
+                       "is3D":'true'
+                      };
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.BarChart(document.getElementById('drawCentury_div'));
         chart.draw(data, options);
       }
 
@@ -195,8 +229,13 @@
         </td>
       </tr>
       <tr>
+        <td align="center" valign="bottom" colspan="2">
+          <div id="drawCentury_div"></div>
+        </td>
+      </tr>
+      <tr>
         <td align="center" valign="center" colspan="2">
-          <h3><span style="color:blue">Dexter@Nanvaent</span>&nbsp;said &quot;<i>the pussy thing</i>&quot;</h3>
+          <h3><span style="color:blue">Kalinash@Crat's&nbsp;Agony</span>&nbsp;said &quot;<i>you can get anything you can afford</i>&quot;</h3>
         </td>
       </tr>
     </table>

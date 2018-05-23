@@ -83,7 +83,7 @@ void eventReceiveChannelMessage(mixed array packet) {
     tn("eventReceiveChannelMessage: "+identify(packet),"green");
 
     if( file_name(previous_object()) != INTERMUD_D ) return;
-    if( packet[2] == mud_name() && packet[3] != "chat_d" ) return;
+    if( packet[2] == mud_name() && !CHAT_D->isNPCAllowed(packet[3])) return;
     if( !packet[2] || packet[2] == "" ) packet[2] = "BustedAssMUD";
 
     CHAT_D->eventSendChannel(packet[7] + "@" + packet[2], packet[6],
