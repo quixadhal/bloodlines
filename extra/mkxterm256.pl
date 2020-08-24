@@ -19,23 +19,23 @@
 # ]);
 
 use Data::Dumper;
+use JSON qw(encode_json);
 
 my $FORMAT_FIRST = 0;
 my $FORMAT_NONE = 0;
 my $FORMAT_ANSI = 1;
 my $FORMAT_XTERM = 2;
 my $FORMAT_GREY = 3;
-#my $FORMAT_LAST = 3;
 my $FORMAT_IMC2 = 4;
 my $FORMAT_I3 = 5;
 my $FORMAT_MXP = 6;
 my $FORMAT_LAST = 6;
-#my $FORMAT_HTML = 6;
-#my $FORMAT_LAST = 6;
+#my $FORMAT_HTML = 7;
+#my $FORMAT_LAST = 7;
 
 my @themes = ( "default", "afk", "smaug" );
-#my @term_name = ( "unknown", "ansi", "xterm-256color", "xterm-grey", "imc2", "i3", "mxp", "html" );
 my @term_name = ( "unknown", "ansi", "xterm-256color", "xterm-grey", "imc2", "i3", "mxp" );
+#my @term_name = ( "unknown", "ansi", "xterm-256color", "xterm-grey", "imc2", "i3", "mxp", "html" );
 
 my $RESET = "\033[0m";
 my $BOLD = "\033[1m";
@@ -2457,6 +2457,36 @@ sub output_data {
     }
 }
 
+sub output_json {
+    my $file = shift;
+    my $format_count = $FORMAT_LAST - $FORMAT_FIRST + 1;
+    my %meta_trans = ();
+    for( my $format = $FORMAT_FIRST; $format <= $FORMAT_LAST; $format++ ) {
+        $meta_trans{$term_name[$format]} = ();
+        $meta_trans{$term_name[$format]}{$_} = $attr_trans{$format}{$_} foreach (keys %{ $attr_trans{$format} });
+        $meta_trans{$term_name[$format]}{$_} = $terminal_trans{$format}{$_} foreach (keys %{ $terminal_trans{$format} });
+        $meta_trans{$term_name[$format]}{$_} = $ansi_trans{$format}{$_} foreach (keys %{ $ansi_trans{$format} });
+        $meta_trans{$term_name[$format]}{$_} = $xterm_trans{$format}{$_} foreach (keys %{ $xterm_trans{$format} });
+        $meta_trans{$term_name[$format]}{$_} = $x11_trans{$format}{$_} foreach (keys %{ $x11_trans{$format} });
+    }
+    my @meta_keys = ( sort keys %{ $meta_trans{ $term_name[$FORMAT_FIRST] } } );
+    my $kc = (scalar @meta_keys);
+    my $data = {
+        terminal_count  => $format_count,
+        terminals       => \@term_name,
+        trans_count     => $kc,
+        trans           => \%meta_trans,
+    };
+    my $out = JSON->new->utf8->allow_nonref->canonical->pretty->encode($data);
+    if(defined $file) {
+        open FOO, ">$file" or die "Cannot open output $file";
+        print FOO "$out\n";
+        close FOO;
+    } else {
+        print "$out\n";
+    }
+}
+
 setup_hex_arrays();
 setup_colour_maps();
 setup_symbolic();
@@ -2470,6 +2500,7 @@ output_dump('dump.txt');
 output_lpc('pinkfish.h');
 output_c('colormap.c');
 output_data('colormap.dat');
+output_json('colormap.json');
 output_cpp('mappings.cpp');
 output_perl('terminal.pl');
 chmod 0755, 'terminal.pl';
